@@ -224,7 +224,7 @@ class Article < ActiveRecord::Base
   end
   
   def bindAlbumsById(arr, val)
-	albums = PhotoAlbum.find_all_by_id((arr))
+	albums = PhotoAlbum.where(id: (arr))
 	if albums != []
 		albums.each do |alb|
 			alb.update_attributes(:article_id => val)
@@ -233,7 +233,7 @@ class Article < ActiveRecord::Base
   end
   
   def bindVideosById(arr, val)
-	videos = Video.find_all_by_id((arr))
+	videos = Video.where(id: (arr))
 	if videos != []
 		videos.each do |vid|
 			vid.update_attributes(:article_id => val)

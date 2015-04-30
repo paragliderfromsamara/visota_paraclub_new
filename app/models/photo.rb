@@ -1,4 +1,4 @@
-require 'xmp'
+#require 'xmp'
 require 'exifr'
 require 'open-uri'
 class Photo < ActiveRecord::Base

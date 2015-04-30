@@ -3,7 +3,7 @@ class EventsController < ApplicationController
   # GET /events.json
   def index
     @title = 'Новости'
-	@events = Event.paginate(:page => params[:page], :per_page => 10).find_all_by_status_id(2, :order => 'post_date DESC')
+	@events = Event.paginate(:page => params[:page], :per_page => 10).where(status_id: 2).order('post_date DESC')
     respond_to do |format|
       format.html # index.html.erb
       format.json { render :json => @events }
@@ -13,7 +13,7 @@ class EventsController < ApplicationController
   # GET /events/1
   # GET /events/1.json
   def show
-    @event = Event.find_by_id(params[:id])
+    @event = Event.find_by(id: params[:id])
 	if @event != nil
 		@title = 'Новости'
 		@path_array = [
@@ -55,7 +55,7 @@ class EventsController < ApplicationController
 
   # GET /events/1/edit
   def edit
-    @event = Event.find_by_id(params[:id])
+    @event = Event.find_by(id: params[:id])
 	if userCanEditEvent?(@event)
 		@title = 'Изменение новости'
     @add_functions = "initEventForm(#{@event.id}, '.edit_event');"
@@ -93,7 +93,7 @@ class EventsController < ApplicationController
   # PUT /events/1
   # PUT /events/1.json
   def update
-    @event = Event.find_by_id(params[:id])
+    @event = Event.find_by(id: params[:id])
 	if userCanEditEvent?(@event)
 		respond_to do |format|
 		  if @event.update_attributes(params[:event])

@@ -49,9 +49,9 @@ module StepsHelper
 	end
 	
 	def clear_steps(user)
-		steps = Step.find_all_by_user_id_and_ip_addr_and_host_name(0, request.env['REMOTE_ADDR'], request.env['REMOTE_HOST'])
+		steps = Step.where(user_id: 0, ip_addr: request.env['REMOTE_ADDR'], host_name: request.env['REMOTE_HOST'])
 		steps.each do |step|
-			signed_step = Step.find_by_user_id_and_part_id_and_page_id_and_entity_id_and_ip_addr_and_host_name(user.id, step.part_id, step.page_id, step.entity_id, request.env['REMOTE_ADDR'], request.env['REMOTE_HOST'])
+			signed_step = Step.find_by(user_id: user.id, part_id: step.part_id, entity_id: step.entity_id, page_id: step.page_id, ip_addr: request.env['REMOTE_ADDR'], host_name: request.env['REMOTE_HOST'])
 			if signed_step != nil
 				signed_step.update_attributes(:visit_time => step.visit_time)
 				step.destroy
@@ -80,12 +80,12 @@ module StepsHelper
 	end
 	
 	def signed_step_check
-		step = Step.find_by_user_id_and_part_id_and_page_id_and_entity_id(current_user.id, @page_params[:part_id], @page_params[:page_id], @page_params[:entity_id])
+		step = Step.find_by(user_id: current_user.id, part_id: @page_params[:part_id], page_id: @page_params[:page_id], entity_id: @page_params[:entity_id])
 		return step
 	end
 	
 	def unsigned_step_check
-		step = Step.find_by_user_id_and_part_id_and_page_id_and_entity_id_and_ip_addr_and_host_name(0, @page_params[:part_id], @page_params[:page_id], @page_params[:entity_id], request.env['REMOTE_ADDR'], request.env['REMOTE_HOST'])
+		step = Step.find_by(user_id: 0, part_id: @page_params[:part_id], page_id: @page_params[:page_id], entity_id: @page_params[:entity_id], ip_addr: request.env['REMOTE_ADDR'], host_name: request.env['REMOTE_HOST'])
 		return step
 	end
 	
@@ -132,7 +132,7 @@ module StepsHelper
 	end
 	
 	def guest_host_validation
-		step = Step.find_by_part_id_and_page_id_and_entity_id_and_ip_addr_and_host_name(@page_params[:part_id], @page_params[:page_id], @page_params[:entity_id], request.env['REMOTE_ADDR'], request.env['REMOTE_HOST'], :conditions => "user_id != 0")
+		step = Step.find_by(part_id: @page_params[:part_id], page_id: @page_params[:page_id], entity_id: @page_params[:entity_id], ip_addr: request.env['REMOTE_ADDR'], host_name: request.env['REMOTE_HOST']).conditions("user_id != 0")
 		return step
 	end
 	

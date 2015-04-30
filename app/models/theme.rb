@@ -8,7 +8,7 @@ class Theme < ActiveRecord::Base
   #---------при полном удалении темы удалять и лайки
   
   
-  attr_accessible :last_message_date, :name, :status_id, :topic_id, :user_id, :content, :photos, :uploaded_photos, :video_id, :photo_album_id, :updater_id, :attachment_files, :created_at, :updated_at, :merge_with, :visibility_status_id
+ attr_accessible :last_message_date, :name, :status_id, :topic_id, :user_id, :content, :photos, :uploaded_photos, :video_id, :photo_album_id, :updater_id, :attachment_files, :created_at, :updated_at, :merge_with, :visibility_status_id
  
   has_many :messages, :dependent  => :delete_all
   belongs_to :user
@@ -49,7 +49,7 @@ class Theme < ActiveRecord::Base
   end
   
   def last_message #находим последнее сообщение темы
-	Message.find_by_theme_id_and_status_id(self.id, 1, :order => 'created_at DESC')
+	Message.where(theme_id: self.id, status_id: 1).order('created_at DESC').first
   end
 #Валидация--------------------------------------------------------------------------
  validates :name, :presence => {:message => "Поле 'Заголовок темы' не должно быть пустым"},
@@ -80,7 +80,7 @@ class Theme < ActiveRecord::Base
   
   def uniqless_name_check
 	if self.name != nil and self.name != ''
-		th = Theme.find_by_name_and_topic_id_and_status_id(self.name, self.topic_id, 1)
+		th = Theme.find_by(name: self.name, topic_id: self.topic_id, status_id: 1)
 		errors.add(:content, "Тема с таким названием уже существует в данном разделе") if self != th and th != nil
 
 	end
@@ -243,7 +243,7 @@ class Theme < ActiveRecord::Base
 #управление содержимым end  
   def last_read_message(user) #Находит крайнее непрочитанное сообщение пользователя
 	if user != nil
-		last_step_in_theme = Step.find_by_part_id_and_page_id_and_entity_id_and_user_id(9, 1, self.id, user.id)
+		last_step_in_theme = Step.find_by(part_id: 9, page_id: 1, entity_id: self.id, user_id: user.id)
 		if last_step_in_theme != nil
 			step_time = last_step_in_theme.visit_time if last_step_in_theme.visit_time != nil and last_step_in_theme.visit_time != ''
 			not_read_msgs = self.messages.where({:created_at => step_time..Time.now, :status_id => 1})
@@ -320,7 +320,7 @@ class Theme < ActiveRecord::Base
 		self.update_attribute(:status_id, 4) if self.status_id == 3
 	end
 	def visible_messages
-		Message.find_all_by_theme_id_and_status_id(self.id, 1, :order => 'created_at ASC')
+		Message.where(theme_id: self.id, status_id: 1).order('created_at ASC')
 	end
 	def recovery
 		self.update_attribute(:status_id, 1) if self.status_id == 2 
@@ -330,7 +330,7 @@ class Theme < ActiveRecord::Base
 
 #счётчик просмотров
 	def views
-		Step.find_all_by_part_id_and_page_id_and_entity_id(9, 1, self.id)
+		Step.where(part_id: 9, page_id: 1, entity_id: self.id)
 	end
 #счётчик просмотров end
 private

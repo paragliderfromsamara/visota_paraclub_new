@@ -94,7 +94,7 @@ class PhotoAlbum < ActiveRecord::Base
   end
   
   def views
-	Step.find_all_by_part_id_and_page_id_and_entity_id(3,1,self.id)
+	Step.where(part_id: 3, page_id: 1, entity_id: self.id)
   end
   #статусы...  
   def statuses 

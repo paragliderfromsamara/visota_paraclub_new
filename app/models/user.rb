@@ -11,6 +11,7 @@
 require 'digest'
 class User < ActiveRecord::Base
   attr_accessor :password, :old_password, :current_password
+  attr_accessible :password, :avatar, :cell_phone, :email, :email_status, :encrypted_password, :full_name, :icq, :inform, :name, :photo, :salt, :skype, :user_group_id, :password_confirmation, :avatar_cache, :photo_cache, :old_password, :current_password
   require 'will_paginate'
 #--------Old_messages---------------------------------------------
 has_many :old_messages
@@ -130,15 +131,15 @@ mount_uploader :photo, UserPhotoUploader
   end
   
   def club_pilots
-	User.find_all_by_user_group_id([0,1,2,6])
+	User.where(user_group_id: [0,1,2,6])
   end
   
   def club_friends
-	User.find_all_by_user_group_id(3)
+	User.where(user_group_id: 3)
   end
   
   def new_users
-	User.find_all_by_user_group_id(5)
+	User.where(user_group_id: 5)
   end
   
   def bunned

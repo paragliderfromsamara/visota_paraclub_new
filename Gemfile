@@ -45,5 +45,8 @@ group :development, :test do
 	gem 'auto_html'
 	gem 'carrierwave'
 	gem 'will_paginate'
+	gem 'exifr'
+	gem 'nokogiri'
+	gem 'protected_attributes'
 end
 

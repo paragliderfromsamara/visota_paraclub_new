@@ -12,10 +12,10 @@ class MessagesController < ApplicationController
   # GET /messages/1
   # GET /messages/1.json
   def show
-    @message = Message.find_by_id(params[:id])
+    @message = Message.find_by(id: params[:id])
 	if userCanSeeMessage?(@message)
 		#themes part
-		@theme = Theme.find_by_id_and_status_id(@message.theme_id, ([1, 3]))
+		@theme = Theme.find_by(id: @message.theme_id, status_id: ([1, 3]))
 		if @theme != nil
 			@title = "Ответы на сообщение от #{@message.created_at.to_s(:ru_datetime)}"
 			@path_array = [
@@ -27,13 +27,13 @@ class MessagesController < ApplicationController
 		end
 		#themes part end
 		#photos part
-		@photo = Photo.find_by_id_and_status_id(@message.photo_id, 1)
+		@photo = Photo.find_by(id: @message.photo_id, status_id: 1)
 		if @photo != nil
 			#todo
 		end
 		#photos part end
 		#videos part
-		@video = Video.find_by_id(@message.video_id)
+		@video = Video.find_by(id: @message.video_id)
 		if @video != nil
 			@title = "Ответы комментарий от #{@message.created_at.to_s(:ru_datetime)}"
 			@path_array = [
@@ -74,15 +74,15 @@ class MessagesController < ApplicationController
 
   # GET /messages/1/edit
   def edit
-    @formMessage = Message.find_by_id_and_status_id(params[:id], 1)
+    @formMessage = Message.find_by(id: params[:id], status_id: 1)
 	if userCanEditMsg?(@formMessage)
-			@theme = Theme.find_by_id_and_status_id(@formMessage.theme_id, 1)
-			@photo = Photo.find_by_id_and_status_id(@formMessage.photo_id, 1)
-			@video = Video.find_by_id(@formMessage.video_id, 1)
+			@theme = Theme.find_by(id: @formMessage.theme_id, status_id: 1)
+			@photo = Photo.find_by(id: @formMessage.photo_id, status_id: 1)
+			@video = Video.find_by(id: @formMessage.video_id, status_id: 1)
 			@button_name = 'Сохранить изменения'
 			if @theme != nil
 				@title = 'Изменение сообщения'
-				@topic = Topic.find_by_id(@formMessage.topic_id)
+				@topic = Topic.find_by(id: @formMessage.topic_id)
 				@path_array = [
 								{:name => 'Клубная жизнь', :link => '/visota_life'},
 								{:name => @theme.topic.name, :link => topic_path(@theme.topic)},
@@ -107,10 +107,10 @@ class MessagesController < ApplicationController
 		params[:message][:user_id] = current_user.id
 		@draft = current_user.message_draft
 		@add_functions = "initMessageForm(#{@draft.id}, '#new_message');"
-		@message_to = Message.find_by_id_and_status_id(params[:message][:message_id], 1) 	#ищем ответ ли это на сообщение.
-		@theme = Theme.find_by_id_and_status_id(params[:message][:theme_id], 1)				#ищем тему.
-		@photo = Photo.find_by_id_and_status_id(params[:message][:photo_id], 1)				#ищем фотографию.
-		@album = PhotoAlbum.find_by_id_and_status_id(params[:message][:photo_album_id], 1)  #ищем фотоальбом.
+		@message_to = Message.find_by(id: params[:message][:message_id], status_id: 1) 	#ищем ответ ли это на сообщение.
+		@theme = Theme.find_by(id: params[:message][:theme_id], status_id: 1)				#ищем тему.
+		@photo = Photo.find_by(id: params[:message][:photo_id], status_id: 1)				#ищем фотографию.
+		@album = PhotoAlbum.find_by(id: params[:message][:photo_album_id], status_id: 1)  #ищем фотоальбом.
 		if @theme != nil
 			@path_array = [
 							{:name => 'Клубная жизнь', :link => '/visota_life'},
@@ -192,14 +192,14 @@ class MessagesController < ApplicationController
 			format.json { head :no_content }
 		  else
 			current_user.message_draft.clean
-			@message_to = Message.find_by_id_and_status_id(params[:message][:message_id], 1)
-			@theme = Theme.find_by_id_and_status_id(@message.theme_id, 1)
-			@photo = Photo.find_by_id_and_status_id(@message.photo_id, 1)
-			@video = Video.find_by_id(@message.video_id, 1)
+			@message_to = Message.find_by(id: params[:message][:message_id], status_id: 1)
+			@theme = Theme.find_by(id: @message.theme_id, status_id: 1)
+			@photo = Photo.find_by(id: @message.photo_id, status_id: 1)
+			@video = Video.find_by(id: @message.video_id, status_id: 1)
 			@add_functions = "initMessageForm(#{@message.id.to_s}, '.edit_message');" #включаем функцию отрисовки формы
 			if @theme != nil
 				@title = 'Изменение сообщения'
-				@topic = Topic.find_by_id(@message.topic_id)
+				@topic = Topic.find_by(id: @message.topic_id)
 				@path_array = [
 								{:name => 'Клубная жизнь', :link => '/visota_life'},
 								{:name => @theme.topic.name, :link => topic_path(@theme.topic)},
@@ -247,7 +247,7 @@ class MessagesController < ApplicationController
   end
   
   def recovery
-	msg = Message.find_by_id(params[:id])
+	msg = Message.find_by(id: params[:id])
 	if msg != nil and is_admin?
 		msg.set_as_visible
 	else
@@ -256,7 +256,7 @@ class MessagesController < ApplicationController
   end
   
   def replace_message
-	@message = Message.find_by_id(params[:id])
+	@message = Message.find_by(id: params[:id])
 	if user_type != 'admin' || user_type != 'super_admin' and @message != nil
 		@collection = []
 		@themes_collection = []
@@ -279,9 +279,9 @@ class MessagesController < ApplicationController
   
   def do_replace_message
 	if is_admin?
-		message = Message.find_by_id(params[:replace_message][:current_message])
-		new_topic = Topic.find_by_id(params[:split_theme][:topic_id])
-		target_theme = Theme.find_by_id(params[:split_theme][:theme_id])
+		message = Message.find_by(id: params[:replace_message][:current_message])
+		new_topic = Topic.find_by(id: params[:split_theme][:topic_id])
+		target_theme = Theme.find_by(id: params[:split_theme][:theme_id])
 		new_theme_flag = (params[:replace_message][:make_new_as_theme]).to_i
 		new_theme_name = (params[:replace_message][:new_theme_name]).strip
 		if message != nil and new_topic != nil
@@ -310,7 +310,7 @@ class MessagesController < ApplicationController
 	end
   end
   def upload_photos
-	message = Message.find_by_id(params[:id]) 
+	message = Message.find_by(id: params[:id]) 
 	if isEntityOwner?(message)
 		@photo = Photo.new(:message_id => message.id, :user_id => message.user.id, :link => params[:message][:uploaded_photos], :status_id => 0)
 		if @photo.save

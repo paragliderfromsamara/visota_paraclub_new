@@ -24,7 +24,7 @@ class Video < ActiveRecord::Base
 		end
 	end
 	def visible_messages
-		Message.find_all_by_video_id_and_status_id(self.id, 1, :order => 'created_at ASC')
+		Message.where(video_id: self.id, status_id: 1).order('created_at ASC')
 	end
 	
 	before_save :make_mini_link
@@ -77,7 +77,7 @@ class Video < ActiveRecord::Base
   #categories end---
   #Просмотры--------
   	def views
-		Step.find_all_by_part_id_and_page_id_and_entity_id(5, 1, self.id)
+		Step.where(part_id: 5, page_id: 1, entity_id: self.id)
 	end
   #Просмотры end
 end

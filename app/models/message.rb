@@ -1,5 +1,6 @@
 class Message < ActiveRecord::Base
   attr_accessible :content, :first_message_id, :message_id, :photo_id, :photo_album_id, :name, :theme_id, :topic_id, :updater_id, :user_id, :video_id, :uploaded_photos, :article_id, :attachment_files, :status_id, :created_at, :updated_at, :base_theme_id, :visibility_status_id
+ 
   belongs_to :user
   belongs_to :video
   has_many :photos, :dependent  => :delete_all
@@ -191,7 +192,7 @@ class Message < ActiveRecord::Base
   
   def get_visible_tread
 	msgs = self.get_tread
-	v_msgs = Message.find_all_by_id_and_status_id((msgs), 1)
+	v_msgs = Message.where(id: (msgs), status_id: 1)
 	return v_msgs
   end
   
@@ -282,7 +283,7 @@ class Message < ActiveRecord::Base
   
   def make_first_message_id #непонятная функция
 	if self.message_id != nil
-		message_to = Message.find_by_id(self.message_id)
+		message_to = Message.find_by(id: self.message_id)
 		if message_to != nil
 			self.first_message_id = message_to.first_message_id if message_to.first_message_id != nil
 			self.first_message_id = message_to.id if message_to.first_message_id == nil

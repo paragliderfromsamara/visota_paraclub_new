@@ -10,19 +10,19 @@ include ApplicationHelper
 	@video = Video.new
 	case params[:c]
 	when 'paragliding'
-		@videos = Video.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id(5)
+		@videos = Video.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').where(category_id: 5)
 		@category_name = 'Свободные полёты'
 	when 'power_paragliding'
-		@videos = Video.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id(4)
+		@videos = Video.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').where(category_id: 4)
 		@category_name = 'Моторные полёты'
 	when 'kiting'
-		@videos = Video.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id(2)
+		@videos = Video.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').where(category_id: 2)
 		@category_name = 'Кайтинг'		
 	when 'club_events'
-		@videos = Video.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id(3)
+		@videos = Video.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').where(category_id: 3)
 		@category_name = 'Клубные мероприятия'
 	when 'another'
-		@videos = Video.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id(1)
+		@videos = Video.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').where(category_id: 1)
 		@category_name = 'Разное'
 	else
 		@videos = Video.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').all
