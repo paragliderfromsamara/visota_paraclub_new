@@ -8,23 +8,23 @@ include MessagesHelper
 	@per_page = 10
 	case params[:c]
 	when 'paragliding'
-		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id_and_status_id(5, 1)
+		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 5, status_id: 1).order('created_at DESC')
 		@category_name = 'Свободные полёты'
 	when 'power_paragliding'
-		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id_and_status_id(4, 1)
+		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 5, status_id: 1).order('created_at DESC')
 		@category_name = 'Моторные полёты'
 	when 'kiting'
-		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id_and_status_id(2, 1)
+		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 5, status_id: 1).order('created_at DESC')
 		@category_name = 'Кайтинг'		
 	when 'club_events'
-		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id_and_status_id(3, 1)
+		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 5, status_id: 1).order('created_at DESC')
 		@category_name = 'Клубные мероприятия'
 		
 	when 'another'
-		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id_and_status_id(1, 1)
+		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 5, status_id: 1).order('created_at DESC')
 		@category_name = 'Разное'
 	else
-		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_status_id(1)
+		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page).where(status_id: 1).order('created_at DESC')
 		@category_name = 'Все альбомы'
 	end
     respond_to do |format|

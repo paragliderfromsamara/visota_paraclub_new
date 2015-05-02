@@ -1,6 +1,7 @@
 #require 'xmp'
 require 'exifr'
 require 'open-uri'
+require  Rails.root.join("config/xmp")
 class Photo < ActiveRecord::Base
   attr_accessor :delete_flag
   attr_accessible :article_id, :category_id, :description, :event_id, :link, :message_id, :name, :photo_album_id, :user_id, :theme_id, :status_id, :delete_flag, :visibility_status_id
@@ -61,10 +62,10 @@ class Photo < ActiveRecord::Base
     img = EXIFR::JPEG.new(path)
     if img.exif?
       xmp = XMP.parse(img)
-      if xmp != nil
+     if xmp != nil
         xmp.namespaces.each do |namespace_name|
           namespace = xmp.send(namespace_name)
-          namespace.attributes.each do |attr|
+         namespace.attributes.each do |attr|
             if attr == name 
               v = namespace.send(attr)
             end
@@ -73,25 +74,34 @@ class Photo < ActiveRecord::Base
       end
     end
     return v
-  end
+end
   def exif_data
     path = Rails.root.join("public#{self.link}").to_s
+    
     exifData = EXIFR::JPEG.new(path)
-    xmp = XMP.parse(exifData)
+    image = Magick::Image.read(Rails.root.join("public#{self.link}")).first
+    val = image.get_iptc_dataset('lens')
+    #xml = Nokogiri::XML(exifData.app1s[1])
+   # xmp = XMP.parse(exifData)
     exif = {
       :make => exifData.make.to_s,
       :model => exifData.model.to_s,
       :exposure_time => exifData.exposure_time.to_s,
       :f_number => "f/#{exifData.f_number.to_i}",
-      :iso => self.exif_data_xmp('ISOSpeed').to_s,
+      :iso => exifData.iso_speed_ratings,#self.exif_data_xmp('ISOSpeedRatings').to_s,
       :author =>  exifData.artist,
       :focal_length => "#{exifData.focal_length.to_f}мм",
       :software => exifData.software,
       :lens => self.exif_data_xmp('Lens').to_s,
-      :exposure => self.exif_data_xmp('Exposure').to_s
+      :exposure => exifData#self.exif_data_xmp('Exposure').to_s
       
     }
     return exif
+  end
+  def sel(d)
+    hash={}
+    d.instance_variables.each {|var| hash[var.to_s.delete("@")] = d.instance_variable_get(var) }
+      return hash
   end
   def isHorizontal?
 	p = self.widthAndHeight

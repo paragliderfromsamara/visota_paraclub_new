@@ -1,4 +1,6 @@
 class PhotoAlbum < ActiveRecord::Base
+  attr_accessible :article_id, :category_id, :description, :name, :photo_id, :user_id, :uploaded_photos, :status_id, :visibility_status_id
+  
   belongs_to :user
   belongs_to :photo
   has_one :theme, :dependent  => :destroy

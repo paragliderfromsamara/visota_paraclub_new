@@ -164,7 +164,7 @@ DEPENDENCIES
   exifr
   jbuilder (~> 2.0)
   jquery-rails
-  nokogiri
+  nokogiri (~> 1.6.0)
   protected_attributes
   rails (= 4.2.1)
   rmagick

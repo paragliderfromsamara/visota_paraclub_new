@@ -46,7 +46,7 @@ group :development, :test do
 	gem 'carrierwave'
 	gem 'will_paginate'
 	gem 'exifr'
-	gem 'nokogiri'
+  gem 'nokogiri', '~> 1.6.0'
 	gem 'protected_attributes'
 end
 
