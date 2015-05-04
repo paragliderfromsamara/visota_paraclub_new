@@ -7,19 +7,19 @@ include UsersHelper
 	if category == 'club_friends'
 		@title = 'Друзья клуба'
 		@active_button = 1 
-		@users = User.paginate(:page => params[:page], :per_page => 10).find_all_by_user_group_id(3)
+		@users = User.paginate(:page => params[:page], :per_page => 10).where(user_group_id: 3)
 	elsif category == 'just_came'
 		@title = 'Вновь прибывшие'
 		@active_button = 2
-		@users = User.paginate(:page => params[:page], :per_page => 10).find_all_by_user_group_id(5)
+		@users = User.paginate(:page => params[:page], :per_page => 10).where(user_group_id: 5)
 	elsif category == 'bun_list' and is_admin?
 		@title = 'Бан лист'
 		@active_button = 3 
-		@users = User.paginate(:page => params[:page], :per_page => 10).find_all_by_user_group_id(4)
+		@users = User.paginate(:page => params[:page], :per_page => 10).where(user_group_id: 4)
 	else 
 		@title = 'Клубные пилоты'
 		@active_button = 0
-		@users = User.paginate(:page => params[:page], :per_page => 10).find_all_by_user_group_id([1, 0, 2, 6], :order => 'user_group_id DESC')
+		@users = User.paginate(:page => params[:page], :per_page => 10).where(user_group_id: [1, 0, 2, 6]).order('user_group_id DESC')
 	end
     respond_to do |format|
       format.html # index.html.erb
@@ -33,22 +33,22 @@ include UsersHelper
 		@per_page = 18
 		case params[:c]
 		when 'paragliding'
-			@videos = @user.videos.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id(5)
+			@videos = @user.videos.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 5).order('created_at DESC')
 			@category_name = 'Свободные полёты'
 		when 'power_paragliding'
-			@videos = @user.videos.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id(4)
+			@videos = @user.videos.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 4).order('created_at DESC')
 			@category_name = 'Моторные полёты'
 		when 'kiting'
-			@videos = @user.videos.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id(2)
+			@videos = @user.videos.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 2).order('created_at DESC')
 			@category_name = 'Кайтинг'		
 		when 'club_events'
-			@videos = @user.videos.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id(3)
+			@videos = @user.videos.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 3).order('created_at DESC')
 			@category_name = 'Клубные мероприятия'
 		when 'another'
-			@videos = @user.videos.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id(1)
+			@videos = @user.videos.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 1).order('created_at DESC')
 			@category_name = 'Разное'
 		else
-			@videos = @user.videos.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').all
+			@videos = @user.videos.paginate(:page => params[:page], :per_page => @per_page).all.order('created_at DESC')
 			@category_name = 'Все видео'
 		end
 		@path_array = [
@@ -70,23 +70,23 @@ include UsersHelper
 		@per_page = 18
 		case params[:c]
 		when 'paragliding'
-			@albums = @user.photo_albums.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id_and_status_id(5, 1)
+			@albums = @user.photo_albums.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 5, status_id: 1).order('created_at DESC')
 			@category_name = 'Свободные полёты'
 		when 'power_paragliding'
-			@albums = @user.photo_albums.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id_and_status_id(4, 1)
+			@albums = @user.photo_albums.paginate(:page => params[:page], :per_page => @per_pag).where(category_id: 4, status_id: 1).order('created_at DESC')
 			@category_name = 'Моторные полёты'
 		when 'kiting'
-			@albums = @user.photo_albums.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id_and_status_id(2, 1)
+			@albums = @user.photo_albums.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 2, status_id: 1).order('created_at DESC')
 			@category_name = 'Кайтинг'		
 		when 'club_events'
-			@albums = @user.photo_albums.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id_and_status_id(3, 1)
+			@albums = @user.photo_albums.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 3, status_id: 1).order('created_at DESC')
 			@category_name = 'Клубные мероприятия'
 			
 		when 'another'
-			@albums = @user.photo_albums.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_category_id_and_status_id(1, 1)
+			@albums = @user.photo_albums.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 1, status_id: 1).order('created_at DESC')
 			@category_name = 'Разное'
 		else
-			@albums = @user.photo_albums.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').find_all_by_status_id(1)
+			@albums = @user.photo_albums.paginate(:page => params[:page], :per_page => @per_page).where(status_id: 1).order('created_at DESC')
 			@category_name = 'Все альбомы'
 		end
 		respond_to do |format|
@@ -111,7 +111,7 @@ include UsersHelper
       	end  
       	@title = @curArtCat[:multiple_name]
         vStatus = (is_not_authorized?)? [1]:[1,2]
-      	@articles = Article.find_all_by_article_type_id_and_status_id_and_visibility_status_id_and_user_id(@curArtCat[:value], 1, vStatus, @user.id, :order => 'accident_date DESC')
+      	@articles = Article.where(article_type_id: @curArtCat[:value], status_id: 1, visibility_status_id: vStatus, user_id: @user.id).order('created_at DESC')
       	  respond_to do |format|
             format.html {render 'articles/index'}# index.html.erb
             format.json { render :json => @articles }
@@ -123,7 +123,7 @@ include UsersHelper
   # GET /users/1
   # GET /users/1.json
   def show 
-    @user = User.find_by_id(params[:id])
+    @user = User.find_by(id: params[:id])
 	if @user != nil
 		#@alter_logo = @user.photo if @user.photo?
 		@title = "#{@user.name}"
@@ -155,7 +155,7 @@ include UsersHelper
 
   # GET /users/1/edit
   def edit
-    @user = User.find_by_id(params[:id])
+    @user = User.find_by(id: params[:id])
 	if userCanEditUserCard?(@user)
 		if @user.mailer == nil and params[:tab] == 'notification_upd'
 			#send mail_check if @user.make_mailer

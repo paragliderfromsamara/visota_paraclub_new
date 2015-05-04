@@ -143,7 +143,7 @@ mount_uploader :photo, UserPhotoUploader
   end
   
   def bunned
-	User.find_all_by_user_group_id(4)
+	User.where(user_group_id: 4)
   end
   
   
@@ -163,12 +163,12 @@ mount_uploader :photo, UserPhotoUploader
   end
   #управление черновиками тем и сообщений
   def message_draft #выдает, а если необходимо создает черновик сообщения
-	draft = Message.find_by_user_id_and_status_id(self.id, 0)
+	draft = Message.find_by(user_id: self.id, status_id: 0)
 	draft = self.messages.create(:status_id => 0) if draft == nil 
 	return draft
   end
   def theme_draft #выдает, а если необходимо создает черновик темы
-	draft = Theme.find_by_user_id_and_status_id(self.id, 0)
+	draft = Theme.find_by(user_id: self.id, status_id: 0)
 	if draft == nil
 		draft = Theme.new(:user_id => self.id, :status_id => 0)# if draft == nil 
 		draft.save(:validate => false) #отключаем проверку длины названия темы
@@ -176,7 +176,7 @@ mount_uploader :photo, UserPhotoUploader
 	return draft
   end
   def album_draft 
-	draft = PhotoAlbum.find_by_user_id_and_status_id(self.id, 0)
+	draft = PhotoAlbum.find_by(user_id: self.id, status_id: 0)
 	if draft == nil
 		draft = PhotoAlbum.new(:user_id => self.id, :status_id => 0)# if draft == nil 
 		draft.save(:validate => false) #отключаем проверку длины названия темы
@@ -184,7 +184,7 @@ mount_uploader :photo, UserPhotoUploader
 	return draft
   end
   def article_draft 
-	draft = Article.find_by_user_id_and_status_id(self.id, 0)
+	draft = Article.find_by(user_id: self.id, status_id: 0)
 	if draft == nil
 		draft = Article.new(:user_id => self.id, :status_id => 0)# if draft == nil 
 		draft.save(:validate => false) #отключаем проверку длины названия темы
@@ -192,7 +192,7 @@ mount_uploader :photo, UserPhotoUploader
 	return draft
   end
   def event_draft 
-  	draft = Event.find_by_status_id(0)
+  	draft = Event.find_by(status_id: 0)
   	if draft == nil
   		draft = Event.new(:status_id => 0)# if draft == nil 
   		draft.save(:validate => false) #отключаем проверку
@@ -273,13 +273,13 @@ mount_uploader :photo, UserPhotoUploader
   end
 
     def self.authenticate(name, submitted_password)
-    user = find_by_name(name)
+    user = find_by(name: name)
     return nil  if user.nil?
     return user if user.has_password?(submitted_password)
   end
   
 	def self.authenticate_with_salt(id, cookie_salt)
-    user = find_by_id(id)
+    user = find_by(id: id)
 	(user && user.salt == cookie_salt) ? user : nil
     end  
  #feed functions for current_user--------------------------------------------------------------------------------
@@ -294,7 +294,7 @@ mount_uploader :photo, UserPhotoUploader
 	ids_arr += theme_where_wrote_ids if theme_where_wrote_ids != [] #Ids тем в которых пользователь писал
 	ids_arr += self_themes_ids if self_themes_ids != [] #Ids тем которые пользователь создал
 	ids_arr.uniq! if ids_arr != []
-	value = Theme.find_all_by_id(ids_arr, :order => 'created_at DESC') if ids_arr != []
+	value = Theme.where(id: ids_arr).order('created_at DESC') if ids_arr != []
 	return value
   end
   
@@ -315,12 +315,12 @@ mount_uploader :photo, UserPhotoUploader
 	ids_arr += answrToMyMsgs if answrToMyMsgs != []
 	ids_arr -= myMsgsIDs
 	ids_arr.uniq! if ids_arr != []
-	value = Message.find_all_by_id(ids_arr, :order => 'created_at DESC') if ids_arr != []
+	value = Message.where(id: ids_arr).order('created_at DESC') if ids_arr != []
 	return value
   end
   
   def not_current_user_messages #сообщения других юзеров
-	Message.find_all_by_theme_id_and_status_id(theme_with_user_ids_for_feed, 1, :conditions => "user_id != #{self.id}")
+	Message.where(theme_id: theme_with_user_ids_for_feed, status_id: 1, user_id: "user_id != #{self.id}")
   end
   
   def themes_without_current_user(is_not_authorized) #Темы в которых пользователь не принимал участия

@@ -83,19 +83,26 @@ end
     val = image.get_iptc_dataset('lens')
     #xml = Nokogiri::XML(exifData.app1s[1])
    # xmp = XMP.parse(exifData)
-    exif = {
-      :make => exifData.make.to_s,
-      :model => exifData.model.to_s,
-      :exposure_time => exifData.exposure_time.to_s,
-      :f_number => "f/#{exifData.f_number.to_i}",
-      :iso => exifData.iso_speed_ratings,#self.exif_data_xmp('ISOSpeedRatings').to_s,
-      :author =>  exifData.artist,
-      :focal_length => "#{exifData.focal_length.to_f}мм",
-      :software => exifData.software,
-      :lens => self.exif_data_xmp('Lens').to_s,
-      :exposure => exifData#self.exif_data_xmp('Exposure').to_s
-      
-    }
+   model = exifData.model.to_s #модель камеры
+   lens = self.exif_data_xmp('Lens').to_s #модель объектива
+   iso = exifData.iso_speed_ratings.to_s #iso
+   f_length = exifData.focal_length.to_f #фокусное расстояние
+   exposure_time = exifData.exposure_time.to_s
+   f_number = exifData.f_number.to_i 
+   exposure = self.exif_data_xmp('Exposure').to_s
+   artist = exifData.artist.to_s
+   software = exifData.software.to_s
+    exif = []
+    exif[exif.length] = {name: 'Камера', value: model} if model.strip != '' 
+    exif[exif.length] = {name: 'Объектив', value: lens} if lens.strip != '' 
+    exif[exif.length] = {name: 'iso', value: iso} if lens.strip != '' 
+    exif[exif.length] = {name: 'Фокусное расстояние', value: "#{f_length}mm"} if f_length  != 0.0 
+    exif[exif.length] = {name: 'Выдержка', value: exposure_time} if exposure_time.strip  != ''
+    exif[exif.length] = {name: 'Диафрагма', value: "f/#{f_number}"} if f_number  != 0.0
+    exif[exif.length] = {name: 'Экспозиция', value: exposure} if exposure.strip  != ''
+    exif[exif.length] = {name: 'Автор', value: artist} if artist.strip  != ''
+    exif[exif.length] = {name: "ПО", value: software} if software.strip  != ''
+
     return exif
   end
   def sel(d)

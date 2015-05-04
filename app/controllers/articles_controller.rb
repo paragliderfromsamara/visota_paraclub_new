@@ -12,7 +12,7 @@ class ArticlesController < ApplicationController
 	end  
 	@title = @curArtCat[:multiple_name]
   vStatus = (is_not_authorized?)? [1]:[1,2]
-	@articles = Article.find_all_by_article_type_id_and_status_id_and_visibility_status_id(@curArtCat[:value], 1, vStatus, :order => 'accident_date DESC')
+	@articles = Article.where(article_type_id: @curArtCat[:value], status_id: 1, visibility_status_id: vStatus).order('accident_date DESC')
 	  respond_to do |format|
       format.html # index.html.erb
       format.json { render :json => @articles }
@@ -25,7 +25,7 @@ class ArticlesController < ApplicationController
   def show
     @article = Article.find(params[:id])
 	@photos = Photo.select(:id)
-	@events = Event.find_all_by_display_area_id(([2, 3]), :order => 'post_date DESC', :limit => 3)
+	@events = Event.where(display_area_id: ([2, 3])).order('post_date DESC').limit(3)
 	@path_array = [
 					{:name => 'Материалы', :link => '/articles'},
 					{:name => @article.type_name_multiple, :link => @article.type_path},
@@ -128,7 +128,7 @@ class ArticlesController < ApplicationController
     end
   end
   def upload_photos
-	article = Article.find_by_id(params[:id]) 
+	article = Article.find_by(id: params[:id]) 
 	if isEntityOwner?(article)
 		@photo = Photo.new(:article_id => article.id, :user_id => article.user.id, :link => params[:article][:uploaded_photos], :status_id => 1)
 		if @photo.save
@@ -141,7 +141,7 @@ class ArticlesController < ApplicationController
 	end
   end
   def bind_videos_and_albums
-    article = Article.find_by_id(params[:id])  
+    article = Article.find_by(id: params[:id])  
 	if isEntityOwner?(article) and params[:format] == 'json'
 		@albums = PhotoAlbum.find_all_by_article_id_and_status_id(([nil, article.id]), 1)
 		@videos = Video.find_all_by_article_id([nil, article.id])

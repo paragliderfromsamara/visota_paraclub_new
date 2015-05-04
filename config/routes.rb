@@ -48,9 +48,8 @@ resources :voices, :only => [:create, :destroy]
   resources :messages
   get "messages/replace_message"
   get "messages/do_replace_message"
-  post "messages/upload_photos"
   get '/messages/:id/replace_message', :to => 'messages#replace_message'
-  get '/messages/:id/upload_photos', :to => 'messages#upload_photos' #загрузка с помощью dropzone.js и собственную функцию photosUploader() в application.js
+  post '/messages/:id/upload_photos', :to => 'messages#upload_photos' #загрузка с помощью dropzone.js и собственную функцию photosUploader() в application.js
   get '/do_replace_message', :to => 'messages#do_replace_message'
   #messages_controller end
   
@@ -62,7 +61,6 @@ resources :voices, :only => [:create, :destroy]
   post "themes/theme_switcher"
   post "themes/add_photos"
   post "themes/add_files"
-  post "themes/upload_photos"
   get '/themes/:id/theme_switcher', :to => 'themes#theme_switcher'
   get '/get_themes_list', :to => 'themes#get_themes_list'
   get '/themes/:id/merge_themes', :to => 'themes#merge_themes'
@@ -70,7 +68,7 @@ resources :voices, :only => [:create, :destroy]
   get '/themes/:id/add_photos', :to => 'themes#add_photos' #Загрузка фото
   get '/themes/:id/add_files', :to => 'themes#add_files' #Загрузка файлов
   get '/do_merge_themes', :to => 'themes#do_merge_themes'
-  get '/themes/:id/upload_photos', :to => 'themes#upload_photos' #загрузка с помощью dropzone.js и собственную функцию photosUploader() в application.js
+  post '/themes/:id/upload_photos', :to => 'themes#upload_photos' #загрузка с помощью dropzone.js и собственную функцию photosUploader() в application.js
   #themes_controller end
 
   #topics controller
@@ -87,23 +85,20 @@ resources :voices, :only => [:create, :destroy]
 
   #photos_controller
   resources :photos
-  get "photos/edit_photos"
   get "photos/recovery"
-  post "photos/edit_photos"
   post "photos/update_photos"
   get '/photos/:id/recovery', :to => 'photos#recovery' #восстановление
   get '/edit_photos', :to => 'photos#edit_photos'
-  get '/update_photos', :to => 'photos#update_photos'
+  post '/update_photos', :to => 'photos#update_photos'
   #photos_controller end
 
   #photo_albums_controller
   resources :photo_albums
   get "photo_albums/unbinded_to_article_albums"
-  post "photo_albums/upload_photos"
   get "photo_albums/get_albums_list"
   get '/get_albums_list', :to => 'photo_albums#get_albums_list'
   get '/unbinded_to_article_albums', :to => 'photo_albums#unbinded_to_article_albums'#Ссылка на вывод списка альбомов не прикрепленных к статье...
-  get '/photo_albums/:id/upload_photos', :to => 'photo_albums#upload_photos' #загрузка с помощью dropzone.js и собственную функцию photosUploader() в application.js
+  post '/photo_albums/:id/upload_photos', :to => 'photo_albums#upload_photos' #загрузка с помощью dropzone.js и собственную функцию photosUploader() в application.js
   #photo_albums_controller end
 
 

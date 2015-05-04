@@ -78,7 +78,7 @@ class MessagesController < ApplicationController
 	if userCanEditMsg?(@formMessage)
 			@theme = Theme.find_by(id: @formMessage.theme_id, status_id: 1)
 			@photo = Photo.find_by(id: @formMessage.photo_id, status_id: 1)
-			@video = Video.find_by(id: @formMessage.video_id, status_id: 1)
+			@video = Video.find_by(id: @formMessage.video_id)
 			@button_name = 'Сохранить изменения'
 			if @theme != nil
 				@title = 'Изменение сообщения'
@@ -195,7 +195,7 @@ class MessagesController < ApplicationController
 			@message_to = Message.find_by(id: params[:message][:message_id], status_id: 1)
 			@theme = Theme.find_by(id: @message.theme_id, status_id: 1)
 			@photo = Photo.find_by(id: @message.photo_id, status_id: 1)
-			@video = Video.find_by(id: @message.video_id, status_id: 1)
+			@video = Video.find_by(id: @message.video_id)
 			@add_functions = "initMessageForm(#{@message.id.to_s}, '.edit_message');" #включаем функцию отрисовки формы
 			if @theme != nil
 				@title = 'Изменение сообщения'
@@ -310,11 +310,11 @@ class MessagesController < ApplicationController
 	end
   end
   def upload_photos
-	message = Message.find_by(id: params[:id]) 
+	message = Message.find(params[:id]) 
 	if isEntityOwner?(message)
-		@photo = Photo.new(:message_id => message.id, :user_id => message.user.id, :link => params[:message][:uploaded_photos], :status_id => 0)
+		@photo = Photo.new(message_id: message.id, user_id: message.user.id, link: params[:message][:uploaded_photos], status_id: 0)
 		if @photo.save
-			render :json => {:message => 'success', :photoID => @photo.id }
+			render :json => {message: 'success', photoID: @photo.id }
 		else
 			render :json => {:error => @photo.errors.full_messages.join(',')}
 		end

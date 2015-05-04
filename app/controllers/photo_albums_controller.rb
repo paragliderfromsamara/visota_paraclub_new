@@ -34,7 +34,7 @@ include MessagesHelper
   end
   
   def unbinded_to_article_albums
-	@photo_albums = PhotoAlbum.find_all_by_article_id_and_status_id(nil, 1)
+	@photo_albums = PhotoAlbum.where(article_id: nil, status_id: 1)
 	respond_to do |format|
       #format.html # index.html.erb
       format.json { render :json => @photo_albums }
@@ -44,8 +44,8 @@ include MessagesHelper
   # GET /photo_albums/1
   # GET /photo_albums/1.json
   def show
-	@album = PhotoAlbum.find_by_id_and_status_id(params[:id], 1) if !is_admin? 
-	@album = PhotoAlbum.find(params[:id]) if is_admin?
+	@album = PhotoAlbum.find_by(id: params[:id], status_id: 1) if !is_admin? 
+	@album = PhotoAlbum.find_by(id: params[:id]) if is_admin?
 	if userCanSeeAlbum?(@album)
 		@page_params = {:part_id => 3,:page_id => 1,:entity_id => @album.id}
 		@return_to = photo_album_path(@album)
@@ -80,8 +80,8 @@ include MessagesHelper
 
   # GET /photo_albums/1/edit
   def edit
-	@albumToForm = PhotoAlbum.find_by_id_and_status_id(params[:id], 1) if !is_admin? 
-	@albumToForm = PhotoAlbum.find(params[:id]) if is_admin?
+	@albumToForm = PhotoAlbum.find_by(id: params[:id], status_id: 1) if !is_admin? 
+	@albumToForm = PhotoAlbum.find_by(id: params[:id]) if is_admin?
 	if isEntityOwner?(@albumToForm) 
 		@title = 'Изменение фотоальбома'
 	else
@@ -127,8 +127,8 @@ include MessagesHelper
   # PUT /photo_albums/1
   # PUT /photo_albums/1.json
   def update
-	@album = PhotoAlbum.find_by_id_and_status_id(params[:id], 1) if user_type != 'super_admin' and user_type != 'admin'
-	@album = PhotoAlbum.find(params[:id]) if user_type == 'super_admin' || user_type == 'admin'
+	@album = PhotoAlbum.find_by(id: params[:id], status_id: 1) if user_type != 'super_admin' and user_type != 'admin'
+	@album = PhotoAlbum.find_by(id: params[:id]) if user_type == 'super_admin' || user_type == 'admin'
     if @album != nil
 		if user_type != 'guest' and user_type != 'bunned' and user_type != 'new_user' and (@album.user == current_user or user_type == 'admin' or user_type == 'super_admin')
 			if @album.user_id != (params[:photo_album][:user_id]).to_i
@@ -159,7 +159,7 @@ include MessagesHelper
   # DELETE /photo_albums/1
   # DELETE /photo_albums/1.json
   def destroy
-    @photo_album = PhotoAlbum.find(params[:id])
+    @photo_album = PhotoAlbum.find_by(id: params[:id])
 	if @photo_album.user == current_user || is_admin?
 		if @photo_album.status_id == 3
 			@photo_album.destroy
@@ -198,7 +198,7 @@ include MessagesHelper
 				@my_albums.uniq!
 			end
 		else 
-			@my_albums = Theme.find_all_by_status_id(1, :order => 'name ASC')
+			@my_albums = Theme.where(status_id: 1).order('name ASC')
 		end
 		respond_to do |format|
 		  #format.html # index.html.erb
@@ -209,7 +209,7 @@ include MessagesHelper
 	end
   end
   def recovery
-	album = PhotoAlbum.find(params[:id])
+	album = PhotoAlbum.find_by(id: params[:id])
 	if album != nil and is_admin?
 		album.set_as_visible
 	else
@@ -218,7 +218,7 @@ include MessagesHelper
   end
   
   def upload_photos #загрузка фотографий
-	album = PhotoAlbum.find_by_id(params[:id]) 
+	album = PhotoAlbum.find_by(id: params[:id]) 
 	if isEntityOwner?(album)
 		@photo = Photo.new(:photo_album_id => album.id, :user_id => album.user.id, :link => params[:photo_album][:uploaded_photos])
 		if @photo.save

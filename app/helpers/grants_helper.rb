@@ -20,7 +20,7 @@ end
 	end
 	def userCanGiveVoice?(vote)
 		if vote != nil and user_type != 'guest'
-			voice = Voice.find_by_vote_id_and_user_id(vote.id, current_user.id)
+			voice = Voice.find_by(user_id: current_user.id, vote_id: vote.id) 
 			if vote_completed?(vote) and voice != nil
 				return false
 			else
@@ -33,7 +33,7 @@ end
 	def user_could_see_vote_result?(vote)
 		
 		if user_type != 'guest' and vote != nil
-			voice = Voice.find_by_user_id_and_vote_id(current_user.id, vote.id) 
+			voice = Voice.find_by(user_id: current_user.id, vote_id: vote.id) 
 			if voice != nil || vote_completed?(vote)
 				return true
 			else	

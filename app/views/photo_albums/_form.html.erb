@@ -7,7 +7,7 @@
 				<%= form_for(@albumToForm, :multipart => true) do |f| %>
 					<%= f.hidden_field :uploaded_photos, :value => '' %>
 					<% if is_super_admin? %>
-						<% @users = User.find(:all, :order=> 'created_at ASC') %>
+						<% @users = User.all.order('created_at ASC') %>
 						<%= f.label :user_id, 'Автор' %><br />
 						<%= f.collection_select :user_id, @users, :id, :name, {}, {:class => 'c_select'} %><br /><br />
 					<% end %>
