@@ -4,7 +4,7 @@ module ThemesHelper
 		form_for(@formTheme, :multipart => 'true') do |f|
 		"
 			<div class = 'tForm'>
-				<div style = 'display: none;'>#{ f.file_field :uploaded_photos, :multiple => 'true' if type != 'comment'}</div>
+				<div style = 'display: none;'>#{ f.file_field :uploaded_photos, :multiple => 'true'}</div>
 				<div class = 'central_field' style = 'width: 950px;'>
 					<br />
 					<table id = 'msg_table'>

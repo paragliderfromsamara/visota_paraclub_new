@@ -132,7 +132,7 @@ module StepsHelper
 	end
 	
 	def guest_host_validation
-		step = Step.find_by(part_id: @page_params[:part_id], page_id: @page_params[:page_id], entity_id: @page_params[:entity_id], ip_addr: request.env['REMOTE_ADDR'], host_name: request.env['REMOTE_HOST']).conditions("user_id != 0")
+		step = Step.find_by(part_id: @page_params[:part_id], page_id: @page_params[:page_id], entity_id: @page_params[:entity_id], ip_addr: request.env['REMOTE_ADDR'], host_name: request.env['REMOTE_HOST'], user_id: "!=0")
 		return step
 	end
 	

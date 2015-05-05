@@ -63,7 +63,7 @@ module ArticlesHelper
 		v_status_id = [1,2] if !is_not_authorized?
     link = (@user == nil)? articles_path: "\/users\/#{@user.id}\/articles"
 		art.types.each do |t|
-			articles = Article.find_all_by_article_type_id_and_status_id_and_visibility_status_id(t[:value], 1, v_status_id)
+			articles = Article.where(article_type_id: t[:value], status_id: 1, visibility_status_id: v_status_id)
 			but = {:name => "#{t[:multiple_name]} [#{articles.count}]", :access => true, :type => 'b_grey', :link => "#{link}?c=#{t[:link]}"}
 			but[:selected] = true if t == @curArtCat
 			buttons[buttons.length] = but
@@ -71,7 +71,7 @@ module ArticlesHelper
 		return buttons_in_line(buttons)
 	end
 	def article_type_part(type)
-		articles = Article.find_all_by_article_type_id(type[:value], :limit => 3)
+		articles = Article.where(article_type_id: type[:value]).limit(3)
 		articles_block = '<p class = "istring">В данной категории ничего нет...</p>'
 		part = ''
 		if articles != []

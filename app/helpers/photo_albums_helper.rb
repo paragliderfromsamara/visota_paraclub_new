@@ -158,9 +158,9 @@ module PhotoAlbumsHelper
 						]
 		al.categories.each do |c|
 			if @user == nil
-				cAlbums = PhotoAlbum.find_all_by_category_id_and_status_id(c[:value], 1)
+				cAlbums = PhotoAlbum.where(category_id: c[:value], status_id: 1)
 			else
-				cAlbums = PhotoAlbum.find_all_by_category_id_and_status_id_and_user_id(c[:value], 1, @user.id)
+				cAlbums = PhotoAlbum.where(category_id: c[:value], status_id: 1, user_id: @user.id)
 			end
 			but = {:name => "#{c[:name]} [#{cAlbums.count}]", :access => true, :type => 'b_grey', :link => link + "?c=" +c[:path_name]}
 			but[:selected] = true if cur == c[:path_name]

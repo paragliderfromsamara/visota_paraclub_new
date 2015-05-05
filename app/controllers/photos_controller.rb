@@ -28,7 +28,7 @@ include MessagesHelper
   # GET /photos/1
   # GET /photos/1.json
   def show
-    @photo = Photo.find_by_id(params[:id])
+    @photo = Photo.find_by(id: params[:id])
 	if userCanSeePhoto?(@photo)
 		@photos = []
 		@j_photo = {:id => @photo.id, :link => @photo.link.to_s, :thumb => @photo.link.thumb.to_s, :description => @photo.description}
@@ -98,27 +98,27 @@ include MessagesHelper
 	@entity = params[:e]
 	case @entity
 	when "theme" #Фотографии в теме...
-		@theme = Theme.find_by_id(params[:e_id])
+		@theme = Theme.find_by(id: params[:e_id])
 		redirect_to '/404' if !isEntityOwner?(@theme)
 		@photos = @theme.photos
 		@link_to = theme_path(@theme.id)
 	when "photo_album" #Фотографии в альбоме...
-		@album = PhotoAlbum.find_by_id(params[:e_id])
+		@album = PhotoAlbum.find_by(id: params[:e_id])
 		redirect_to '/404' if !isEntityOwner?(@album)
 		@photos = @album.photos
 		@link_to = photo_album_path(@album.id)
 	when "message" #Фотографии в теме...
-		@message = Message.find_by_id(params[:e_id])
+		@message = Message.find_by(id: params[:e_id])
 		redirect_to '/404' if !isEntityOwner?(@message)
 		@photos = @message.photos
 		@link_to = theme_path(@message.theme_id)
 	when "article" #Фотографии в статье...
-		@article = Article.find_by_id(params[:e_id])
+		@article = Article.find_by(id: params[:e_id])
 		redirect_to '/404' if !isEntityOwner?(@article)
 		@photos = @article.photos
 		@link_to = article_path(@article)
 	when "event" #Фотографии в Новостях...
-		@event = Event.find_by_id(params[:e_id])
+		@event = Event.find_by(id: params[:e_id])
 		redirect_to '/404' if !is_admin? and user_type != 'manager'
 		@photos = @event.photos
 		@link_to = event_path(@event)
@@ -131,7 +131,7 @@ include MessagesHelper
 		photos_params = params[:photo_editions][:photos]
 		flag = 'no_changes'
 		photos_params.each do |x|
-				photo = Photo.find_by_id(x[1][:id])
+				photo = Photo.find_by(id: x[1][:id])
 				if photo != nil
 					if photo.name != x[1][:name] or photo.description != x[1][:description]
 						flag = 'updated'
