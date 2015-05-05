@@ -588,6 +588,10 @@ function myForm(type, entityID, formName)
 										paramName: entity+"[uploaded_photos]",
 										inputId: entity+"_uploaded_photos",
 										forceFallback: false,
+                                        sending: function(file, xhr, formData) {
+                                                // Pass token. You can use the same method to pass any other values as well such as a id to associate the image with for example.
+                                                formData.append("authenticity_token", el.find("input[name='authenticity_token']").val()); // Laravel expect the token post value to be named _token by default
+                                            },
 										success: function(file, response){
 																			var ph_id = response.photoID;
 																			getUploadedPh(ph_id, el, file.previewElement);
