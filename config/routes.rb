@@ -49,6 +49,10 @@ resources :voices, :only => [:create, :destroy]
   get "messages/replace_message"
   get "messages/do_replace_message"
   get '/messages/:id/replace_message', :to => 'messages#replace_message'
+<<<<<<< HEAD
+=======
+  get '/messages/:id/upload_photos', :to => 'messages#upload_photos'
+>>>>>>> 49f6525b4004528a4d74ebe925c66f31c33afaad
   post '/messages/:id/upload_photos', :to => 'messages#upload_photos' #загрузка с помощью dropzone.js и собственную функцию photosUploader() в application.js
   get '/do_replace_message', :to => 'messages#do_replace_message'
   #messages_controller end
@@ -89,6 +93,10 @@ resources :voices, :only => [:create, :destroy]
   post "photos/update_photos"
   get '/photos/:id/recovery', :to => 'photos#recovery' #восстановление
   get '/edit_photos', :to => 'photos#edit_photos'
+<<<<<<< HEAD
+=======
+  post '/edit_photos', :to => 'photos#edit_photos'
+>>>>>>> 49f6525b4004528a4d74ebe925c66f31c33afaad
   post '/update_photos', :to => 'photos#update_photos'
   #photos_controller end
 
