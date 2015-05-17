@@ -9,6 +9,7 @@
   <script type = 'text/javascript'>$(document).ready(function(){my_functions(); wheatherPanel(); <%= js_functions %> bottomControl();});</script>
 </head>
 <body>
+    
 	<!-- <div class = 'right_menu'>
 		<div id = 'wh_cont' style = 'width: 580px;'>
 			<div style = 'display: inline-block;'>
@@ -32,36 +33,132 @@
 			<div id = 'w_but'>
 			</div>
 		</div>
-	</div> -->
+	</div> 
+        -->
 	<div class='quickScroll' style = 'display: none;'>
 		<div class = 'arrow' id = 'aUp' style = 'display: none;'></div>
 		<div class = 'arrow' id = 'aDwn' style = 'display: none;'></div>
 	</div>
 	<div id = 'wrapper'>
 		<div id = 'top'>
-				<div id = 'logoField' <% if  @topSlider != true %>style = 'border-bottom: 1px solid #e1eaf6;'<% end %>>
-					<div link_to = '/' id = 'mLogo'></div>
-					<% if @topSlider == true %>
-						<%= topSlider.html_safe%>
-					<% end %>
-				</div>
-			<div id = 'menuWrapper'>
-				<div id = 'ses_p'>
-					<%= user_session_menu.html_safe %>
-				</div>
-				<div id = 'mainMenu'>
-					<%= put_link_type.html_safe %>
-				</div>
-			</div>
+				<div id = 'logoField'>
+                    <div class = 'section group'>
+                        <div class = 'col span_1_of_12'>
+                        </div>
+                        <div class = 'col span_2_of_12'>
+                            <img link_to = '/' id = 'mLogo' src = '/logoImages/logo.png' />
+                        </div>
+                        <div class = 'col span_8_of_12'>
+                            <div id = 'mainMenu'>
+                                <%= topMainMenu.html_safe %>
+                            </div>
+                        </div>                       
+                    </div>
+                    <% if controller.controller_name == 'pages' &&  controller.action_name == 'index' %>
+                    <div class = 'section group'>
+                        <div class = 'col span_1_of_12'>
+                        </div>
+                        <div class = 'col span_3_of_12'>
+                            <div style = 'position: relative;'>
+                            <p id = 'siteName'>САМАРСКИЙ</p>
+                            <p id = 'siteName'>ПАРАПЛАНЕРНЫЙ</p>
+                            <p id = 'siteName'>КЛУБ</p>
+                            
+                            <div id = 'aboutClubLink'>
+                                <p>УЗНАТЬ О КЛУБЕ</p>   
+                            </div>
+                        </div>
+                        </div>             
+                    </div>
+                    <%end%>
+                </div>
+                <img src = '<%= topImage %>' style = 'width: 100%; height:auto;' vspace = '0'>
 		</div>
 		<div id = 'middle'>
-			<%= header_1 %>
-			<%= yield %>
-			<div id = 'whiteSpace' style = 'position: relative; width: 100%;'></div>
+            <%= header_1 %>
+            <%= yield %>
+            <div id = 'm_full' class = 'even'>
+                <div class = 'central_field' id = 'm_1000wh'>
+                    <div class = 'section group' style = 'padding: 20px 0 20px 0'>
+                        <div class = 'col span_2_of_12'>
+                   
+                        </div>
+                        <div class = 'col span_1_of_12'>
+                             <img src = '/files/vk.png' style = 'width: 100%;'>
+                        </div> 
+                        <div class = 'col span_1_of_12'>
+             
+                        </div>
+                        <div class = 'col span_1_of_12'>
+                              <img src = '/files/fb.png' style = 'width: 100%;'>
+                        </div>
+                        <div class = 'col span_1_of_12'>
+             
+                        </div>
+                        <div class = 'col span_1_of_12'>
+                             <img src = '/files/tw.png' style = 'width: 100%;'>
+                        </div>
+                        <div class = 'col span_1_of_12'>
+                        </div>
+                        <div class = 'col span_1_of_12'>
+                             <img src = '/files/gp.png' style = 'width: 100%;'>
+                        </div>
+                        <div class = 'col span_2_of_12'>
+                        </div>               
+                    </div>
+            </div>
+            <div id = 'm_full' class = 'odd'>
+                <div class = 'central_field' id = 'm_1000wh'>
+                <div class="section group">
+                       <div class="col span_1_of_12">
+                            </div>
+                        <div class="col span_5_of_12">
+                            <h4>
+                                Адрес базирования клуба: 
+                            </h4>
+                            <p class = 'str-min norm'>
+                                Россия, Самарская область, пос. Яицкий, ул. Озёрная, 88
+                            </p>
+                        </div>
+                        <div class="col span_1_of_12">
+                             </div>
+                        <div class="col span_5_of_12">
+                            <h4>
+                                Телефоны: 
+                            </h4>
+                            <p class = 'str-min norm'>
+                                Самара: +7-927-294-30-01 Владимир Архиповский
+                            </p>
+                            <p class = 'str-min norm'>
+                                Самара: +7-903-309-04-12 Юрий Запорожец
+                            </p>
+                            <p class = 'str-min norm'>
+                                Новокуйбышевск: (235) 6-27-44 Борис Лузин
+                            </p>
+                        </div>
+                         </div>
+                    <br />
+                </div>
+            </div>
 		</div>
 		<div id = 'bottom'>
 			<div id = 'test'></div>
+            <div class = 'central_field' id = 'm_1000wh'  style = 'top: 30%;'>
+                <div class = 'section group'>
+                    <div class = 'col span_1_of_12'>
+                    </div>
+                    <div class = 'col span_8_of_12'>
+                        <div id = 'bottomMenu'>
+                          <%= bottomMainMenu.html_safe %>
+                        </div>
+                    </div>
+                    <div class = 'col span_3_of_12'>
+                       <p id = 'bottomClubName'> © СПК "Высота", 2000-<%= Time.now.year %></p>
+                    </div>
+                </div>
+                
+            </div>
 		</div>
-	</div>		
+	</div>
 </body>
 </html>

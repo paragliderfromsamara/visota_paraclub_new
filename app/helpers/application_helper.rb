@@ -53,22 +53,41 @@ require 'open-uri' #для парсера
 			return '"ВЫСОТА"-Самарский Парапланерный Клуб'
 		end
 	end
-	
-	def menu_array
+	def topImage
+    if @topImage == nil
+      return "/sliderImages/1.jpg"
+    else
+      return "/sliderImages/#{@topImage}"
+    end
+  end
+  def primaryMenuItems
+	  [{
+	   :name => 'О клубе', 
+	   :link => "/about_us", 
+	   :title => "История клуба",
+	   :drop_items => 'none'
+	  },
+	  {
+	   :name => 'Обучение', 
+	   :link => "/school", 
+	   :title => "История клуба",
+	   :drop_items => 'none'
+	  },
+	  {
+	   :name => 'Снаряжение', 
+	   :link => "/equipment", 
+	   :title => "Снаряжение",
+	   :drop_items => 'none'
+	  },
+    {
+     :name => 'Контакты', 
+     :link => "/contacts", 
+     :title => "Контактная информация",
+     :drop_items => 'none'
+    }]
+  end
+	def secondaryMenuItems
 	[
-					  {
-					   :name => 'Главная', 
-					   :link => "#{root_path}", 
-					   :title => "На главную",
-					   :drop_items => 'none'
-					  }, #page_name, part_id, page_id, title
-
-					  {
-					   :name => 'О клубе', 
-					   :link => "/about_us", 
-					   :title => "История клуба",
-					   :drop_items => 'none'
-					  },
 					  {
 					   :name => 'Новости', 
 					   :link => "/events", 
@@ -109,16 +128,16 @@ require 'open-uri' #для парсера
 					   :name => 'Клубная жизнь', 
 					   :link => "/visota_life", 
 					   :title => "Общение (в прошлом Гостевая)",
-					 #  :links_list => topic_link_list,
+					   :links_list => topic_link_list,
 					   :link_list_width => '170px',
 					   :id => 'nav_topics',
 					   :drop_items => 'none'
 					  },
 					  {
-					   :name => 'Материалы', 
+					  :name => 'Материалы', 
 					   :link => "/articles", 
 					   :title => "Отчёты, Отзывы, Документация, полезные ссылки",
-					   # :links_list => [
+					   #:links_list => [
 										# {:name => 'Отчёты', :link => '/reports'},
 										# {:name => 'Статьи', :link => '/club_articles'},
 										# {:name => 'Отзывы', :link => '/reviews'},
@@ -128,14 +147,8 @@ require 'open-uri' #для парсера
 									   # ],
 						:link_list_width => '170px',
 						:id => 'nav_materials',
-					    :drop_items => 'none'
-					  },
-					   {
-					   :name => 'Контакты', 
-					   :link => "/contacts", 
-					   :title => "Контактная информация",
-					   :drop_items => 'none'
-					  }
+					  :drop_items => 'none'
+					 }
 					 ]
 	end
 	def user_session_menu
@@ -157,37 +170,34 @@ require 'open-uri' #для парсера
 		end
 		return "<ul>#{v}</ul>"
 	end
-	def put_link_type #формирование меню сайта
+	def topMainMenu #меню в шапке сайта
 		value = ""
-		menu_array.each do |item|
+		primaryMenuItems.each do |item|
 			value += "<li id = '#{is_selected(item)}'><a href = '#{item[:link]}'><span>#{item[:name]}</span></a>#{ '&#9662;' if item[:drop_items] != 'none' and item[:drop_items] != nil}#{menu_drop_list(item)}</li>"
 		end
 		
 		return "<ul>#{value}</ul>"
 	end
-	
+	def bottomMainMenu
+		value = ""
+		primaryMenuItems.each do |item|
+			value += "<li><a href = '#{item[:link]}'><span>#{item[:name]}</span></a></li>"
+		end
+		
+		return "<ul>#{value}</ul>"
+  end
 	def is_selected(item)
-		if menu_array.index(item) != 0
 			if @curMenuItem == item[:name] || current_page?(item[:link])
 				return 'c_nav_li' 
 			end
-		end
-
 	end
-	
-	def nav_menu #основное меню сайта
-				"
-					#{put_link_type}
-				"
-	end
-	
+  
 	def menu_drop_list(item) #Формирует выпадающие списки основного меню.
 		value = ''
 		if item[:links_list] != nil and item[:links_list] != []
 			item[:links_list].each do |sub_item|
 				value += "<a style = 'text-decoration: none;' href = '#{sub_item[:link]}'><li style = 'display: block; font-size: 12pt;' class = 's_nav_li'>#{sub_item[:name]}</li></a>"
 			end
-			
 		end
 		return "<div style = 'display: none; width: #{item[:link_list_width]};' class = 'menu_drop_list'><ul>#{value}</ul></div>"
 	end

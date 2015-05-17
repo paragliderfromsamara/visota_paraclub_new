@@ -2,6 +2,7 @@ module StepsHelper
 	def define_action
 		@page_params = {:part_id => 0, :page_id => 0, :entity_id => 0} if @page_params == nil
 		if controller.controller_name == 'pages' #@page_params[:part_id] == 0 #pages
+      @curMenuItem = 'О клубе' if controller.action_name == 'about_us'
 		elsif controller.controller_name == 'topics' #@page_params[:part_id] == 1 #topics
 			@curMenuItem = 'Клубная жизнь'
 			make_signed_step

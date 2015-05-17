@@ -18,15 +18,19 @@ include PagesHelper
   end
 
   def equipment
-	@title = 'Снаряжение'
+	  @title = 'Снаряжение'
+    @topImage = '4.jpg'
   end
 	
   def contacts
-	@title = "Контакты"
+    @title = "Контакты"
+    @topImage = '3.jpg'
   end
 
   def about_us
-	@title = "О клубе"
+    @topImage = '2.jpg'
+	  @title = "О клубе"
+    
   end
   
   def styles
