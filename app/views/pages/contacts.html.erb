@@ -1,27 +1,43 @@
-<div class = 'central_field' style = 'width: 98%;'>
-<span class = 'article_content'>
-<h2>Номера телефонов</h2>
-<ul>
-	<li>- <span class = 'flow_b_str'>Самара</span>: <b>+7-927-294-30-01</b> <span class = 'flow_b_str'>Владимир Архиповский</span></li>
-	<li>- <span class = 'flow_b_str'>Самара</span>: <b>+7-903-309-04-12</b> <span class = 'flow_b_str'>Юрий Запорожец</span></li>
-	<li>- <span class = 'flow_b_str'>Новокуйбышевск</span>: <b>(235) 6-27-44</b> <span class = 'flow_b_str'>Борис Лузин</span></li>
-</ul>
-<hr />
-<h2>Мы в интернете</h2>
-<ul>
-	<li>- <%= link_to 'visota-paraclub.ru', 'http://visota-paraclub.ru', :class => 'b_link_bolder', :style => 'font-size: 13pt;' %> - <span class = 'flow_str'>Сайт клуба</span></li>
-	<li>- <%= link_to 'vk.com/visota_paraclub', 'http://vk.com/visota_paraclub', :class => 'b_link_bolder', :style => 'font-size: 13pt;' %> - <span class = 'flow_str'>Сообщество Алексея Колесникова <b>Вконтакте</b></span></li>
-</ul>
-<hr />
-<h2>Адрес базирования клуба</h2>
-<p><span class = 'flow_str'>Самарская Область, пос. Яицкий ул. Озёрная, 88</span></p>
-<hr />
-<h2>Схема проезда</h2>
-<div class = 'central_field' style = 'width: 600px;'>
-	<%= render 'map' %>
-	<br />
-	<%= image_tag '/files/m.jpg', :width => '600px' %>
+<div class = 'central_field' id = 'm_1000wh'>
+    <div class = 'section group'>
+        <div class = 'col span_5_of_12' style = 'padding: 50px 0 0 0;'>
+            <h1 class = 'blue'>
+                КОНТАКТЫ
+            </h1>
+            <br />
+            <p>
+                Адрес: Самарская Область, пос. Яицкий ул. Озёрная, 88
+            </p>
+            <p>
+                Самара: +7-927-294-30-01 Владимир Архиповский
+            </p>
+            <p>
+                Самара: +7-903-309-04-12 Юрий Запорожец
+            </p>
+            <p>
+                Новокуйбышевск: (235) 6-27-44 Борис Лузин 
+            </p>
+        </div>
+    </div>
+    <div class = 'section group' style = 'padding: 0 0 50px 0;'>
+        <div class = 'col span_12_of_12'>
+            <%= render 'map' %>
+        </div>
+    </div>
+    <div class = 'section group'>
+        <div class = 'col span_12_of_12'>
+            <h1 class = 'blue'>
+                ПОДРОБНАЯ СХЕМА ПРОЕЗДА В ПОСЁЛКЕ
+            </h1>
+        </div>
+    </div>
+    <div class = 'section group' style = 'padding: 0 0 50px 0;'>
+        <div class = 'col span_4_of_12' >
+        </div>    
+        <div class = 'col span_7_of_12'>
+                <%= image_tag '/files/m.jpg', :style => 'width: 100%;' %>
+        </div>
+    </div>
 </div>
-</span>
-</div>
-</div>
+
+	

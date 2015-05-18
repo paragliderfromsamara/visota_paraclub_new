@@ -64,7 +64,7 @@ body {
 	}
 h1 {
 	font-family: $font_family_1; 
-	font-size: 1em; 
+	font-size: 1.375em; 
 	color: $text_color_1;
   }
   h1.blue {color: $link_color;}
@@ -212,8 +212,8 @@ img.ava {width: 120px;}
 #bottom{background-color: $fiveth_color; height: 105px;}
 #mLogo 
 {
-	width: 100%;
-	height:auto;
+    width: 100%;
+    max-width: 250px;
     cursor:pointer;
 }
 #logoField  {z-index: 300; position: absolute; width: 100%; min-width: 1000px;}
