@@ -152,12 +152,6 @@ resources :voices, :only => [:create, :destroy]
   #sessions_controller end
   
   #pages_controller
-  get "pages/index"
-  get "pages/school"
-  get "pages/contacts"
-  get "pages/about_us"
-  get "pages/feed"
-  get "pages/search"
   get '/index', :to => 'pages#index'
   get '/school', :to => 'pages#school'
   get '/about_us', :to => 'pages#about_us'
@@ -165,6 +159,7 @@ resources :voices, :only => [:create, :destroy]
   get '/styles', :to => 'pages#styles'
   get '/feed', :to => 'pages#feed'
   get '/search', :to => 'pages#search'
+  get '/equipment', :to => 'pages#equipment'
   #pages_controller end
   # You can have the root of your site routed with "root"
   root 'pages#index'

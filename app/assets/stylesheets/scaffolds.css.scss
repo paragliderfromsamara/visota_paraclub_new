@@ -1,21 +1,25 @@
 $main_color: #3084c9;
+$link_color: #176bb5;
 $second_color: #e1e7eb;
 $third_color: #f4f7fb;
 $fourth_color:#cbe0f2;
-$text_color_1: #5c5c5c;
+$fiveth_color: #2e4e5e;
+$text_color_1: #6d6d6d;
 $text_color_2: #1a2d5d;
 $text_color_3: #414141;
 $text_color_4: #64b0fb;
 $text_color_5: #76797c;
 /* Цвет чётных блоков */
-$evenBlockColor: #eff2f5;
+$evenBlockColor: #f9f9f9;
 /* Цвет нечётных блоков */
 $oddBlockColor: #ebeef1;
 $error_color: red;
-$font_family_1: robotoregular, sans-serif;
-$font_family_2:roboto_bkbold, sans-serif;
-$font_family_3: roboto_ltbold_italic, sans-serif;
-$font_family_4: robotoitalic, sans-serif;
+$font_family_1: ubuntu_regular, sans-serif;
+$font_family_2: ubuntu_bold, sans-serif;
+$font_family_3: ubuntu_bold_italic, sans-serif;
+$font_family_4: ubuntu_regular_italic, sans-serif;
+$font_family_5: ubuntu_light, sans-serif;
+$magistral_font: magistral_norm, sans-serif;
 $time_1: 500ms;
 $time_2: 250ms;
 /*dropzone var*/
@@ -28,54 +32,65 @@ $dz_preview_width: 100px;
     -moz-transition-duration: $t;
     transition-duration: $t;
 	}
+@mixin transform
+    	{
+            -moz-transform: rotate(270deg); 
+            -ms-transform: rotate(270deg);
+            -webkit-transform: rotate(270deg); 
+            -o-transform: rotate(270deg); 
+            transform: rotate(270deg);
+    	}
 @mixin my_opacity($t){opacity: $t;filter: alpha(opacity=$t*100);-moz-opacity: $t;}
 	
 @mixin menuLi
 	{
 		position: relative;
 		float: left; 
-		color: $text_color_1; 
+		
 		font-family: $font_family_1; 
-		font-size: 12pt; 
+		font-size: 1em; 
 		cursor:pointer; 
-		padding-left: 12px;
-		padding-right: 12px;
-		padding-top: 7px;
-		padding-bottom: 8px;
+
 		z-index: 500;
-		@include animation($time_1);
+		
 	}
 
 	
 body {
 	background-color: #ffffff;
+    min-width:1000px;
+    font: 100%/1.5 $font_family_1;
+    color: $text_color_1;
 	}
 h1 {
-	font-family: $font_family_2; 
-	font-size: 14pt; 
+	font-family: $font_family_1; 
+	font-size: 1em; 
 	color: $text_color_1;
   }
+  h1.blue {color: $link_color;}
 h2 {
-	font-family: $font_family_2; 
-	font-size: 14pt; color: 
-	$text_color_2;
+	font-family: $font_family_1; 
+	font-size: 1em; color: $main_color;
    }
 h3 {
 	font-family: $font_family_3; 
-	font-size: 13pt; 
+	font-size: 1em; 
 	color: $text_color_1;
   }
 h4 {
-  	font-family: $font_family_3; 
-  	font-size: 11pt; 
-  	color: $text_color_1;
+  	font-family: $font_family_1; 
+  	font-size: 9pt; 
+  	color: $main_color;
     }
 b  {
 	font-family: $font_family_2;
   }
-p  {
+p {
     font-family: $font_family_1;
-  }
+    font-size: 0.875em;
+   }
+   p.quote {font-size: 1.25em; color: $link_color;}
+   span.blue_undline{border-bottom: 3px solid #176bb5; padding-bottom: 14px;}
 hr {size:1px;}
 textarea {resize: none;}
 /* form elements */
@@ -182,59 +197,79 @@ textarea {resize: none;}
 			   }
 .pB-wr-fix {position: fixed; top:0;}
 /*paralaxes end*/
-p.string {font-family: $font_family_1; font-size: 15px;}
-.istring {font-family: $font_family_3; font-size: 15px;}
+.string {font-family: $font_family_1; font-size: 15px;}
+.str-min {@extend .string; font-size: 12px;}
+.istring {font-family: $font_family_4; font-size: 15px;}
 .norm {color: $text_color_5;}
 .white{color: white;}
 .err {color: $error_color;}
-.istring_m{	@extend .istring;font-size: 13px;}
+.istring_m{	@extend .istring;font-size: 0.6875em;}
 .medium-opacity{@include my_opacity(0.7);}
 img.ava {width: 120px;}
-#wrapper, #top_photo, #top, #bottom {position: relative; width: 100%; min-width: 1200px; z-index: 1;}
-#middle, #menuWrapper, #logoField   {position: relative; max-width: 1200px; min-width: 1200px; margin-left: auto; margin-right: auto; z-index: 1;}
+#wrapper, #top_photo, #top, #bottom {position: relative; width: 100%; min-width: 1000px; z-index: 1;}
+#middle, #menuWrapper {position: relative; width: 100%; min-width: 1000px; margin-left: auto; margin-right: auto; z-index: 1;}
 #middle{/*background-color: #d9eaf9;*/min-height: 500px; }
-#bottom{background-color: $main_color; height: 200px;}
+#bottom{background-color: $fiveth_color; height: 105px;}
 #mLogo 
 {
-	width: 209px;
-	height:118px;
-	padding: 35px 0 0 50px;
-	top: 10px;
-	margin: 0 auto;
-	cursor: pointer;
-	position: relative;
-	background-image: url('/logoImages/logo.png');
-	background-repeat: no-repeat;
-
+	width: 100%;
+	height:auto;
+    cursor:pointer;
 }
-#logoField  {max-height: 600px; z-index: 300;}
+#logoField  {z-index: 300; position: absolute; width: 100%; min-width: 1000px;}
 /*links*/
 	a.b_link {
 		font-family: $font_family_1;
-		color: $main_color;
-		font-size: 15px;
+		color: $link_color;
+		font-size: 0.8125em;
 		text-decoration: none;
 		}
 	.smiles, a.pointer{cursor: pointer;}
 	a.b_link_bold {
 		font-family: $font_family_2;
-		color: $main_color;
+		color: $link_color;
 		text-decoration: none;
 		}
 	a.b_link_bold:hover, a.b_link:hover , a.b_link_i:hover
 		{
 			text-decoration: underline;
 		}
-	a.b_link_i {font-family: $font_family_3; font-size: 13px; color:$main_color;text-decoration: none;}
+	a.b_link_i {font-family: $font_family_3; font-size: 13px; color:$link_color;text-decoration: none;}
 	
-	a.w_link_i {font-family: $font_family_3; font-size: 13px;text-decoration: none; color:$main_color;}
+	a.w_link_i {font-family: $font_family_3; font-size: 13px;text-decoration: none; color:$link_color;}
 	a.w_link_i:hover {text-decoration: underline; }
 /*links end*/
 /*mainMenu*/
 
 
-	
-	#mainMenu {
+	#siteName
+    {
+        color: white;
+        font-family: $font_family_5; font-size: 2em;
+        height: 30%;
+    }
+    #aboutClubLink
+    {
+        color: white;
+        position: relative;
+        text-align: center;
+        border-color: white;
+        border-width: 1px;
+        border-radius: 16px;
+        cursor:pointer;
+        float: right;
+        p 
+        {
+            padding: 10px 10px 10px 10px;
+            font-size: 0.75em;
+            font-family: $font_family_5;
+        }
+    }
+    #bottomClubName 
+    {
+        color: white; font-family: $font_family_5; font-size: 0.875em; vertical-align:middle;
+    }
+	#mainMenu { 
 		height: 40px; 
 		z-index: 550;
 		padding-bottom: 20px;
@@ -245,7 +280,53 @@ img.ava {width: 120px;}
 			}
 		
 		li {
-			@include menuLi;		
+			@include menuLi;color: black; 	
+    		padding-left: 12px;
+    		padding-right: 12px;
+    		padding-top: 7px;
+    		padding-bottom: 8px;	
+		   }
+		li:hover, #c_nav_li {	border-width: 1px;
+    		padding-left: 11px;
+    		padding-right: 11px;
+    		padding-top: 6px;
+    		padding-bottom: 7px;
+            border-radius: 16px;
+					span {color: $main_color;}
+					border-color:$main_color; 
+                  }	
+		span {
+				padding-bottom: 7px;
+				width: 20px;
+			 }
+			
+		span:hover {
+					color: $main_color; 
+				  }
+		a {
+			text-decoration: none;
+			color: black;
+		  }
+          
+	}
+	#bottomMenu { 
+		z-index: 550;
+		ul
+			{
+				list-style: none; 
+			}
+		
+		li {
+    		position: relative;
+    		float: left; 
+    		color: white; 
+    		font-family: $font_family_5; 
+    		font-size: 0.875em; 
+    		cursor:pointer; 
+    		padding-left: 12px;
+    		padding-right: 12px;
+    		z-index: 500;
+    		@include animation($time_1);		
 		  }
 			
 		span {
@@ -255,45 +336,14 @@ img.ava {width: 120px;}
 			
 		span:hover {
 					border-bottom-width: 2px;
-					color: $main_color;
-					border-bottom-color:$main_color; 
+					border-bottom-color:white; 
 				  }
 		a {
 			text-decoration: none;
-			color: $text_color_1;
+			color: white;
 		  }
 	}
-	#c_nav_li
-			{
-				color: white;
-				background-color: $text_color_4;
-				border-bottom-color:$main_color;
-				
-				a{
-					color:white;
-					:hover {color:white;}
-				 }
-				 span:hover {
-					border-bottom-width: 0px;
-				  } 
-			}
-	#ses_p
-	{
-		position: absolute;
-		right: 0;
-		margin-top: 0;
-		width: 350px;
-		height: 90%;
-		ul {float: right;}
-		li {
-			@include menuLi;
-		   }
-		li:hover {
-					color: white;
-					background-color: $main_color;
-					border-width: 0;
-				 }
-	}
+
 /*mainMenu end*/
 
 /* Локальное мини меню */
@@ -462,8 +512,8 @@ img.ava {width: 120px;}
     	}
 #m_full {
 			width: 100%;
-			height: 50px;
 		}
+
 /* block end */
 
 

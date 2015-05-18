@@ -6,4 +6,19 @@ class PagesControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test "should get school" do
+    get :school
+    assert_response :success
+  end
+
+  test "should get contacts" do
+    get :contacts
+    assert_response :success
+  end
+
+  test "should get about_us" do
+    get :about_us
+    assert_response :success
+  end
+
 end
