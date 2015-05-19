@@ -33,8 +33,9 @@ include PagesHelper
     
   end
   
-  def styles
-	@title = "Стили"
+  def paragliding
+	  @title = "Немного о парапланеризме"
+    @topImage = '5.jpg'
   end
   
   def new_template
