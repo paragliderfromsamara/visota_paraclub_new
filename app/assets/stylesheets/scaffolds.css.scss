@@ -210,7 +210,8 @@ img.ava {width: 120px;}
 #wrapper {position: relative; width: 100%; min-width: 1200px; margin-left: auto; margin-right: auto; z-index: 1;}
 #middle, #menuWrapper {position: relative; width: 100%; margin-left: auto; margin-right: auto; z-index: 1;}
 #middle{/*background-color: #d9eaf9;*/min-height: 500px; }
-#bottom{background-color: $fiveth_color; height: 105px; position: relative; width: 100%; min-width: 1200px; z-index: 1;}
+#bottom, #footer{position: relative; width: 100%; min-width: 1200px; z-index: 1;}
+#footer{background-color: $fiveth_color; height: 105px;}
 #mLogo 
 {
     width: 100%;
@@ -273,6 +274,7 @@ img.ava {width: 120px;}
 	#mainMenu { 
 		height: 40px; 
 		z-index: 550;
+        float:right;
 		padding-bottom: 20px;
 		margin-top: 20px;
 		ul
