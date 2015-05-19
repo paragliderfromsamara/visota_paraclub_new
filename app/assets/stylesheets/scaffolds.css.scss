@@ -58,7 +58,7 @@ $dz_preview_width: 100px;
 	
 body {
 	background-color: #ffffff;
-    min-width:1000px;
+    /* min-width:1000px;*/
     font: 100%/1.5 $font_family_1;
     color: $text_color_1;
 	}
@@ -206,10 +206,11 @@ textarea {resize: none;}
 .istring_m{	@extend .istring;font-size: 0.6875em;}
 .medium-opacity{@include my_opacity(0.7);}
 img.ava {width: 120px;}
-#wrapper, #top_photo, #top, #bottom {position: relative; width: 100%; min-width: 1000px; z-index: 1;}
-#middle, #menuWrapper {position: relative; width: 100%; min-width: 1000px; margin-left: auto; margin-right: auto; z-index: 1;}
+#top_photo, #top {position: relative; width: 1600px; margin-left: auto; margin-right: auto; z-index: 1;}
+#wrapper {position: relative; width: 100%; min-width: 1200px; margin-left: auto; margin-right: auto; z-index: 1;}
+#middle, #menuWrapper {position: relative; width: 100%; margin-left: auto; margin-right: auto; z-index: 1;}
 #middle{/*background-color: #d9eaf9;*/min-height: 500px; }
-#bottom{background-color: $fiveth_color; height: 105px;}
+#bottom{background-color: $fiveth_color; height: 105px; position: relative; width: 100%; min-width: 1200px; z-index: 1;}
 #mLogo 
 {
     width: 100%;
@@ -245,8 +246,8 @@ img.ava {width: 120px;}
 	#siteName
     {
         color: white;
-        font-family: $font_family_5; font-size: 2em;
-        height: 30%;
+        font-family: $font_family_1; font-size: 3em;
+        padding: 0 0 7px 0;
     }
     #aboutClubLink
     {
@@ -255,14 +256,14 @@ img.ava {width: 120px;}
         text-align: center;
         border-color: white;
         border-width: 1px;
-        border-radius: 16px;
+        border-radius: 30px;
         cursor:pointer;
-        float: right;
+        float: left;
         p 
         {
-            padding: 10px 10px 10px 10px;
-            font-size: 0.75em;
-            font-family: $font_family_5;
+            padding: 15px 24px 15px 24px;
+            font-size: 0.93em;
+            font-family: ubuntu_light, sans-serif;
         }
     }
     #bottomClubName 
@@ -506,6 +507,10 @@ img.ava {width: 120px;}
 	{
 		width: 1000px;
 	}
+#m_1600wh
+    	{
+    		width: 1600px;
+    	}
 #m_90percent
     	{
     		width: 90%;
