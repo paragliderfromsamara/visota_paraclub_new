@@ -13,6 +13,8 @@ module StepsHelper
 				@curTopImage = topImages[2]
 			elsif controller.action_name == 'paragliding'
 				@curTopImage = topImages[4]
+			elsif controller.action_name == 'school'
+				@curTopImage = topImages[5]
 			end
 			
 		elsif controller.controller_name == 'topics' #@page_params[:part_id] == 1 #topics
