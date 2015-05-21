@@ -287,7 +287,8 @@ img.ava {width: 120px;}
     		padding-top: 7px;
     		padding-bottom: 8px;	
 		   }
-		li:hover, #c_nav_li {	border-width: 1px;
+        li:hover {span {color: $main_color;}}
+		#c_nav_li {	border-width: 1px;
     		padding-left: 31px;
     		padding-right: 31px;
     		padding-top: 6px;
