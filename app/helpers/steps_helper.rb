@@ -1,8 +1,20 @@
 module StepsHelper
 	def define_action
 		@page_params = {:part_id => 0, :page_id => 0, :entity_id => 0} if @page_params == nil
+		@curTopImage = @curTopImage = topImages[1]
 		if controller.controller_name == 'pages' #@page_params[:part_id] == 0 #pages
-      @curMenuItem = 'О клубе' if controller.action_name == 'about_us'
+			if controller.action_name == 'about_us'
+				@curTopImage = topImages[1]
+			elsif controller.action_name == 'index'
+				@curTopImage = topImages.first
+			elsif controller.action_name == 'equipment'
+				@curTopImage = topImages[3] 
+			elsif controller.action_name == 'contacts'
+				@curTopImage = topImages[2]
+			elsif controller.action_name == 'paragliding'
+				@curTopImage = topImages[4]
+			end
+			
 		elsif controller.controller_name == 'topics' #@page_params[:part_id] == 1 #topics
 			@curMenuItem = 'Клубная жизнь'
 			make_signed_step

@@ -181,8 +181,8 @@ module VideosHelper
 							all_but   
 						]
 		v.categories.each do |c|
-			categoryVideos = Video.find_all_by_category_id(c[:value]) if @user == nil
-			categoryVideos = Video.find_all_by_category_id_and_user_id(c[:value], @user.id) if @user != nil
+			categoryVideos = Video.where(category_id: c[:value]) if @user == nil
+			categoryVideos = Video.where(category_id: c[:value], user_id: @user.id) if @user != nil
 			but = {:name => "#{c[:name]} [#{categoryVideos.count}]", :access => true, :type => 'b_grey', :link => link+"?c=#{c[:path_name]}"}
 			but[:selected] = true if cur == c[:path_name]
 			buttons_array[buttons_array.length] = but

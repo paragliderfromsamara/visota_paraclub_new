@@ -1,14 +1,15 @@
+
 <div class = 'c_box'>
-    <div class = 'central_field' style = 'width: 90%; z-index: 15;'>
+    <div class = 'central_field' id = 'm_1600wh' style = 'z-index: 15;'>
         <%= top_index_topic_buttons.html_safe %>
     </div>
 </div>
 <% @topics.each do |topic| %>
 	<div class = 'c_box'>
-				<div class = 'central_field' style = 'width: 90%; z-index: 15;'>
+				<div class = 'central_field' id = 'm_1600wh' style = 'z-index: 15;'>
 					</br>
 						<div class = 'central_field' style = 'width: 100%;'>
-							<%= link_to(topic.name, topic, :class => 'b_link_bold', :style => 'font-size: 14pt;') %>	
+							<%= link_to(topic.name, topic, :class => 'b_link_bold', :style => 'font-size: 0.875em;') %>	
 						</div>
 					</br>
 					<% 
@@ -102,6 +103,7 @@
 	
 	<br />
 </div>
+
 <br />
 <br />
 <br />

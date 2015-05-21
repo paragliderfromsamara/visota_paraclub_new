@@ -53,12 +53,16 @@ require 'open-uri' #для парсера
 			return '"ВЫСОТА"-Самарский Парапланерный Клуб'
 		end
 	end
-	def topImage
-    if @topImage == nil
-      return "/sliderImages/1.jpg"
-    else
-      return "/sliderImages/#{@topImage}"
-    end
+	def topImages
+		path = "/sliderImages/"
+		arr = [
+				{link: "#{path}1.jpg", BlockHeight: 531},
+				{link: "#{path}2.jpg", BlockHeight: 397},
+				{link: "#{path}3.jpg", BlockHeight: 397},
+				{link: "#{path}4.jpg", BlockHeight: 397},
+				{link: "#{path}5.jpg", BlockHeight: 397}
+			  ]
+		return arr
   end
   def primaryMenuItems
 	  [{

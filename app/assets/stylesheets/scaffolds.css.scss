@@ -86,11 +86,11 @@ b  {
 	font-family: $font_family_2;
   }
 p {
-    font-family: $font_family_5;
+    font-family: $font_family_1;
     font-size: 0.875em;
    }
-   p.quote {font-size: 1em; color: $link_color; font-family:$font_family_5;}
-   span.blue_undline{border-bottom: 3px solid #176bb5; padding-bottom: 10px;}
+   p.quote {font-size: 1.25em; color: $link_color; font-family:$font_family_5;}
+   span.blue_undline{border-bottom: 3px solid #176bb5; padding-bottom: 14px;}
 hr {size:1px;}
 textarea {resize: none;}
 /* form elements */
@@ -504,6 +504,10 @@ img.ava {width: 120px;}
 		height:50px;
 	}
 #m_1000wh
+	{
+		width: 1000px;
+	}
+#m_1200wh
 	{
 		width: 1000px;
 	}

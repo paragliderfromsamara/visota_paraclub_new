@@ -40,7 +40,7 @@
 		<div class = 'arrow' id = 'aDwn' style = 'display: none;'></div>
 	</div>
 	<div id = 'wrapper'>
-		<div id = 'top'>
+		<div id = 'top' style = 'height: <%= @curTopImage[:BlockHeight] %>px;'>
 				<div id = 'logoField'>
                     <div class = 'central_field' id = 'm_1000wh'>
                     <div class = 'section group'>
@@ -73,7 +73,7 @@
                     <%end%>
                     </div>
                 </div>
-                <img src = '<%= topImage %>' style = 'width: 100%; height:auto;' vspace = '0'>
+                <img src = '<%= @curTopImage[:link] %>' style = 'width: 100%; height:auto;' vspace = '0'>
 		</div>
 	</div>
 		<div id = 'middle'>

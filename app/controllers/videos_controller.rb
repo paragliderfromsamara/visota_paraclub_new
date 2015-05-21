@@ -25,7 +25,7 @@ include ApplicationHelper
 		@videos = Video.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').where(category_id: 1)
 		@category_name = 'Разное'
 	else
-		@videos = Video.paginate(:page => params[:page], :per_page => @per_page, :order => 'created_at DESC').all
+		@videos = Video.paginate(:page => params[:page], :per_page => @per_page).all.order('created_at DESC')
 		@category_name = 'Все видео'
 	end
     respond_to do |format|
