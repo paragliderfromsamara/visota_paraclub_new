@@ -12,7 +12,7 @@ $text_color_5: #76797c;
 /* Цвет чётных блоков */
 $evenBlockColor: #f9f9f9;
 /* Цвет нечётных блоков */
-$oddBlockColor: #ebeef1;
+$oddBlockColor: #ffffff;
 $error_color: red;
 $font_family_1: ubuntu_regular, sans-serif;
 $font_family_2: ubuntu_bold, sans-serif;
@@ -200,7 +200,7 @@ textarea {resize: none;}
 .string {font-family: $font_family_1; font-size: 15px;}
 .str-min {@extend .string; font-size: 12px;}
 .istring {font-family: $font_family_4; font-size: 15px;}
-.norm {color: $text_color_5;}
+.norm {color: $text_color_1;}
 .white{color: white;}
 .err {color: $error_color;}
 .istring_m{	@extend .istring;font-size: 0.6875em;}
@@ -270,7 +270,7 @@ img.ava {width: 120px;}
     }
     #bottomClubName 
     {
-        color: white; font-family: $font_family_5; font-size: 0.875em; vertical-align:middle;
+        color: white; font-family: $font_family_5; font-size: 1.125em; vertical-align:middle;
     }
 	#mainMenu { 
 		height: 40px; 
@@ -287,6 +287,7 @@ img.ava {width: 120px;}
     		padding-right: 32px;
     		padding-top: 7px;
     		padding-bottom: 8px;	
+            font-size: 1.125em;
 		   }
         li:hover {span {color: $main_color;}}
 		#c_nav_li {	border-width: 1px;
@@ -320,7 +321,7 @@ img.ava {width: 120px;}
     		float: left; 
     		color: white; 
     		font-family: $font_family_5; 
-    		font-size: 0.875em; 
+    		font-size: 1.125em; 
     		cursor:pointer; 
     		padding-left: 12px;
     		padding-right: 12px;
