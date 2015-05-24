@@ -89,7 +89,8 @@ p {
     font-family: $font_family_1;
     font-size: 0.875em;
    }
-   p.quote {font-size: 1.25em; color: $link_color; font-family:$font_family_5;}
+   p.quote-text {font-size: 1.25em; color: #176bb5;font-family:$font_family_2;}
+   p.quote-author {font-size: 1.25em; color: $link_color; font-family:$font_family_1;}
    span.blue_undline{border-bottom: 3px solid #176bb5; padding-bottom: 14px;}
 hr {size:1px;}
 textarea {resize: none;}
