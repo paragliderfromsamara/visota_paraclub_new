@@ -208,7 +208,7 @@ textarea {resize: none;}
 img.ava {width: 120px;}
 #top_photo, #top {position: relative; width: 1600px; margin-left: auto; margin-right: auto; z-index: 1;}
 #wrapper {position: relative; width: 100%; min-width: 1600px; margin-left: auto; margin-right: auto; z-index: 1;}
-#middle, #menuWrapper {position: relative; width: 100%; margin-left: auto; margin-right: auto; z-index: 1;}
+#middle, #menuWrapper {position: relative; width: 100%; min-width: 1600px; margin-left: auto; margin-right: auto; z-index: 1;}
 #middle{/*background-color: #d9eaf9;*/min-height: 500px; }
 #bottom, #footer{position: relative; width: 100%; min-width: 1600px; z-index: 1;}
 #footer{background-color: $fiveth_color; height: 105px;}
@@ -267,6 +267,10 @@ img.ava {width: 120px;}
             font-size: 0.93em;
             font-family: ubuntu_light, sans-serif;
         }
+        div{
+            position:absolute; width: 100%; height:100%; background-color: #ffffff; border-radius: 30px; @include my_opacity(0);@include animation($time_1);
+        }
+        div:hover {@include my_opacity(0.2);}
     }
     #bottomClubName 
     {
