@@ -207,10 +207,10 @@ textarea {resize: none;}
 .medium-opacity{@include my_opacity(0.7);}
 img.ava {width: 120px;}
 #top_photo, #top {position: relative; width: 1600px; margin-left: auto; margin-right: auto; z-index: 1;}
-#wrapper {position: relative; width: 100%; min-width: 1200px; margin-left: auto; margin-right: auto; z-index: 1;}
+#wrapper {position: relative; width: 100%; min-width: 1600px; margin-left: auto; margin-right: auto; z-index: 1;}
 #middle, #menuWrapper {position: relative; width: 100%; margin-left: auto; margin-right: auto; z-index: 1;}
 #middle{/*background-color: #d9eaf9;*/min-height: 500px; }
-#bottom, #footer{position: relative; width: 100%; min-width: 1200px; z-index: 1;}
+#bottom, #footer{position: relative; width: 100%; min-width: 1600px; z-index: 1;}
 #footer{background-color: $fiveth_color; height: 105px;}
 #mLogo 
 {
@@ -283,16 +283,16 @@ img.ava {width: 120px;}
 		
 		li {
 			@include menuLi;color: black; 	
-    		padding-left: 32px;
-    		padding-right: 32px;
+    		padding-left: 28px;
+    		padding-right: 28px;
     		padding-top: 7px;
     		padding-bottom: 8px;	
             font-size: 1.125em;
 		   }
         li:hover {span {color: $main_color;}}
 		#c_nav_li {	border-width: 1px;
-    		padding-left: 31px;
-    		padding-right: 31px;
+    		padding-left: 27px;
+    		padding-right: 27px;
     		padding-top: 6px;
     		padding-bottom: 7px;
             border-radius: 16px;
