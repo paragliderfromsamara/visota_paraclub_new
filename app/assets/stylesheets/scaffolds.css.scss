@@ -70,7 +70,7 @@ h1 {
   h1.blue {color: $link_color;}
 h2 {
 	font-family: $font_family_1; 
-	font-size: 1em; color: $main_color;
+	font-size: 1.125em; color: $main_color;
    }
 h3 {
 	font-family: $font_family_3; 
@@ -198,9 +198,9 @@ textarea {resize: none;}
 			   }
 .pB-wr-fix {position: fixed; top:0;}
 /*paralaxes end*/
-.string {font-family: $font_family_1; font-size: 15px;}
-.str-min {@extend .string; font-size: 12px;}
-.istring {font-family: $font_family_4; font-size: 15px;}
+.string {font-family: $font_family_1; font-size: 1.125em;}
+.str-min {@extend .string; font-size: 0.75em;}
+.istring {font-family: $font_family_4; font-size: 1.125em;}
 .norm {color: $text_color_1;}
 .white{color: white;}
 .err {color: $error_color;}
