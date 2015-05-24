@@ -19,6 +19,7 @@ $font_family_2: ubuntu_bold, sans-serif;
 $font_family_3: ubuntu_bold_italic, sans-serif;
 $font_family_4: ubuntu_regular_italic, sans-serif;
 $font_family_5: ubuntu_light, sans-serif;
+$font_family_6: ubuntu_medium, sans-serif;
 $magistral_font: magistral_norm, sans-serif;
 $time_1: 500ms;
 $time_2: 250ms;
@@ -83,13 +84,13 @@ h4 {
   	color: $main_color;
     }
 b  {
-	font-family: $font_family_2;
-  }
+	font-family: $font_family_6;
+   }
 p {
     font-family: $font_family_1;
     font-size: 0.875em;
    }
-   p.quote-text {font-size: 1.25em; color: #176bb5;font-family:$font_family_2;}
+   p.quote-text {font-size: 1.25em; color: #176bb5;font-family:$font_family_6;}
    p.quote-author {font-size: 1.25em; color: $link_color; font-family:$font_family_1;}
    span.blue_undline{border-bottom: 3px solid #176bb5; padding-bottom: 14px;}
 hr {size:1px;}
@@ -126,12 +127,12 @@ textarea {resize: none;}
 			margin-right: auto; 
 			margin-bottom: 5px;
 			.check {
-						font-family: $font_family_2; 
+						font-family: $font_family_6; 
 						font-size:15px;
 				   }
 		    }
 	.notice {
-			font-family: $font_family_2; 
+			font-family: $font_family_6; 
 			font-size:13pt; 
 			color: $text_color_1;
 
@@ -227,7 +228,7 @@ img.ava {width: 120px;}
 		}
 	.smiles, a.pointer{cursor: pointer;}
 	a.b_link_bold {
-		font-family: $font_family_2;
+		font-family: $font_family_6;
 		color: $link_color;
 		text-decoration: none;
 		}
@@ -387,7 +388,7 @@ img.ava {width: 120px;}
 .pagination
 	{
 		position: relative;
-		font-family: $font_family_2;
+		font-family: $font_family_6;
 		font-weight: bolder;
 		font-size: 12pt;
 		float: right;
@@ -568,7 +569,7 @@ img.ava {width: 120px;}
 	a#first {padding-left: 12px;}
 	span#splitter {
 					font-size: 22pt;
-					font-family: $font_family_2;
+					font-family: $font_family_6;
 					font-weight: bolder;
 				  }
 	span#cur_path  {

@@ -122,6 +122,11 @@
     font-style: normal;
 }
 @font-face {
+    font-family: 'ubuntu_medium';
+    src: url('/fonts/ubuntu/Ubuntu-M.ttf') format('truetype');
+    font-style: normal;
+}
+@font-face {
     font-family: 'magistral_norm';
     src: url('/fonts/magistral/MagistralC.otf') format('truetype');
     font-style: normal;
