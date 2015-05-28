@@ -4,16 +4,13 @@ function myParalaxes()
 	var prlxBlks = new Array(), i=0;
 	getBlocks();
 	goParallaxAction();
-	
 	function goParallaxAction() //обновляем блоки...
 	{
 		var v = '';
 		for(var i=0; i<prlxBlks.length; i++)
 		{
 			prlxBlks[i].calBgPosition();
-			v += "sp: "+prlxBlks[i].startPosition+"; bgTop: " + prlxBlks[i].background.css('top') + "; speed: "+(prlxBlks[i].speed)+"; sPoint"+prlxBlks[i].startPoint+"; ePoint"+prlxBlks[i].endPoint+"; Содержит подложку?: "+prlxBlks[i].containsWrapper+"; Отступ: "+prlxBlks[i].topOffset+"; Высота блока: "+prlxBlks[i].blHeight+"; Высота подложки: "+prlxBlks[i].bgHeight+"; Коэффициент: "+prlxBlks[i].heightCoeff +";<br />";
 		}
-		//$("#test").html(v);
 	}
 	$(window).scroll(function(){goParallaxAction();});
 	$(window).resize(function(){goParallaxAction();});
@@ -52,6 +49,7 @@ function parallaxBlock(blID)
 										this.block = $('#'+blID);
 										this.background = this.block.find('.pB-wrapper');
 										this.content = this.block.find('.pB-content');
+										this.content.fadeOut();
 										if (this.content.offset() !== undefined)
 										{
 											this.cTopOffset = this.content.offset().top;
@@ -70,8 +68,6 @@ function parallaxBlock(blID)
 												this.startPosition = this.background.attr('pb-start-position');
 												if (this.startPosition == 'out'){this.baseBgOffset = (this.bgHeight*this.speed)/2}
 											}
-											
-											
 											this.containsWrapper = true;
 											this.getHeightCoeff();
 										}
@@ -85,7 +81,6 @@ function parallaxBlock(blID)
 	this.calBgPosition = function() {
 										var span, bgTop;
 										this.curScrlTop = $(window).scrollTop();
-										
 										if (this.curScrlTop>=this.startPoint && this.curScrlTop<this.endPoint && this.containsWrapper == true)
 										{
 											span = this.startPoint - this.curScrlTop;
@@ -103,7 +98,7 @@ function parallaxBlock(blID)
 											}else {
 													this.background.css('bottom', bgTop + 'px');
 												  }
-											
+											this.content.fadeIn(1300);
 										}
 									}
 	this.getKeyPoints = function() {
@@ -124,29 +119,6 @@ function parallaxBlock(blID)
 											{
 												this.endPoint = docHeight-wHeight;
 											} else {this.endPoint=blBotScrlTop-startOffsets;}
-								   }
-	this.contentMakeEffects = function() {
-											
-											var wHeight, sPoint, ePoint;
-											wHeight = $(window).height();
-											
-											if (this.contEffects !== 'none')
-											{
-												if (this.contEffects == 'fadeOnPlace')
-												{
-													this.cFadeOnPlace();//изменение прозрачности без изменения положения
-												} 
-												else if (this.contEffects == 'fadeOnRigthToLeft')
-												{
-													//изменение видимости с задержкой по середине
-												}
-												//добавлять эффекты сюда.
-											}
-										 }
-	this.cFadeOnPlace = function() {
-										
-										
-										
 								   }
 }
 //Paralaxes end

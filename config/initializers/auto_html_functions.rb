@@ -168,16 +168,16 @@ AutoHtml.add_filter(:my_quotes) do |text|
 end
 AutoHtml.add_filter(:my_photo_hash) do |text|
   text.gsub(/#Photo(\d+)/) do
-    photo = Photo.find_by_id($1)
+    photo = Photo.find_by(:id => $1)
 	if photo != nil
-		"<br /><div class = 'central_field' style = 'min-width: 100px;max-width:750px;'>#{"<p class = 'istring norm'>#{photo.description}</p>" if photo.description != nil and photo.description != ''}<img style = 'max-width: 750px;' src = '#{photo.link}'></div><br />" if photo.status_id == 1
+		"<br /><div class = 'central_field' style = 'min-width: 100px;max-width:750px;'>#{"<p class = 'istring norm'>#{photo.description}</p>" if photo.description != nil and photo.description != ''}<img style = 'max-width: 750px;' src = '#{photo.link}'></div><br />"
 	end
   end
 end
 
 AutoHtml.add_filter(:theme_hash) do |text|
   text.gsub(/#Theme(\d+)(\[(.+)\])?/) do
-    theme = Theme.find_by_id($1)
+    theme = Theme.find_by(:id => $1)
 	if theme != nil
 		name = $3 if $3 != nil and $3 != ''
 		name = theme.name if $3 == nil or $3 == ''
@@ -188,7 +188,7 @@ end
 
 AutoHtml.add_filter(:user_hash) do |text|
   text.gsub(/#User(\d+)(\[(.+)\])?/) do
-    user = User.find_by_id($1)
+    user = User.find_by(:id => $1)
 	if user != nil
 		name = $3 if $3 != nil and $3 != ''
 		name = user.name if $3 == nil or $3 == ''

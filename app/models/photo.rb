@@ -15,7 +15,6 @@ class Photo < ActiveRecord::Base
   has_many :messages, :dependent  => :delete_all #Комментарии к фото
   mount_uploader :link, PhotoUploader
   before_destroy :delPhoto
-  
   def comments
 	self.messages.where(:status_id=>1).order('created_at ASC')
   end

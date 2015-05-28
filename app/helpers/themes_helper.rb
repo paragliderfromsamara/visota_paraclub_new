@@ -164,7 +164,7 @@ module ThemesHelper
 						<span id = 'content' class = 'mText'>#{theme.content_html}</span>
 						<br />#{theme.updater_string}
 						<br />
-						#{"<br /><div class = 'central_field' style = 'width: 760px;'>#{theme_list_photos(theme)}</div>" if theme.photos != []}
+						#{"<br /><div class = 'central_field' style = 'width: 1000px;'>#{theme_list_photos(theme)}</div>" if theme.photos != []}
 						#{"<br />#{list_attachments(theme.attachment_files)}" if theme.attachment_files != []}
 					</div>
 				</td>

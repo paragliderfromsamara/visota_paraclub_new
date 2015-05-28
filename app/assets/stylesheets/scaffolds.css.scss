@@ -399,7 +399,6 @@ img.ava {width: 120px;}
 		@include animation($time_1);
  		a {
 			color: #a2a2a2;
-			
 		  }
 		a:hover
 			{
@@ -517,7 +516,7 @@ img.ava {width: 120px;}
 	}
 #m_1200wh
 	{
-		width: 1000px;
+		width: 1200px;
 	}
 #m_1600wh
     	{
@@ -566,7 +565,7 @@ img.ava {width: 120px;}
 	z-index: 11;
 	width: 100%;
 	a {font-size: 14pt;}
-	a#first {padding-left: 12px;}
+	a#first {padding-left: 0px;}
 	span#splitter {
 					font-size: 22pt;
 					font-family: $font_family_6;
