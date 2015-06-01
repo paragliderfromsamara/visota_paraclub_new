@@ -67,6 +67,10 @@ include PagesHelper
 	end
   end
   
+  def visota_life
+	@title = "Клубная жизнь"
+  end
+  
   def search
 	visota_search("Нет ничего лучше борща с грибами, Shit'a Fuck'a", 'all')
   end

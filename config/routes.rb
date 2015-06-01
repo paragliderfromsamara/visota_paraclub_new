@@ -76,7 +76,7 @@ resources :voices, :only => [:create, :destroy]
 
   #topics controller
   resources :topics
-  get '/visota_life', :to => 'topics#index'
+  get '/communication', :to => 'topics#index'
   get '/gost.htm', :to => 'topics#index'
   #topics controller end
 
@@ -160,6 +160,7 @@ resources :voices, :only => [:create, :destroy]
   get '/feed', :to => 'pages#feed'
   get '/search', :to => 'pages#search'
   get '/equipment', :to => 'pages#equipment'
+  get '/visota_life', :to => 'pages#visota_life'
   #pages_controller end
   # You can have the root of your site routed with "root"
   root 'pages#index'

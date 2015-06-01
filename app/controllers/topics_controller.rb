@@ -6,6 +6,10 @@ include EventsHelper
   def index
     @topics = Topic.all
 	@title = "Клубная Жизнь"
+	@path_array = [
+					{:name => 'Клубная жизнь', :link => '/visota_life'},
+					{:name => 'Общение'}
+				  ]
     respond_to do |format|
 	  format.html# index.html.erb
       format.json { render :json => @topics }
@@ -25,6 +29,7 @@ include EventsHelper
 	end
 	@path_array = [
 					{:name => 'Клубная жизнь', :link => '/visota_life'},
+					{:name => 'Общение', :link => '/visota_life'},
 					{:name => @topic.name, :link => topic_path(@topic)}
 				  ]
     respond_to do |format|

@@ -292,16 +292,16 @@ img.ava {width: 120px;}
 		
 		li {
 			@include menuLi;color: black; 	
-    		padding-left: 28px;
-    		padding-right: 28px;
+    		padding-left: 16px;
+    		padding-right: 16px;
     		padding-top: 7px;
     		padding-bottom: 8px;	
-            font-size: 1.125em;
+            font-size: 1em;
 		   }
         li:hover {span {color: $main_color;}}
 		#c_nav_li {	border-width: 1px;
-    		padding-left: 27px;
-    		padding-right: 27px;
+    		padding-left: 15px;
+    		padding-right: 15px;
     		padding-top: 6px;
     		padding-bottom: 7px;
             border-radius: 16px;

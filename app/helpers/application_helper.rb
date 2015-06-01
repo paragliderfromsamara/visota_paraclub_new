@@ -89,7 +89,14 @@ require 'open-uri' #для парсера
      :link => "/contacts", 
      :title => "Контактная информация",
      :drop_items => 'none'
-    }]
+    },
+	{
+	   :name => 'Клубная жизнь', 
+	   :link => "/visota_life", 
+	   :title => "Фотографии, общение, видео",
+	   :drop_items => 'none'
+	}
+	]
   end
 	def secondaryMenuItems
 	[

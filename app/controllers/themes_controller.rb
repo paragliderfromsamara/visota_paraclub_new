@@ -23,6 +23,7 @@ include TopicsHelper
 		@title = @theme.name
 		@path_array = [
 						{:name => 'Клубная жизнь', :link => '/visota_life'},
+						{:name => 'Общение', :link => '/visota_life'},
 						{:name => @theme.topic.name, :link => topic_path(@theme.topic)},
 						{:name => @theme.name, :link => theme_path(@theme)}
 					  ]
