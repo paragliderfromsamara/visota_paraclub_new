@@ -98,6 +98,17 @@ require 'open-uri' #для парсера
 	}
 	]
   end
+  def visota_life_buttons #buttons => {:name => 'Перейти', :title => "Перейти на страницу пилота", :access => ['all'], :type => 'b_green', :link => user_path(user)}
+	user = User.new
+	buttons_array = [
+					 {:name => "Общение", :access => true, :type => 'b_grey', :link => '/communication'}, 
+					 {:name => "Фото альбомы", :access => true, :type => 'b_grey', :link => '/photo_albums'}, 
+					 {:name => "Видео", :access => true, :type => 'b_grey', :link => '/videos'}, 
+					 {:name => "Материалы", :access => true, :type => 'b_grey', :link => '/pilots?g=bun_list'}
+					 ]
+	buttons_array[@active_button][:selected] = true if @active_button != nil
+	buttons_in_line(buttons_array)
+  end
 	def secondaryMenuItems
 	[
 					  {

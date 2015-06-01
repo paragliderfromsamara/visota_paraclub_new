@@ -40,7 +40,7 @@
 		<div class = 'arrow' id = 'aDwn' style = 'display: none;'></div>
 	</div>
 	<div id = 'wrapper'>
-		<div id = 'top' style = 'height: <%= @curTopImage[:BlockHeight] %>px;'>
+		<div id = 'top' style = 'height: <%= @curTopImage[:BlockHeight] %>px; background-image:url("<%= @curTopImage[:link] %>");'>
 				<div id = 'logoField'>
                     <div class = 'central_field' id = 'm_1000wh'>
                     <div class = 'section group'>
@@ -64,7 +64,6 @@
                                     <p id = 'siteName'>ПАРАПЛАНЕРНЫЙ</p>
                                     <p id = 'siteName'>КЛУБ</p>
                                     <div id = 'aboutClubLink'>
-                                        
                                         <a href = '/about_us'><div></div><p>УЗНАТЬ О КЛУБЕ</p></a>   
                                     </div>
                                 </div>
@@ -74,7 +73,6 @@
                     <%end%>
                     </div>
                 </div>
-                <img src = '<%= @curTopImage[:link] %>' style = 'width: 100%; height:auto;' vspace = '0'>
 		</div>
 	</div>
 		<div id = 'middle'>
