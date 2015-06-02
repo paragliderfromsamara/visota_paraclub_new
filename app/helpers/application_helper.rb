@@ -90,12 +90,12 @@ require 'open-uri' #для парсера
      :title => "Контактная информация",
      :drop_items => 'none'
     },
-	{
+	  {
 	   :name => 'Клубная жизнь', 
 	   :link => "/visota_life", 
 	   :title => "Фотографии, общение, видео",
 	   :drop_items => 'none'
-	}
+	  }
 	]
   end
   def visota_life_buttons #buttons => {:name => 'Перейти', :title => "Перейти на страницу пилота", :access => ['all'], :type => 'b_green', :link => user_path(user)}

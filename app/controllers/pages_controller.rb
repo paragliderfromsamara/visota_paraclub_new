@@ -48,7 +48,7 @@ include PagesHelper
 		@title_2 = feed_part_name
 		@entity_array = feed_blocks
 		@photos = Photo.select(:id)
-		@events = Event.find_all_by_display_area_id(([2, 3]), :order => 'post_date DESC', :limit => 3)
+		@events = Event.where(display_area_id: [2, 3]).order('post_date DESC').limit(3)
 		if current_feed_part[:en_name] == 'answers'
 			@entity_on_page = 15
 		elsif current_feed_part[:en_name] == 'themes' # or current_feed_part[:en_name] == 'comments'
