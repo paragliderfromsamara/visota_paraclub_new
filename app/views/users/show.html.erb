@@ -3,50 +3,45 @@
         <%= control_buttons(show_path_buttons).html_safe %>
     </div>
 </div>
-
 <div class = 'c_box even'>
     <br />
     <div class = 'central_field' style = 'width: 1000px;'>
         <p id="notice"><%= notice %></p>
-        <table style = 'width:100%;'>
-            <tr>
-                <td align = 'center' valign = 'top' style = 'width:200px'>
-                		<%= image_tag @user.alter_avatar, :width => @user.widthAndHeight(@user.alter_avatar)[:width].to_s + 'px', :height => @user.widthAndHeight(@user.alter_avatar)[:height].to_s + 'px' %>						
-                		<p class = 'istring_m medium-opacity'><%= @user.group_name %></p>
-                </td>
-                <td align = 'left' valign = 'top'>
-            		<div class = 'central_field' style = 'width: 95%;'>
-            						<h4>Общая информация</h4>
-            						<p>
-            							<span class = 'istring_m norm'>Ник:</span> <span class = 'istring_m'><%= @user.name %></span>
-            						</p>
-                                    <% if !is_not_authorized? %>
-                                    <p>
-                                        <span class = 'istring_m medium-opacity'>Полное имя: </span> <span class = 'istring_m'><%= @user.full_name %></span>
-                                    </p>
-                                    <% end %>
-                                    <% if @user.inform? %>
-                                        <br />
-                                        <p>
-                                            <span class = 'istring_m medium-opacity'>О себе:</span> <span class = 'istring_m'><%= @user.inform %></span>
-                                        </p>
-                                    <% end %>
-            						<br />
-            						<h4>Контактные данные</h4>
-            						<p><%= user_contacts(@user).html_safe %></p>
-            		</div>
-                    <br />
-                    <br />
-                </td>
-            </tr>
-        </table>
-</div>
+		<div class = 'section group'>
+			<div class = 'col span_2_of_12'>
+				<%= image_tag @user.alter_avatar, :width => @user.widthAndHeight(@user.alter_avatar)[:width].to_s + 'px', :height => @user.widthAndHeight(@user.alter_avatar)[:height].to_s + 'px' %>						
+			</div>
+			<div class = 'col span_10_of_12'>
+				<h3>Общая информация</h3>
+				<p>
+					<span class = 'istring norm medium-opacity'>Ник:</span> <span class = 'istring'><%= @user.name %></span>
+				</p>
+				<p>
+					<span class = 'istring norm medium-opacity'>Группа:</span> <span class = 'istring'><%= @user.group_name %></span>
+				</p>
+				
+				<% if !is_not_authorized? %>
+				<p>
+					<span class = 'istring medium-opacity'>Полное имя: </span> <span class = 'istring'><%= @user.full_name %></span>
+				</p>
+				<% end %>
+				<% if @user.inform? %>
+					<br />
+					<p>
+						<span class = 'istring medium-opacity'>О себе:</span> <span class = 'istring'><%= @user.inform %></span>
+					</p>
+				<% end %>
+				<br />
+				<h3>Контактные данные</h3>
+				<p><%= user_contacts(@user).html_safe %></p>
+			</div>
+		</div>
+	</div>
 </div>
 <% i = 0 %>
 <% if @user == current_user %>
     <% if @user.videos != [] %>
         <% i+=1 %>
-        <div class = 'cBoxSplitter'><h4>Крайние размещенные видео</h4></div>
         <%= last_user_videos(i).html_safe %>
     <% end %>
 <% end %>

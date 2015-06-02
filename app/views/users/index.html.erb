@@ -1,6 +1,17 @@
-<div class = 'central_field' id = 'm_1000'>
-	<%= users_paths_buttons.html_safe %>
-	<%= will_paginate @users %>
+<div class = 'central_field' id = 'm_1000wh'>
+	<h1>
+		<%= @title %>
+	</h1>
+</div>
+<div class = 'central_field' id = 'm_1000wh'>
+	<div class = 'section group'>
+		<div class = 'col span_9_of_12'>
+			<%= users_paths_buttons.html_safe %>
+		</div>
+		<div class = 'col span_3_of_12'>
+			<%= will_paginate @users %>
+		</div>
+	</div>
 </div>
 <div class = 'central_field' id = 'b_wrapper' style='min-height: 400px;'>
 	<% if @users != [] %>
@@ -17,8 +28,13 @@
         </div>
 	<% end %>
 </div>
-<br />
-<div class = 'central_field' id = 'm_1000'>
-	<%= users_paths_buttons.html_safe %>
-	<%= will_paginate @users %>
+<div class = 'central_field' id = 'm_1000wh'>
+	<div class = 'section group'>
+		<div class = 'col span_9_of_12'>
+			<%= users_paths_buttons.html_safe %>
+		</div>
+		<div class = 'col span_3_of_12'>
+			<%= will_paginate @users %>
+		</div>
+	</div>
 </div>

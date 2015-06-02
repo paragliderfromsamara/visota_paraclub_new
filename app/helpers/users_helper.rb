@@ -97,9 +97,9 @@ def last_user_videos(i)
   if videos != []
     videos.each { |video| v += video_index_block(video)}
   	p = {
-  			:tContent => "<br />#{control_buttons([{:name => 'Все видео пользователя', :access => true, :type => 'follow', :link => "/users/#{@user.id.to_s}/videos"} ])}#{v}</br>", 
-  			:idLvl_2 => 'm_90percent',
-        :parity => i
+  			:tContent => "<br /><h3>Крайние размещенные видео</h3>#{control_buttons([{:name => 'Все видео пользователя', :access => true, :type => 'follow', :link => "/users/#{@user.id.to_s}/videos"} ])}#{v}</br>", 
+  			:idLvl_2 => 'm_1000wh',
+			:parity => i
   		}
       v = c_box_block(p)
   end
@@ -107,7 +107,6 @@ def last_user_videos(i)
   return v
 end
 def edit_path_buttons
-	
 	buttons = [
 					{:name => 'К профилю', :access => true, :type => 'follow', :link => user_path(@user)},
 					{:name => 'Изменить пароль', :access => userCanEditUserCard?(@user), :type => 'key', :link => edit_user_path(:id => @user.id, :tab => 'password_upd'), :id => 'change_password'},
@@ -128,7 +127,7 @@ def index_path_buttons(user)
 end
 
 def data_container(data)
-	"<tr><td><p class = 'istring_m medium-opacity'>#{data[:name]}</p></td><td><p class = 'istring_m'>#{data[:value]}</p></td></tr>"
+	"<tr><td><p class = 'istring medium-opacity'>#{data[:name]}</p></td><td><p class = 'istring'>#{data[:value]}</p></td></tr>"
 end
 
 def users_paths_buttons #buttons => {:name => 'Перейти', :title => "Перейти на страницу пилота", :access => ['all'], :type => 'b_green', :link => user_path(user)}

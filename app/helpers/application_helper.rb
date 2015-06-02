@@ -102,6 +102,7 @@ require 'open-uri' #для парсера
 	user = User.new
 	buttons_array = [
 					 {:name => "Общение", :access => true, :type => 'b_grey', :link => '/communication'}, 
+					 {:name => "Опросы", :access => true, :type => 'b_grey', :link => '/votes'}, 
 					 {:name => "Фото альбомы", :access => true, :type => 'b_grey', :link => '/photo_albums'}, 
 					 {:name => "Видео", :access => true, :type => 'b_grey', :link => '/videos'}, 
 					 {:name => "Материалы", :access => true, :type => 'b_grey', :link => '/pilots?g=bun_list'}
@@ -182,6 +183,7 @@ require 'open-uri' #для парсера
 				]
 		else
 			b = [
+					{:name => 'Пилоты', :link => '/pilots'},
 					{:name => 'Лента событий', :link => '/feed'},
 					{:name => 'Профиль', :link => user_path(current_user)},
 					{:name => 'Выйти', :link => '/signout'}
@@ -189,14 +191,14 @@ require 'open-uri' #для парсера
 		end
 		v = ''
 		b.each do |i|
-			v += (current_page?(i[:link]))? "<li id = 'c_nav_li' style = 'color: white;' link_to = '#{i[:link]}'>#{i[:name]}</li>":"<li link_to = '#{i[:link]}'>#{i[:name]}</li>"
+			v += (current_page?(i[:link]))? "<li id = 'c_nav_li' link_to = '#{i[:link]}'>#{i[:name]}</li>":"<li link_to = '#{i[:link]}'>#{i[:name]}</li>"
 		end
 		return "<ul>#{v}</ul>"
 	end
 	def topMainMenu #меню в шапке сайта
 		value = ""
 		primaryMenuItems.each do |item|
-			value += "<li id = '#{is_selected(item)}'><a href = '#{item[:link]}'><span>#{item[:name]}</span></a>#{ '&#9662;' if item[:drop_items] != 'none' and item[:drop_items] != nil}#{menu_drop_list(item)}</li>"
+			value += "<li id = '#{is_selected(item)}'><a href = '#{item[:link]}'><span>#{item[:name]}</span></a></li>"
 		end
 		
 		return "<ul>#{value}</ul>"
@@ -304,7 +306,7 @@ def buttons_in_line(buttons) #buttons => {:name => 'Перейти', :title => "
 				value += "<a #{button_attrs(button)}><li id = '#{button[:type]}'>#{button[:name]}</li></a>"
 			end
 		end
-		value = "<div class = 'l_menu'><ul>#{value}</ul></div>"
+		value = "<ul class = 'l_menu'>#{value}</ul>"
 	end
 	return value
 end

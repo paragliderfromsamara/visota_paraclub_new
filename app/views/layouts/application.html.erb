@@ -9,160 +9,160 @@
   <script type = 'text/javascript'>$(document).ready(function(){my_functions(); wheatherPanel(); <%= js_functions %> bottomControl();});</script>
 </head>
 <body>
-    
-	<!-- <div class = 'right_menu'>
-		<div id = 'wh_cont' style = 'width: 580px;'>
-			<div style = 'display: inline-block;'>
+<!--
+<div class = 'right_menu'>
+	<div id = 'wh_cont' style = 'width: 580px;'>
+		<div style = 'display: inline-block;'>
 			<a class = 'b_link' target = '_blank' href = 'http://rp5.ru/7259/ru'>Самара</a><br />
 			<EMBED src='http://rp5.ru/informer/100x100/1/17.swf' loop=false menu=false quality=high scale=noscale wmode=transparent bgcolor=#CCCCCC flashvars='id=7259&lang=ru&um=00000' WIDTH='100' HEIGHT='100' NAME='loader' ALIGN='' TYPE='application/x-shockwave-flash' PLUGINSPAGE= 'http://www.macromedia.com/go/getflashplayer'></EMBED>
-			</div>
-			<div style = 'display: inline-block;'>
+		</div>
+		<div style = 'display: inline-block;'>
 			<a class = 'b_link' target = '_blank'  href = 'http://rp5.ru/123798/ru'>Б. Раковка</a><br />
 			<EMBED src='http://rp5.ru/informer/100x100/1/17.swf' loop=false menu=false quality=high scale=noscale wmode=transparent bgcolor=#CCCCCC flashvars='id=123798&lang=ru&um=00000' WIDTH='100' HEIGHT='100' NAME='loader' ALIGN='' TYPE='application/x-shockwave-flash' PLUGINSPAGE= 'http://www.macromedia.com/go/getflashplayer'></EMBED>
-			</div>
-			<div style = 'display: inline-block;'>
-				<a href='http://6.pogoda.by/28807' title='Прогноз атмосферного давления,скорости и направления ветра по данным UKMET. Самара' target='_blank'>
-				<img src='http://pogoda.by/mg/366/egrr_W28807.gif' width='366' height='100' border='1' alt='График элементов погоды P, Ws, Wa г. Самара прогноз на 126 ч.'></a>
-			</div>
 		</div>
-		<div id = 'cont'>
-			<div style = 'display: none;' id = 'h_wr'>
-			</div>
-		</div>
-		<div id = 'but_area'>
-			<div id = 'w_but'>
-			</div>
-		</div>
-	</div> 
-        -->
-	<div class='quickScroll' style = 'display: none;'>
-		<div class = 'arrow' id = 'aUp' style = 'display: none;'></div>
-		<div class = 'arrow' id = 'aDwn' style = 'display: none;'></div>
-	</div>
-	<div id = 'wrapper'>
-		<div id = 'top' style = 'height: <%= @curTopImage[:BlockHeight] %>px; background-image:url("<%= @curTopImage[:link] %>");'>
-				<div id = 'logoField'>
-                    <div class = 'central_field' id = 'm_1000wh'>
-                    <div class = 'section group'>
-                        <div class = 'col span_3_of_12' style = 'margin-top:23px; '>
-                            <img link_to = '/' id = 'mLogo' src = '/logoImages/logo.png' />
-                        </div>
-                        <div class = 'col span_2_of_12'>
-                        </div>
-                        <div class = 'col span_7_of_12' style = 'padding: 0 0 0 0; margin-top:56px;'>
-                            <div id = 'mainMenu'>
-                                <%= topMainMenu.html_safe %>
-                            </div>
-                        </div>                       
-                    </div>
-                    <% if controller.controller_name == 'pages' &&  controller.action_name == 'index' %>
-                    
-                        <div class = 'section group'>
-                            <div class = 'col span_6_of_12' style = 'padding: 0 0 0 0; margin-top:50px;'>
-                                <div style = 'position: relative;'>
-                                    <p id = 'siteName'>САМАРСКИЙ</p>
-                                    <p id = 'siteName'>ПАРАПЛАНЕРНЫЙ</p>
-                                    <p id = 'siteName'>КЛУБ</p>
-                                    <div id = 'aboutClubLink'>
-                                        <a href = '/about_us'><div></div><p>УЗНАТЬ О КЛУБЕ</p></a>   
-                                    </div>
-                                </div>
-                            </div>             
-                        </div>
-                    
-                    <%end%>
-                    </div>
-                </div>
+		<div style = 'display: inline-block;'>
+			<a href='http://6.pogoda.by/28807' title='Прогноз атмосферного давления,скорости и направления ветра по данным UKMET. Самара' target='_blank'>
+			<img src='http://pogoda.by/mg/366/egrr_W28807.gif' width='366' height='100' border='1' alt='График элементов погоды P, Ws, Wa г. Самара прогноз на 126 ч.'></a>
 		</div>
 	</div>
-		<div id = 'middle'>
-            <%= header_1 %>
-            <%= yield %>
+	<div id = 'cont'>
+		<div style = 'display: none;' id = 'h_wr'>
 		</div>
-	</div>	
-	<div id = 'bottom'>
-		<div id = 'test'></div>
-        <% if controller.controller_name == 'pages' %>
-		<div id = 'm_full' class = 'even'>
-            <div class = 'central_field' id = 'm_1000wh'>
-                <div class = 'section group' style = 'padding: 47px 0 47px 0'>
-                    <div class = 'col span_2_of_12'>
-               
-                    </div>
-                    <div class = 'col span_1_of_12'>
-                         <img src = '/files/vk.png' >
-                    </div> 
-                    <div class = 'col span_1_of_12'>
-         
-                    </div>
-                    <div class = 'col span_1_of_12'>
-                          <img src = '/files/fb.png' >
-                    </div>
-                    <div class = 'col span_1_of_12'>
-         
-                    </div>
-                    <div class = 'col span_1_of_12'>
-                         <img src = '/files/tw.png'>
-                    </div>
-                    <div class = 'col span_1_of_12'>
-                    </div>
-                    <div class = 'col span_1_of_12'>
-                         <img src = '/files/gp.png'>
-                    </div>
-                    <div class = 'col span_2_of_12'>
-                    </div>               
-                </div>
-        </div>
-        <div id = 'm_full' class = 'odd'>
-            <div class = 'central_field' id = 'm_1000wh'>
-            <div class="section group" style = 'padding: 78px 0 78px 0'>
-                   <div class="col span_1_of_12">
-                   </div>
-                    <div class="col span_5_of_12">
-                        <h2>
-                            Адрес базирования клуба: 
-                        </h2>
-                        <p class = 'string norm'>
-                            Россия, Самарская область, пос. Яицкий, ул. Озёрная, 88
-                        </p>
-                    </div>
-                    <div class="col span_1_of_12">
-                         </div>
-                    <div class="col span_5_of_12">
-                        <h2>
-                            Телефоны: 
-                        </h2>
-                        <p class = 'string norm'>
-                            Самара: +7-927-294-30-01 Владимир Архиповский
-                        </p>
-                        <p class = 'string norm'>
-                            Самара: +7-903-309-04-12 Юрий Запорожец
-                        </p>
-                        <p class = 'string norm'>
-                            Новокуйбышевск: (235) 6-27-44 Борис Лузин
-                        </p>
-                    </div>
-                 </div>
-                <br />
-            </div>
-        </div>
+	</div>
+	<div id = 'but_area'>
+		<div id = 'w_but'>
+		</div>
+	</div>
+</div> 
+-->
+<div class='quickScroll' style = 'display: none;'>
+	<div class = 'arrow' id = 'aUp' style = 'display: none;'></div>
+	<div class = 'arrow' id = 'aDwn' style = 'display: none;'></div>
+</div>
+<div id = 'top' style = 'height: <%= @curTopImage[:BlockHeight] %>px; background-image:url("<%= @curTopImage[:link] %>");'>
+	<div class = 'central_field' id = 'm_1000wh'>
+		<div class = 'section group'>
+			<div class = 'col span_3_of_12' style = 'margin-top:23px; '>
+				<img link_to = '/' id = 'mLogo' src = '/logoImages/logo.png' />
+			</div>
+			<div class = 'col span_2_of_12'>
+			</div>
+			<div class = 'col span_7_of_12' style = 'padding: 0 0 0 0; margin-top:56px;'>
+				<div id = 'mainMenu'>
+					<%= topMainMenu.html_safe %>
+				</div>
+			</div>                       
+		</div>
+		<% if controller.controller_name == 'pages' &&  controller.action_name == 'index' %>
+			<div class = 'section group'>
+				<div class = 'col span_6_of_12' style = 'padding: 0 0 0 0; margin-top:50px;'>
+					<div style = 'position: relative;'>
+						<p id = 'siteName'>САМАРСКИЙ</p>
+						<p id = 'siteName'>ПАРАПЛАНЕРНЫЙ</p>
+						<p id = 'siteName'>КЛУБ</p>
+						<div id = 'aboutClubLink'>
+							<a href = '/about_us'><div></div><p>УЗНАТЬ О КЛУБЕ</p></a>   
+						</div>
+					</div>
+				</div>             
+			</div>
 		<% end %>
-        <div id = 'footer'>
-            <div class = 'central_field' id = 'm_1000wh'  style = 'top: 30%;'>
-                <div class = 'section group'>
-                    <div class = 'col span_1_of_12'>
-                    </div>
-                    <div class = 'col span_8_of_12'>
-                        <div id = 'bottomMenu'>
-                          <%= bottomMainMenu.html_safe %>
-                        </div>
-                    </div>
-                    <div class = 'col span_3_of_12'>
-                       <p id = 'bottomClubName'> © СПК "Высота", 2000-<%= Time.now.year %></p>
-                    </div>
-                </div>
-            </div>
-        </div>
 	</div>
+</div>
+<div id = 'ses_p'>
+	<div class = 'section group'>
+		<div class = 'col span_6_of_12'>
+		</div>
+		<div class = 'col span_6_of_12'>
+			<%= user_session_menu.html_safe %>
+		</div>
+	</div>
+</div>
+<div id = 'middle'>
+	<%= header_1 %>
+	<%= yield %>
+</div>
+<div id = 'bottom'>
+	<div id = 'test'></div>
+	<% if controller.controller_name == 'pages' %>
+		<div id="m_full" class="even">
+			<div class="central_field" id="m_1000wh">
+				<div class="section group" style="padding: 47px 0 47px 0">
+					<div class="col span_2_of_12">
+					</div>
+					<div class="col span_1_of_12">
+						 <div class = 'social-icons' id = 'vkontakte'></div>
+					</div> 
+					<div class="col span_1_of_12">
+					</div>
+					<div class="col span_1_of_12">
+						  <div class = 'social-icons' id = 'facebook'></div>
+					</div>
+					<div class="col span_1_of_12">
+					</div>
+					<div class="col span_1_of_12">
+						 <div class = 'social-icons' id = 'twitter'></div>
+					</div>
+					<div class="col span_1_of_12">
+					</div>
+					<div class="col span_1_of_12">
+						 <div class = 'social-icons' id = 'googlePlus'></div>
+					</div>
+					<div class="col span_2_of_12">
+					</div>               
+				</div>
+			</div>
+		</div>
+		<div id = 'm_full' class = 'odd'>
+			<div class = 'central_field' id = 'm_1000wh'>
+					<div class="section group" style = 'padding: 78px 0 78px 0'>
+					   <div class="col span_1_of_12">
+					   </div>
+					   <div class="col span_5_of_12">
+							<h2>
+								Адрес базирования клуба: 
+							</h2>
+							<p class = 'string norm'>
+								Россия, Самарская область, пос. Яицкий, ул. Озёрная, 88
+							</p>
+					   </div>
+					   <div class="col span_1_of_12">
+					   </div>
+					   <div class="col span_5_of_12">
+							<h2>
+								Телефоны: 
+							</h2>
+							<p class = 'string norm'>
+								Самара: +7-927-294-30-01 Владимир Архиповский
+							</p>
+							<p class = 'string norm'>
+								Самара: +7-903-309-04-12 Юрий Запорожец
+							</p>
+							<p class = 'string norm'>
+								Новокуйбышевск: (235) 6-27-44 Борис Лузин
+							</p>
+					   </div>
+					</div>
+				<br />
+			</div>
+		</div>
+	<% end %>
+	<div id = 'footer'>
+		<div class = 'central_field' id = 'm_1000wh'  style = 'top: 30%;'>
+			<div class = 'section group'>
+				<div class = 'col span_1_of_12'>
+				</div>
+				<div class = 'col span_8_of_12'>
+					<div id = 'bottomMenu'>
+					  <%= bottomMainMenu.html_safe %>
+					</div>
+				</div>
+				<div class = 'col span_3_of_12'>
+				   <p id = 'bottomClubName'> © СПК "Высота", 2000-<%= Time.now.year %></p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 </body>
 </html>
