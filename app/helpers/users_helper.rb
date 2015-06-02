@@ -87,8 +87,7 @@ def show_path_buttons
 		{:name => 'Изменить общую информацию', :access =>  userCanEditUserCard?(@user), :type => 'ucard', :link => edit_user_path(:id => @user.id), :id => 'change_password'},
 		{:name => 'Уведомления', :title => "Уведомления на почтовый ящик", :access => userCanEditUserCard?(@user), :type => 'bing', :link => edit_user_path(:id => @user.id, :tab => 'notification_upd'), :id => 'change_notification'},
 		{:name => 'Изменить E-mail', :title => "Изменить адрес электронной почты", :access => userCanEditUserCard?(@user), :type => 'mail', :link => edit_user_path(:id => @user.id, :tab => 'email_upd'), :id => 'change_email'},
-    {:name => 'Изменить пароль', :access => userCanEditUserCard?(@user), :type => 'key', :link => edit_user_path(:id => @user.id, :tab => 'password_upd'), :id => 'change_password'}
-	
+        {:name => 'Изменить пароль', :access => userCanEditUserCard?(@user), :type => 'key', :link => edit_user_path(:id => @user.id, :tab => 'password_upd'), :id => 'change_password'}
   ]	
 end
 def last_user_videos(i)
@@ -103,7 +102,6 @@ def last_user_videos(i)
   		}
       v = c_box_block(p)
   end
-	
   return v
 end
 def edit_path_buttons
