@@ -1,44 +1,7 @@
 module PhotoAlbumsHelper
 #album block
 	def album_index_block(album, i, pathName)
-		html = "
-				   <table style = 'width: 100%;'>				
-						<tr>
-							<td align='left' valign='middle'>
-								<h3>#{album.name}</h3>
-							</td>
-							<td align = 'right' valign='middle'>
-								#{albumInformation(album)}
-							</td>
-						</tr>
-						<tr>
-							<td align = 'left' valign='middle' style = 'height:30px;'>
-								<p class = 'istring_m norm medium-opacity'>
-									Автор #{link_to album.user.name, album.user, :class => 'b_link_i'}
-								</p>
-							</td>
-							<td align = 'right' valign='middle'>
-								<p class = 'istring_m norm medium-opacity'>Размещён #{my_time(album.created_at)}</p>
-							</td>
-						</tr>
-						<tr>
-							<td align = 'left' valign='middle' >
-								<p class = 'istring_m norm medium-opacity'>Категория #{link_to album.category_name, photo_albums_path(:c=>album.category_path), :class => 'b_link_i', :title => "Все альбомы категории #{album.category_name}"}</p>
-							</td>
-							<td align = 'right' valign='middle'>
-								
-							</td>
-						</tr>
-						#{"<tr><td colspan = '2' align = 'left' valign='top'><p class = 'istring_m norm' style = 'padding-top:10px; padding-bottom:10px;'>#{album.description}</p></td></tr>" if album.description != nil and album.description != ''}
-						<tr>
-							<td colspan = '2'>
-								#{album_photos_field(album, pathName)}
-								
-							</td>
-						</tr>
-						#{bottom_album_buttons(album, pathName)}	
-				   </table>
-				  "
+		html = album_table(album, pathName)
 		p = {
 				:tContent => html, 
 				:idLvl_2 => "b_middle",
@@ -48,20 +11,64 @@ module PhotoAlbumsHelper
 		v = (v == '')? '':"<div class = 'c_box'><div class = 'central_field' id = 'm_1000wh'>#{v}</div></div>"
 		return "#{v}#{c_box_block(p)}".html_safe
 	end
+	def album_table(album, pathName)
+		"
+			<table style = 'width: 100%;'>				
+				<tr>
+					<td align='left' valign='middle'>
+						<h3>#{album.name}</h3>
+					</td>
+					<td align = 'right' valign='middle'>
+						#{albumInformation(album)}
+					</td>
+				</tr>
+				<tr>
+					<td align = 'left' valign='middle' style = 'height:30px;'>
+						<p class = 'istring_m norm medium-opacity'>
+							Автор #{link_to album.user.name, album.user, :class => 'b_link_i'}
+						</p>
+					</td>
+					<td align = 'right' valign='middle'>
+						<p class = 'istring_m norm medium-opacity'>Размещён #{my_time(album.created_at)}</p>
+					</td>
+				</tr>
+				<tr>
+					<td align = 'left' valign='middle' >
+						<p class = 'istring_m norm medium-opacity'>Категория #{link_to album.category_name, photo_albums_path(:c=>album.category_path), :class => 'b_link_i', :title => "Все альбомы категории #{album.category_name}"}</p>
+					</td>
+					<td align = 'right' valign='middle'>
+						
+					</td>
+				</tr>
+				#{"<tr><td colspan = '2' align = 'left' valign='top'><p class = 'istring_m norm' style = 'padding-top:10px; padding-bottom:10px;'>#{album.description}</p></td></tr>" if album.description != nil and album.description != ''}
+				<tr>
+					<td colspan = '2'>
+						#{album_photos_field(album, pathName)}
+						
+					</td>
+				</tr>
+				#{bottom_album_buttons(album, pathName)}	
+		   </table>
+		"
+	end
+	
 	def album_photos_field(album, pathName)
 		value = ''
 		photos = []
+		width = (pathName == 'visota_life')? '510px':'903px'
 		if pathName == 'index'
 			photos = album.index_photos
 		elsif pathName == 'show'
 			photos = album.visible_photos
+		elsif  pathName == 'visota_life'
+			photos = album.visota_life_photos
 		end
 		if photos != []
 			photos.each do |p|
-				value += "<a href = '#{photo_path(p)}' title = '#{p.description}' alt = '#{photo_path(p)}' ><div class = 'inline-blocks inline-mini'><div class = 'central_field' style = 'width: 150px; margin-top: 7px;'>#{image_tag p.link.thumb, :width => '150px'}</div></div></a>" if pathName == 'index' 
+				value += "<a href = '#{photo_path(p)}' title = '#{p.description}' alt = '#{photo_path(p)}' ><div class = 'inline-blocks inline-mini'><div class = 'central_field' style = 'width: 150px; margin-top: 7px;'>#{image_tag p.link.thumb, :width => '150px'}</div></div></a>" if pathName == 'index' || pathName == 'visota_life'
 				value += "<a href = '#{photo_path(p)}' title = '#{p.description}' alt = '#{photo_path(p)}' ><div class = 'inline-blocks inline-thumb'><div class = 'central_field' style = 'width: 250px; margin-top: 15px;'>#{image_tag p.link.thumb, :width => '250px'}</div><div style = 'width: 100px; height: 23px; position: absolute; bottom: 5px; right: 15px;'>#{photoInfo(p)}</div></div></a>" if pathName == 'show'
 			end
-			value = "<div class = 'central_field' style = 'width: 903px; padding-top: 10px; padding-bottom:10px;'>#{value}</div>"
+			value = "<div class = 'central_field' style = 'width: #{width}; padding-top: 10px; padding-bottom:10px;'>#{value}</div>"
 		end
 		return value
 	end
@@ -82,7 +89,7 @@ module PhotoAlbumsHelper
 	def bottom_album_buttons(album, pathName) #кнопки в нижней части блока
 		v = []
 		val = ''
-		if pathName == 'index'
+		if pathName == 'index' || pathName == 'visota_life'
 			v = [{:name => 'Перейти', :access => true, :type => 'follow', :link => "#{photo_album_path(album)}"}]
 		elsif pathName == 'show' and @album != nil
 			v = [{:name => 'Добавить комментарий', :access => userCanCreateMsg?, :type => 'add', :id => 'newMsgBut'}]

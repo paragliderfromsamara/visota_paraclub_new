@@ -1,8 +1,12 @@
-<div class = 'central_field' id = 'm_1000'>
-	<%= feed_nav_buttons %>
-	<div class = "pagination">
-		<%= feed_pagination if @entity_array.length > @entity_on_page %>
-	</div>		
+<div class = 'central_field' id = 'm_1100wh'>
+    <div class = 'section group'>
+        <div class = 'col span_8_of_12'>
+			<%= feed_nav_buttons %>
+        </div>
+        <div class = 'col span_4_of_12'>
+            <div class = 'pagination'><%= feed_pagination if @entity_array.length > @entity_on_page %></div>
+        </div>
+    </div>
 </div>
 <div class = 'central_field' id = 'b_wrapper'>
 		<% if @entity_array != [] %>
@@ -20,9 +24,15 @@
 			<p class = 'istring norm'>В данной ленте ничего нет</p>
 		<% end %>
 </div>
-<br />
-<div class = 'central_field' id = 'm_1000'>	
-	<div class = "pagination">
-		<%= feed_pagination if @entity_array.length > @entity_on_page %>
-	</div>
+<div class = 'central_field' id = 'm_1100wh'>
+    <div class = 'section group'>
+        <div class = 'col span_8_of_12'>
+			<%= feed_nav_buttons %>
+        </div>
+        <div class = 'col span_4_of_12'>
+			<div class = 'pagination'>
+				<%= feed_pagination if @entity_array.length > @entity_on_page %>
+			</div>
+        </div>
+    </div>
 </div>

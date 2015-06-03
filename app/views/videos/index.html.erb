@@ -1,22 +1,31 @@
-<div class = 'central_field' id = 'm_1000'>
-<%= videos_paths_buttons.html_safe %>
-<%= will_paginate @videos %>
+<div class = 'central_field' id = 'm_1600wh'>
+	<div class = 'section group'>
+		<div class = 'col span_8_of_12'>
+			<%= videos_paths_buttons.html_safe %>
+		</div>
+		<div class = 'col span_4_of_12'>
+			<%= will_paginate @videos %>
+		</div>
+	</div>
 </div>
 <div class = 'c_box'>
-	<br />
-		<div class = 'central_field' style = 'width: 1000px; min-height: 300px;'>
-			<% if @videos != [] %>
-				<% @videos.each do |video| %>
-					<%= video_index_block(video).html_safe %>
-				<% end %>
-			<% else %>
-				<p class = 'istring norm'>В данной категории нет ни одного видео</p>
+	<div class = 'central_field' style = 'width: 1000px; min-height: 300px;'>
+		<% if @videos != [] %>
+			<% @videos.each do |video| %>
+				<%= video_index_block(video).html_safe %>
 			<% end %>
-		</div>
-	<br />
+		<% else %>
+			<p class = 'istring norm'>В данной категории нет ни одного видео</p>
+		<% end %>
+	</div>
 </div>
-<br />
-<div class = 'central_field' id = 'm_1000'>
-<%= videos_paths_buttons.html_safe %>
-<%= will_paginate @videos %>
+<div class = 'central_field' id = 'm_1600wh'>
+	<div class = 'section group'>
+		<div class = 'col span_8_of_12'>
+			<%= videos_paths_buttons.html_safe %>
+		</div>
+		<div class = 'col span_4_of_12'>
+			<%= will_paginate @videos %>
+		</div>
+	</div>
 </div>

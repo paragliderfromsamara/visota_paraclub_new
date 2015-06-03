@@ -149,7 +149,7 @@ end
 		result_arr = []
 		v_status_id = 1 if is_not_authorized?
 		v_status_id = [1,2] if !is_not_authorized?
-		themes = Theme.find_all_by_status_id_and_visibility_status_id(([1,3]), v_status_id, :order => 'created_at DESC')
+		themes = Theme.where(status_id: [1,3], visibility_status_id: v_status_id).order('created_at DESC')
 		if themes != []
 			themes.each do |theme|
 				last_message = theme.last_message

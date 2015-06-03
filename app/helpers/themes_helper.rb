@@ -141,7 +141,7 @@ module ThemesHelper
 		"<table style = 'width: 100%;'>
 			<tr>
 				<td valign = 'middle' align = 'left' style = 'height:50px;' colspan = '2'>
-					<h1>#{theme.name}</h1>
+					<h3>#{theme.name}</h3>
 				</td>
 			</tr>
 			<tr>

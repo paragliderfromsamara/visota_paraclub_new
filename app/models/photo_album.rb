@@ -90,7 +90,9 @@ class PhotoAlbum < ActiveRecord::Base
   def index_photos
 	self.photos.where(:status_id => 1).order('created_at ASC').limit(10)
   end
-  
+  def visota_life_photos
+	self.photos.where(:status_id => 1).order('created_at ASC').limit(9)
+  end
   def comments
 	self.messages.where(:status_id => 1).order('created_at ASC')
   end
