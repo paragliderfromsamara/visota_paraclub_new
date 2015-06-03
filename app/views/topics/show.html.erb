@@ -1,27 +1,33 @@
 <div class = 'central_field' id = 'm_1600wh'>
-	<%= navigation_string.html_safe %>
-</div>
-<div class = 'central_field' id = 'm_1600wh'>
 	<h1><%= @topic.name %></h1>
 </div>
-<%= "<div class = 'c_box even'><div class = 'central_field' id = 'm_1600wh'>#{control_buttons(show_topic_buttons(@topic))}</div></div>".html_safe if control_buttons(show_topic_buttons(@topic)) != '' %>
 <div class = 'central_field' id = 'm_1600wh'>
-	<%= will_paginate @themes %>
+    <div class = 'central_field' id = 'm_1600wh'>
+    	<div class = 'section group'>
+            <div class = 'col span_7_of_12'>
+                <%= navigation_string.html_safe %>
+            </div>
+            <div class = 'col span_5_of_12'>
+                <%= will_paginate @themes %>
+            </div>
+        </div>
+    </div>
 </div>
-<div class = 'c_box'>
-	<div class = 'central_field' id = 'm_1600wh'>
+<%= "<div class = 'c_box even'><div class = 'central_field' id = 'm_1600wh'>#{control_buttons(show_topic_buttons(@topic))}</div></div>".html_safe if control_buttons(show_topic_buttons(@topic)) != '' %>
+<div class = 'c_box even'>
+	<div class = 'central_field' id = 'm_1100wh'>
 		<%= themes_table.html_safe %>
 	</div>
 </div>
 <div class = 'central_field' id = 'm_1600wh'>
-	<div class = 'section group'>
-		<div class = 'col span_9_of_12'>
-		</div>
-		<div class = 'col span_3_of_12'>
-			<%= will_paginate @themes %>
-		</div>
-	</div>
-</div>
-<div class = 'central_field' id = 'm_1600wh'>
-	<%= navigation_string.html_safe %>
+    <div class = 'central_field' id = 'm_1600wh'>
+    	<div class = 'section group'>
+            <div class = 'col span_7_of_12'>
+                <%= navigation_string.html_safe %>
+            </div>
+            <div class = 'col span_5_of_12'>
+                <%= will_paginate @themes %>
+            </div>
+        </div>
+    </div>
 </div>

@@ -1,9 +1,17 @@
-<%= navigation_string.html_safe %>
-<br />
-<div class = 'central_field' id = 'm_1000'>
-    <div class = 'l_menu'><h1>Архив сообщений с para.saminfo.ru</h1></div>
-<%= will_paginate @themes %>
+<div class = 'central_field' id = 'm_1600wh'>
+    <h1>Архив сообщений с para.saminfo.ru</h1>
 </div>
+<div class = 'central_field' id = 'm_1600wh'>
+    <div class = 'section group'>
+        <div class = 'col span_8_of_12'>
+            <%= navigation_string.html_safe %>
+        </div>
+        <div class = 'col span_4_of_12'>
+            <%= will_paginate @themes %>
+        </div>
+    </div>
+</div>
+
 <div class = 'central_field' id = 'b_wrapper'>
 	<div id = 'b_wrapper'>
 		<% i=0 %>
@@ -13,9 +21,13 @@
 		<% end %>
 	</div>
 </div>
-<br />
-<div class = 'central_field' id = 'm_1000'>
-<%= will_paginate @themes %>
+<div class = 'central_field' id = 'm_1600wh'>
+    <div class = 'section group'>
+        <div class = 'col span_8_of_12'>
+            <%= navigation_string.html_safe %>
+        </div>
+        <div class = 'col span_4_of_12'>
+            <%= will_paginate @themes %>
+        </div>
+    </div>
 </div>
-<%= navigation_string.html_safe %>
-<br />

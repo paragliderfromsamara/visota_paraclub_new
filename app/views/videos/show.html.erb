@@ -1,13 +1,16 @@
 <% video_errors %>
 <div class = 'central_field' id = 'm_1600wh'>
+	<h1>
+        <%= @video.alter_name %>
+    </h1>
+</div>
+<div class = 'central_field' id = 'm_1600wh'>
 	<%= navigation_string.html_safe %>
 </div>
 <%= video_show_block.html_safe %>
 <%= newMessageFormInitial('none', '#new_message').html_safe %>
 <a name = 'content'></a>
-
-	<%= render 'comments' %>
-
+<%= render 'comments' %>
 <div class = 'central_field' id = 'm_1600wh'>
 	<%= navigation_string.html_safe %>
 </div>

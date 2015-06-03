@@ -52,7 +52,6 @@ $dz_preview_width: 100px;
 		font-size: 1em; 
 		cursor:pointer; 
 		z-index: 500;
-		
 	}
 
 	
@@ -243,9 +242,9 @@ textarea {resize: none;}
 			   }
 .pB-wr-fix {position: fixed; top:0;}
 /*paralaxes end*/
-.string {font-family: $font_family_1; font-size: 1.125em;}
+.string {font-family: $font_family_1; font-size: 0.875em;}
 .str-min {@extend .string; font-size: 0.75em;}
-.istring {font-family: $font_family_4; font-size: 1.125em;}
+.istring {font-family: $font_family_4; font-size: 0.875em;}
 .norm {color: $text_color_1;}
 .white{color: white;}
 .err {color: $error_color;}

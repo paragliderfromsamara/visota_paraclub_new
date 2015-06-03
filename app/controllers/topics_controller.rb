@@ -28,10 +28,9 @@ include EventsHelper
 		@themes = @topic.themes.where('status_id in (1, 4)and visibility_status_id in (1,2)').order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
 	end
 	@path_array = [
-					{:name => 'Клубная жизнь', :link => '/visota_life'},
-					{:name => 'Общение', :link => '/visota_life'},
-					{:name => @topic.name, :link => topic_path(@topic)}
-				  ]
+					        {:name => 'Клубная жизнь', :link => '/visota_life'},
+					        {:name => @topic.name, :link => topic_path(@topic)}
+				        ]
     respond_to do |format|
       format.html# show.html.erb
       format.json { render :json => @topic }

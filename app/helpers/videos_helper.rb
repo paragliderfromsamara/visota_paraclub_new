@@ -32,15 +32,8 @@ module VideosHelper
 	end
 	def video_show_block
 		html = "
-				<br />	
-				
 				<p id='notice'>#{ notice }</p>
 				<table style = 'width: 100%'>
-					<tr>
-						<td valign = 'middle' align = 'left' style = 'height:50px;' colspan = '2'>
-							<h1>#{ @video.alter_name }</h1>
-						</td>
-					</tr>
 					<tr>
 						<td valign = 'middle' align = 'left'  style='height: 30px;'>
 							#{ videoInformation(@video) }
@@ -77,7 +70,7 @@ module VideosHelper
 				:classLvl_1 => 'mainEntity',  
 				:classLvl_2 => 'msgBody'
 			}
-		return "<div class = 'c_box'><div class = 'central_field msgBody'>#{control_buttons(top_video_buttons).html_safe}</div></div>#{c_box_block(p)}"
+		return "<div class = 'c_box even'><div class = 'central_field msgBody'>#{control_buttons(top_video_buttons).html_safe}</div></div>#{c_box_block(p)}"
 	end
 	
 	def video_index_block(video)
