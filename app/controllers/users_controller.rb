@@ -160,7 +160,6 @@ include UsersHelper
 		if @user.mailer == nil and params[:tab] == 'notification_upd'
 			#send mail_check if @user.make_mailer
 		end
-		@title = "Изменение данных"
 		@action_type = 'edit'
 	else
 		redirect_to '/404'

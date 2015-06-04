@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   attr_accessor :password, :old_password, :current_password
   attr_accessible :password, :avatar, :cell_phone, :email, :email_status, :encrypted_password, :full_name, :icq, :inform, :name, :photo, :salt, :skype, :user_group_id, :password_confirmation, :avatar_cache, :photo_cache, :old_password, :current_password
   require 'will_paginate'
+  
 #--------Old_messages---------------------------------------------
 has_many :old_messages
 #--------Old_messages end-----------------------------------------
@@ -38,6 +39,26 @@ has_many :messages
 #--------steps-----------------------------------------------------
 has_many :steps
 #--------steps end-------------------------------------------------
+#--------topic_notifications-----------------------------------------------------
+has_many :topic_notifications
+def getTopicNotification(topic_id)
+	tNtf = nil
+	if self.topic_notifications != []
+		tNtf = self.topic_notifications.where(:topic_id => topic_id).first 
+	end
+	return tNtf
+end
+#--------topic_notifications end-------------------------------------------------
+#--------theme_notifications-----------------------------------------------------
+has_many :theme_notifications
+def getThemeNotification(theme_id)
+	tNtf = nil
+	if self.theme_notifications != []
+		tNtf = self.theme_notifications.where(:theme_id => theme_id).first 
+	end
+	return tNtf
+end
+#--------theme_notifications end-------------------------------------------------
 #--------Mailers-------------------------------------------------
 has_one :mailer, :dependent  => :delete
 	def has_mailer?

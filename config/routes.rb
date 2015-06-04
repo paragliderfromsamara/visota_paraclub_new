@@ -1,11 +1,20 @@
 Rails.application.routes.draw do
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 resources :voices, :only => [:create, :destroy]	
   resources :votes
-  resources :events
+  #topicNotifications
+	resources :topic_notifications, :only => [:create, :destroy]
+	get 'topic_notifications/get_list'
+  #topicNotifications end	
+  #themeNotifications  
+	resources :theme_notifications, :only => [:create, :destroy]
+	get 'theme_notifications/get_list'
+  #themeNotifications end
 
   #events 
+  resources :events
   post "events/upload_photos"
   get '/events/:id/upload_photos', :to => 'events#upload_photos' #загрузка с помощью dropzone.js и собственную функцию
   #events end

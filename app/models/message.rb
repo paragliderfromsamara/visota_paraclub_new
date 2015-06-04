@@ -270,7 +270,7 @@ class Message < ActiveRecord::Base
 
 
   def bind_child_messages_to_theme_from_first_message(theme) #Переносит в тему созданную из first_message
-	msgs = self.get_tread
+	msgs = Message.where(:first_message_id => self.id)
 	if msgs != []
 		msgs.each do |msg|
 			msg.update_attributes(:theme_id => theme.id, :first_message_id => nil, :topic_id => theme.topic_id, :status_id => 1, :visibility_status_id => 1)

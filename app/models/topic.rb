@@ -36,7 +36,7 @@ class Topic < ActiveRecord::Base
 	msgs += self.messages.select(:id).where(:photo_id => nil, :video_id => nil, :first_message_id => nil, :name => nil)
 	msgs += self.messages.select(:id).where(:photo_id => nil, :video_id => nil, :first_message_id => nil, :name => '')
 	if msgs != []
-		frst_messages = Message.where(id: msgs, :order => 'id ASC')
+		frst_messages = Message.where(id: msgs).order('id ASC')
 	end
 	return frst_messages 
   end

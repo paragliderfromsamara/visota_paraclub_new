@@ -75,7 +75,9 @@ class Photo < ActiveRecord::Base
     return v
 end
   def exif_data
-    path = Rails.root.join("public#{self.link}").to_s
+    exif = []
+	if  Magick::Image.read(Rails.root.join("public#{self.link}")).first.format == 'jpg'
+	path = Rails.root.join("public#{self.link}").to_s
     
     exifData = EXIFR::JPEG.new(path)
     image = Magick::Image.read(Rails.root.join("public#{self.link}")).first
@@ -102,7 +104,9 @@ end
     exif[exif.length] = {name: 'Автор', value: artist} if artist.strip  != ''
     exif[exif.length] = {name: "ПО", value: software} if software.strip  != ''
 
-    return exif
+    
+	end
+	return exif
   end
   def sel(d)
     hash={}
