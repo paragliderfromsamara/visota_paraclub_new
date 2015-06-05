@@ -63,9 +63,52 @@
 <div class = 'c_box even'>
 	<div class = 'central_field' id = 'm_1000wh' style = 'padding: 20px 0 20px 0;'>
 		<% if themeNtfs != [] %>
+				<table class = 'v_table' id = 'themes_list'>
+					<tr>
+						<th id = 'first'>
+							Тема
+						</th>
+						<th>
+							Автор темы
+						</th>
+						<th title = 'Дата крайнего сообщения в теме'>
+							Дата
+						</th>
+						<th>
+							Информация
+						</th>
+						<th id = 'last'>
+						</th>
+					</tr>
+				
+			
 			<% themeNtfs.each do |n| %>
-				<p class = 'istring'><%= n.theme.name %></p>
+				<% last_msg = n.theme.last_message %>
+				<tbody >
+					<tr>
+						<td id = 'first'>
+							<%= link_to n.theme.name, n.theme, :target => '_blank', :class => 'b_link' %>
+						</td>
+						<td>
+							<%= n.theme.user.name %>
+						</td>
+						<td class = 'date'>
+							<% if last_msg != nil  %>
+								<%= my_time(last_msg.created_at)  %>
+							<%else%>
+								<%= my_time(n.theme.created_at) %>
+							<%end%>
+						</td>
+						<td>
+							<%= themeInformation(n.theme).html_safe %>
+						</td>
+						<td id = 'last'>
+							<%= control_buttons([themeNotificationButton(n.theme.id)]).html_safe %>
+						</td>
+					</tr>
+				</tbody>
 			<% end %>
+				</table>
 		<% else %>
 			<p class = 'istring norm'>Список отслеживаемых тем пуст...</p>
 		<% end %>

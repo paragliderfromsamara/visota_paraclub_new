@@ -323,6 +323,7 @@ def button_attrs(button)
 	val += "name = '#{button[:e_name]}'" if button[:e_name] != '' and button[:e_name] != nil
 	val += "alt = '#{button[:alt]}'" if button[:alt] != '' and button[:alt] != nil
 	val += "data-remote = '#{button[:remote]}'" if button[:remote] != '' and button[:remote] != nil
+	val += "data-value = '#{button[:value]}'" if button[:value] != '' and button[:value] != nil
 	return val
 end
 

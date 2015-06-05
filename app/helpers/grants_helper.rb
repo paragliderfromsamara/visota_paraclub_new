@@ -215,6 +215,9 @@ end
 		end 
 		return f
 	end
+	def userCanWatchTheme?(theme)
+		return userCanSeeTheme?(theme)
+	end
 	#themes_part end
 
 	#messages_part

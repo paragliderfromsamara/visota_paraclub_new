@@ -14,6 +14,7 @@
 			<% array_to_view.each do |v| %>
 				<%= build_as_answer_block(v, i).html_safe if current_feed_part[:en_name] == 'answers' %>
 				<%= build_as_theme_block(v, i).html_safe if current_feed_part[:en_name] == 'themes' %>
+				<%= build_as_message_block(v, i).html_safe if current_feed_part[:en_name] == 'messages' %>
 				<%= build_as_album_block(v, i).html_safe if current_feed_part[:en_name] == 'albums' %>
 				<%= build_as_video_block(v, i).html_safe if current_feed_part[:en_name] == 'videos' %>
 				<%= build_as_article_block(v, i).html_safe if current_feed_part[:en_name] == 'articles' %>

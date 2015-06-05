@@ -183,6 +183,7 @@ module ThemesHelper
 	def theme_owner_buttons #в контроллере themes#show
 		buttons_array = []
 		buttons_array += [{:name => 'Новое сообщение', :access => userCanCreateMsgInTheme?(@theme), :type => 'add', :id => 'newMsgBut'}]
+		buttons_array += [themeNotificationButton(@theme.id)] if signed_in?
 		buttons_array += [
 							{:name => "Редактировать", :access => userCanEditTheme?(@theme), :type => 'edit', :link => "#{edit_theme_path(@theme)}", :id => 'editTheme'}
 							#{:name => "Добавить фото", :access => userCanEditTheme?(@theme), :type => 'camera', :link => "#{theme_path(@theme)}/add_photos", :title => 'Добавить фотографии к теме...'},

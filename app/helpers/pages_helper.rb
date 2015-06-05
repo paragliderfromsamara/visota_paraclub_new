@@ -99,7 +99,8 @@ end
 		[
 			{:en_name => 'answers', :ru_name => 'Ответы', :description => 'Ответы на сообщения и комментарии', :path => '/feed?part=answers'},
 			{:en_name => 'comments', :ru_name => 'Комментарии', :description => 'Комментарии к фото и видео', :path => '/feed?part=comments'},
-			{:en_name => 'themes', :ru_name => 'Темы', :description => 'Новые темы, сообщения в ослеживаемых темах', :path => '/feed?part=themes'},
+			{:en_name => 'themes', :ru_name => 'Темы', :description => 'Новые темы в интересующих разделах', :path => '/feed?part=themes'},
+			{:en_name => 'messages', :ru_name => 'Сообщения', :description => 'Новые сообщения в отслеживаемых разделах', :path => '/feed?part=messages'},
 			{:en_name => 'articles', :ru_name => 'Материалы', :description => 'Новые статьи', :path => '/feed?part=articles'},
 			{:en_name => 'videos', :ru_name => 'Видео', :description => 'Новые видео', :path => '/feed?part=videos'},
 			{:en_name => 'albums', :ru_name => 'Фотоальбомы', :description => 'Новые альбомы и обновления в альбомах', :path => '/feed?part=albums'}
@@ -137,6 +138,8 @@ end
 			make_entities_for_album_part
 		when 'themes'
 			make_entities_for_theme_part
+		when 'messages'
+			make_entities_for_message_part
 		when 'answers'
 			make_entities_for_answer_part
 		when 'articles'
@@ -147,20 +150,25 @@ end
 	end
 	def make_entities_for_theme_part #
 		result_arr = []
-		v_status_id = 1 if is_not_authorized?
-		v_status_id = [1,2] if !is_not_authorized?
-		themes = Theme.where(status_id: [1,3], visibility_status_id: v_status_id).order('created_at DESC')
-		if themes != []
-			themes.each do |theme|
-				last_message = theme.last_message
-				date_for_sort = theme.created_at
-				result_arr[result_arr.length] = [date_for_sort, theme]
+		topicsNtfs = current_user.topic_notifications.select(:topic_id)
+		if topicsNtfs != []
+			v_status_id = 1 if is_not_authorized?
+			v_status_id = [1,2] if !is_not_authorized?
+			themes = Theme.where(status_id: [1,3], visibility_status_id: v_status_id, topic_id: topicsNtfs).order('created_at DESC')
+			if themes != []
+				themes.each do |theme|
+					last_message = theme.last_message
+					date_for_sort = theme.created_at
+					result_arr[result_arr.length] = [date_for_sort, theme]
+				end
+				result_arr.sort!{|a,b|b<=>a}
 			end
-			result_arr.sort!{|a,b|b<=>a}
 		end
 		return result_arr
 	end
-	
+	def make_entities_for_message_part
+		[]
+	end
 	def make_entities_for_answer_part
 		result_arr = []
 			messages = current_user.answerMessages(is_not_authorized?)
@@ -483,7 +491,9 @@ end
 			}
 		return c_box_block(p)
 	end
-
+	def build_as_message_block(v, i)
+		return '#to_do'
+	end
 	def build_as_album_block(v, i)
 		date = v[0]
 		album = v[1]

@@ -182,8 +182,7 @@ function my_functions()
 											$($(this).attr('href')).find('.cWrapper').animate({opacity: 1.0}, 500 ).animate({opacity: 0.0}, 500 );
 										}
 							 );
-		$('#watchTheme').click(function(){switchThemeWatcher(th, el)}); //подписка на тему
-		$('#unWatchTheme').click(function(){switchThemeWatcher(th, el)}); //отписка от темы
+		
 	};
 	
 function scrollControl() //Управление панелькой перемотки
@@ -744,9 +743,14 @@ function voteShowPath(id)
 	
 }
 //vote_path end
-function switchThemeWatcher(th, el)
+function switchThemeWatcher(el, th_id)
 {
-	
+	$.ajax({
+					type: "POST",
+					url: "/theme_notifications.json",
+					data: ({theme_notifications:({type: 'single', theme_id: th_id})}),
+					success: function(but){$(el).html('<li><img src = "/files/'+but.type+'_b.png" style = "float: left;" height = "20px">'+but.name+'</li>');}
+})
 }
 //Старые функции, удалять лишнее
 function wheather_panel(){var time=360;$(".wheather_content").hover(function(){},function(){$("div#wheather_blocks").animate({opacity:0.0},time,function(){$("div#wheather_blocks").css('display','none');});$(".wheather_panel").animate({width:"0"},time);});$(".wheather_link").click(function(){$(".wheather_panel").animate({width:"750px"},time);$("div#wheather_blocks").css('display','inline-block');$("div#wheather_blocks").animate({opacity:1.0},time);});};

@@ -53,6 +53,8 @@ include PagesHelper
 			@entity_on_page = 15
 		elsif current_feed_part[:en_name] == 'themes' # or current_feed_part[:en_name] == 'comments'
 			@entity_on_page = 15
+		elsif current_feed_part[:en_name] == 'messages' # or current_feed_part[:en_name] == 'comments'
+			@entity_on_page = 15
 		elsif current_feed_part[:en_name] == 'albums'
 			@entity_on_page = 10
 		elsif current_feed_part[:en_name] == 'videos'
