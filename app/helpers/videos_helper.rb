@@ -67,10 +67,10 @@ module VideosHelper
 				</table>"
 		p = {
 				:tContent => html, 
-				:classLvl_1 => 'mainEntity',  
-				:classLvl_2 => 'msgBody'
+        :classLvl_2 => 'tb-pad-m',
+				:parity => 0
 			}
-		return "<div class = 'c_box even'><div class = 'central_field msgBody'>#{control_buttons(top_video_buttons).html_safe}</div></div>#{c_box_block(p)}"
+		return "<div class = 'c_box even'><div class = 'm_1000wh'>#{control_buttons(top_video_buttons).html_safe}</div></div>#{c_box_block(p)}"
 	end
 	
 	def video_index_block(video)

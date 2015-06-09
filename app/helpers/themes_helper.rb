@@ -132,18 +132,13 @@ module ThemesHelper
 		html = theme_body(@theme, showBut)
 		p = {
 				:tContent => html, 
-				:classLvl_1 => 'mainEntity', 
-				:classLvl_2 => 'msgBody'
+				:classLvl_2 => 'tb-pad-m',
+        :parity => 0
 			}
 		return c_box_block(p)
 	end
 	def theme_body(theme, showBut)
 		"<table style = 'width: 100%;'>
-			<tr>
-				<td valign = 'middle' align = 'left' style = 'height:50px;' colspan = '2'>
-					<h3>#{theme.name}</h3>
-				</td>
-			</tr>
 			<tr>
 				<td valign = 'middle' align = 'left'  style='height: 45px;'>
 					#{themeInformation(theme)}
@@ -160,21 +155,18 @@ module ThemesHelper
 			<tbody id = 'middle'>
 				<tr>
 				<td  colspan = '2'>
-					<div class = 'central_field' style = 'width: 95%;'>
 						<span id = 'content' class = 'mText'>#{theme.content_html}</span>
-						<br />#{theme.updater_string}
-						<br />
+						#{theme.updater_string}
 						#{"<br /><div class = 'central_field' style = 'width: 1000px;'>#{theme_list_photos(theme)}</div>" if theme.photos != []}
 						#{"<br />#{list_attachments(theme.attachment_files)}" if theme.attachment_files != []}
-					</div>
 				</td>
 				</tr>
 			</tbody>
 			<tr>
 				<td colspan = '2'>
-					<div style = 'height: 30px;'>
+					<div>
 						#{theme_owner_buttons if showBut == true}
-					</div><br />
+					</div>
 				</td>
 			</tr>
 		</table>		

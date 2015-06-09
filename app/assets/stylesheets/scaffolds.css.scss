@@ -572,32 +572,31 @@ img.ava {width: 120px;}
 				padding-left: 5px;
 				}
 	}
-#b_wrapper
-	{
-		width: 100%; 
-		height: 90%; 
-		background-color: $third_color;
-	}
-#m_1000wh
+.m_1000wh, #m_1000wh
 	{
 		width: 1000px;
+        @extend .central_field;
 	}
-#m_1100wh
+.m_1100wh, #m_1100wh
 	{
 		width: 1100px;
+        @extend .central_field;
 	}
-#m_1600wh
+.m_1600wh, #m_1600wh
     	{
 		width: 100%;
 		max-width: 1600px;
 		min-width: $min_width;
+        @extend .central_field;
     }
 #m_90percent
-    	{
+    {
     		width: 90%;
+            @extend .central_field;
     }
 #m_full {
 			width: 100%;
+            
 		}
 
 /* block end */

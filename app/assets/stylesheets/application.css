@@ -135,4 +135,6 @@ html, body, div, span, h1, h2, h3, h4, h5, h6, p, img, ul, li, fieldset, form, l
 ol, ul { list-style: none; }
 hr {margin: 0;}
 
-
+.tb-pad-s {padding: 10px 0 10px 0;}
+.tb-pad-m {padding: 30px 0 30px 0;}
+.tb-pad-l {padding: 60px 0 60px 0;}

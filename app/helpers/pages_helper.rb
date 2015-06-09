@@ -262,13 +262,8 @@ end
 						</tr>
 				</table>"
 		p = {
-				:tContent => html, 
-				#:fContent => answrToMsg(message), 
-				:classLvl_1 => 'msgs', 
-				#:idLvl_1 => "m_#{message.id}", 
-				:classLvl_2 => 'msgBody', 
-				#:idLvl_2 => '', 
-				#:classBg => 'cWrapper', 
+				:tContent => html,  
+				:classLvl_2 => 'tb-pad-m', 
 				:parity => i
 			}
 		return c_box_block(p)
@@ -471,7 +466,7 @@ end
 		p = {
 				:tContent => "<br /><p class = 'istring medium-opacity'>#{head_info}</p>" + message_body(message, false) + "<br />" + bottom_links, 
 				:classLvl_1 => 'msgs', 
-				:classLvl_2 => 'msgBody',
+				:classLvl_2 => 'tb-pad-m',
 				:parity => i
 			}
 		return c_box_block(p)
@@ -484,9 +479,9 @@ end
 		head_info = "Вы разместили тему в разделе #{theme.topic.name}" if theme.user == current_user
 		bottom_links = control_buttons([{:name => 'Перейти к теме', :access => userCanSeeTheme?(theme), :type => 'follow',  :link => "/themes/#{theme.id}"}])
 		p = {
-				:tContent => "<br /><p class = 'istring medium-opacity'>#{head_info}</p>" + theme_body(theme, false) + "<br />" + bottom_links, 
+				:tContent => "<p class = 'istring medium-opacity'>#{head_info}</p><h3 class = 'tb-pad-s'>#{theme.name}</h3>" + theme_body(theme, false) + bottom_links, 
 				:classLvl_1 => 'mainEntity', 
-				:classLvl_2 => 'msgBody',
+				:classLvl_2 => 'tb-pad-m',
 				:parity => i
 			}
 		return c_box_block(p)

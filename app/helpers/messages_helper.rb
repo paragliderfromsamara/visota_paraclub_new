@@ -15,7 +15,7 @@ module MessagesHelper
 				:fContent => answrToMsg(message), 
 				:classLvl_1 => 'msgs', 
 				:idLvl_1 => "m_#{message.id}", 
-				:classLvl_2 => 'msgBody', 
+				:classLvl_2 => 'pb-top-s', 
 				#:idLvl_2 => '', 
 				:classBg => 'cWrapper', 
 				:parity => i

@@ -96,9 +96,9 @@ def last_user_videos(i)
   if videos != []
     videos.each { |video| v += video_index_block(video)}
   	p = {
-  			:tContent => "<br /><h3>Крайние размещенные видео</h3>#{control_buttons([{:name => 'Все видео пользователя', :access => true, :type => 'follow', :link => "/users/#{@user.id.to_s}/videos"} ])}#{v}</br>", 
-  			:idLvl_2 => 'm_1000wh',
-			:parity => i
+  			:tContent => "#{control_buttons([{:name => 'Все видео пользователя', :access => true, :type => 'follow', :link => "/users/#{@user.id.to_s}/videos"} ])}#{v}", 
+			  :parity => i,
+        :classLvl_2 => 'tb-pad-m'
   		}
       v = c_box_block(p)
   end
