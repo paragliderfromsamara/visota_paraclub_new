@@ -55,14 +55,12 @@ resources :voices, :only => [:create, :destroy]
   
   #messages_controller
   resources :messages
-  get "messages/replace_message"
-  get "messages/do_replace_message"
   get '/messages/:id/replace_message', :to => 'messages#replace_message'
 
   get '/messages/:id/upload_photos', :to => 'messages#upload_photos'
 
   post '/messages/:id/upload_photos', :to => 'messages#upload_photos' #загрузка с помощью dropzone.js и собственную функцию photosUploader() в application.js
-  get '/do_replace_message', :to => 'messages#do_replace_message'
+  post '/do_replace_message', :to => 'messages#do_replace_message'
   #messages_controller end
   
   #themes_controller  

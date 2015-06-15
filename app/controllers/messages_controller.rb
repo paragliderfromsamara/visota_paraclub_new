@@ -262,7 +262,7 @@ class MessagesController < ApplicationController
 		@themes_collection = []
 		@default = {:value => @message.theme.topic_id, :name => @message.theme.topic.name}
 		@add_functions = "getTargetTheme();" #Включаем функцию вытаскивания темы
-		topics = Topic.all(:order => 'name ASC')
+		topics = Topic.all.order('name ASC')
 		topics.each do |topic|
 			@collection[@collection.length] = {:value => topic.id, :name => topic.name}
 		end
@@ -295,7 +295,7 @@ class MessagesController < ApplicationController
 				end
 			else
 				if target_theme != nil
-					message.update_attributes(:theme_id => target_theme.id, :topic_id => target_theme.topic_id, :visibility_status_id => target_theme.visibility_status_id)
+					message.update_attributes(:theme_id => target_theme.id, :topic_id => target_theme.topic_id, :visibility_status_id => target_theme.visibility_status_id, :message_id => nil)
 					message.bind_child_messages_to_theme(target_theme)
 					redirect_to "#{theme_path(target_theme)}#m_#{message.id.to_s}"
 				else

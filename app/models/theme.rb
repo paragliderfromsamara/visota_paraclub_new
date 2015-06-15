@@ -17,6 +17,7 @@ class Theme < ActiveRecord::Base
   belongs_to :photo_album
   has_many :attachment_files, :dependent  => :delete_all
   has_many :photos, :dependent  => :delete_all
+  has_many :theme_notifications, :dependent => :delete_all
   auto_html_for :content do
     html_escape
 	my_youtube_msg(:width => 480, :height => 360, :span => true)
@@ -182,12 +183,12 @@ class Theme < ActiveRecord::Base
 			msg.updatePhotosStatusesAfterSave
 		end
 	end
-	old_theme_notifications = ThemeNotification.where(theme_id: self.id)
+	old_theme_notifications = self.theme_notifications
 	if old_theme_notifications != []
 		old_theme_notifications.each do |ntf|
-			newNtf = ThemeNotification.find_by(theme_id: new_theme.id, user_id: ntf.user_id)
-			ntf = ThemeNotification.create(theme_id: newNtf.id, user_id: ntf.user_id) if newNtf == nil
-			ntf.destroy
+      usr_id = ntf.user_id
+			newNtf = ThemeNotification.find_by(theme_id: new_theme.id, user_id: usr_id)
+      newNtf = ThemeNotification.create(theme_id: new_theme.id, user_id: usr_id) if newNtf == nil
 		end
 	end
 	
