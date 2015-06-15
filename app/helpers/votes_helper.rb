@@ -30,8 +30,8 @@ module VotesHelper
 		html = vote_body(@vote)
 		p = {
 				:tContent => html, 
-				:classLvl_1 => 'mainEntity', 
-				:classLvl_2 => 'msgBody'
+				:classLvl_1 => 'even', 
+				:classLvl_2 => 'm_1000wh'
 			}
 		return c_box_block(p)
 	end

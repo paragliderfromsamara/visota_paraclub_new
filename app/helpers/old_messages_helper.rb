@@ -59,7 +59,7 @@ module OldMessagesHelper
 		p = {
 				:tContent => html,  
 				:classLvl_1 => 'msgs', 
-				:classLvl_2 => 'msgBody', 
+				:classLvl_2 => 'm_1000wh', 
 				:parity => i
 			}
 		return c_box_block(p)
