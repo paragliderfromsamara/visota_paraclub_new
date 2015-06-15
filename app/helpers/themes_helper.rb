@@ -129,11 +129,13 @@ module ThemesHelper
 		return v
 	end
 	def theme_show_block(showBut)
+		showBut = false if params[:but] == 'false'
 		html = theme_body(@theme, showBut)
 		p = {
 				:tContent => html, 
+				:idLvl_2 => 'thBody',
 				:classLvl_2 => 'tb-pad-m',
-        :parity => 0
+				:parity => 0
 			}
 		return c_box_block(p)
 	end
@@ -165,7 +167,7 @@ module ThemesHelper
 			<tr>
 				<td colspan = '2'>
 					<div>
-						#{theme_owner_buttons if showBut == true}
+						#{theme_owner_buttons if showBut == true }
 					</div>
 				</td>
 			</tr>

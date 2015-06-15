@@ -76,6 +76,12 @@ include TopicsHelper
 		@topic = @formTheme.topic 
 		@title = "Изменение темы '#{@formTheme.name}'"
 		@add_functions = "initThemeForm(#{@formTheme.id}, '#edit_theme_#{@formTheme.id}');"
+		@path_array = [
+						{:name => 'Клубная жизнь', :link => '/visota_life'},
+						{:name => @topic.name, :link => topic_path(@topic)},
+						{:name => @formTheme.name, :link => theme_path(@formTheme)},
+						{:name => 'Изменение темы'}
+					  ]
 		respond_to do |format|
 			format.html# show.html.erb
 			format.json { render :json => @formTheme }
@@ -89,7 +95,6 @@ include TopicsHelper
   # POST /themes.json
   def create
 	params[:theme][:status_id] = 1 #Создаёт тему отображаемую в клубной жизни...
-   
 	@topic = Topic.find_by_id(params[:theme][:topic_id])
 	if userCreateThemeInTopic?(@topic) 
 		@theme = Theme.new(params[:theme])
@@ -196,17 +201,23 @@ include TopicsHelper
   end
 #Работа с темами----------------------------  
   def merge_themes
-	@theme = Theme.find_by_id(params[:id])
+	@theme = Theme.find_by(id: params[:id])
 	if @theme != nil and is_admin?
 		@title = 'Объединение тем'
 		@collection = []
 		@themes_collection = []
 		@default = {:value => @theme.topic.id, :name => @theme.topic.name}
-		topics = Topic.all(:order => 'name ASC')
+		topics = Topic.all.order('name ASC')
 		@add_functions = "getTargetTheme();" #Включаем функцию вытаскивания темы
 		topics.each do |topic|
 			@collection[@collection.length] = {:value => topic.id, :name => topic.name}
 		end
+		@path_array = [
+						{:name => 'Клубная жизнь', :link => '/visota_life'},
+						{:name => @theme.topic.name, :link => topic_path(@theme.topic)},
+						{:name => @theme.name, :link => theme_path(@theme)},
+						{:name => 'Объединение темы'}
+					  ]
 		base_themes_list = @theme.topic.themes.where(:status_id => 1)
 		if base_themes_list != []
 			base_themes_list.each do |thm|
@@ -223,9 +234,9 @@ include TopicsHelper
   end
   
   def do_merge_themes
-	current_theme = Theme.find_by_id(params[:split_theme][:current_theme])
-	new_topic = Topic.find_by_id(params[:split_theme][:topic_id])
-	new_theme = Theme.find_by_id(params[:split_theme][:theme_id])
+	current_theme = Theme.find_by(id: params[:split_theme][:current_theme])
+	new_topic = Topic.find_by(id: params[:split_theme][:topic_id])
+	new_theme = Theme.find_by(id: params[:split_theme][:theme_id])
 	if is_admin? and current_theme != nil and new_topic != nil and new_theme != nil
 		if current_theme.merge(new_topic, new_theme)
 			redirect_to new_theme
@@ -261,7 +272,7 @@ include TopicsHelper
 			
 		#	@my_themes = Theme.find_all_by_topic_id_and_status_id_and_name(params[:topic], 1, params[:name], :order => 'name ASC')
 		else 
-			@my_themes = Theme.find_all_by_topic_id_and_status_id(params[:topic], 1, :order => 'name ASC')
+			@my_themes = Theme.where(topic_id: params[:topic], status_id: 1).order('name ASC')
 		end
 		respond_to do |format|
 		  #format.html # index.html.erb

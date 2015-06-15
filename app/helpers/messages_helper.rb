@@ -184,7 +184,7 @@ module MessagesHelper
 			end
 			@add_functions = (@add_functions == nil)? "initMessageForm(#{ent.id.to_s}, '#{formClass}', '#{type}');":@add_functions+"initMessageForm(#{ent.id.to_s}, '#{formClass}', '#{type}');"
 			form = "<div style = 'display: #{display};' id = 'newMsgForm'>#{buildMsgForm(type)}</div>"
-			p = {:tContent => form}
+			p = {:tContent => form, :classLvl_1 => 'mForm'}
 			return c_box_block(p)
 		else
 			return ''
@@ -194,8 +194,6 @@ module MessagesHelper
 		#отрисовывается с помощью js функции initMessageForm(msg_id)
 		form_for(@formMessage, :multipart => 'true') do |f|
 		"
-			<div class = 'mForm'>
-				
 				<div style = 'display: none;'>#{ f.file_field :uploaded_photos, :multiple => 'true' if type != 'comment'}</div>
 				#{ hidden_field :info, :return_to_link, :value => getMsgPathLinkAfterSave}
 				#{ f.hidden_field :message_id, :value => @message_to.id if @message_to != nil }
@@ -245,7 +243,6 @@ module MessagesHelper
 					</table>
 					<br />
 				</div>
-			</div>
 			".html_safe
 		end
 	end

@@ -182,6 +182,14 @@ class Theme < ActiveRecord::Base
 			msg.updatePhotosStatusesAfterSave
 		end
 	end
+	old_theme_notifications = ThemeNotification.where(theme_id: self.id)
+	if old_theme_notifications != []
+		old_theme_notifications.each do |ntf|
+			newNtf = ThemeNotification.find_by(theme_id: new_theme.id, user_id: ntf.user_id)
+			ntf = ThemeNotification.create(theme_id: newNtf.id, user_id: ntf.user_id) if newNtf == nil
+			ntf.destroy
+		end
+	end
 	
 	self.destroy
  #Объединение тем

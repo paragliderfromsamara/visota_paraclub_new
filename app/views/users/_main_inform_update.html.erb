@@ -1,13 +1,12 @@
 <div class = 'cBoxSplitter'>
-    <div class = 'central_field' id = 'm_1000wh'>
-     <h3>Дополнительная информация</h3>
- </div>
+    <div class = 'm_1000wh'>
+		<h3>Дополнительная информация</h3>
+	</div>
 </div>
 <%= form_for(@user) do |f| %>
 <input type = 'hidden' name = 'tab' value = 'data_upd'>
 <div class = 'c_box odd'>
-    <div class = 'central_field' id = 'm_1000wh'>
-        <br />
+    <div class = 'm_1000wh tb-pad-s'>
     	<table style = 'width: 100%;'>
     		<% if user_type == 'admin' or user_type == 'super_admin' %>
     			<tr>
@@ -60,17 +59,15 @@
     			</td>
     		</tr>
     	  </table>
-          <br />
     </div>
 </div>
 <div class = 'cBoxSplitter'>
-    <div class = 'central_field' id = 'm_1000wh'>
-     <h3>Аватар и фото</h3>
- </div>
+    <div class = 'm_1000wh'>
+		<h3>Аватар и фото</h3>
+	</div>
 </div>
 <div class = 'c_box even'>
-    <div class = 'central_field' id = 'm_1000wh'>
-        <br />
+    <div class = 'm_1000wh tb-pad-s'>
         <table style = 'width: 100%;'>
         	<tr>
         		<td align = 'right' valign = 'middle' style = 'width: 130px; height: 30px;'>
@@ -89,10 +86,9 @@
         		</td>
         	</tr>
         </table>
-        <br />
     </div>
 </div>
-<br />
+<div class = 'm_1000wh tb-pad-s'>
  <%= f.submit 'Сохранить', :class => 'butt' %>
+</div>
 <% end %>
-<br />

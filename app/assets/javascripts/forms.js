@@ -866,8 +866,7 @@ function getTargetTheme() //используется в themes/split_themes
 		}
 		function getTargetTheme(id)
 		{
-			$("#target_theme").load("/themes/"+id+" .mainEntity");
-			
+			$("#target_theme").load("/themes/"+id+"?but=false #thBody");
 		}
 		
 	}

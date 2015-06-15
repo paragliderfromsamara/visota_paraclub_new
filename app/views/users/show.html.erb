@@ -41,11 +41,11 @@
 <% if @user == current_user %>
     <% if @user.videos != [] %>
         <% i+=1 %>
-<div class = 'cBoxSplitter'>
-    <div class = 'm_1000wh'>
-        <h3>Крайние размещенные видео</h3>
-    </div>
-</div>
+		<div class = 'cBoxSplitter'>
+			<div class = 'm_1000wh'>
+				<h3>Крайние размещенные видео</h3>
+			</div>
+		</div>
         <%= last_user_videos(i).html_safe %>
     <% end %>
 <% end %>

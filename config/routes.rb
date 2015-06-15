@@ -79,7 +79,7 @@ resources :voices, :only => [:create, :destroy]
   get '/themes/:id/new_message', :to => 'themes#new_message' #Новое сообщение в теме
   get '/themes/:id/add_photos', :to => 'themes#add_photos' #Загрузка фото
   get '/themes/:id/add_files', :to => 'themes#add_files' #Загрузка файлов
-  get '/do_merge_themes', :to => 'themes#do_merge_themes'
+  post '/do_merge_themes', :to => 'themes#do_merge_themes'
   post '/themes/:id/upload_photos', :to => 'themes#upload_photos' #загрузка с помощью dropzone.js и собственную функцию photosUploader() в application.js
   #themes_controller end
 
