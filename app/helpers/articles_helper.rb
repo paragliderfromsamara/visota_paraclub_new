@@ -5,10 +5,10 @@ module ArticlesHelper
            <table style = 'width: 100%;'>
 						<tr>
 							<td align='left' valign='middle'>
-								<h3>#{@article.alter_name}</h3>
+								#{articleInformation(@article)}
 							</td>
 							<td align = 'right' valign='middle'>
-								#{articleInformation(@article)}
+								<p class = 'istring_m norm medium-opacity'>Размещён #{my_time(@article.alter_date)}</p>
 							</td>
 						</tr>
 						<tr>
@@ -21,10 +21,16 @@ module ArticlesHelper
 								</p>
 							</td>
 							<td align = 'right' valign='middle'>
-								<p class = 'istring_m norm medium-opacity'>Размещён #{my_time(@article.alter_date)}</p>
+								
 							</td>
 						</tr>
-						<tr><td colspan = '2' align = 'left' valign='top'><p class = 'istring_m norm' style = 'padding-top:10px; padding-bottom:10px;'>#{@article.content_html}</p></td></tr>
+						<tr>
+							<td colspan = '2' align = 'left' valign='top'>
+								<p class = 'istring_m norm' style = 'padding-top:10px; padding-bottom:10px;'>
+									#{@article.content_html}
+								</p>
+							</td>
+						</tr>
 						<tr>
 							<td colspan = '2'>
 								#{article_list_photos(@article)}
@@ -47,7 +53,7 @@ module ArticlesHelper
                 {:name => 'Удалить', :access => true, :type => 'del', :link => article_path(@article), :data_method => 'delete', :rel => 'no-follow', :data_confirm => 'Вы уверены, что хотите удалить данный материал?'}
                 	
 				      ]
-		return "<div class = 'c_box'><div class = 'central_field' id = 'm_1000wh'>#{control_buttons(buttons)}</div></div>"
+		return "<div class = 'c_box'><div class = 'm_1000wh'>#{control_buttons(buttons)}</div></div>"
 	end
 #	def top_article_buttons
 #		buttons = []
@@ -259,7 +265,7 @@ module ArticlesHelper
 	def article_albums_block(i)
 		albums = ''
 		if @article.photo_albums != []
-			albums = '<div class = "cBoxSplitter"><h3>Вложенные альбомы</h3></div>'
+			albums = '<div class = "cBoxSplitter"><div class = "m_1000wh"><h3>Вложенные альбомы</h3></div></div>'
 			@article.photo_albums.each do |album|
 				if album.photos != []
 					albums += "#{album_index_block(album, i, "index")}"
@@ -282,7 +288,7 @@ module ArticlesHelper
 				:idLvl_1 => "b_middle",
 				:parity => i
 			}
-			videos = "<div class = 'cBoxSplitter'><h3>Вложенные видео</h3></div>#{c_box_block(p)}"
+			videos = "<div class = 'cBoxSplitter'><div class = 'm_1000wh'><h3>Вложенные видео</h3></div></div>#{c_box_block(p)}"
 		end
 		return videos.html_safe
 	end

@@ -14,27 +14,27 @@ module PhotoAlbumsHelper
 	def album_table(album, pathName)
 		"
 			<table style = 'width: 100%;'>				
+				#{"<tr><td colspan = '2'><h3>#{album.name}</h3></td></tr>" if pathName == 'index' || pathName == 'visota_life'}
 				<tr>
-					<td align='left' valign='middle'>
-						<h3>#{album.name}</h3>
-					</td>
-					<td align = 'right' valign='middle'>
+					<td align='right' valign='middle'>
 						#{albumInformation(album)}
-					</td>
-				</tr>
-				<tr>
-					<td align = 'left' valign='middle' style = 'height:30px;'>
-						<p class = 'istring_m norm medium-opacity'>
-							Автор #{link_to album.user.name, album.user, :class => 'b_link_i'}
-						</p>
 					</td>
 					<td align = 'right' valign='middle'>
 						<p class = 'istring_m norm medium-opacity'>Размещён #{my_time(album.created_at)}</p>
 					</td>
 				</tr>
 				<tr>
+					<td align = 'left' valign='middle' style = 'height:30px;'>
+						<span class = 'istring_m norm medium-opacity'>Автор </span>#{link_to album.user.name, album.user, :class => 'b_link_i'}
+						
+					</td>
+					<td align = 'right' valign='middle'>
+						
+					</td>
+				</tr>
+				<tr>
 					<td align = 'left' valign='middle' >
-						<p class = 'istring_m norm medium-opacity'>Категория #{link_to album.category_name, photo_albums_path(:c=>album.category_path), :class => 'b_link_i', :title => "Все альбомы категории #{album.category_name}"}</p>
+						<span class = 'istring_m norm medium-opacity'>Категория </span>#{link_to album.category_name, photo_albums_path(:c=>album.category_path), :class => 'b_link_i', :title => "Все альбомы категории #{album.category_name}"}
 					</td>
 					<td align = 'right' valign='middle'>
 						
@@ -44,7 +44,6 @@ module PhotoAlbumsHelper
 				<tr>
 					<td colspan = '2'>
 						#{album_photos_field(album, pathName)}
-						
 					</td>
 				</tr>
 				#{bottom_album_buttons(album, pathName)}	
@@ -60,7 +59,7 @@ module PhotoAlbumsHelper
 			photos = album.index_photos
 		elsif pathName == 'show'
 			photos = album.visible_photos
-		elsif  pathName == 'visota_life'
+		elsif pathName == 'visota_life'
 			photos = album.visota_life_photos
 		end
 		if photos != []
@@ -101,7 +100,7 @@ module PhotoAlbumsHelper
 		v = "<img src = '/files/camera_g.png' width = '18px' style = 'float: left; padding-left: 5px;'/><span title = 'Фотографий в альбоме' class = 'stat'>#{album.visible_photos.count}</span> "
 		v += "<img src = '/files/answr_g.png' width = '20px' style = 'float: left; padding-left: 5px;'/><span title = 'Комментарии' class = 'stat'>#{album.comments.count.to_s}</span> "
 		v += "<img src = '/files/eye_g.png' width = '20px' style = 'float: left;' /><span title = 'Просмотры' class = 'stat'>0</span> "#{album.views.count}
-		return "<div id = 'right_f'>#{v}</div>"
+		return "#{v}"
 	end
 #album block end
 	def album_errors
@@ -158,7 +157,7 @@ module PhotoAlbumsHelper
 		link = photo_albums_path
 		link = "/users/#{@user.id}/photo_albums" if @user != nil
 		cur = params[:c]
-		all_but = {:name => 'Все категории', :access => true, :type => 'b_grey', :link => link} 
+		all_but = {:name => 'Все', :access => true, :type => 'b_grey', :link => link} 
 		all_but[:selected] = true if cur == nil or cur == []
 		buttons_array = [
 							all_but   

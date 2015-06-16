@@ -26,7 +26,7 @@ include ApplicationHelper
 		@category_name = 'Разное'
 	else
 		@videos = Video.paginate(:page => params[:page], :per_page => @per_page).all.order('created_at DESC')
-		@category_name = 'Все видео'
+		@category_name = 'Все'
 	end
     respond_to do |format|
       format.html # index.html.erb

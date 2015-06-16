@@ -1,47 +1,43 @@
-<div class = 'central_field' id = 'm_1000'>
+<div class = 'm_1000wh'>
+	<h1><%= @curArtCat[:multiple_name] %></h1>
 	<%= articles_path_buttons.html_safe %>
 </div>
-
-	<% if !is_not_authorized? %>
-			<div class = 'c_box'><div class = 'central_field' id = 'm_1000wh'><%= new_article_button.html_safe %></div></div>	
-	<% end %>
-<div class = 'c_box'>
-    <div class = 'central_field' id = 'm_1000wh'>
-    <br />
-<h1><%= @curArtCat[:multiple_name] %></h1><br />
-<% if @articles != [] %>
-	<% curYear = nil %>
-	<% @articles.each do |article| %>
-		<% if curYear != article.accident_date.year %>
-			<% if @articles.first == article %>
-				<h1><%= article.accident_date.year %></h1>
-				<table class = 'v_table' id = 'article_table'>
-			<% end %>
-			<% if @articles.first != article and @articles.last != article%>
-				</table>
-				<h1><%= article.accident_date.year %></h1>
-				<table class = 'v_table' id = 'article_table'>
-			<% end %>
-			<% curYear = article.accident_date.year %>
-		<% end %>
-		<tbody class = 't_link' link_to = '<%= article_path(article) %>'>
-			<tr>
-				<td align = 'left' class = 'name' id = 'first'>
-					<%= article.name %>
-				</td>
-				<td align = 'right' class = 'date' id = 'last'>
-					 <%= my_time(article.accident_date) %>
-				</td>
-			</tr>
-		</tbody>
-		<% if @articles.last == article %>
-			</table>
-		<% end %>
-	<% end %>
-<% else %>
-	<p class = 'istring norm'>В данной категории нет материалов...</p>
+<% if !is_not_authorized? %>
+	<div class = 'c_box'><div class = 'm_1000wh'><%= new_article_button.html_safe %></div></div>	
 <% end %>
-</div>
- <br />
- <br />
+<div class = 'c_box'>
+    <div class = 'm_1000wh tb-pad-m'>
+		<% if @articles != [] %>
+			<% curYear = nil %>
+			<% @articles.each do |article| %>
+				<% if curYear != article.accident_date.year %>
+					<% if @articles.first == article %>
+						<h1><%= article.accident_date.year %></h1>
+						<table class = 'v_table' id = 'article_table'>
+					<% end %>
+					<% if @articles.first != article and @articles.last != article%>
+						</table>
+						<h1><%= article.accident_date.year %></h1>
+						<table class = 'v_table' id = 'article_table'>
+					<% end %>
+					<% curYear = article.accident_date.year %>
+				<% end %>
+				<tbody class = 't_link' link_to = '<%= article_path(article) %>'>
+					<tr>
+						<td align = 'left' class = 'name' id = 'first'>
+							<%= article.name %>
+						</td>
+						<td align = 'right' class = 'date' id = 'last'>
+							 <%= my_time(article.accident_date) %>
+						</td>
+					</tr>
+				</tbody>
+				<% if @articles.last == article %>
+					</table>
+				<% end %>
+			<% end %>
+		<% else %>
+			<p class = 'istring norm'>В данной категории нет материалов...</p>
+		<% end %>
+	</div>
 </div>

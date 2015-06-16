@@ -25,7 +25,7 @@ include MessagesHelper
 		@category_name = 'Разное'
 	else
 		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page).where(status_id: 1).order('created_at DESC')
-		@category_name = 'Все альбомы'
+		@category_name = 'Все'
 	end
     respond_to do |format|
       format.html # index.html.erb

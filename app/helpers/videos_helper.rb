@@ -75,7 +75,7 @@ module VideosHelper
 	
 	def video_index_block(video)
 		"
-			<div class = 'video_thumb' >
+			<div class = 'video_thumb' style = 'margin-top: 10px;'>
 							<div>
 								#{video.mini_link_html}
 							</div>
@@ -99,8 +99,8 @@ module VideosHelper
 										</td>
 									</tr>
 									<tr>
-										<td align = 'right' style = 'height: 25px;'>
-												#{control_buttons([{:link => video_path(video), :access => true, :type=> 'follow', :name=> 'Перейти'}])}
+										<td align = 'right' valign = 'middle'  style = 'height: 20px;'>
+												#{link_to "Перейти", video, :class => 'b_link'}
 										</td>
 										<td align = 'right'>
 											<span title = 'Комментарии'>#{image_tag('/files/answr_g.png', :width => '20px', :valign => 'bottom')} <span class='istring_m norm medium-opacity'>#{video.messages.where(:status_id => 1).count.to_s}</span></span>
@@ -111,31 +111,7 @@ module VideosHelper
 						</div>
 		"
 	end
-	def video_category_part(category)
-		videos = Video.find_all_by_category_id(category[:value], :order => 'created_at DESC')
-		part = ''
-		if videos != []
-			videos_block = ''
-			i = 0
-			videos.each do |video|
-				i += 1
-				videos_block += video_index_block(video)
-				break if i == 6  
-			end
-			part = "
-					<div class = 'mono_c'>
-					<div class = 'central_field' style = 'width: 98%;'><span class = 'flow_b_str'>#{category[:name]}</span> #{'(' + link_to('Смотреть все', videos_path(:category => category[:path_name]), :class => 'b_link') + ')' if videos.count > 6}</div>
-					<hr />
-						<div class = 'central_field' style = 'width: 1000px;'>
-							#{videos_block}
-						</div>
-					</div>
-					<br />
-				   "
-		end
-		return part.html_safe
-	end
-	
+
 	def video_errors
 		@name_error = ''
 		@link_error = ''
@@ -168,7 +144,7 @@ module VideosHelper
 		link = "/users/#{@user.id.to_s}/videos" if @user != nil
 		
 		cur = params[:c]
-		all_but = {:name => 'Все категории', :access => true, :type => 'b_grey', :link => link} 
+		all_but = {:name => 'Все', :access => true, :type => 'b_grey', :link => link} 
 		all_but[:selected] = true if cur == nil or cur == []
 		buttons_array = [
 							all_but   

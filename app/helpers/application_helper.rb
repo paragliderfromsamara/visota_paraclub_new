@@ -105,7 +105,7 @@ require 'open-uri' #для парсера
 					 {:name => "Опросы", :access => true, :type => 'b_grey', :link => '/votes'}, 
 					 {:name => "Фото альбомы", :access => true, :type => 'b_grey', :link => '/photo_albums'}, 
 					 {:name => "Видео", :access => true, :type => 'b_grey', :link => '/videos'}, 
-					 {:name => "Материалы", :access => true, :type => 'b_grey', :link => '/pilots?g=bun_list'}
+					 {:name => "Материалы", :access => true, :type => 'b_grey', :link => '/articles'}
 					 ]
 	buttons_array[@active_button][:selected] = true if @active_button != nil
 	buttons_in_line(buttons_array)

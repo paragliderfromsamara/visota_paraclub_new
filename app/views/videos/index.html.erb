@@ -1,23 +1,26 @@
 <div class = 'm_1000wh'>
-	<div class = 'section group'>
-		<div class = 'col span_12_of_12'>
-			<%= videos_paths_buttons.html_safe %>
-		</div>
-	</div>
+	<h1><%= @title %>: <%= @category_name %></h1>
 </div>
 <div class = 'm_1000wh'>
 	<div class = 'section group'>
 		<div class = 'col span_10_of_12'>
+			<%= videos_paths_buttons.html_safe %>
 		</div>
-		<div class = 'col span_4_of_12'>
+		<div class = 'col span_2_of_12'>
 			<%= will_paginate @videos %>
 		</div>
 	</div>
 </div>
-<div class = 'c_box'>
-	<div class = 'm_1000wh' style = 'min-height: 300px;'>
+<div class = 'c_box even'>
+	<div class = 'm_1000wh tb-pad-m' style = 'min-height: 300px;'>
+		
 		<% if @videos != [] %>
+			<% cur_year = nil %>
 			<% @videos.each do |video| %>
+				<% if cur_year != video.created_at.year %>
+					<% cur_year = video.created_at.year %>
+					<h2 class = 'tb-pad-s'><%= cur_year %></h2><hr />
+				<% end %>
 				<%= video_index_block(video).html_safe %>
 			<% end %>
 		<% else %>
@@ -28,15 +31,10 @@
 <div class = 'm_1000wh'>
 	<div class = 'section group'>
 		<div class = 'col span_10_of_12'>
-
-		</div>
-		<div class = 'col span_4_of_12'>
-			<%= will_paginate @videos %>
-		</div>
-	</div>
-	<div class = 'section group'>
-		<div class = 'col span_12_of_12'>
 			<%= videos_paths_buttons.html_safe %>
+		</div>
+		<div class = 'col span_2_of_12'>
+			<%= will_paginate @videos %>
 		</div>
 	</div>
 </div>

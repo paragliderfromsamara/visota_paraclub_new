@@ -143,8 +143,8 @@ class ArticlesController < ApplicationController
   def bind_videos_and_albums
     article = Article.find_by(id: params[:id])  
 	if isEntityOwner?(article) and params[:format] == 'json'
-		@albums = PhotoAlbum.find_all_by_article_id_and_status_id(([nil, article.id]), 1)
-		@videos = Video.find_all_by_article_id([nil, article.id])
+		@albums = PhotoAlbum.where(article_id: [nil, article.id], status_id: 1)
+		@videos = Video.where(article_id: [nil, article.id])
 		a = []
 		v = []
 		@albums.each {|al| a[a.length] = {:id => al.id, :name => al.name, :link => photo_album_path(al)}} if @albums != []
