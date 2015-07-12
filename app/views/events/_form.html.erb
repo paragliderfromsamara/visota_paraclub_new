@@ -1,10 +1,5 @@
 <div class = 'c_box odd'>
-    <div class = 'central_field' id = 'm_1000wh'>
-        <br />
-        <h1>
-            Добавление новости
-        </h1>
-        <br />
+    <div class = 'm_1000wh tb-pad-m'>
         <%= form_for(@event) do |f| %>
          <% if user_type == 'manager' %>
              <%= f.hidden_field :post_date, :value => Time.now %>
@@ -62,7 +57,6 @@
 					</div>
 				</td>
 				<tr>
-
 				<td id = 'formPhotos'>
 					<%= f.label :uploaded_photos, 'Фотографии новости' %><br />
 					<div class = 'dropzone' id = 'ph_to_frm'>
@@ -75,8 +69,6 @@
 			</tr>
 		</table>
         <% end %>
-        <br />
-        <br />
     </div>
 </div>
 

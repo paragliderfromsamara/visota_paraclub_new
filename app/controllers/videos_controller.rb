@@ -28,6 +28,7 @@ include ApplicationHelper
 		@videos = Video.paginate(:page => params[:page], :per_page => @per_page).all.order('created_at DESC')
 		@category_name = 'Все'
 	end
+  @header = "#{@title}: #{@category_name}"
     respond_to do |format|
       format.html # index.html.erb
       format.json { render :json => @videos }
@@ -39,7 +40,7 @@ include ApplicationHelper
   def show
     @video = Video.find(params[:id])
 	if @video != nil
-		@title = @video.alter_name
+		@title = @header = @video.alter_name
 		@return_to = video_path(@video)
 		@page_params = {:part_id => 5,:page_id => 1,:entity_id => @video.id}
 		@path_array = [

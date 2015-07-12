@@ -8,7 +8,7 @@ module TopicsHelper
 		]
 	end
 	def top_index_topic_buttons
-		"#{control_buttons([{:name => "Опросы", :access => true, :type => 'follow', :link => votes_path}, {:name => 'Новый раздел', :access => is_super_admin?, :type => 'add', :link => "#{new_topic_path}", :id => 'newTopic'}])}"
+		"#{control_buttons([{:name => "Опросы", :access => true, :type => 'chart', :link => votes_path}, {:name => 'Новый раздел', :access => is_super_admin?, :type => 'add', :link => "#{new_topic_path}", :id => 'newTopic'}])}"
 	end
 	def show_topic_buttons(topic)
 		[

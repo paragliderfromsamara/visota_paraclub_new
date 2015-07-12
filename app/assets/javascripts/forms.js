@@ -180,6 +180,7 @@ function initMessageForm(msg_id, formName, msgType)
 													f.initPanel();
 													cleanAnswerBlks();
 													allowArrows = false;
+                                                    bottomControl();
 													
 												}
 												else {f.curContentValue = f.contentField.val(); $('#newMsgForm').hide();allowArrows = true;}
@@ -587,7 +588,7 @@ function myForm(type, entityID, formName)
 										acceptedFiles: "image/*",
 										paramName: entity+"[uploaded_photos]",
 										inputId: entity+"_uploaded_photos",
-										forceFallback: false,
+										/* forceFallback:true, */
                                         sending: function(file, xhr, formData) {
                                                 // Pass token. You can use the same method to pass any other values as well such as a id to associate the image with for example.
                                                 formData.append("authenticity_token", el.find("input[name='authenticity_token']").val()); // Laravel expect the token post value to be named _token by default

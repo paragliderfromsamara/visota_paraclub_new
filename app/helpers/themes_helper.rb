@@ -67,8 +67,8 @@ module ThemesHelper
 		"#{ f.hidden_field :visibility_status_id, :value => 1}"	if is_not_authorized?  
 		"<br />#{ f.label :visibility_status_id, ('<img src="/files/privacy_g.png" style = "width: 20px;float: left;"/> Скрыть от не авторизованных пользователей').html_safe} #{ f.check_box :visibility_status_id, {:class=>'check_box'}, '2', '1'}<br />" if !is_not_authorized?
 	end
-	def themes_table
-		if @themes != []
+	def themes_table(themes)
+		if themes != []
 			"
 				<table class = 'v_table' id = 'themes_list'>
 					<tr>
@@ -88,7 +88,7 @@ module ThemesHelper
 							Информация
 						</th>
 					</tr>
-					#{build_rows}
+					#{build_rows(themes)}
 				</table>
 			"
 		else
@@ -96,12 +96,9 @@ module ThemesHelper
 		end
 	end
 	
-	def build_rows
+	def build_rows(themes)
 		rows = ''
-		if signed_in?
-			
-		end
-		@themes.each do |th|
+		themes.each do |th|
 			last_msg = th.last_message
 			rows += "<tbody class = 't_link' link_to = '#{theme_path(th)}' title = '#{th.name}'>"
 			rows += '<tr>'

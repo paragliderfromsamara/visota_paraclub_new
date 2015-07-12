@@ -46,7 +46,14 @@ module PhotoAlbumsHelper
 						#{album_photos_field(album, pathName)}
 					</td>
 				</tr>
-				#{bottom_album_buttons(album, pathName)}	
+				<tr>
+          <td style = 'height: 40px;' align='left' valign = 'middle'>
+            #{bottom_album_buttons(album, pathName)}	
+          </td>
+          <td align='right' valign = 'middle'>
+            #{user_photo_album_like_link(album)}
+          </td>
+        </tr>
 		   </table>
 		"
 	end
@@ -93,7 +100,7 @@ module PhotoAlbumsHelper
 		elsif pathName == 'show' and @album != nil
 			v = [{:name => 'Добавить комментарий', :access => userCanCreateMsg?, :type => 'add', :id => 'newMsgBut'}]
 		end
-		val = "<tr><td style = 'height: 40px;' align='left' valign = 'middle' colspan = '2'>#{control_buttons(v)}</td></tr>" if v != []
+		val = "#{control_buttons(v)}" if v != []
 		return val
 	end
 	def albumInformation(album)

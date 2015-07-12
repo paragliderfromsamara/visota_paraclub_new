@@ -6,6 +6,7 @@ class PhotoAlbum < ActiveRecord::Base
   has_one :theme, :dependent  => :destroy
   has_many :photos, :dependent  => :delete_all
   has_many :messages, :dependent  => :delete_all
+  has_many :photo_album_like_marks, :dependent  => :delete_all
   #belongs_to :category 
   #has_many :events, :dependent  => :delete_all
   belongs_to :article

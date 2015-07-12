@@ -30,15 +30,24 @@ has_many :photos, :dependent  => :delete_all
 #--------PhotoAlbums end-----------------------------------------
 
 #--------Themes--------------------------------------------------
-has_many :themes
+has_many :themes, :dependent  => :delete_all
 #--------Themes end----------------------------------------------
-
+#--------photo_album_like_marks--------------------------------------------------
+has_many :photo_album_like_marks, :dependent  => :delete_all
+#--------photo_album_like_marks end----------------------------------------------
+#--------photo_like_marks--------------------------------------------------
+has_many :photo_like_marks, :dependent  => :delete_all
+#--------photo_like_marks end----------------------------------------------
+#--------video_like_marks--------------------------------------------------
+has_many :photo_like_marks, :dependent  => :delete_all
+#--------video_like_marks end----------------------------------------------
 #--------Messages--------------------------------------------------
-has_many :messages
+has_many :messages, :dependent  => :delete_all
 #--------Messages end----------------------------------------------
 #--------steps-----------------------------------------------------
 has_many :steps
 #--------steps end-------------------------------------------------
+
 #--------topic_notifications-----------------------------------------------------
 has_many :topic_notifications
 def getTopicNotification(topic_id)
@@ -137,10 +146,15 @@ mount_uploader :photo, UserPhotoUploader
 		</table>
 	"
   end
+  def email_with_status
+    msg = "Не подтверждён"
+    msg = "Подтверждён" if self.email_status == "Активен" 
+    return "#{self.email} (#{msg})"
+  end
 
   def user_groups #в старой версии была отдельная таблица в базе
 		[
-			{:value => 7, :name => 'Удалённый'},#manager
+			{:value => 7, :name => 'Удалённый'},#deleted
 			{:value => 6, :name => 'Руководитель клуба'},#manager
 			{:value => 2, :name => 'Клубный пилот'},	 #club_pilot
 			{:value => 3, :name => 'Друг клуба'},		 #friend
@@ -294,7 +308,18 @@ mount_uploader :photo, UserPhotoUploader
   end
 
     def self.authenticate(name, submitted_password)
-    user = find_by(name: name)
+    user = nil
+    users = User.all
+    name = name.mb_chars.downcase
+    users.each do |u|
+     if u.name.mb_chars.downcase == name
+       user = u 
+       break
+     elsif name == u.email.mb_chars.downcase and u.email_status == 'Активен'
+       user = u 
+       break
+     end
+    end
     return nil  if user.nil?
     return user if user.has_password?(submitted_password)
   end
@@ -328,9 +353,13 @@ mount_uploader :photo, UserPhotoUploader
 	myThIDs = themes.select(:id).where(:status_id => [1,3], :visibility_status_id => v_status_id)
 	if myThIDs != []
 		msgsInMyThemes = Message.select(:id).where(:status_id => 1, :theme_id => myThIDs)
+  else
+    msgsInMyThemes = []
 	end
 	if myMsgsIDs != []
 		answrToMyMsgs = Message.select(:id).where(:message_id => myMsgsIDs, :status_id => 1)
+  else
+    answrToMyMsgs = []
 	end
 	ids_arr += msgsInMyThemes if msgsInMyThemes != []
 	ids_arr += answrToMyMsgs if answrToMyMsgs != []

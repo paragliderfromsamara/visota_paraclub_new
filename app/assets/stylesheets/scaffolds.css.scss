@@ -129,12 +129,19 @@ textarea {resize: none;}
 						font-size:15px;
 				   }
 		    }
-	.notice {
-			font-family: $font_family_6; 
-			font-size:13pt; 
-			color: $text_color_1;
+	.notice, .alert
+            {
+    			font-family: $font_family_6; 
+    			font-size:13pt; 
+    			color: $text_color_1;
+            }
+    .notice {
 
+            background-color: #e7ffca;
 			}
+    .alert {
+             background-color: #ffcaca;
+           }
 	.err {
 			color: $error_color;
 		 }
@@ -251,12 +258,11 @@ textarea {resize: none;}
 .istring_m{	@extend .istring;font-size: 0.6875em;}
 .medium-opacity{@include my_opacity(0.7);}
 img.ava {width: 120px;}
-#top_photo, #top, #ses_p {position: relative; width:100%;max-width:1600px;min-width: $min_width; margin-left: auto; margin-right: auto; z-index: 1; background-position:center;}
+#top_photo, #top {position: relative; width:100%;max-width:1600px;min-width: $min_width; margin-left: auto; margin-right: auto; z-index: 1; background-position:center;}
 #middle {position: relative; width: 100%; min-width: $min_width; z-index: 1;min-height: 500px;}
 #bottom, #footer{position: relative; width: 100%; min-width: $min_width; z-index: 1;}
 #footer{background-color:$fiveth_color;height: 105px;}
 #ses_p {
-				
 				ul
 				{
 					list-style: none; 
@@ -267,9 +273,9 @@ img.ava {width: 120px;}
 					color: $main_color; 	
 					padding-left: 10px;
 					padding-right: 10px;
-					padding-top: 10px;
-					padding-bottom: 10px;	
-					font-size: 1.2em;
+					padding-top: 6px;
+					padding-bottom: 6px;	
+					font-size: 1em;
 					@include animation($time_1);
 				 }
 				li:hover 
@@ -320,6 +326,31 @@ img.ava {width: 120px;}
 	a.w_link_i {font-family: $font_family_3; font-size: 0.8125em;text-decoration: none; color:$link_color;}
 	a.w_link_i:hover {text-decoration: underline; }
 /*links end*/
+/*like_marks*/
+.like_marks
+{
+    cursor:pointer;
+	#mark_link
+    {
+        font-family: $font_family_1;
+	    color: $link_color;
+	    font-size: 0.8125em;
+	    text-decoration: none;
+    }
+    #mark_img
+    {
+        position:relative;
+        width: 18px;
+        height: 15px;
+        background-repeat:no-repeat;
+    }
+}
+.like_marks:hover 
+{
+    #mark_link {text-decoration: underline;}
+    #mark_img {background-image: url(/files/like_b.png);}
+}
+/*like_marks end*/    
 /*mainMenu*/
 
 

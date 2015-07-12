@@ -32,7 +32,6 @@ module VideosHelper
 	end
 	def video_show_block
 		html = "
-				<p id='notice'>#{ notice }</p>
 				<table style = 'width: 100%'>
 					<tr>
 						<td valign = 'middle' align = 'left'  style='height: 30px;'>
@@ -60,9 +59,12 @@ module VideosHelper
 						</td>	
 					</tr>
 					<tr>
-						<td valign = 'middle' align = 'left' colspan = '2' style = 'height: 40px;'>
+						<td valign = 'middle' align = 'left'  style = 'height: 40px;'>
 							#{ control_buttons(bottom_video_buttons) }
 						</td>	
+            <td valign = 'middle' align = 'right'>
+              #{user_video_like_link(@video)}
+            </td>
 					</tr>
 				</table>"
 		p = {
@@ -70,7 +72,7 @@ module VideosHelper
         :classLvl_2 => 'tb-pad-m',
 				:parity => 0
 			}
-		return "<div class = 'c_box even'><div class = 'm_1000wh'>#{control_buttons(top_video_buttons).html_safe}</div></div>#{c_box_block(p)}"
+		return "<div class = 'c_box even'><div class = 'm_1000wh'>#{control_buttons(top_video_buttons).html_safe}</div>#{my_notice}</div>#{c_box_block(p)}"
 	end
 	
 	def video_index_block(video)

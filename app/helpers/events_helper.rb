@@ -1,8 +1,6 @@
 module EventsHelper
 	def event_index_item(event, i) #Миниатюра в списке новостей  
-    html = "<br />
-						<h4>#{event.title}</h4>
-            <br />
+    html = "<h4>#{event.title}</h4>
 							<table style = 'width: 99%;'>
 								<tr>
 									#{"<td>#{event.alter_photo('thumb')}</td>" if event.alter_photo('thumb') != nil}
@@ -17,33 +15,18 @@ module EventsHelper
 				"
     		p = {
     				:tContent => html, 
-    				:idLvl_2 => "m_1000wh", 
+    				:classLvl_2 => "m_1000wh tb-pad-m", 
     				:parity => i
     			}
           return c_box_block(p)
 	end
 	
-	def event_index_blocks #Построение списка новостей
-		result = 'Нет ни одной новости'
-		if @events != [] and @events != nil
-			result = ''
-		 @events.each do |event|
-				#result += event_index_item(event)
-			end
-		end
-		return result
-	end
-	
 	def event_show_block
 		"
-    <br />
     <table style = 'width:100%;'>
       <tr>
-        <td  align = 'left' >
-          	<h1>#{@event.title}</h1>
-        </td>
-        <td align = 'right'>
-          <span class = 'istring norm medium-opacity'>#{my_time(@event.created_at)}</span>
+        <td align = 'left'>
+          <span class = 'istring norm medium-opacity'>Размещена #{my_time(@event.created_at)}</span>
         </td>
       </tr>
       <tr> 
@@ -53,7 +36,6 @@ module EventsHelper
         </td>
       </tr>
     </table>
-    <br /><br />
 		"
 	end
 	

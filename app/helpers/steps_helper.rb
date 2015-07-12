@@ -1,7 +1,7 @@
 module StepsHelper
 	def define_action
 		@page_params = {:part_id => 0, :page_id => 0, :entity_id => 0} if @page_params == nil
-		@curTopImage = @curTopImage = topImages[1]
+		@curTopImage = {link: "none", BlockHeight: 150}
 		if controller.controller_name == 'pages' #@page_params[:part_id] == 0 #pages
 			if controller.action_name == 'about_us'
 				@curTopImage = topImages[1]
@@ -21,6 +21,7 @@ module StepsHelper
 			@curMenuItem = 'Клубная жизнь'
 			make_signed_step
 		elsif controller.controller_name == 'users' #@page_params[:part_id] == 2 #users
+      @curTopImage = topImages[6]
 		elsif controller.controller_name == 'photo_albums' #@page_params[:part_id] == 3 #photo_albums
 			@curMenuItem = 'Фото'
 			make_step

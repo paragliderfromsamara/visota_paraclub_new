@@ -1,7 +1,4 @@
 <div class = 'm_1000wh'>
-	<h1><%= @topic.name %></h1>
-</div>
-<div class = 'm_1000wh'>
     	<div class = 'section group'>
             <div class = 'col span_7_of_12'>
                 <%= navigation_string.html_safe %>
@@ -14,7 +11,7 @@
 <%= "<div class = 'c_box even'><div class = 'm_1000wh'>#{control_buttons(show_topic_buttons(@topic))}</div></div>".html_safe if control_buttons(show_topic_buttons(@topic)) != '' %>
 <div class = 'c_box even'>
 	<div class = 'm_1000wh'>
-		<%= themes_table.html_safe %>
+		<%= themes_table(@themes).html_safe %>
 	</div>
 </div>
 <div class = 'm_1000wh'>

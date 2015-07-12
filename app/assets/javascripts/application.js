@@ -211,14 +211,15 @@ function scrollControl() //Управление панелькой перемо�
 function bottomControl()
 	{
 		var sum_h, window_h, new_middle_h;
-		sum_h = blocksSumHeight();
+		sum_h = $(document).height();
 		window_h = $(window).height();
+        $("#test").text($(document).height());
 		if (sum_h < window_h)
 		{
 			new_middle_h = window_h - $("#top").outerHeight(true) - $("#bottom").outerHeight(true);
 			$('#middle').height(new_middle_h);
-			//$("#bottom").css('position', 'fixed').css('bottom', '0');
-		}//else{$("#bottom").css('position', 'relative').css('bottom', 'none');}
+			$("#bottom").css('position', 'fixed').css('bottom', '0');
+		}else{$("#bottom").css('position', 'relative').css('bottom', 'none');}
 		scrollControl();
 	}
 function blocksSumHeight(){return $("#top").outerHeight(true) + $("#middle").outerHeight(true) + $("#bottom").outerHeight(true);} 
@@ -518,14 +519,14 @@ function userFieldsChecking()
 				
 			}
 			function uniqNameValidation(){
-												$.getJSON("/check_email_and_name?format=json&name=" + usrCard.oName, function(json){
+												$.getJSON("/check_email_and_name.json?name=" + usrCard.oName, function(json){
 												if (json.status == 'true') {
 																				usrCard.errUniqName = true;
 																			} else {usrCard.errUniqName = false;}
 											});
 										 }
 			function uniqMailValidation(){
-												$.getJSON("/check_email_and_name?format=json&email=" + usrCard.oMail, function(json){
+												$.getJSON("/check_email_and_name.json?email=" + usrCard.oMail, function(json){
 												if (json.status == 'true') {
 																				usrCard.errUniqMail = true;
 																			} else {usrCard.errUniqMail = false;}
@@ -750,6 +751,15 @@ function switchThemeWatcher(el, th_id)
 					url: "/theme_notifications.json",
 					data: ({theme_notifications:({type: 'single', theme_id: th_id})}),
 					success: function(but){$(el).html('<li><img src = "/files/'+but.type+'_b.png" style = "float: left;" height = "20px">'+but.name+'</li>');}
+})
+}
+function switchLikeMark(id, type)
+{
+	$.ajax({
+					type: "POST",
+					url: "/switch_mark.json",
+					data: ({mark:({type: type, id: id})}),
+					success: function(v){var el = $('#' + type + '_' + id + '_mark'); el.find('#mark_link').text(v.linkName); el.find('#mark_count').text(v.mCount); el.find('#mark_img').attr('style', 'background-image: url(/files/like'+ v.img +'.png);');}
 })
 }
 //Старые функции, удалять лишнее

@@ -11,22 +11,24 @@ include MessagesHelper
 		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 5, status_id: 1).order('created_at DESC')
 		@category_name = 'Свободные полёты'
 	when 'power_paragliding'
-		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 5, status_id: 1).order('created_at DESC')
+		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 4, status_id: 1).order('created_at DESC')
 		@category_name = 'Моторные полёты'
 	when 'kiting'
-		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 5, status_id: 1).order('created_at DESC')
+		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 2, status_id: 1).order('created_at DESC')
 		@category_name = 'Кайтинг'		
 	when 'club_events'
-		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 5, status_id: 1).order('created_at DESC')
+		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 3, status_id: 1).order('created_at DESC')
 		@category_name = 'Клубные мероприятия'
 		
 	when 'another'
-		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 5, status_id: 1).order('created_at DESC')
+		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page).where(category_id: 1, status_id: 1).order('created_at DESC')
 		@category_name = 'Разное'
 	else
 		@albums = PhotoAlbum.paginate(:page => params[:page], :per_page => @per_page).where(status_id: 1).order('created_at DESC')
 		@category_name = 'Все'
 	end
+  @title = "#{@title}: #{@category_name}"
+  @header = @title
     respond_to do |format|
       format.html # index.html.erb
       format.json { render :json => @photo_albums }

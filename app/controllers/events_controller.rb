@@ -2,7 +2,7 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.json
   def index
-    @title = 'Новости'
+  @title = @header = 'Новости'
 	@events = Event.paginate(:page => params[:page], :per_page => 10).where(status_id: 2).order('post_date DESC')
     respond_to do |format|
       format.html # index.html.erb
@@ -15,7 +15,7 @@ class EventsController < ApplicationController
   def show
     @event = Event.find_by(id: params[:id])
 	if @event != nil
-		@title = 'Новости'
+		@title = @header = @event.title
 		@path_array = [
 						{:name => 'Новости', :link => '/events'},
 						{:name => @event.title}
@@ -34,16 +34,14 @@ class EventsController < ApplicationController
   def new
 	if user_type == 'admin' || user_type == 'super_admin' || user_type == 'manager'
 		@event = Event.new
-		@title = 'Добавление новости'
+		@title = @header = 'Добавление новости'
 		@path_array = [
 						{:name => 'Новости', :link => '/events'},
-						{:name => "Добавление новости"}
+						{:name => @title}
 					  ]
 		@draft = current_user.event_draft
 		@draft.clean
     @add_functions = "initEventForm(#{@draft.id}, '#new_event');"
-		
-    
     respond_to do |format|
 		  format.html # new.html.erb
 		  format.json { render :json => @event }

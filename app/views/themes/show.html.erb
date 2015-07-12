@@ -1,7 +1,7 @@
 <div class = 'm_1000wh'>
-	<h1><%= @theme.name %></h1>
     <%= navigation_string.html_safe %>
 </div>
+<%= my_notice %>
 <%= theme_show_block(true).html_safe %>
 <%= newMessageFormInitial('none', '#new_message').html_safe %>
 <% if @messages != [] %>
@@ -12,7 +12,7 @@
 	<% end %>
 <% else %>
 	<div class = 'm_1000wh'>
-		<p class = 'istring norm'>В теме нет ни одного сообщения...</p>
+		<p class = 'istring norm tb-pad-m'>В теме нет ни одного сообщения...</p>
 	</div>
 <% end %>
 <div class = 'm_1000wh'>

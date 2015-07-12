@@ -13,6 +13,7 @@ class Photo < ActiveRecord::Base
   belongs_to :event #Фото как фото в новости
   belongs_to :message #Фото как вложение в сообщение
   has_many :messages, :dependent  => :delete_all #Комментарии к фото
+  has_many :photo_like_marks, :dependent  => :delete_all #Комментарии к фото
   mount_uploader :link, PhotoUploader
   before_destroy :delPhoto
   def comments
@@ -76,7 +77,7 @@ class Photo < ActiveRecord::Base
 end
   def exif_data
     exif = []
-	if  Magick::Image.read(Rails.root.join("public#{self.link}")).first.format == 'jpg'
+	if  Magick::Image.read(Rails.root.join("public#{self.link}")).first.format == 'JPEG'
 	path = Rails.root.join("public#{self.link}").to_s
     
     exifData = EXIFR::JPEG.new(path)
@@ -103,8 +104,6 @@ end
     exif[exif.length] = {name: 'Экспозиция', value: exposure} if exposure.strip  != ''
     exif[exif.length] = {name: 'Автор', value: artist} if artist.strip  != ''
     exif[exif.length] = {name: "ПО", value: software} if software.strip  != ''
-
-    
 	end
 	return exif
   end

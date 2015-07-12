@@ -5,11 +5,7 @@ include EventsHelper
   # GET /topics.json
   def index
     @topics = Topic.all
-	@title = "Клубная Жизнь"
-	@path_array = [
-					{:name => 'Клубная жизнь', :link => '/visota_life'},
-					{:name => 'Общение'}
-				  ]
+	  @title = @header = "Общение"
     respond_to do |format|
 	  format.html# index.html.erb
       format.json { render :json => @topics }
@@ -19,8 +15,8 @@ include EventsHelper
   # GET /topics/1
   # GET /topics/1.json
   def show
-    @topic = Topic.find(params[:id])
-	@title = @topic.name
+  @topic = Topic.find(params[:id])
+	@title = @header = @topic.name
 	@themes_per_page = 25
 	if is_not_authorized?
 		@themes = @topic.themes.where('status_id in (1, 4) and visibility_status_id = 1').order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
@@ -28,7 +24,7 @@ include EventsHelper
 		@themes = @topic.themes.where('status_id in (1, 4)and visibility_status_id in (1,2)').order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
 	end
 	@path_array = [
-					        {:name => 'Клубная жизнь', :link => '/visota_life'},
+					        {:name => 'Общение', :link => '/visota_life'},
 					        {:name => @topic.name, :link => topic_path(@topic)}
 				        ]
     respond_to do |format|

@@ -1,13 +1,11 @@
-<div class = 'central_field' id = 'm_1000wh'>
-    <h1 class = 'tb-pad-s'><%= @title %></h1>
-</div>
 <div class = 'c_box even'>
-    <div class = 'central_field tb-pad-m' id = 'm_1000wh'>
+    <%= my_alert %>
+    <div class = 'm_1000wh tb-pad-m'>
         <p class = 'istring'>Чтобы зайти на сайт небходимо ввести ник и пароль созданной Вами учётной записи.</p>
-        <p class = 'notice'><%= @my_notice %></p>
+        
         <%= form_for(:session, :url => sessions_path(:redirect_to => 'index')) do |f|  %>
     	    <div class = 'field'>
-    		    <%= f.label :name, 'Ник' %> <br />
+    		    <%= f.label :name, 'Ник или E-mail' %> <br />
     		    <%= f.text_field :name, :size => 33, :class => 't_field'  %>
     	    </div>
     	    <div class = 'field'>

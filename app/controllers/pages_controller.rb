@@ -19,23 +19,19 @@ include PagesHelper
 
   def equipment
 	  @title = 'Снаряжение'
-    @topImage = '4.jpg'
   end
 	
   def contacts
     @title = "Контакты"
-    @topImage = '3.jpg'
   end
 
   def about_us
-    @topImage = '2.jpg'
 	  @title = "О клубе"
     
   end
   
   def paragliding
 	  @title = "Немного о парапланеризме"
-    @topImage = '5.jpg'
   end
   
   def new_template
@@ -70,10 +66,10 @@ include PagesHelper
   end
   
   def visota_life
-	@title = "Клубная жизнь"
+	  @title = "Клубная жизнь"
   end
   
   def search
-	visota_search("Нет ничего лучше борща с грибами, Shit'a Fuck'a", 'all')
+	  visota_search("Нет ничего лучше борща с грибами, Shit'a Fuck'a", 'all')
   end
 end

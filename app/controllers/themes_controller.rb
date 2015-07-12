@@ -20,9 +20,9 @@ include TopicsHelper
 	if userCanSeeTheme?(@theme)
 		@page_params = {:part_id => 9, :page_id => 1, :entity_id => @theme.id}
 		@jsonTheme = {:author => @theme.user.role_card("Автор темы: "), :content => @theme.content_html}
-		@title = @theme.name
+		@title = @header = @theme.name
 		@path_array = [
-						{:name => 'Клубная жизнь', :link => '/visota_life'},
+						{:name => 'Общение', :link => '/visota_life'},
 						{:name => @theme.topic.name, :link => topic_path(@theme.topic)},
 						{:name => @theme.name, :link => theme_path(@theme)}
 					  ]

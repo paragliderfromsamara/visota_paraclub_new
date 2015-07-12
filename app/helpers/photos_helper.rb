@@ -83,7 +83,7 @@ module PhotosHelper
 		value = ''
 		value += "<tr><td align = 'left' valign = 'middle'><span class = 'istring_m norm'>Фото разместил</span> #{link_to @photo.user.name, @photo.user, :class=>'b_link_i'}</td></tr>" if @photo.user != nil
 		value += "<tr><td align = 'left' valign = 'middle'><span class = 'istring_m norm'>Размещено #{@photo.parent[:published_in]}</span> #{link_to(@photo.parent[:parent_name], @photo.parent[:parent_link], :class => 'b_link_i')}</td></tr>" 
-		return "<table style = 'width: 98%; font-size: 14pt;'>#{value}</table>"
+    return "<table style = 'width: 98%; font-size: 14pt;'>#{value}</table>"
 	end
 	def photoInfo(photo)
 		v = "<img src = '/files/answr_g.png' width = '17px' style = 'float: left; padding-left: 7px;'/><span title = 'Комментарии' class = 'stat'>#{photo.comments.count.to_s}</span> "
@@ -125,4 +125,5 @@ module PhotosHelper
 		end
 		return value
 	end
+  
 end

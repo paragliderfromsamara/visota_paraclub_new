@@ -11,7 +11,7 @@ include TopicNotificationsHelper
 			d = multipleTopicNtfUpd(ntfData)
 			if d == true 
 				respond_to do |format|
-					format.html {redirect_to edit_user_path(:id => current_user.id, :tab => 'notification_upd')}# index.html.erb
+					format.html {redirect_to edit_user_path(:id => current_user.id, :tab => 'notification_upd'), :notice => 'Список отслеживаемых разделов успешно обновлён.'}# index.html.erb
 					format.json { render :json => d }
 				end
 			else

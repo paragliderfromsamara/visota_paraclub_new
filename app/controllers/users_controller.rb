@@ -29,7 +29,6 @@ include UsersHelper
   def videos
 	@user = User.find_by_id(params[:id])
 	if @user != nil
-		@title = 'Видео'
 		@per_page = 18
 		case params[:c]
 		when 'paragliding'
@@ -51,6 +50,9 @@ include UsersHelper
 			@videos = @user.videos.paginate(:page => params[:page], :per_page => @per_page).all.order('created_at DESC')
 			@category_name = 'Все видео'
 		end
+		@title = "Видео пользователя #{@user.name}" if @user != current_user
+    @title = "Мои видео" if @user == current_user
+    @header = "#{@title}: #{@category_name}"
 		@path_array = [
 						{:name => 'Видео', :link => videos_path},
 						{:name => "Видео пользователя #{@user.name}"}
@@ -66,7 +68,8 @@ include UsersHelper
   def photo_albums
 	@user = User.find_by_id(params[:id])
 	if @user != nil
-		@title = "Фотоальбомы пользователя #{@user.name}"
+		@title = @header = "Фотоальбомы пользователя #{@user.name}" if @user != current_user
+    @title = @header = "Мои фотоальбомы" if @user == current_user
 		@per_page = 18
 		case params[:c]
 		when 'paragliding'
@@ -119,38 +122,52 @@ include UsersHelper
       else
     		redirect_to '/404'
     	end
+  end
+  
+  def themes
+    @user = User.find_by(id: params[:id])
+    if @user != nil
+      @title = @header = "Все темы пользователя #{@user.name}" if @user != current_user
+      @title = @header = "Мои темы" if @user == current_user
+      @visibility_ids = 1 if is_not_authorized? and @user != current_user
+      @visibility_ids = [1,2] if !is_not_authorized? or @user == current_user
+      @topics = Topic.all.order('name ASC')
+    else
+      redirect_to '/404'
     end
+  end
+  
   # GET /users/1
   # GET /users/1.json
   def show 
     @user = User.find_by(id: params[:id])
-	if @user != nil
-		#@alter_logo = @user.photo if @user.photo?
-		@title = "#{@user.name}"
-		respond_to do |format|
-		  format.html # show.html.erb
-		  format.json { render :json => @user }
-		end
-	else
-		redirect_to '/404'
-	end
+  	if @user != nil
+  		#@alter_logo = @user.photo if @user.photo?
+  		@title = "#{@user.name}"
+  		respond_to do |format|
+  		  format.html # show.html.erb
+  		  format.json { render :json => @user }
+  		end
+  	else
+  		redirect_to '/404'
+  	end
   end
 
   # GET /users/new
   # GET /users/new.json
   def new
-	if user_type == 'guest'
-		@user = User.new
-		@action_type = 'new'
-		@title = "Регистрация на сайте"
-		@add_functions = "userFieldsChecking();"
-		respond_to do |format|
-		  format.html # new.html.erb
-		  format.json { render :json => @user }
-		end
-	else
-		redirect_to '/404'
-	end
+  	if user_type == 'guest'
+  		@user = User.new
+  		@action_type = 'new'
+  		@title = @header = "Регистрация на сайте"
+  		@add_functions = "userFieldsChecking();"
+  		respond_to do |format|
+  		  format.html # new.html.erb
+  		  format.json { render :json => @user }
+  		end
+  	else
+  		redirect_to user_path(user)
+  	end
   end
 
   # GET /users/1/edit
@@ -181,7 +198,8 @@ include UsersHelper
 					user = User.authenticate(params[:user][:name],
 											params[:user][:password])
 					sign_in user
-					format.html { redirect_to "/welcome", :notice => 'Вы успешно зарегистрировались...' }
+					format.html { redirect_to @user, :notice => "<b>Приветствуем в нашей крылатой компании!!!</b><br /><br /> На электронный адрес <b>#{@user.email}</b> было отправлено сообщение с ссылкой на подтверждение Вашей учётной записи. <br />
+			Подтвердив свою учётную запись, Вы сможете делиться своими фотографиями и видеозаписями." }
 					format.json { render :json => @user, :status => :created, :location => @user }
 				  else
 					format.html { render :action => "new" }
@@ -190,7 +208,7 @@ include UsersHelper
 				end
 		else
 			respond_to do |format|
-				format.html {redirect_to :back, :notice => 'Неправильно введён текст изображения', @user => params[:user]}
+				format.html {redirect_to :back, :alert => 'Неправильно введён текст изображения', @user => params[:user]}
 			end
 		end
 	else
@@ -203,16 +221,19 @@ include UsersHelper
   def update
     @user = User.find(params[:id])
 	if userCanEditUserCard?(@user)
-		my_notice = 'Профиль успешно обновлён'
-		case params[:tab]
-		when 'email_upd' 
-			my_notice = 'E-mail адрес обновлён. На новый адрес отправлено проверочное сообщение.' if UserMailer.mail_check(@user).deliver
-			params[:user][:email_status] = 'Проверка'
-		when 'password_upd'
-			my_notice = 'Пароль обновлён.'
-		end
+		if params[:tab] == 'email_upd'
+      params[:user][:email_status] = 'Проверка' if @user.email != params[:user][:email]
+    end
 		respond_to do |format|
 		  if @user.update_attributes(params[:user])
+    		my_notice = 'Профиль успешно обновлён'
+    		case params[:tab]
+    		when 'email_upd' 
+    			my_notice = 'E-mail адрес обновлён. На новый адрес отправлено проверочное сообщение.' if UserMailer.mail_check(@user).deliver
+    			
+    		when 'password_upd'
+    			my_notice = 'Пароль успешно обновлён.'
+    		end
 			format.html { redirect_to @user, :notice => my_notice }
 			format.json { head :no_content }
 		  else
@@ -228,16 +249,16 @@ include UsersHelper
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    @user = User.find_by_id(params[:id])
-	if is_super_admin?
-		@user.destroy
-		respond_to do |format|
-		  format.html { redirect_to users_url }
-		  format.json { head :no_content }
-		end
-	else
-		redirect_to '/404'
-	end
+    @user = User.find_by(id: params[:id])
+  	if is_super_admin?
+  		@user.destroy
+  		respond_to do |format|
+  		  format.html { redirect_to users_url }
+  		  format.json { head :no_content }
+  		end
+  	else
+  		redirect_to '/404'
+  	end
   end
   
   def welcome
@@ -249,16 +270,16 @@ include UsersHelper
   end
   
   def thanks
-	@title = 'Аккаунт успешно активирован!!!'
+	  @title = 'Аккаунт успешно активирован!!!'
   end
   
   def update_mailer
 	if user_type != 'guest'
-		@mailer = Mailer.find(params[:id])
+		@mailer = Mailer.find_by(user_id: params[:id])
 		if @mailer != nil and (@mailer.user == current_user or user_type == 'super_admin')
 			respond_to do |format|
 			  if @mailer.update_attributes(params[:mailer])
-				format.html { redirect_to edit_user_path(:id => @mailer.user.id, :tab => 'notification_upd'), :notice => 'Список уведомлений успешно обновлён' }
+				format.html { redirect_to edit_user_path(:id => @mailer.user.id, :tab => 'notification_upd'), :notice => 'Список уведомлений отправляемых на электронную почту успешно обновлён' }
 				format.json { head :no_content }
 			  end
 			end
@@ -271,22 +292,20 @@ include UsersHelper
   end
   
   def user_check
-	user = User.find_by_name_and_salt_and_email(params[:name], params[:value], params[:email])
+	user = User.find_by(name: params[:name], salt: params[:value], email: params[:email])
 	if user != nil
 		if user.user_group_id == 5
-			value = Value.find_by_value_id(user.id)
-			user.update_attributes(:user_group_id => 3, :email_status => "Активен", :password => value.value, :password_confirmation => value.value)
-			mailer = Mailer.new(
-								:user_id => user.id, 
+      sign_in user if !signed_in?
+			user.update_attributes(:user_group_id => 3, :email_status => "Активен")
+			mailer = Mailer.create(
+                :user_id => user.id, 
 								:album => 'no',  # Уведомление о новых фотоальбомах
 								:video => 'no',  # Уведомление о новых видеозаписях
 								:message => 'no', # Уведомление о всех новых сообщениях
 								:article => 'no', # Уведомление о всех новых статьях
 								:photo_comment => 'no', # Уведомление о всех новых комментариях к фото в альбомах пользователя
-								:video_comment => 'no', # Уведомление о всех новых комментариях к видео пользователя
-								:email => user.email
+								:video_comment => 'no'
 								)
-			mailer.save
 			redirect_to edit_user_path(:id => user.id, :tab => 'notification_upd'), :notice => 'Ваш аккаунт успешно подтверждён'
 		end
 	else
@@ -294,34 +313,46 @@ include UsersHelper
 	end		
   end
   
-  def password_mail_sent
-		redirect_to '/404' if signed_in? or (params[:mail] == '' or params[:mail] == nil or params[:mail] == []) 
-		@title = 'Восстановление пароля'
-  end
-  
   def remember_password
-	redirect_to '/404' if signed_in?
-	@title = 'Восстановление пароля'
+	  redirect_to '/404' if signed_in?
+    @title = @header = 'Восстановление пароля'
   end
   
   def make_mail
-	nikname = (params[:user][:name]).strip
 	eaddr = (params[:user][:email]).strip
-	if (eaddr != '' and nikname != '' and eaddr != nil and nikname != nil)
-		user = User.find_by_name_and_email(params[:user][:name], params[:user][:email])#(params[:name], params[:value], params[:created_at])
+  user = nil
+  @title = @header = 'Восстановление пароля'
+  abiUsr = User.new
+	if (eaddr != ''  and eaddr != nil and abiUsr.image_valid?(params[:abi][:value], params[:abi][:name]))
+    users = User.all
+    users.each do |u|
+      if params[:user][:email] != '' and params[:user][:email] != nil
+        if u.email.downcase == params[:user][:email].downcase
+            user = u
+          break
+        end
+      end
+    end
 		if user == nil
-			redirect_to '/remember_password', :notice => ("<span class = 'err'>Пользователь с именем</span> <b>#{params[:user][:name]}</b> <span class = 'err'>и почтовым адресом</span> <b>#{params[:user][:email]}</b> <span class = 'err'>не найден</span>").html_safe
+      flash[:alert] = "Пользователь с почтовым адресом <b>#{params[:user][:email]}</b> не найден"
+			render 'remember_password'
 		else
-			redirect_to "/password_mail_sent?mail=#{user.email}" if UserMailer.mail_remember_password(user).deliver
+      flash[:mail] = user.email 
+			redirect_to "/remember_password", :notice => "На электронный адрес <b>#{params[:user][:email]}</b> отправлено сообщение для восстановления пароля"  if UserMailer.mail_remember_password(user).deliver
 		end
-	else
-		redirect_to '/remember_password', :notice => ("<span class = 'err'>Поля</span> 'Ник' <span class = 'err'>и</span> 'Почтовый адрес' <span class = 'err'>должны быть заполнены</span>").html_safe
-	end
+  elsif eaddr == '' || eaddr == nil 
+    flash[:alert] = "Поле 'Почтовый адрес' должно быть заполнено"
+    render 'remember_password'
+  elsif !abiUsr.image_valid?(params[:abi][:value], params[:abi][:name])
+    flash[:alert] = "Неправильно введён текст отображенный на картинке"
+    render 'remember_password'
+  end
+  
   end
   
   def mail_switcher
 	action = params[:action_type]
-	user = User.find_by_salt_and_name_and_email(params[:value], params[:name], params[:email])
+	user = User.find_by(salt: params[:value], name: params[:name], email: params[:email])
 	if action != nil and action != '' and user != nil
 		current_user = user
 		case action
@@ -345,26 +376,22 @@ include UsersHelper
   end
   
   def check_email_and_name
-	user = nil
 	@status = {:status => 'false'}
   users = User.all
   users.each do |u|
-    if params[:email] != ''
-      if u.name.mb_chars.downcase == params[:name].mb_chars.downcase
+    if params[:email] != '' and params[:email] != nil
+      if u.email.downcase == params[:email].downcase
         @status = {:status => 'true'}
         break
       end
     end
-    if params[:name] != ''
+    if params[:name] != '' and params[:name] != nil
       if u.name.mb_chars.downcase == params[:name].mb_chars.downcase
         @status = {:status => 'true'}
         break
       end
     end
   end
-#	user = User.find_by_email(params[:email]) if params[:email] != nil and params[:email] != ''
-#	user = User.find_by_name(params[:name]) if params[:name] != nil and params[:name] != ''
-	@status = {:status => 'true'} if user != nil
 	respond_to do |format|
 		format.json { render :json => @status }
 	end
@@ -375,17 +402,27 @@ include UsersHelper
 	#UserMailer.mail_remember_password(current_user).deliver
 	#UserMailer.mail_check(current_user).deliver
   end
-  
+  def send_email_check_message
+    user = User.find_by(id: params[:id])
+    if (current_user == user and user != nil) || is_admin? 
+      UserMailer.user_check(user).deliver if user.user_group_id == 3
+      UserMailer.mail_check(user).deliver if user.user_group_id != 3
+      respond_to do |format|
+  	    format.json {render :json => 'good'}
+      end
+    end
+
+  end
   def steps
-	if is_super_admin?
-		@user = User.find_by_id(params[:id])
-		@steps = Step.find_all_by_user_id(@user.id)
-		respond_to do |format|
-			format.html { render 'steps/index' }
-			format.json { render :json => @steps }
-		end
-	else
-		redirect_to '/404'
-	end
+	  if is_super_admin?
+	    @user = User.find_by(id: params[:id])
+		  @steps = Step.where(user_id: @user.id)
+	    respond_to do |format|
+		    format.html { render 'steps/index' }
+		    format.json { render :json => @steps }
+	    end
+	  else
+		  redirect_to '/404'
+    end
   end
 end

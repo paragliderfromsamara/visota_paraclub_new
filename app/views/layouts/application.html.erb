@@ -39,15 +39,13 @@
 	<div class = 'arrow' id = 'aUp' style = 'display: none;'></div>
 	<div class = 'arrow' id = 'aDwn' style = 'display: none;'></div>
 </div>
-<div id = 'top' style = 'height: <%= @curTopImage[:BlockHeight] %>px; background-image:url("<%= @curTopImage[:link] %>");'>
-	<div class = 'central_field' id = 'm_1000wh'>
+<div id = 'top' style = 'height: <%= @curTopImage[:BlockHeight] %>px; <% if @curTopImage[:link] != 'none' %>background-image:url("<%= @curTopImage[:link] %>");<% end %>'>
+	<div class = 'm_1000wh'>
 		<div class = 'section group'>
 			<div class = 'col span_3_of_12' style = 'margin-top:23px; '>
 				<img link_to = '/' id = 'mLogo' src = '/logoImages/logo.png' />
 			</div>
-			<div class = 'col span_2_of_12'>
-			</div>
-			<div class = 'col span_7_of_12' style = 'padding: 0 0 0 0; margin-top:56px;'>
+			<div class = 'col span_9_of_12' style = 'padding: 0 0 0 0; margin-top:56px;'>
 				<div id = 'mainMenu'>
 					<%= topMainMenu.html_safe %>
 				</div>
@@ -69,7 +67,7 @@
 		<% end %>
 	</div>
 </div>
-<div id = 'ses_p'>
+<div class = 'm_1000wh' id = 'ses_p'>
 	<div class = 'section group'>
 		<div class = 'col span_6_of_12'>
 		</div>
@@ -79,14 +77,16 @@
 	</div>
 </div>
 <div id = 'middle'>
-	<%= header_1 %>
+	<div class = "m_1000wh tb-pad-s">
+        <%= header_1 %>
+    </div>
 	<%= yield %>
 </div>
 <div id = 'bottom'>
 	<div id = 'test'></div>
 	<% if controller.controller_name == 'pages' and controller.action_name != 'visota_life' and controller.action_name != 'feed' %>
 		<div id="m_full" class="even">
-			<div class="central_field" id="m_1000wh">
+			<div class="m_1000wh">
 				<div class="section group" style="padding: 47px 0 47px 0">
 					<div class="col span_2_of_12">
 					</div>
@@ -114,7 +114,7 @@
 			</div>
 		</div>
 		<div id = 'm_full' class = 'odd'>
-			<div class = 'central_field' id = 'm_1000wh'>
+			<div class = 'm_1000wh'>
 					<div class="section group" style = 'padding: 78px 0 78px 0'>
 					   <div class="col span_1_of_12">
 					   </div>
@@ -148,11 +148,9 @@
 		</div>
 	<% end %>
 	<div id = 'footer'>
-		<div class = 'central_field' id = 'm_1000wh'  style = 'top: 30%;'>
+		<div class = 'm_1000wh'  style = 'top: 30%;'>
 			<div class = 'section group'>
-				<div class = 'col span_1_of_12'>
-				</div>
-				<div class = 'col span_8_of_12'>
+				<div class = 'col span_9_of_12'>
 					<div id = 'bottomMenu'>
 					  <%= bottomMainMenu.html_safe %>
 					</div>

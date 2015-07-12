@@ -2,6 +2,7 @@ class Video < ActiveRecord::Base
   belongs_to :user
   belongs_to :article
   has_many :messages, :dependent  => :delete_all
+  has_many :video_like_marks, :dependent  => :delete_all
   has_one :theme, :dependent  => :destroy
   require 'will_paginate'
   #has_many :events, :dependent  => :delete_all

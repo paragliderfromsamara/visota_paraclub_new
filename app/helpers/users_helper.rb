@@ -57,20 +57,21 @@ def user_index_list(user, i)
       						<div style = 'padding-left: 15px;'>
       							<p>#{link_to user.visible_name(user_type), user, :class => 'b_link_bold'}</p>
       							<p class = 'istring norm'>#{user.group_name}</p>
+                    <p class = 'istring norm'>#{user.email_with_status if user_type == 'super_admin'}</p>
       						</div>
       					</td>
       				</tr>
       			</table>"
         	p = {
-        			:tContent => html, 
-        			:idLvl_2 => 'b_middle',
-              :parity => i
-        		}
+        			  :tContent => html, 
+        			  :idLvl_2 => 'b_middle',
+                :parity => i
+        		  }
             return c_box_block(p).html_safe
 end
 
 def user_contacts(user)
-	if !is_not_authorized? and !user.nil?
+	if !is_not_authorized? || user == current_user
 		"<table>
 				#{data_container(:name => "E-mail:", :value => user.email)}
 				#{data_container(:name => "Контактный номер:", :value => user.cell_phone) if user.cell_phone?}
@@ -87,7 +88,8 @@ def show_path_buttons
 		{:name => 'Изменить общую информацию', :access =>  userCanEditUserCard?(@user), :type => 'ucard', :link => edit_user_path(:id => @user.id), :id => 'change_password'},
 		{:name => 'Уведомления', :title => "Уведомления на почтовый ящик", :access => userCanEditUserCard?(@user), :type => 'bing', :link => edit_user_path(:id => @user.id, :tab => 'notification_upd'), :id => 'change_notification'},
 		{:name => 'Изменить E-mail', :title => "Изменить адрес электронной почты", :access => userCanEditUserCard?(@user), :type => 'mail', :link => edit_user_path(:id => @user.id, :tab => 'email_upd'), :id => 'change_email'},
-        {:name => 'Изменить пароль', :access => userCanEditUserCard?(@user), :type => 'key', :link => edit_user_path(:id => @user.id, :tab => 'password_upd'), :id => 'change_password'}
+    {:name => 'Изменить пароль', :access => userCanEditUserCard?(@user), :type => 'key', :link => edit_user_path(:id => @user.id, :tab => 'password_upd'), :id => 'change_password'},
+    {:name => 'Удалить пользователя', :access => is_super_admin?, :type => 'del', :link => user_path(@user), :data_method => 'delete', :data_confirm => 'Вы уверены, что хотите удалить пользователя?'}
   ]	
 end
 def last_user_videos(i)

@@ -3,10 +3,10 @@ class VotesController < ApplicationController
 	@completed_votes = Vote.where("end_date < :time_now", {:time_now => Time.now})
 	@active_votes = Vote.where("end_date > :time_now", {:time_now => Time.now})
 	@path_array = [
-						{:name => 'Клубная жизнь', :link => '/visota_life'},
+						{:name => 'Общение', :link => '/visota_life'},
 						{:name => 'Опросы'}
 				  ]
-          @title = 'Опросы'
+  @title = @header = 'Опросы'
 	respond_to do |format|
 	  format.html # index.html.erb
       format.json { render :json => @votes }

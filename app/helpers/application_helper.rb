@@ -61,10 +61,12 @@ require 'open-uri' #для парсера
 				{link: "#{path}3.jpg", BlockHeight: 397},
 				{link: "#{path}4.jpg", BlockHeight: 397},
 				{link: "#{path}5.jpg", BlockHeight: 397},
-        {link: "#{path}6.jpg", BlockHeight: 397}
+        {link: "#{path}6.jpg", BlockHeight: 397},
+        {link: "#{path}7.jpg", BlockHeight: 422}
 			  ]
 		return arr
   end
+
   def primaryMenuItems
 	  [{
 	   :name => 'О клубе', 
@@ -90,8 +92,20 @@ require 'open-uri' #для парсера
      :title => "Контактная информация",
      :drop_items => 'none'
     },
+    {
+     :name => 'Фото', 
+     :link => "/photo_albums", 
+     :title => "Альбомы",
+     :drop_items => 'none'
+    },
+    {
+     :name => 'Видео', 
+     :link => "/videos", 
+     :title => "Альбомы",
+     :drop_items => 'none'
+    },
 	  {
-	   :name => 'Клубная жизнь', 
+	   :name => 'Общение', 
 	   :link => "/visota_life", 
 	   :title => "Фотографии, общение, видео",
 	   :drop_items => 'none'
@@ -149,9 +163,9 @@ require 'open-uri' #для парсера
 						:drop_items => 'none'
 					  },
 					  {
-					   :name => 'Клубная жизнь', 
+					   :name => 'Общение', 
 					   :link => "/visota_life", 
-					   :title => "Общение (в прошлом Гостевая)",
+					   :title => "в прошлом Гостевая",
 					   :links_list => topic_link_list,
 					   :link_list_width => '170px',
 					   :id => 'nav_topics',
@@ -249,6 +263,32 @@ require 'open-uri' #для парсера
 		return val_arr
 	end
 	
+  def my_notice
+    if notice != nil && notice != ''
+    "
+     <div class = 'notice'> 
+         <div class = 'm_1000wh'>
+             <p id='notice' class = 'tb-pad-s'>#{notice}</p>
+         </div>
+     </div>
+    ".html_safe
+    else
+      ''
+    end
+  end
+  def my_alert
+    if flash[:alert] != nil && flash[:alert] != ''
+    "
+     <div class = 'alert'> 
+         <div class = 'm_1000wh'>
+             <p id='alert' class = 'tb-pad-s'>#{flash[:alert]}</p>
+         </div>
+     </div>
+    ".html_safe
+    else
+      ''
+    end
+  end
 	def wheather_panel
 	"
 		<div id = 'wheather_panel' class = 'wheather_panel'>

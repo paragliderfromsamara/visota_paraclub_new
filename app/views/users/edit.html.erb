@@ -1,12 +1,13 @@
-<div class = 'central_field' id = 'm_1000wh'>
+<div class = 'm_1000wh'>
 	<h1 class = 'tb-pad-m'><%= 'Изменение персональных данных' %></h1>
 </div>
 <div class = 'c_box'>
-    <div class = 'central_field' id = 'm_1000wh'>
+    <div class = 'm_1000wh'>
     	<%= control_buttons(edit_path_buttons).html_safe %>
-    </div>
+       
+    </div> 
+  <%= my_notice %>
 </div>
-<p id="notice"><%= notice %></p>
 <%= render 'main_inform_update' if params[:tab] == nil or params[:tab] == '' or params[:tab] == 'data_upd' %>
 <%= render 'password_update' if params[:tab] == 'password_upd' %>
 <%= render 'email_update' if params[:tab] == 'email_upd' %>

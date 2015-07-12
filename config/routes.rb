@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  post '/switch_mark', :to => 'like_marks#switch_mark'
+  get  '/switch_mark', :to => 'like_marks#switch_mark'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 resources :voices, :only => [:create, :destroy]	
@@ -83,6 +85,7 @@ resources :voices, :only => [:create, :destroy]
 
   #topics controller
   resources :topics
+  get '/visota_life', :to => 'topics#index'
   get '/communication', :to => 'topics#index'
   get '/gost.htm', :to => 'topics#index'
   #topics controller end
@@ -118,33 +121,21 @@ resources :voices, :only => [:create, :destroy]
   
   #users_controller
   resources :users
-  get "users/password_mail_sent"
-  get "users/make_mail"
-  get "users/remember_password"
-  get "users/mail_switcher"
-  get "users/thanks"
-  put "users/update_mailer"
-  get "users/user_check"
-  get "users/mail_test"
-  get "users/check_email_and_name"
-  get "users/videos"
-  get "users/photo_albums"
-  get "users/articles"
-  get "users/steps"
-  get '/password_mail_sent', :to => 'users#password_mail_sent'
-  get '/make_mail', :to => 'users#make_mail'
+  post '/make_mail', :to => 'users#make_mail'
   get '/remember_password', :to => 'users#remember_password'
   get '/thanks', :to => 'users#thanks'
   get '/mail_switcher', :to => 'users#mail_switcher'
   get '/user_check', :to => 'users#user_check'
   get "/pilots", :to => 'users#index'
   get "/welcome", :to => 'users#welcome'
-  get "/update_mailer", :to => 'users#update_mailer'
+  put "/users/:id/update_mailer", :to => 'users#update_mailer'
   get "/check_email_and_name", :to => 'users#check_email_and_name' #проверка имени и почтового адреса на занятость.
   get "/users/:id/videos", :to => "users#videos"
   get "/users/:id/steps", :to => "users#steps"
   get '/users/:id/photo_albums', :to => 'users#photo_albums'
   get '/users/:id/articles', :to => 'users#articles'
+  get '/users/:id/themes', :to => 'users#themes'
+  get '/send_email_check_message', :to => 'users#send_email_check_message'
   #users_controller
   
   #sessions_controller
@@ -167,7 +158,6 @@ resources :voices, :only => [:create, :destroy]
   get '/feed', :to => 'pages#feed'
   get '/search', :to => 'pages#search'
   get '/equipment', :to => 'pages#equipment'
-  get '/visota_life', :to => 'pages#visota_life'
   #pages_controller end
   # You can have the root of your site routed with "root"
   root 'pages#index'
