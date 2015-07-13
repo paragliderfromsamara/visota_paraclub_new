@@ -65,8 +65,24 @@ include PagesHelper
 	end
   end
   
-  def visota_life
-	  @title = "Клубная жизнь"
+  def media
+    setMediaSessionHash
+	  @title = @header = "Фото и видео"
+    category = session[:media_category]
+    if session[:media_photo_albums] == true
+      if category == 'all'
+        @albums = PhotoAlbum.where(status_id: 1).order('created_at DESC')
+      else
+        @albums = PhotoAlbum.where(category_id: category, status_id: 1).order('created_at DESC')
+      end
+    end
+    if session[:media_videos] == true
+      if category == 'all'
+        @videos = Video.all.order('created_at DESC')
+      else
+        @videos = Video.where(category_id: category).order('created_at DESC')
+      end
+    end
   end
   
   def search

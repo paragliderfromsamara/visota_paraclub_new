@@ -471,7 +471,8 @@ img.ava {width: 120px;}
 	
 		li {
 			display: inline-block;
-			padding-left: 7px;
+			margin-left: 5px;
+            padding-left: 7px;
 			padding-right: 7px;
 			padding-top: 10px;
 			padding-bottom: 10px;
@@ -490,7 +491,7 @@ img.ava {width: 120px;}
 		a:hover {
 			color: $text_color_1;
 		 }
-		 #c_loc_li {color: $text_color_1;}
+		 #c_loc_li {color: $text_color_1; border-bottom: 2px solid $text_color_1;}
 		}
 /* Локальное мини меню end */
 
@@ -739,7 +740,7 @@ img.ava {width: 120px;}
 							color: $text_color_1;
 							
 						  }
-						td#first, th#first {padding-left: 44px;}
+						td#first, th#first {padding-left: 22px;}
 						tbody.t_link {cursor: pointer;@include animation($time_1);}
 						tbody.t_link:hover {background-color: $second_color;}
 	}

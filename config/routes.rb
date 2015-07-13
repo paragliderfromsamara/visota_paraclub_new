@@ -158,6 +158,7 @@ resources :voices, :only => [:create, :destroy]
   get '/feed', :to => 'pages#feed'
   get '/search', :to => 'pages#search'
   get '/equipment', :to => 'pages#equipment'
+  get '/media', :to => 'pages#media'
   #pages_controller end
   # You can have the root of your site routed with "root"
   root 'pages#index'

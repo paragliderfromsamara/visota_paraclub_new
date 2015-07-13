@@ -695,7 +695,66 @@ end
 
 
 #поиск по сайту-end----------------------------------------------------------------------------------------------------------------------------------------------------
+  def mediaTypeMenu
+    v = ''
+    buttons = []
+    if session[:media_photo_albums] == true
+      but = {:name => "Фотоальбомы", :access => true, :selected => true, :type => 'b_grey', :link => "/media?photo_albums=no", :data_remote => true}
+    else
+      but = {:name => "Фотоальбомы", :access => true, :type => 'b_grey', :link => "/media?photo_albums=yes", :data_remote => true}
+    end
+    buttons[buttons.length] = but
+    if session[:media_videos] == true
+      but = {:name => "Видео", :access => true, :selected => true, :type => 'b_grey', :link => "/media?videos=no", :data_remote => true}
+    else
+      but = {:name => "Видео", :access => true, :type => 'b_grey', :link => "/media?videos=yes", :data_remote => true}
+    end
+    buttons[buttons.length] = but
+    return buttons_in_line(buttons).html_safe
+  end
+  def mediaCategoryMenu
+    album = PhotoAlbum.new
+    buttons = [{:name => "Все категории", :access => true, :type => 'b_grey', :link => "/media?category=all", :data_remote => true}]
+    buttons.first[:selected] = true if session[:media_category] == 'all'
+    i = 0
+    album.categories.each do |c|
+      i += 1
+      buttons[i] = {:name => c[:name], :access => true, :type => 'b_grey', :link => "/media?category=#{c[:value]}", :data_remote => true}
+      buttons[i][:selected] = true if session[:media_category] == c[:value]
+    end
+    return buttons_in_line(buttons).html_safe
+  end
+  def mediaYearsMenu
+    '<br />YearsMenu'.html_safe
+  end
 
-
-
+  def setMediaSessionHash
+    session[:media_photo_albums] = true if session[:media_photo_albums] == nil
+    session[:media_videos] = true if session[:media_photo_albums] == nil
+    session[:media_year] = 'all' if session[:media_year] == nil
+    session[:media_category] = 'all' if session[:media_category] == nil 
+    base_value_alb = session[:media_photo_albums]
+    base_value_vid = session[:media_videos]
+    if params[:photo_albums] != nil and params[:photo_albums] != ''
+      session[:media_photo_albums] = true if params[:photo_albums] == 'yes'
+      session[:media_photo_albums] = false if params[:photo_albums] == 'no'
+    end
+    if params[:videos] != nil and params[:videos] != ''
+      session[:media_videos] = true if params[:videos] == 'yes'
+      session[:media_videos] = false if params[:videos] == 'no'
+    end
+    if session[:media_photo_albums] == false && session[:media_videos] == false
+      session[:media_photo_albums] = true if base_value_alb == false
+      session[:media_videos] = true if base_value_vid == false
+    end
+    if params[:year] != nil
+      session[:media_year] = 'all'
+    else
+      session[:media_year] = params[:year]
+    end
+    if params[:category] != nil && params[:category] != ''
+      session[:media_category] = params[:category].to_i if params[:category] != 'all'
+      session[:media_category] = params[:category] if params[:category] == 'all'
+    end
+  end
 end

@@ -93,15 +93,9 @@ require 'open-uri' #для парсера
      :drop_items => 'none'
     },
     {
-     :name => 'Фото', 
-     :link => "/photo_albums", 
-     :title => "Альбомы",
-     :drop_items => 'none'
-    },
-    {
-     :name => 'Видео', 
-     :link => "/videos", 
-     :title => "Альбомы",
+     :name => 'Медиа', 
+     :link => "/media", 
+     :title => "Фото и видео",
      :drop_items => 'none'
     },
 	  {
