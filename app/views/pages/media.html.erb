@@ -1,45 +1,40 @@
 <div class = 'm_1000wh tb-pad-s'>
-    <%= mediaTypeMenu %>
-    <%= mediaCategoryMenu %>
-</div>
-<div class = 'c_box odd'>
-    <div class = 'central_field' id = 'm_1000wh' style = 'padding: 38px 0 38px 0;'>
-        <% if session[:media_photo_albums] == true and  session[:media_videos] == true %>
-            <div class = 'section group'>
-                <div class = 'col span_7_of_12'>
-                    <h2>
-       					Фотоальбомы
-       				</h2>
-       				<% @albums.each do |alb| %>
-       					<div class = 'c_box'><div class = 'central_field' style = 'width: 95%; padding: 10px 0 10px 0;'><%= album_table(alb, 'visota_life').html_safe %></div></div>
-       				<% end %>
-       			</div>
-       			<div class = 'col span_1_of_12'>
-       			</div>
-       			<div class = 'col span_4_of_12'>
-       				<h2>
-       					Видео
-       				</h2>
-       				<% @videos.each do |vid| %>
-       					<%= video_index_block(vid).html_safe %>
-       				<% end %>
-       			</div>
-   		    </div> 
-        <% elsif session[:media_photo_albums] == true and  session[:media_videos] == false %>
-			<h2>
-				Фотоальбомы
-			</h2>
-			<% @albums.each do |alb| %>
-				<div class = 'c_box'><div class = 'central_field' style = 'width: 95%; padding: 10px 0 10px 0;'><%= album_table(alb, 'index').html_safe %></div></div>
-			<% end %>
-        <% elsif session[:media_photo_albums] == false and  session[:media_videos] == true %>
-			<h2>
-				Видео
-			</h2>
-			<% @videos.each do |vid| %>
+    <div class = 'section group'>
+        <div class = 'col span_10_of_12'>
+            <%= mediaTypeMenu %>
+            <%= mediaCategoryMenu %>
+        </div>
+        <div class = 'col span_2_of_12'>
+            <%= will_paginate @entities %>
+        </div>
+    </div>
+</div>   
+<% if session[:media_type] == 'videos'%>
+    <div class = 'c_box odd'>
+        <div class = 'm_1000wh tb-pad-m' >
+			<% @entities.each do |vid| %>
 				<%= video_index_block(vid).html_safe %>
 			<% end %>
-        <% end %>
-	</div>
-</div>
+        </div>
+    </div>
+<% else %>
+	<% @entities.each do |alb| %>
+		<div class = 'c_box'>
+            <div class = 'm_1000wh tb-pad-s'>
+                <%= album_table(alb, 'index').html_safe %>
+            </div>
+        </div>
+	<% end %>
+<% end %>
+<div class = 'm_1000wh tb-pad-s'>
+    <div class = 'section group'>
+        <div class = 'col span_10_of_12'>
+            <%= mediaCategoryMenu %>
+        </div>
+        <div class = 'col span_2_of_12'>
+            <%= will_paginate @entities %>
+        </div>
+    </div>
+</div>   
+
 

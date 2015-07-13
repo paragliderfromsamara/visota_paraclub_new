@@ -697,19 +697,16 @@ end
 #поиск по сайту-end----------------------------------------------------------------------------------------------------------------------------------------------------
   def mediaTypeMenu
     v = ''
-    buttons = []
-    if session[:media_photo_albums] == true
-      but = {:name => "Фотоальбомы", :access => true, :selected => true, :type => 'b_grey', :link => "/media?photo_albums=no", :data_remote => true}
+    buttons = [
+                 {:name => "Фотоальбомы", :access => true, :type => 'b_grey', :link => "/media?type=albums", :data_remote => true},
+                 {:name => "Видео", :access => true, :type => 'b_grey', :link => "/media?type=videos", :data_remote => true}
+              ]
+    
+    if session[:media_type] == 'videos'
+      buttons[1][:selected] = true
     else
-      but = {:name => "Фотоальбомы", :access => true, :type => 'b_grey', :link => "/media?photo_albums=yes", :data_remote => true}
-    end
-    buttons[buttons.length] = but
-    if session[:media_videos] == true
-      but = {:name => "Видео", :access => true, :selected => true, :type => 'b_grey', :link => "/media?videos=no", :data_remote => true}
-    else
-      but = {:name => "Видео", :access => true, :type => 'b_grey', :link => "/media?videos=yes", :data_remote => true}
-    end
-    buttons[buttons.length] = but
+      buttons[0][:selected] = true
+    end 
     return buttons_in_line(buttons).html_safe
   end
   def mediaCategoryMenu
@@ -729,23 +726,12 @@ end
   end
 
   def setMediaSessionHash
-    session[:media_photo_albums] = true if session[:media_photo_albums] == nil
-    session[:media_videos] = true if session[:media_photo_albums] == nil
     session[:media_year] = 'all' if session[:media_year] == nil
     session[:media_category] = 'all' if session[:media_category] == nil 
-    base_value_alb = session[:media_photo_albums]
-    base_value_vid = session[:media_videos]
-    if params[:photo_albums] != nil and params[:photo_albums] != ''
-      session[:media_photo_albums] = true if params[:photo_albums] == 'yes'
-      session[:media_photo_albums] = false if params[:photo_albums] == 'no'
-    end
-    if params[:videos] != nil and params[:videos] != ''
-      session[:media_videos] = true if params[:videos] == 'yes'
-      session[:media_videos] = false if params[:videos] == 'no'
-    end
-    if session[:media_photo_albums] == false && session[:media_videos] == false
-      session[:media_photo_albums] = true if base_value_alb == false
-      session[:media_videos] = true if base_value_vid == false
+    if params[:type] != 'videos' and params[:type] != 'albums'
+      session[:media_type] = 'albums' if session[:media_type] != 'videos'
+    else
+       session[:media_type] = params[:type]
     end
     if params[:year] != nil
       session[:media_year] = 'all'

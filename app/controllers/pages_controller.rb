@@ -67,20 +67,20 @@ include PagesHelper
   
   def media
     setMediaSessionHash
-	  @title = @header = "Фото и видео"
+	  @title = @header = "Медиа"
     category = session[:media_category]
-    if session[:media_photo_albums] == true
+    @entities = []
+    if session[:media_type] == 'videos'
       if category == 'all'
-        @albums = PhotoAlbum.where(status_id: 1).order('created_at DESC')
+        @entities = Video.paginate(:page => params[:page], :per_page => 12).all.order('created_at DESC')
       else
-        @albums = PhotoAlbum.where(category_id: category, status_id: 1).order('created_at DESC')
+        @entities  = Video.paginate(:page => params[:page], :per_page => 12).where(category_id: category).order('created_at DESC')
       end
-    end
-    if session[:media_videos] == true
+    else
       if category == 'all'
-        @videos = Video.all.order('created_at DESC')
+        @entities = PhotoAlbum.paginate(:page => params[:page], :per_page => 5).where(status_id: 1).order('created_at DESC')
       else
-        @videos = Video.where(category_id: category).order('created_at DESC')
+        @entities = PhotoAlbum.paginate(:page => params[:page], :per_page => 5).where(category_id: category, status_id: 1).order('created_at DESC')
       end
     end
   end
