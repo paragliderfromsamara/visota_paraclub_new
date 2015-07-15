@@ -328,7 +328,7 @@ require 'open-uri' #для парсера
 		end
 	end
 #Блок отрисовки кнопок----------------------------------------------------------
-def buttons_in_line(buttons) #buttons => {:name => 'Перейти', :title => "Перейти на страницу пилота", :access => ['all'], :type => 'b_green', :link => user_path(user)}
+def draw_in_line(buttons) #buttons => {:name => 'Перейти', :title => "Перейти на страницу пилота", :access => ['all'], :type => 'b_green', :link => user_path(user)}
 	value = ""
 	if @active_button != nil
 		buttons[@active_button][:selected]
@@ -340,9 +340,16 @@ def buttons_in_line(buttons) #buttons => {:name => 'Перейти', :title => "
 				value += "<a #{button_attrs(button)}><li id = '#{button[:type]}'>#{button[:name]}</li></a>"
 			end
 		end
-		value = "<ul class = 'l_menu'>#{value}</ul>"
 	end
 	return value
+end
+
+def buttons_in_line(buttons) 
+  "<ul class = 'l_menu'>#{draw_in_line(buttons)}</ul>"
+end
+
+def buttons_in_line_b(buttons) 
+  "<ul class = 'l_menu_b'>#{draw_in_line(buttons)}</ul>"
 end
 
 def button_attrs(button)

@@ -44,8 +44,9 @@ include ApplicationHelper
 		@return_to = video_path(@video)
 		@page_params = {:part_id => 5,:page_id => 1,:entity_id => @video.id}
 		@path_array = [
-						{:name => 'Видео', :link => videos_path},
-						{:name => @video.category_name, :link => videos_path(:c => @video.category_path)},
+            {:name => 'Медиа', :link => '/media'},
+						{:name => 'Видео', :link => '/media?type=videos&category=all'},
+						{:name => @video.category_name, :link => "/media?type=videos&category=#{@video.category_id}"},
 						{:name => @video.alter_name, :link => '/'}
 					  ]
 		@comments = @video.messages.where(:status_id => 1).order('created_at ASC')

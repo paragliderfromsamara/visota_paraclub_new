@@ -53,9 +53,10 @@ include MessagesHelper
 		@return_to = photo_album_path(@album)
 		@title = @album.name
 		@path_array = [
-						{:name => 'Фото', :link => photo_albums_path},
-						{:name => @album.category_name, :link => photo_albums_path(:c => @album.category_path)},
-						{:name => @album.name, :link => '/'}
+            {:name => 'Медиа', :link => '/media'},
+						{:name => 'Фотоальбомы', :link => '/media?type=albums&category=all'},
+						{:name => @album.category_name, :link => "/media?type=albums&category=#{@album.category_id}"},
+						{:name => @album.name}
 					  ]
 		respond_to do |format|
 		  format.html # show.html.erb

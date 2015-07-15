@@ -707,7 +707,7 @@ end
     else
       buttons[0][:selected] = true
     end 
-    return buttons_in_line(buttons).html_safe
+    return buttons_in_line_b(buttons).html_safe
   end
   def mediaCategoryMenu
     album = PhotoAlbum.new
