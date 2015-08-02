@@ -698,8 +698,8 @@ end
   def mediaTypeMenu
     v = ''
     buttons = [
-                 {:name => "Фотоальбомы", :access => true, :type => 'b_grey', :link => "/media?type=albums", :data_remote => true},
-                 {:name => "Видео", :access => true, :type => 'b_grey', :link => "/media?type=videos", :data_remote => true}
+                 {:name => "Фотоальбомы", :access => true, :type => 'b_grey', :link => "/media?t=albums", :data_remote => true},
+                 {:name => "Видео", :access => true, :type => 'b_grey', :link => "/media?t=videos", :data_remote => true}
               ]
     
     if session[:media_type] == 'videos'
@@ -711,12 +711,12 @@ end
   end
   def mediaCategoryMenu
     album = PhotoAlbum.new
-    buttons = [{:name => "Все категории", :access => true, :type => 'b_grey', :link => "/media?category=all", :data_remote => true}]
+    buttons = [{:name => "Все категории", :access => true, :type => 'b_grey', :link => "/media?c=all", :data_remote => true}]
     buttons.first[:selected] = true if session[:media_category] == 'all'
     i = 0
     album.categories.each do |c|
       i += 1
-      buttons[i] = {:name => c[:name], :access => true, :type => 'b_grey', :link => "/media?category=#{c[:value]}", :data_remote => true}
+      buttons[i] = {:name => c[:name], :access => true, :type => 'b_grey', :link => "/media?c=#{c[:value]}", :data_remote => true}
       buttons[i][:selected] = true if session[:media_category] == c[:value]
     end
     return buttons_in_line(buttons).html_safe
@@ -728,19 +728,32 @@ end
   def setMediaSessionHash
     session[:media_year] = 'all' if session[:media_year] == nil
     session[:media_category] = 'all' if session[:media_category] == nil 
-    if params[:type] != 'videos' and params[:type] != 'albums'
+    if params[:t] != 'videos' and params[:t] != 'albums'
       session[:media_type] = 'albums' if session[:media_type] != 'videos'
     else
-       session[:media_type] = params[:type]
+       session[:media_type] = params[:t]
     end
     if params[:year] != nil
       session[:media_year] = 'all'
     else
       session[:media_year] = params[:year]
     end
-    if params[:category] != nil && params[:category] != ''
-      session[:media_category] = params[:category].to_i if params[:category] != 'all'
-      session[:media_category] = params[:category] if params[:category] == 'all'
+    if params[:c] != nil && params[:c] != ''
+      session[:media_category] = params[:c].to_i if params[:c] != 'all'
+      session[:media_category] = params[:c] if params[:c] == 'all'
     end
+  end
+  
+  def newMediaPanel
+    if is_not_authorized?
+      ''
+    else
+      p = [
+            {:name => 'Добавить альбом', :access => true, :type => 'add', :link => new_photo_album_path},
+            {:name => 'Добавить видео', :access => true, :type => 'add', :link => new_video_path}
+          ]
+      v = "<div class = 'c_box'><div class = 'm_1000wh'>#{control_buttons(p)}</div></div>"
+      return v.html_safe 
+    end 
   end
 end

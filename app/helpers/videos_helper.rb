@@ -13,14 +13,14 @@ module VideosHelper
 	def top_video_buttons
 		[
 		 {:name => 'К списку видео', :access => true, :type => 'follow', :link => "#{videos_path}"}, 
-		 {:name => 'Все видео пользователя', :access => true, :type => 'follow', :link => "/users/#{@video.user.id.to_s}/videos"} 
+		 {:name => 'Все видео пользователя', :access => true, :type => 'follow', :link => "/users/#{@video.user.id.to_s}/videos"},
+     {:name => 'Изменить видео', :access => isEntityOwner?(@video), :type => 'edit', :link => edit_video_path(@video)},  
+     {:name => 'Удалить', :access => isEntityOwner?(@video), :type => 'del', :link => "#{video_path(@video)}", :data_confirm => 'Вы уверены что хотите удалить данное видео?', :data_method => 'delete', :rel => 'nofollow'}
 		]
 	end
 	def bottom_video_buttons
 		[
-		 {:name => 'Добавить комментарий', :access => !is_not_authorized?, :type => 'add', :id => 'newMsgBut'},
-		 {:name => 'Редактировать', :access => ['super_admin', 'admin', @video.user_id], :type => 'edit', :link => "#{video_path(:id => @video.id, :tab => 'edit')}"},
-		 {:name => 'Удалить', :access => ['super_admin', 'admin'], :type => 'del', :link => "#{video_path(@video)}", :data_confirm => 'Вы уверены что хотите удалить данное видео?', :data_method => 'delete', :rel => 'nofollow'}
+		 {:name => 'Добавить комментарий', :access => !is_not_authorized?, :type => 'add', :id => 'newMsgBut'}
 		]
 	end
 	def videoInformation(video)
@@ -97,7 +97,7 @@ module VideosHelper
 											<p class='istring_m norm medium-opacity' style = 'padding-left: 4px;'>Категория:</p>
 										</td>
 										<td style = 'width: 170px' >
-											#{link_to video.category[:name], videos_path(:category => video.category[:path_name] ), :class => 'b_link_i', :style => 'font-size: 12px;', :title => "Смотреть все альбомы категории #{video.category[:name]}"}
+											#{link_to video.category[:name], "/media?t=videos&c=#{video.category_id}", :class => 'b_link_i', :style => 'font-size: 12px;', :title => "Смотреть все альбомы категории #{video.category[:name]}"}
 										</td>
 									</tr>
 									<tr>

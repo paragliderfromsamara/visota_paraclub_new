@@ -138,7 +138,7 @@ function initMessageForm(msg_id, formName, msgType)
 	minContentLength = 1;
 	f = new myForm('message', msg_id, formName);
 	f.parentElID = '#newMsgForm';
-	f.aButList = [0];
+	f.aButList = [0, 2];
 	f.contentFieldMaxLength = 15000;
 	f.contentFieldMinLength = minContentLength;
 	f.contentField = f.formElement.find('#message_content');
@@ -147,10 +147,11 @@ function initMessageForm(msg_id, formName, msgType)
 	f.imagesMaxLength = 20;
 	f.imagesMaxLengthErr = 'Максимально допустимое количество фотографий для сообщения превышено на ';
 	f.curContentValue = f.contentField.val();
+    f.tEditor = new textEditor(f);
 	f.initPanel();
 	f.photosUploader();
 	f.getPhsToForm();
-	f.tEditor = new textEditor(f);
+	
 	setInterval(function(){
 							var cFlag, iFlag;
 							//f.getAlignArray();
@@ -164,69 +165,21 @@ function initMessageForm(msg_id, formName, msgType)
 								f.formElement.find('.butt').removeAttr('disabled');
 							}else{f.formElement.find('.butt').attr('disabled', 'true');};
 						  }, 300);
-	$('#newMsgBut').click(function(){var curDisp, txt; 
-												curDisp = $('#newMsgForm').css('display');
-												if (curDisp == 'none')
-												{
-													f.curContentValue = f.contentField.val();
-													f.formElement.find('#message_message_id').remove();
-													$('#newMsgForm').html($(f.formElement).clone(true)).show();
-													f.formElement = $('#newMsgForm').find(formName);
-													f.parentElID = '#newMsgForm';
-													updUploadedImageButtons('newMsgForm');
-													f.photosUploader();
-													f.contentField = f.formElement.find('#message_content');
-													f.contentField.val(f.curContentValue);
-													f.initPanel();
-													cleanAnswerBlks();
-													allowArrows = false;
-                                                    bottomControl();
-													
-												}
-												else {f.curContentValue = f.contentField.val(); $('#newMsgForm').hide();allowArrows = true;}
-										   }
-							  );
-	function cleanAnswerBlks(m_id){
-									$('.msgs').each(function(i)
-																{
-																if (this.id!=('m_'+m_id))
-																	{
-																	 $(this).find('.answr').html('').hide();
-																	}
-																}
-													);
-								  }
+                          
 	$('a#answer_but').click(function() {
 											var msgToId = $(this).attr('alt');
-											var answBl = $('#answr_to_' + msgToId);
-											f.parentElID = answBl;
-											$('#newMsgForm').hide();
-											if ($(answBl).css('display') == 'none')
-												{
-													f.formElement.find('#message_message_id').remove();
-													f.curContentValue = f.contentField.val();
-													$(answBl).html(f.formElement.clone(true)).show();
-													f.formElement = $(answBl).find(formName);
-													f.formElement.append('<input type="hidden" id="message_message_id" name="message[message_id]" value="'+msgToId+'">');
-													f.contentField = f.formElement.find('#message_content');
-													f.initPanel();
-													f.contentField.val(f.curContentValue);
-													f.contentField.focus();
-													f.photosUploader();
-													cleanAnswerBlks(msgToId);
-													updUploadedImageButtons(answBl.attr('id'));
-                                                    allowArrows = false;
-												}
-												else {
-														f.formElement.find('#message_message_id').remove();
-														$('#newMsgForm').html($(answBl).find(formName).clone(true));
-														f.formElement = $('#newMsgForm').find(formName);
-														f.curContentValue = f.contentField.val();
-														//initListeners(currentVisibleForm);
-														$(answBl).hide().empty();
-                                                        allowArrows = true;
-													 }
-										  });
+											if (f.formElement.find('#message_message_id').val() == undefined)
+                                            {
+                                                f.formElement.append('<input type="hidden" name = "message[message_id]" value = "'+msgToId+'"/>');
+                                            }else
+                                            {
+                                                f.formElement.find('#message_message_id').val(msgToId);
+                                            }
+                                            f.formElement.find('#answr_to_str').html('<a id = "ans_link" class = "b_link_i" href = "#m_'+msgToId+'">ответ пользователю '+$('#m_'+msgToId).find('#u_name').text()+'</a>').show();
+											f.formElement.find('#ans_link').click(function(){var c=$($(this).attr('href')).css('background-color'), n='blue';
+											$($(this).attr('href')).find('.cWrapper').animate({opacity: 1.0}, 500 ).animate({opacity: 0.0}, 500 );});
+                                            
+									 });
 }
 function initAlbumForm(id, formName)
 {
@@ -240,7 +193,7 @@ function initAlbumForm(id, formName)
 	f.shortNameErr = 'Название не должно быть короче ' + f.nameFieldMinLength + ' символов';
 	f.longNameErr = 'Длина названия превышена на ';
 	f.imagesMaxLength = 120;
-	f.imagesMinLength = 10;
+	f.imagesMinLength = 3;
 	f.imagesMaxLengthErr = 'Максимально допустимое количество фотографий альбома превышено на ';
 	f.imagesMinLengthErr = 'В альбоме должно быть не менее '+f.imagesMinLength+' фотографий';
 	f.matchNameErr = 'Фотоальбом с таким названием уже существует...';
@@ -380,8 +333,8 @@ function myForm(type, entityID, formName)
 	this.tEditor = null;
 	this.parentElID = 'none'; 
 	this.imgAddr = '/files/';
-	this.nameList = ['addSmiles', 'binding'];
-	this.descList = ['Улыбки', 'Вложить альбомы и видео'];
+	this.nameList = ['addSmiles', 'binding', 'addImg'];
+	this.descList = ['Улыбки', 'Вложить альбомы и видео', 'Добавить фотографии'];
 	this.aButList = []; //список используемых кнопок отражает номер кнопки в массивах descList и nameList
 	//включение 
 	//наименование
@@ -595,7 +548,7 @@ function myForm(type, entityID, formName)
                                             },
 										success: function(file, response){
 																			var ph_id = response.photoID;
-																			getUploadedPh(ph_id, el, file.previewElement);
+																			getUploadedPh(ph_id, el, file.previewElement, entity);
 																			//updUploadedImageButtons(el.attr('id'));
 																		 },
 										fallback: function(){
@@ -721,26 +674,25 @@ function myForm(type, entityID, formName)
 		var t = $(el).attr('b-type');
 		fe.formElement.find("#"+fe.type+'_assigned_'+t).val(val); 
 	}
-	function getUploadedPh(phID, el, prEl)
+	function getUploadedPh(phID, el, prEl, type)
 	{
 		$.getJSON("/photos/"+phID+"?format=json", function(t){
 															if (t.id != 'null')
 																{
 																	$(prEl).remove();
 																	$(el).find(".dz-message").show();
-																	renderImgFrm(t, el);
-																	
+																	renderImgFrm(t, el, type);	
 																}
 															 }
 				  ); 
 	}
-	function renderImgFrm(ph, el) //создаёт форму для фотографии
+	function renderImgFrm(ph, el, type) //создаёт форму для фотографии
 	{
 		var imgTag, field, curHtml;
 		if (ph.description == null){ph.description='Без описания...';}
 		imgTag='<img src="'+ph.thumb+'">';
 		field='<textarea cols="35" defaultrows="3" id="photo_editions_photos_photo_'+ph.id+'_description" name="photo_editions[photos][photo_'+ph.id+'][description]" onkeyup="changingTextarea(this)" rows="3"></textarea><br /><br /><a onclick="deletePhotoInTable(this)" photo_id="'+ph.id+'" class="b_link pointer">Удалить</a>';
-		if (el.attr('id') != 'photosField')
+		if (el.attr('id') != 'photosField' && type != 'photo_album')
 		{
 			field += ' <a onclick="addHashCodeToTextArea(this,\''+el.attr('id')+'\')"  class="b_link pointer addHashCode" hashCode="#Photo'+ph.id+'"  title = "Нажмите, чтобы встроить фото в текст...">Встроить в текст</a>';
 		}
@@ -748,31 +700,20 @@ function myForm(type, entityID, formName)
 		$(el).find("#uPhts").prepend(curHtml);
 	}
 	this.getPhsToForm = function(){
-														var t = $(this.formElement).find("#uploadedPhotos"), el;
-														el = this;
-														$(t).load("/edit_photos #update_photos_form", { 'e': el.type, 'e_id': el.entityID, "hashToCont": "true", "submitBut": "false"}, function(){updUploadedImageButtons(el.formElement.attr('id'))}); 
-													  }
+									var t = $(this.formElement).find("#uploadedPhotos"), el;
+									el = this;
+									$(t).load("/edit_photos #update_photos_form", { 'e': el.type, 'e_id': el.entityID, "hashToCont": "true", "submitBut": "false"}, function(){updUploadedImageButtons(el.formElement.attr('id'))}); 
+								 }
 	this.initPanel = function(){
-							var buttons, menus, cur_addr, curMenuClass, i, curButClass, el, eFlag = false; 
+							var buttons, menus, cur_addr, curMenuClass, i, curButClass, el; 
 							menus = ''; 
 							buttons = '<ul>';
 							for (j=0; j<this.aButList.length; j++)
 							{
 								i = this.aButList[j]; 
-								if (j==0)
-								{
-									cur_addr=this.imgAddr+this.nameList[i]+'_b'; 
-									curButClass = ' sItem';
-									curMenuClass = ' sMenu';
-								}else{
-										cur_addr=this.imgAddr+this.nameList[i]+'_g'; 
-										curButClass = ' hItem';
-										curMenuClass = ' hMenu';
-									 };
-								if (i == 1)
-								{
-									eFlag = true;
-								}
+								cur_addr=this.imgAddr+this.nameList[i]+'_g'; 
+								curButClass = ' hItem';
+								curMenuClass = ' hMenu';
 								buttons += '<li class = "mItem'+curButClass+'" title = "'+this.descList[i]+'" id = "'+this.nameList[i]+'"><img src = "'+cur_addr+'.png" width = "25px"/></li>';
 								menus += '<div class = "mMenus'+curMenuClass+'" id = "'+this.nameList[i]+'Menu">'+menuContent(this.nameList[i], this)+'</div>';
 								
@@ -803,6 +744,10 @@ function myForm(type, entityID, formName)
 									{
 										val = '<table style = "width: 100%;"><tr><td><label>Вложенные альбомы</label><div class = "art-binding-ent-list" id = "ab_albums"></div></td><td><label>Вложенное видео</label><div class = "art-binding-ent-list" id = "ab_videos"></div></td></tr><tr><td style = "width: 50%; " ><br /><label>Доступные альбомы</label><br /><div class = "art-binding-ent-list" id = "b_albums"></div></td><td style = "width: 50%; "><br /><label>Доступные видео</label><br /><div class = "art-binding-ent-list" id = "b_videos"></div></td></tr></table>';
 									}
+                                    else if(n=='addImg')
+                                    {
+                                        val = '<div class = "dropzone" id = "ph_to_frm"></div>';
+                                    }
 								return val;
 							}
 							
@@ -814,9 +759,16 @@ function myForm(type, entityID, formName)
 			i= el.aButList[j]; 
 			if(n==el.nameList[i])
 			{
-				$('li#'+el.nameList[i]).addClass('sItem').removeClass('hItem');
-				$('li#'+el.nameList[i]).find('img').attr('src', el.imgAddr+el.nameList[i]+'_b.png');
-				$('div#' + el.nameList[i] + 'Menu').addClass('sMenu').removeClass('hMenu');
+                if ($('li#'+el.nameList[i]).hasClass('sItem'))
+                {
+                    $('li#'+el.nameList[i]).find('img').attr('src', el.imgAddr+el.nameList[i]+'_g.png');
+                }else
+                {
+    				$('li#'+el.nameList[i]).find('img').attr('src', el.imgAddr+el.nameList[i]+'_b.png');
+                }
+				$('li#'+el.nameList[i]).toggleClass('sItem').toggleClass('hItem');
+                $('div#' + el.nameList[i] + 'Menu').toggleClass('sMenu').toggleClass('hMenu');
+
 			}else{
 					$('li#'+el.nameList[i]).addClass('hItem').removeClass('sItem');
 					$('li#'+el.nameList[i]).find('img').attr('src', el.imgAddr+el.nameList[i]+'_g.png');
@@ -883,7 +835,53 @@ function build_themes_list(themes)
 	};
 function addScobes(a){var v= "";for(var i=0;i<a.length;i++){v+="["+a[i]+"]";};return v;};
 function getIdsArray(val){var a = new Array();var j = 0;var v = "";if (val != ''){for(var i=0;i<val.length;i++){if(val[i]==']'){a[j]=v;v="";j++;}else if (val[i] != ']' && val[i] != '['){v += val[i];}}}return a;};
+function update_ids_array(id_array,id){
+                                        var id_int=parseFloat(id);
+                                        var val=$.grep(id_array, function(n){return n == id_int});
+                                        var array_size = id_array.length;
+                                        var new_arr = new Array();
+                                        if (val.length > 0)
+                                            {
+                                                new_arr = $.grep(id_array, function (n) {return n != id_int});
+                                                return new_arr;
+                                            }else{
+                                                    id_array[array_size] = id_int; 
+                                                    new_arr = id_array;
+                                                    return new_arr;
+                                                 }
+                                             };
+function deletePhotoInTable(delBut)
+{
+ var id = $(delBut).attr('photo_id');
+if ($("#photo_album_deleted_photos").val() != undefined)
+ {
+     var v = $('#photo_album_deleted_photos').val();
+     $('#photo_album_deleted_photos').val(addScobes(update_ids_array(getIdsArray(v),id)));
+     $(delBut).attr('onclick', 'recoveryPhotoInTable(this)');
+     $(delBut).text('Восстановить');
+ }else
+ {
+     var v = confirm("Вы уверены что хотите удалить фото?");
+ 	if (v)
+ 	{
+ 		$.ajax({
+ 				type: 'DELETE',
+ 				url: '/photos/' + id,
+ 				success: function(data){alert(data.message);}
+ 				});
+ 		$("tbody#img_"+id).remove();
 
+ 	} 
+ }
+}
+function recoveryPhotoInTable(but)
+{
+ var v = $('#photo_album_deleted_photos').val();
+ var id = $(but).attr('photo_id');
+ $(but).attr('onclick', 'deletePhotoInTable(this)');
+ $(but).text('Удалить');
+ $('#photo_album_deleted_photos').val(addScobes(update_ids_array(getIdsArray(v),id)));
+}
 function themeObj()
 	{
 		th = new Object();

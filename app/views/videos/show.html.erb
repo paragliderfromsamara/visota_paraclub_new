@@ -1,10 +1,14 @@
-<% video_errors %>
 <div class = 'm_1000wh'>
     <%= navigation_string.html_safe %>
 </div>
 <%= video_show_block.html_safe %>
-<%= newMessageFormInitial('none', '#new_message').html_safe %>
+<div class = 'cBoxSplitter'>
+	<div class = 'm_1000wh'>
+		<h3>Комментарии</h3>
+	</div>
+</div>
 <a name = 'content'></a>
+<%= newMessageFormInitial('block', '#new_message').html_safe %>
 <%= render 'comments' %>
 <div class = 'm_1000wh'>
 	<%= navigation_string.html_safe %>

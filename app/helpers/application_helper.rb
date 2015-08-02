@@ -6,6 +6,15 @@
 module ApplicationHelper
 require 'open-uri' #для парсера
 
+  def waitbar(id)
+    "
+    <div class = 'waitbar' id = '#{id}'>
+      <div id = 'wb1' class = 'wb-items' style = 'display: none; background-image:url(/waitbar/1.png);'></div>
+      <div id = 'wb2' class = 'wb-items' style = 'display: none; background-image:url(/waitbar/2.png);'></div>
+      <div id = 'wb3' class = 'wb-items' style = 'display: none; background-image:url(/waitbar/3.png);'></div>
+    </div>
+    " 
+  end 
 	def alter_logo
 		logo = "/img/main_page.jpg"
 		logo = @alter_logo if @alter_logo != nil

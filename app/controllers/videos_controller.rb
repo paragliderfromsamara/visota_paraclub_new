@@ -38,49 +38,58 @@ include ApplicationHelper
   # GET /videos/1
   # GET /videos/1.json
   def show
-    @video = Video.find(params[:id])
-	if @video != nil
-		@title = @header = @video.alter_name
-		@return_to = video_path(@video)
-		@page_params = {:part_id => 5,:page_id => 1,:entity_id => @video.id}
-		@path_array = [
-            {:name => 'Медиа', :link => '/media'},
-						{:name => 'Видео', :link => '/media?type=videos&category=all'},
-						{:name => @video.category_name, :link => "/media?type=videos&category=#{@video.category_id}"},
-						{:name => @video.alter_name, :link => '/'}
-					  ]
-		@comments = @video.messages.where(:status_id => 1).order('created_at ASC')
-		respond_to do |format|
-		  format.html # show.html.erb
-		  format.json { render :json => @video }
-		end
-	end
+    @video = Video.find_by(id: params[:id])
+  	if @video != nil
+  		@title = @header = @video.alter_name
+  		@return_to = video_path(@video)
+  		@page_params = {:part_id => 5,:page_id => 1,:entity_id => @video.id}
+  		@path_array = [
+              {:name => 'Медиа', :link => '/media'},
+  						{:name => 'Видео', :link => '/media?t=videos&c=all'},
+  						{:name => @video.category_name, :link => "/media?t=videos&c=#{@video.category_id}"},
+  						{:name => @video.alter_name, :link => '/'}
+  					  ]
+  		@comments = @video.messages.where(:status_id => 1).order('created_at ASC')
+  		respond_to do |format|
+  		  format.html # show.html.erb
+  		  format.json { render :json => @video }
+  		end
+    else 
+      redirect_to '/404'
+  	end
   end
 
   # GET /videos/new
   # GET /videos/new.json
   def new
-	if user_type != 'guest' and user_type != 'bunned' and user_type != 'new_user'
-		@video = Video.new
-		
-		@title = 'Новое видео'
-		respond_to do |format|
-		  format.html # new.html.erb
-		  format.json { render :json => @video }
-		end
-	else
-		redirect_to '/404'
-	end
+  	if !is_not_authorized?
+  		@video = Video.new
+  		@path_array = [
+                      {:name => 'Медиа', :link => '/media'},
+          						{:name => 'Новое видео'}
+  					        ]
+  		@title = @header = 'Новое видео'
+  		respond_to do |format|
+  		  format.html # new.html.erb
+  		  format.json { render :json => @video }
+  		end
+  	else
+  		redirect_to '/404'
+  	end
   end
 
   # GET /videos/1/edit
   def edit
     @video = Video.find(params[:id])
-	if @video.user == current_user or user_type == 'admin' or user_type == 'super_admin' 
-	
-	else
-		redirect_to '/404'
-	end
+    @title = @header = "Изменение видео"
+		@path_array = [
+                    {:name => 'Медиа', :link => '/media'},
+        						{:name => 'Видео', :link => '/media?t=videos&c=all'},
+        						{:name => @video.category_name, :link => "/media?t=videos&c=#{@video.category_id}"},
+        						{:name => @video.alter_name, :link => video_path(@video)},
+        						{:name => @title}
+					        ]
+  	redirect_to '/404' if !isEntityOwner?(@video) 
   end
 
   # POST /videos
@@ -94,6 +103,11 @@ include ApplicationHelper
 			format.html { redirect_to @video, :notice => 'Видео успешно добавлено' }
 			format.json { render :json => @video, :status => :created, :location => @video }
 		  else
+        	@title = @header = 'Новое видео'
+          @path_array = [
+                          {:name => 'Медиа', :link => '/media'},
+            						  {:name => 'Новое видео'}
+    					          ]
 			format.html { render :action => "new" }
 			format.json { render :json => @video.errors, :status => :unprocessable_entity }
 		  end
@@ -107,51 +121,59 @@ include ApplicationHelper
   # PUT /videos/1.json
   def update
     @video = Video.find(params[:id])
-	if @video.user == current_user or user_type == 'admin' or user_type == 'super_admin' 
-		respond_to do |format|
-		  if @video.update_attributes(params[:video])
-			format.html { redirect_to @video, :notice => 'Видео успешно обновлено' }
-			format.json { head :no_content }
-		  else
-			format.html { render :action => "edit" }
-			format.json { render :json => @video.errors, :status => :unprocessable_entity }
-		  end
-		end
-	else
-		redirect_to '/404'
-	end
+  	if isEntityOwner?(@video) 
+  		respond_to do |format|
+  		  if @video.update_attributes(params[:video])
+  			  format.html { redirect_to @video, :notice => 'Видео успешно обновлено' }
+  			  format.json { head :no_content }
+  		  else
+          @title = @header = "Изменение видео"
+      		@path_array = [
+                          {:name => 'Медиа', :link => '/media'},
+              						{:name => 'Видео', :link => '/media?t=videos&c=all'},
+              						{:name => @video.category_name, :link => "/media?t=videos&c=#{@video.category_id}"},
+              						{:name => @video.alter_name, :link => video_path(@video)},
+              						{:name => @title}
+      					        ]
+    			format.html { render :action => "edit" }
+    			format.json { render :json => @video.errors, :status => :unprocessable_entity }
+  		  end
+  		end
+  	else
+  		redirect_to '/404'
+  	end
   end
 
   # DELETE /videos/1
   # DELETE /videos/1.json
   def destroy
     @video = Video.find(params[:id])
-	if @video.user == current_user or user_type == 'admin' or user_type == 'super_admin'
-		@video.destroy
-
-		respond_to do |format|
-		  format.html { redirect_to videos_url }
-		  format.json { head :no_content }
-		end
-	else
-		redirect_to '/404'
-	end
+  	if isEntityOwner?(@video)
+  		@video.destroy
+  		respond_to do |format|
+  		  format.html { redirect_to '/media?t=videos&c=all' }
+  		  format.json { head :no_content }
+  		end
+  	else
+  		redirect_to '/404'
+  	end
   end
+  
   def new_comment
     @video = Video.find(params[:id])
-	if user_type != 'guest' and user_type != 'bunned'
-		@draft = current_user.message_draft
-		@add_functions = "initMessageForm(#{@draft.id});"
-		@path_array = [
-						{:name => 'Видео', :link => videos_path},
-						{:name => @video.category_name, :link => videos_path(:c => @video.category_path)},
-						{:name => @video.alter_name, :link => video_path(@video)}, 
-						{:name => 'Новый комментарий', :link => '/'} 
-					  ]
-		@message = Message.new
-		@message_to = Message.find_by_id(params[:m])
-	else
-		redirect_to '/404'
-	end
+  	if user_type != 'guest' and user_type != 'bunned'
+  		@draft = current_user.message_draft
+  		@add_functions = "initMessageForm(#{@draft.id});"
+  		@path_array = [
+  						{:name => 'Видео', :link => videos_path},
+  						{:name => @video.category_name, :link => videos_path(:c => @video.category_path)},
+  						{:name => @video.alter_name, :link => video_path(@video)}, 
+  						{:name => 'Новый комментарий', :link => '/'} 
+  					  ]
+  		@message = Message.new
+  		@message_to = Message.find_by_id(params[:m])
+  	else
+  		redirect_to '/404'
+  	end
   end
 end

@@ -11,6 +11,13 @@
  *= require_self
  *= require_tree .
  */
+
+.waitbar, .wb-items
+{
+    position:relative;
+    width: 80px;
+    height:10px;
+}
 /*  SECTIONS  */
 .section {
 	clear: both;

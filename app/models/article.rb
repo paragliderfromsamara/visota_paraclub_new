@@ -278,17 +278,17 @@ class Article < ActiveRecord::Base
   end
   
   def getIds(str)
-	ids = []
-	id = ''
-	str.chars do |ch|
-		if ch != '[' and ch != ']'
-			id += ch
-		elsif ch == ']'
-			ids[ids.length] = id
-			id = ''
-		end
-	end
-	return ids
+  	ids = []
+  	id = ''
+  	str.chars do |ch|
+  		if ch != '[' and ch != ']'
+  			id += ch
+  		elsif ch == ']'
+  			ids[ids.length] = id
+  			id = ''
+  		end
+  	end
+  	return ids
   end
   
   def unbind_albums

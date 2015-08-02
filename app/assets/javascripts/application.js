@@ -110,6 +110,8 @@ var allowArrows = true;
 function my_functions()
 	{
 		var enteredLi, leftLi; //для управления главным меню
+        var wbFrst = new waitbar('video_wait_check');
+        wbFrst.startInter();
 		setInterval(function(){bottomControl()}, 500);
 		Dropzone.autoDiscover = false;
 		//initNavWrapper();
@@ -207,7 +209,43 @@ function scrollControl() //Управление панелькой перемо�
 
 	}
 
-
+function waitbar(id)
+    {
+        this.curVisible = 0;
+        this.interval = null;
+        this.startInter = function()
+        {
+            this.interval = setInterval(function() 
+            {
+                for(var i=1; i<4; i++)
+                {
+                    if(i==1)
+                    {
+                        $('#'+id).find('#wb3').hide();
+                        $('#'+id).find('#wb1').show();
+                        $('#'+id).find('#wb2').hide();
+                       
+                    } else if(i==2)
+                    {
+                        $('#'+id).find('#wb1').hide();
+                        $('#'+id).find('#wb2').show();
+                        $('#'+id).find('#wb3').hide();
+                    }else if(i==3)
+                    {
+                        $('#'+id).find('#wb2').hide();
+                        $('#'+id).find('#wb3').show();
+                        $('#'+id).find('#wb1').hide();
+                    }
+                    window.setTimeout(500);
+                }
+            }, 1000);
+        }
+        this.stopInterval = function()
+        {
+            if (this.interval !== null) clearInterval(this.interval);
+        }
+        
+    }
 function bottomControl()
 	{
 		var sum_h, window_h, new_middle_h;
@@ -309,21 +347,7 @@ function renderImgForm(ph, el) //создаёт форму для фотогра
 function getParentFormNode(e){return $(e+':parent').find('.answr, #newMsgForm');}
 function updUploadedImageButtons(id){$('a.addHashCode').each(function() {$(this).attr('onclick', 'addHashCodeToTextArea(this, "'+id+'")');});}
 function getPhotosToForm(entId, entName, el){var t = $(el).find("#uploadedPhotos"); $(t).load("/edit_photos #update_photos_form", { 'e': entName, 'e_id': entId, "hashToCont": "true", "submitBut": "false"}, function(){updUploadedImageButtons('newMsgForm')}); }
-function deletePhotoInTable(delBut)
-{
-	var v = confirm("Вы уверены что хотите удалить фото?");
-	var id = $(delBut).attr('photo_id');
-	if (v)
-	{
-		$.ajax({
-				type: 'DELETE',
-				url: '/photos/' + id,
-				success: function(data){alert(data.message);}
-				});
-		$("tbody#img_"+id).remove();
-	}
-	
-}
+
 function newPhObj(id, description)
 {
 	var ph = new Object();
@@ -768,7 +792,7 @@ function replace_block(e){var first_block = document.getElementById(e.name+'_fir
 function add_content_to_article(e){var type=$(e).attr("item-type");var h_field_name="#article_assigned_"+type;var item_id=parseFloat($(e).attr("val"));var old_value_str=$(h_field_name).val();var old_value_arr=getIdsArray(old_value_str);var new_arr=update_ids_array(old_value_arr,item_id);changeSelection(e);$(h_field_name).val(addScobes(new_arr));};
 function changeSelection(e){var s=$(e).attr("was_selected");if(s=="false"){$(e).css("background-color","#FFFCED");$(e).attr("was_selected","true");}else if(s == "true"){$(e).css("background-color","#CCEAD1");$(e).attr("was_selected","false");};};
 
-function update_ids_array(id_array,id){var id_int=parseFloat(id);var val=$.grep(id_array, function(n){return n == id_int});var array_size = id_array.length;var new_arr = new Array();if (val.length > 0){new_arr = $.grep(id_array, function (n) {return n != id_int});return new_arr;}else{id_array[array_size] = id_int;new_arr = id_array;return new_arr;}};
+
 
 function checkMyDropLists(){var list_types=["albums", "videos"];for(var i = 0;i<list_types.length;i++){setItemsByType(list_types[i]);}}
 function setItemsByType(type){var hidden_f=document.getElementById("article_assigned_"+type);var ids=new Array();var val = "";if(hidden_f!=null){val=$(hidden_f).val();if(val!=''){ids=getIdsArray(val);$(".drop_value").each(function(i){var item_type=$(this).attr("item-type");var item_id=parseFloat($(this).attr("val"));if(item_type==type){for(var j=0;j<ids.length;j++){if(item_id==ids[j]){changeSelection(this);}}} else {return true}});}}}

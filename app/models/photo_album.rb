@@ -1,5 +1,6 @@
 class PhotoAlbum < ActiveRecord::Base
-  attr_accessible :article_id, :category_id, :description, :name, :photo_id, :user_id, :uploaded_photos, :status_id, :visibility_status_id
+  attr_accessor :deleted_photos
+  attr_accessible :article_id, :category_id, :description, :name, :photo_id, :user_id, :uploaded_photos, :status_id, :visibility_status_id, :deleted_photos
   
   belongs_to :user
   belongs_to :photo
@@ -24,6 +25,23 @@ class PhotoAlbum < ActiveRecord::Base
 							:if => :is_not_draft?
 	
 	validate :photos_check, :on => :create
+  validate :deleted_photos_check, :on => :update
+  
+  def deleted_photos_check
+    if self.deleted_photos != nil and self.deleted_photos != ''
+      arr = getIds(self.deleted_photos)
+      if arr.length > (self.photos.length-3)  
+        errors.add(:deleted_photos, "В альбоме должно быть как минимум 3 фотографии...") 
+      else
+        if arr.length > 0
+          arr.each do |p_id|
+            ph = Photo.find_by(:id => p_id, :photo_album_id => self.id)
+            ph.destroy if ph != nil
+          end
+        end
+      end
+    end
+  end
 	def photos_check
 		if (self.photos == nil || self.photos == []) and self.status_id != 0
 			errors.add(:photos, "Необходимо выбрать одну, или несколько фотографий") if self.user.album_draft.photos == [] 
@@ -89,10 +107,10 @@ class PhotoAlbum < ActiveRecord::Base
   end
   
   def index_photos
-	self.photos.where(:status_id => 1).order('created_at ASC').limit(10)
+	self.photos.order('created_at ASC').limit(10)
   end
   def visota_life_photos
-	self.photos.where(:status_id => 1).order('created_at ASC').limit(9)
+	self.photos.order('created_at ASC').limit(9)
   end
   def comments
 	self.messages.where(:status_id => 1).order('created_at ASC')
@@ -125,10 +143,6 @@ class PhotoAlbum < ActiveRecord::Base
 		stat = s[:ru] if status_id == s[:id]
 	end
 	return stat
-  end
-  
-  def visible_photos #Видимые фотографии
-	self.photos.where(:status_id == 1).order('created_at ASC')
   end
 #статусы end...
 
@@ -169,4 +183,18 @@ class PhotoAlbum < ActiveRecord::Base
 	end
   end
 #Управление отображением альбома end 
+
+  def getIds(str)
+  	ids = []
+  	id = ''
+  	str.chars do |ch|
+  		if ch != '[' and ch != ']'
+  			id += ch
+  		elsif ch == ']'
+  			ids[ids.length] = id
+  			id = ''
+  		end
+  	end
+  	return ids
+  end
 end

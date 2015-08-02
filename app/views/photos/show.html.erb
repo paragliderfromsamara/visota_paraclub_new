@@ -18,20 +18,7 @@
                 <div class = 'section group'>
                     <div class = 'col span_6_of_12'>
         				<%= photo_info.html_safe %>
-                        <%if @photo.exif_data.length != 0 %>
-            				<table>
-                                <% @photo.exif_data.each do |v| %>
-                                    <tr>
-                                        <td align = 'left'>
-                                           <span class = 'istring_m norm medium-opacity'><%= v[:name] %></span>
-                                        </td>
-                                        <td align = 'left'>
-                                           <span class = 'istring_m norm'><%= v[:value] %></span>
-                                        </td>
-                                    </tr>
-                                <%end%>
-                            </table>
-                        <%end%>
+                       
                     </div>
                     <div class = 'col span_6_of_12'>
                         <div id = 'right_f'><%= user_photo_like_link(@photo).html_safe %></div>

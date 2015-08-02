@@ -113,9 +113,9 @@ module MessagesHelper
 	end
 	def message_user_row(message)
 		if message.user_id == nil or message.user_id == 0 and message.user_name != nil and message.user_name != ''
-			return "<span class = 'istring_m norm'>#{message.user_name}</span><br />#{image_tag('/files/undefined.png', :width => '90px')}"
+			return "<span id = 'u_name' class = 'istring_m norm'>#{message.user_name}</span><br />#{image_tag('/files/undefined.png', :width => '90px')}"
 		elsif message.user_id != nil and message.user_id != 0
-			return "#{link_to message.user.name, message.user, :class => 'b_link_i'}<br />#{image_tag(message.user.alter_avatar, :width => '90px')}"
+			return "#{link_to message.user.name, message.user, :class => 'b_link_i', :id => 'u_name'}<br />#{image_tag(message.user.alter_avatar, :width => '90px')}"
 		elsif message.user_name == nil and message.user_name == '' and message.user_id == nil or message.user_id == 0 	
 			return "<span class = 'istring_m norm'>Гость</span><br />#{image_tag('/files/undefined.png', :width => '90px')}"
 		end
@@ -194,14 +194,15 @@ module MessagesHelper
 		#отрисовывается с помощью js функции initMessageForm(msg_id)
 		form_for(@formMessage, :multipart => 'true') do |f|
 		"
-				<div style = 'display: none;'>#{ f.file_field :uploaded_photos, :multiple => 'true' if type != 'comment'}</div>
+				<a name = 'add_message'></a>
+        <div style = 'display: none;'>#{ f.file_field :uploaded_photos, :multiple => 'true' if type != 'comment'}</div>
 				#{ hidden_field :info, :return_to_link, :value => getMsgPathLinkAfterSave}
 				#{ f.hidden_field :message_id, :value => @message_to.id if @message_to != nil }
 				#{ f.hidden_field :theme_id, :value => @theme.id if @theme != nil}
 				#{ f.hidden_field :photo_id, :value => @photo.id if @photo != nil}
 				#{ f.hidden_field :video_id, :value => @video.id if @video != nil}
 				#{ f.hidden_field :photo_album_id, :value => @album.id if @album != nil}
-				<div class = 'central_field' style = 'width: 950px;'>
+				<div class = 'm_1000wh'>
 					<br />
 					<table id = 'msg_table' style = 'width: 100%;'>
 						<tr>
@@ -217,8 +218,9 @@ module MessagesHelper
 										</tr>
 									</table>
 									#{ f.label :content, 'Текст сообщения' if type == 'message'}#{ f.label :content, 'Комментарий' if type == 'comment'}<br />
-									#{ f.text_area :content, :cols => 90, :rows => '7', :defaultRows => '7', :class=> 't_area'}
-									<div><p class = 'istring #{@content_f_color if @content_f_color != nil}' id = 'cLength'><span id = 'txtL'></span> <span id = 'txtErr'>#{@content_error if @content_error != nil}</span><span id = 'txtErrSrv'>#{@content_error if @content_error != nil}</span></p></div>
+									#{ f.text_area :content, :cols => 115, :rows => '7', :defaultRows => '7', :class=> 't_area', :style => 'margin-right:auto; margin-left:auto; display: block;'}
+									<div id = 'answr_to_str' style = 'display:none;'></div>
+                  <div><p class = 'istring #{@content_f_color if @content_f_color != nil}' id = 'cLength'><span id = 'txtL'></span> <span id = 'txtErr'>#{@content_error if @content_error != nil}</span><span id = 'txtErrSrv'>#{@content_error if @content_error != nil}</span></p></div>
 								<div class='actions'>
 									#{ f.submit 'Отправить', :class=>'butt' }
 								</div>
@@ -230,9 +232,6 @@ module MessagesHelper
 							<tr>
 
 							<td id = 'formPhotos'>
-								#{f.label :uploaded_photos, 'Фотографии сообщения'}<br />
-								<div class = 'dropzone' id = 'ph_to_frm'>
-								</div>
 								<div id = 'uploadedPhotos'>
 								</div>
 								<div><p class = 'istring #{@photos_f_color if @photos_f_color != nil}' id = 'iLength'><span id = 'txtL'></span> <span id = 'txtErr'>#{@photos_error if @photos_error != nil}</span><span id = 'txtErrSrv'>#{@photos_error if @photos_error != nil}</span></p></div>
@@ -280,7 +279,7 @@ module MessagesHelper
 	end
 	def msg_block_buttons_bottom_in_theme(message, treadCount)
 		buttons = []
-		buttons += [{:name => 'Ответить', :access => userCanCreateMsgInTheme?(message.theme), :type => 'answr', :alt => message.id, :id => 'answer_but'}] if (user_type != 'bunned' and user_type != 'guest' || (user_type == 'new_user' and @theme.topic_id == 6)) if @theme.status == 'open'
+		buttons += [{:name => 'Ответить', :access => userCanCreateMsgInTheme?(message.theme), :type => 'answr', :alt => message.id, :id => 'answer_but', :link => '#new_message'}] if (user_type != 'bunned' and user_type != 'guest' || (user_type == 'new_user' and @theme.topic_id == 6)) if @theme.status == 'open'
 		buttons += [{:name => 'К обсуждению', :access => true, :type => 'follow', :link => "#{message_path(message.id)}"}] if treadCount != 0 and @message != message
 		buttons += [{:name => 'Изменить', :access => userCanEditMsg?(message), :type => 'edit', :link => "#{edit_message_path(message)}"}]
 		buttons += [{:name => 'Удалить', :access => userCanDeleteMessage?(message), :type => 'del', :link => message_path(message), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить сообщение?', :data_method => 'delete'}] if @theme.status == 'open'

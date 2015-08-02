@@ -97,7 +97,7 @@ end
     exif = []
     exif[exif.length] = {name: 'Камера', value: model} if model.strip != '' 
     exif[exif.length] = {name: 'Объектив', value: lens} if lens.strip != '' 
-    exif[exif.length] = {name: 'iso', value: iso} if lens.strip != '' 
+    exif[exif.length] = {name: 'iso', value: iso} if iso.strip != '' 
     exif[exif.length] = {name: 'Фокусное расстояние', value: "#{f_length}mm"} if f_length  != 0.0 
     exif[exif.length] = {name: 'Выдержка', value: exposure_time} if exposure_time.strip  != ''
     exif[exif.length] = {name: 'Диафрагма', value: "f/#{f_number}"} if f_number  != 0.0

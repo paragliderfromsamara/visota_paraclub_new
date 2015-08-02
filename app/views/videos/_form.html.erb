@@ -1,6 +1,4 @@
 <% video_errors %>
-<a name = 'new'></a>
-<div class = 'central_field' style = 'width: 97%;'>
 	<%= form_for(@video) do |f| %>
 	  <table style = 'width: 100%;'>
 	  	<tr>
@@ -17,16 +15,18 @@
 		  </td>
 		  <td align = 'left' valign = 'middle' <%= @name_f_color.html_safe %>>
 			<%= @name_error.html_safe %>
-			<%= f.text_field :name, :size => '60' %>
+			<%= f.text_field :name, :size => '84' %>
 		  </td>
 		</tr>
 		<tr>
-			<td align = 'right' valign = 'middle' >
+			<td align = 'right' valign = 'top' >
 				<%= f.label :link, 'Ссылка' %>
 			</td>
 			<td align = 'left' valign = 'top' <%= @link_f_color.html_safe %>>
 				<%= @link_error.html_safe %>
 				<%= f.text_area :link, :rows => '3', :cols => '60' %>
+                <%= waitbar('video_wait_check').html_safe %>
+                <div class = 'video_preview'></div>
 			</td>
 		</tr>
 		<tr>
@@ -40,12 +40,11 @@
 		</tr>
 		<tr>
 			<td align = 'left' valign = 'top'>
-				<%= f.submit 'Сохранить' %>
+				
 			</td>
 			<td>
+                <%= f.submit 'Сохранить' %>
 			</td>
 		</tr>
 	</table>
 	<% end %>
-</div>
-<hr />

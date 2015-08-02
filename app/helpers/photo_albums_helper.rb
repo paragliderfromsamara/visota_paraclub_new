@@ -34,7 +34,7 @@ module PhotoAlbumsHelper
 				</tr>
 				<tr>
 					<td align = 'left' valign='middle' >
-						<span class = 'istring_m norm medium-opacity'>Категория </span>#{link_to album.category_name, photo_albums_path(:c=>album.category_path), :class => 'b_link_i', :title => "Все альбомы категории #{album.category_name}"}
+						<span class = 'istring_m norm medium-opacity'>Категория </span>#{link_to album.category_name, "/media/?t=albums&c=#{album.category_id}", :class => 'b_link_i', :title => "Все альбомы категории #{album.category_name}"}
 					</td>
 					<td align = 'right' valign='middle'>
 						
@@ -65,7 +65,7 @@ module PhotoAlbumsHelper
 		if pathName == 'index'
 			photos = album.index_photos
 		elsif pathName == 'show'
-			photos = album.visible_photos
+			photos = album.photos
 		elsif pathName == 'visota_life'
 			photos = album.visota_life_photos
 		end
@@ -83,7 +83,7 @@ module PhotoAlbumsHelper
 		val=''
 		if pathName == 'show' and @album != nil
 			v = [
-				 {:name => 'К списку альбомов', :access => true, :type => 'follow', :link => "#{photo_albums_path}"}, 
+				 {:name => 'К списку альбомов', :access => true, :type => 'follow', :link => "/media?t=albums&c=all"}, 
 				 {:name => 'Все альбомы пользователя', :access => true, :type => 'follow', :link => "/users/#{@album.user.id.to_s}/photo_albums"},
 				 {:name => 'Редактировать', :access => isEntityOwner?(@album), :type => 'edit', :link => "#{edit_photo_album_path(@album)}"},	
 				 {:name => 'Удалить', :access => isEntityOwner?(@album), :type => 'del', :link => photo_album_path(@album), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить альбом и всё, что с ним связанно?', :data_method => 'delete'}
@@ -104,7 +104,7 @@ module PhotoAlbumsHelper
 		return val
 	end
 	def albumInformation(album)
-		v = "<img src = '/files/camera_g.png' width = '18px' style = 'float: left; padding-left: 5px;'/><span title = 'Фотографий в альбоме' class = 'stat'>#{album.visible_photos.count}</span> "
+		v = "<img src = '/files/camera_g.png' width = '18px' style = 'float: left; padding-left: 5px;'/><span title = 'Фотографий в альбоме' class = 'stat'>#{album.photos.count}</span> "
 		v += "<img src = '/files/answr_g.png' width = '20px' style = 'float: left; padding-left: 5px;'/><span title = 'Комментарии' class = 'stat'>#{album.comments.count.to_s}</span> "
 		v += "<img src = '/files/eye_g.png' width = '20px' style = 'float: left;' /><span title = 'Просмотры' class = 'stat'>0</span> "#{album.views.count}
 		return "#{v}"
@@ -129,12 +129,18 @@ module PhotoAlbumsHelper
 				@description_error += "#{err}"
 			end
 		end
-		if @albumToForm.errors[:photos] != nil and @albumToForm.errors[:photos] != []
+		if (@albumToForm.errors[:photos] != nil and @albumToForm.errors[:photos] != [])
 			@photos_f_color = "err"
 			@albumToForm.errors[:photos].each do |err|
 				@photos_error += "#{err}"
 			end
 		end
+    if  @albumToForm.errors[:deleted_photos] != nil and @albumToForm.errors[:deleted_photos] != []
+      @photos_f_color = "err"
+			@albumToForm.errors[:deleted_photos].each do |err|
+				@photos_error += "#{err}"
+			end
+    end
 	end
 	def initPhotoAlbumForm
 		if !is_not_authorized?		
@@ -230,8 +236,8 @@ module PhotoAlbumsHelper
 	end
 	def user_albums_buttons
 		[
-		{:name => 'К странице пользователя', :access => ['all'], :type => 'b_grey', :link => "#{user_path(@user)}"},
-		{:name => 'Все фотоальбомы', :access => ['all'], :type => 'b_grey', :link => "#{photo_albums_path}"}
+		{:name => 'К странице пользователя', :access => true, :type => 'b_grey', :link => "#{user_path(@user)}"},
+		{:name => 'Все фотоальбомы', :access => true, :type => 'b_grey', :link => "/media?t=albums&c=all"}
 		]
 	end
 

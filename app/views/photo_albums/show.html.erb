@@ -1,10 +1,15 @@
 <div class = 'm_1000wh'>
-		<h1 class = 'tb-pad-s'><%= @title %></h1>
 		<div class = 'tb-pad-s'><%= navigation_string.html_safe %></div>
 </div>
+<%= my_notice %>
 <% i=1 %>
 <%= album_index_block(@album, i, 'show') %>
-<%= newMessageFormInitial('none', '#new_message').html_safe %>
+<div class = 'cBoxSplitter'>
+	<div class = 'm_1000wh'>
+		<h3>Комментарии</h3>
+	</div>
+</div>
+<%= newMessageFormInitial('block', '#new_message').html_safe %>
 <% if @album.comments != [] %>
 	<% @album.comments.each do |c| %>
 		<% i+=1 %>
@@ -13,6 +18,6 @@
 <% else %>
 	<div class = 'm_1000wh tb-pad-l'><p class = 'istring norm'>Нет ни одного комментария к альбому</p></div>
 <% end %>
-<div class = 'm_1000wh'>
+<div class = 'm_1000wh tb-pad-s'>
 	<%= navigation_string.html_safe %>
 </div>

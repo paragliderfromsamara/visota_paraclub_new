@@ -96,12 +96,12 @@ textarea {resize: none;}
 /* form elements */
 	label {
 		font-family: $font_family_1; 
-		font-size: 17px;
+		font-size: 11pt;
 		}
 	INPUT.t_field, select.c_select {
 									border-radius: 4px; 
 									border-width: 1px; 
-									font-size:13pt;		
+									font-size:12pt;		
 								}
 	INPUT.check_box {
 						width: 18px;
@@ -509,7 +509,7 @@ img.ava {width: 120px;}
 	{
 		position: relative;
 		font-family: $font_family_6;
-		font-size: 1em;
+		font-size: 9pt;
 		float: right;
 		color: #a2a2a2;/* #FFF4B2; */
 		padding: 10px 0 10px 0;
@@ -667,19 +667,17 @@ img.ava {width: 120px;}
 }
 .nav_string 
 {
-	@extend .central_field;
 	font-family: $font_family_1;
 	z-index: 11;
 	width: 100%;
-	a {font-size: 14pt;}
-	a#first {padding-left: 0px;}
+	a {font-size: 10pt;}
 	span#splitter {
-					font-size: 22pt;
+					font-size: 14pt;
 					font-family: $font_family_6;
 					font-weight: bolder;
 				  }
 	span#cur_path  {
-					font-size: 14pt;
+					font-size: 10pt;
 					color: $text_color_1;
 				  }
 }

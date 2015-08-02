@@ -75,11 +75,10 @@ end
 			elsif photo.message != nil
 				f = userCanSeeMessage?(photo.message)
 			elsif photo.photo_album != nil
-				f = userCanSeeAlbum?(photo.photo_album)
+				f = userCanSeeAlbum?(photo.photo_album) || (photo.photo_album.status_id == 0 && photo.photo_album.user == current_user)
 			elsif photo.article != nil
 				f = isEntityOwner?(photo.article)
 			elsif photo.event != nil
-      
 				f = userCanSeeEvent?(photo.event)
 			end
 		end
@@ -144,8 +143,8 @@ end
 		end
 		def userCanEditAlbum?(album)		
 			if isEntityOwner?(album) 
-				return true if album.status_id == 1
-				return true if is_admin?
+				return true if album.status_id == 1 || album.status_id == 0
+				
 			end
 			return false
 		end

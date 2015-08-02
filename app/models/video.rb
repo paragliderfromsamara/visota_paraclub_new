@@ -1,4 +1,5 @@
 class Video < ActiveRecord::Base
+  attr_accessible :article_id, :category_id, :description, :link, :name, :user_id, :event_id, :image_link, :mini_link
   belongs_to :user
   belongs_to :article
   has_many :messages, :dependent  => :delete_all
@@ -18,7 +19,7 @@ class Video < ActiveRecord::Base
 	end
 	
 	def alter_name
-		if name.strip == '' or name == nil
+		if name == nil
 			"Видео от #{created_at.strftime("%d.%m.%Y в %k:%M:%S")}"
 		else
 			name
@@ -41,8 +42,9 @@ class Video < ActiveRecord::Base
 	
 	 #validation    ---
 	 video_regex = /(https?:\/\/(www.)?(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/watch\?feature=(player_detailpage|player_embedded)&v=)([A-Za-z0-9_-]*)(\&\S+)?(\?\S+)?)|(<iframe\s+src="(http:\/\/vk\.com\/video_ext\.php)\?oid=(\d+)&id=(\d+)&hash=(.+)(&hd=(\d{1}))?"\s+width="(\d{1,3})"\s+height="(\d{1,3})"\s+frameborder="(\d{1})"(.+)?><\/iframe>)|(https?:\/\/(www.)?vimeo\.com\/([A-Za-z0-9._%-]*)((\?|#)\S+)?)/
-	  validates :link, :presence => {:message => "Поле 'Ссылка' не должно быть пустым"},
-				       :format => {:with => video_regex, :message => "Ссылка не соответствует формату youtube, vk, vimeo"},
+	  validates :link, 
+    :presence => {:message => "Поле 'Ссылка' должно быть заполнено"},
+    				     :format => {:with => video_regex, :message => "Поле не соответсвует формату ссылок youtube, vimeo, vk.com"},
 				       :uniqueness => {:case_sensitive => false, :message => "Видео с такой ссылкой уже добавлено"}
 	validates :description, :length => { :maximum => 5000, :message => "Описание не может быть более 5000 знаков"}
 	validates :name, :length => { :maximum => 100, :message => "Название не может быть длиннее 100 знаков"}
@@ -60,7 +62,7 @@ class Video < ActiveRecord::Base
 	  end
 	  
 	  def category_name
-		category[:name]
+		  category[:name]
 	  end
 	  
 	  def cur_category_id
@@ -70,9 +72,11 @@ class Video < ActiveRecord::Base
 		category[:path_name]
 	  end
 	  def category
+      cat = categories.last 
 		categories.each do |group|
-			return group if category_id == group[:value]
+			cat = group if category_id == group[:value]
 		end
+    return cat
 	  end
 	  
   #categories end---

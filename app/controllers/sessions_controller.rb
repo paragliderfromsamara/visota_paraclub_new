@@ -8,9 +8,8 @@ class SessionsController < ApplicationController
     user = User.authenticate(params[:session][:name],
                              params[:session][:password])
     if user.nil?
-      flash[:alert] = "Неверное имя пользователя или пароль"
+      flash.now[:alert] = "Неверное имя пользователя или пароль"
       @title = @header = 'Вход на сайт'
-	  @my_notice = ('<span class = "err">Неверное имя пользователя или пароль</span>').html_safe
 	  respond_to do |format|
 		format.html { render 'new' }
 		format.json { head :no_content }

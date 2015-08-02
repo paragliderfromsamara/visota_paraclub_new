@@ -334,14 +334,14 @@ include UsersHelper
       end
     end
 		if user == nil
-      flash[:alert] = "Пользователь с почтовым адресом <b>#{params[:user][:email]}</b> не найден"
+      flash.now[:alert] = "Пользователь с почтовым адресом <b>#{params[:user][:email]}</b> не найден"
 			render 'remember_password'
 		else
-      flash[:mail] = user.email 
+      flash.now[:mail] = user.email 
 			redirect_to "/remember_password", :notice => "На электронный адрес <b>#{params[:user][:email]}</b> отправлено сообщение для восстановления пароля"  if UserMailer.mail_remember_password(user).deliver
 		end
   elsif eaddr == '' || eaddr == nil 
-    flash[:alert] = "Поле 'Почтовый адрес' должно быть заполнено"
+    flash.now[:alert] = "Поле 'Почтовый адрес' должно быть заполнено"
     render 'remember_password'
   elsif !abiUsr.image_valid?(params[:abi][:value], params[:abi][:name])
     flash[:alert] = "Неправильно введён текст отображенный на картинке"
