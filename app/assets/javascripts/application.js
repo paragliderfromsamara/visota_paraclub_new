@@ -186,7 +186,14 @@ function my_functions()
 							 );
 		
 	};
-	
+
+function submitMyForm(id, el){
+                            if ($(el).hasClass('disabled') == false)
+                            {
+                                document.getElementById(id).submit();
+                            }
+                                
+                         }
 function scrollControl() //Управление панелькой перемотки
 	{
 		var wH,blSH,sT,sB, botH,topH,t=300; 
@@ -538,8 +545,8 @@ function userFieldsChecking()
 													 }, 500);
 							}
 					} //else alert('Без изменений');
-					setTimeout(function(){if (usrCard.errFlag()) {$('#user_butt').attr('disabled', 'disabled');} //Блокирует кнопку отправки формы
-				else {$('#user_butt').removeAttr('disabled');} }, 800)
+					setTimeout(function(){if (usrCard.errFlag()) {$('#new_user_button').addClass('disabled');} //Блокирует кнопку отправки формы
+				else {$('#new_user_button').removeClass('disabled');} }, 800)
 				
 			}
 			function uniqNameValidation(){

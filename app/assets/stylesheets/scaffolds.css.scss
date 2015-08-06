@@ -262,32 +262,44 @@ img.ava {width: 120px;}
 #middle {position: relative; width: 100%; min-width: $min_width; z-index: 1;min-height: 500px;}
 #bottom, #footer{position: relative; width: 100%; min-width: $min_width; z-index: 1;}
 #footer{background-color:$fiveth_color;height: 105px;}
+ul.myBut
+{
+	list-style: none; 
+	float: left;
+    li{
+        font-size: 12px; 
+        padding: 4px 25px 4px 25px;
+        background-color: #afc5d1;
+        cursor:pointer;
+        border-radius: 10px;
+        @include animation($time_1);
+      }
+    li:hover, li.disabled
+    {
+        background-color: #cbd0d3;
+    }
+}
+
 #ses_p {
-				ul
-				{
-					list-style: none; 
-					float: right;
-				}
-				li {
-					@include menuLi;
-					color: $main_color; 	
-					padding-left: 10px;
-					padding-right: 10px;
-					padding-top: 6px;
-					padding-bottom: 6px;	
-					font-size: 1em;
-					@include animation($time_1);
-				 }
-				li:hover 
-				{
-					background-color:$main_color;
-					color:white;
-				}
-				#c_nav_li
-				{
-					background-color:$fourth_color;
-					color: $main_color;
-				}
+                .sesLink
+                {
+                    font-size: 10px;
+                    padding: 0px;
+                    margin:0px;
+                    text-decoration:none;
+                    color: #afafaf;
+                }
+                .sesLink:hover {text-decoration:underline;}
+                #sesText
+                {
+                    border-radius: 8px;
+                    border-width: 1px;
+                    width: 130px;
+                    font-size: 12px;
+                    padding: 5px;
+                }
+
+               
 			 }
 #mLogo 
 {

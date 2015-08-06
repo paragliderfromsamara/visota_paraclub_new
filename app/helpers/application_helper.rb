@@ -21,7 +21,7 @@ require 'open-uri' #для парсера
 		return "background-image: url(#{logo});background-size: cover;"
 	end
 	def header_1 #h1 тэг
-		("<h1>#{@header}</h1><br />").html_safe if @header != nil 
+		("<div class = 'm_1000wh tb-pad-s'><h1>#{@header}</h1></div>").html_safe if @header != nil 
 	end
 	def header_2 #h2 тэг
 		("<h2>#{@title_2}</h2>").html_safe if @title_2 != nil
@@ -193,7 +193,7 @@ require 'open-uri' #для парсера
 					 ]
 	end
 	def user_session_menu
-		if user_type == 'guest'
+    if user_type == 'guest'
 			b = [
 					{:name => 'Вход', :link => '/signin'},
 					{:name => 'Регистрация', :link => '/signup'}
@@ -435,7 +435,15 @@ end
 
 
 #Блок отрисовки кнопок end------------------------------------------------------
-
+  def mySubmitButton(text, elId)
+    "
+      <ul class = 'myBut'>
+          <li id = '#{elId}_button' onclick = 'submitMyForm(\"#{elId}\", this)'>
+            #{text}
+          </li>
+      </ul>
+    "
+  end 
 	def my_time(date)
 		time = Time.now
 		value = ''

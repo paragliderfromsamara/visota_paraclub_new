@@ -1,6 +1,7 @@
 class SessionsController < ApplicationController
   def new
 	 @title = @header = 'Вход на сайт'
+   @hideSesPanel = true
   end
 
   def create
@@ -10,10 +11,11 @@ class SessionsController < ApplicationController
     if user.nil?
       flash.now[:alert] = "Неверное имя пользователя или пароль"
       @title = @header = 'Вход на сайт'
-	  respond_to do |format|
-		format.html { render 'new' }
-		format.json { head :no_content }
-	  end
+      @hideSesPanel = true
+	    respond_to do |format|
+	      format.html { render 'new' }
+		    format.json { head :no_content }
+	    end
     else
       sign_in user
 	    clear_steps user

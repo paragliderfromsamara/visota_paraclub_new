@@ -66,9 +66,10 @@
         <br />
         <img src = '/antibot_images/<%= @antibot[:name] %>.png' width = '150px'><br />
         <input type = 'text' name = abi[value] class = "t_field"  >
+<br /><br />
+        <%= mySubmitButton('Подтвердить регистрацию', 'new_user').html_safe %>
+       
         <br />
-        <br />
-        <%= f.submit 'Подтвердить регистрацию', :class => 'butt', :id => 'user_butt' %>
     </div>
 </div>
 <% end %>
