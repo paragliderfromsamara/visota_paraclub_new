@@ -266,6 +266,8 @@ ul.myBut
 {
 	list-style: none; 
 	float: left;
+    a{text-decoration:none; color:grey;}
+    
     li{
         font-size: 12px; 
         padding: 4px 25px 4px 25px;
@@ -280,27 +282,46 @@ ul.myBut
     }
 }
 
-#ses_p {
-                .sesLink
-                {
-                    font-size: 10px;
-                    padding: 0px;
-                    margin:0px;
-                    text-decoration:none;
-                    color: #afafaf;
-                }
-                .sesLink:hover {text-decoration:underline;}
-                #sesText
-                {
-                    border-radius: 8px;
-                    border-width: 1px;
-                    width: 130px;
-                    font-size: 12px;
-                    padding: 5px;
-                }
-
-               
-			 }
+#ses_p 
+{
+    ul#userMenu 
+    {
+    	list-style: none; 
+        float: right; 
+        position: relative;
+        top: 10px;
+        li{
+            float: left; 
+            font-size: 12px; 
+            padding: 4px 15px 4px 15px;
+            cursor:pointer;
+            @include animation($time_1);
+            color: #afafaf;
+          }
+       li:hover, li#c_nav_li
+          {
+              color: grey;
+              text-decoration:underline;
+          }
+    }
+    .sesLink, .sesText
+    {
+        font-size: 10px;
+        padding: 0px;
+        margin:0px;
+        text-decoration:none;
+        color: #afafaf;
+    }
+    .sesLink:hover {text-decoration:underline;}
+    #sesText
+    {
+        border-radius: 8px;
+        border-width: 1px;
+        width: 130px;
+        font-size: 12px;
+        padding: 5px;
+    }
+}
 #mLogo 
 {
     cursor:pointer;

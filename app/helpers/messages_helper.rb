@@ -287,7 +287,7 @@ module MessagesHelper
 		return buttons
 	end
 	def msg_block_buttons_bottom_in_video(message, treadCount)
-		buttons = [{:name => 'Ответить', :access => !is_not_authorized?, :type => 'answr', :alt => message.id, :id => 'answer_but'}]
+		buttons = [{:name => 'Ответить', :access => !is_not_authorized?, :type => 'answr', :alt => message.id, :id => 'answer_but', :link => '#new_message'}]
 		buttons += [{:name => 'К обсуждению', :access => true, :type => 'follow', :link => "#{message_path(message)}"}] if treadCount != 0 and @message != message
 		buttons += [
 					{:name => 'Изменить', :access => false, :type => 'edit', :link => "#{edit_message_path(message)}"}, 
@@ -296,7 +296,7 @@ module MessagesHelper
 		return buttons
 	end
 	def msg_block_buttons_bottom_in_album(message, treadCount)
-	    buttons = [{:name => 'Ответить', :access => !is_not_authorized?, :type => 'answr', :alt => message.id, :id => 'answer_but'}]
+	    buttons = [{:name => 'Ответить', :access => !is_not_authorized?, :type => 'answr', :alt => message.id, :id => 'answer_but', :link => '#new_message'}]
 		buttons += [{:name => 'К обсуждению', :access => true, :type => 'follow', :link => "#{message_path(message)}"}] if treadCount != 0 and @message != message
 		buttons += [
 					{:name => 'Изменить', :access => false, :type => 'edit', :link => "#{edit_message_path(message)}"}, 

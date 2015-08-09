@@ -20,7 +20,7 @@ module VideosHelper
 	end
 	def bottom_video_buttons
 		[
-		 {:name => 'Добавить комментарий', :access => !is_not_authorized?, :type => 'add', :id => 'newMsgBut'}
+		 {:name => 'Добавить комментарий', :access => !is_not_authorized?, :type => 'add', :id => 'newMsgBut', :link => '#new_message'}
 		]
 	end
 	def videoInformation(video)

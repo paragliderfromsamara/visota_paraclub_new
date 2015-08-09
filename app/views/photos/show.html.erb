@@ -36,7 +36,7 @@
     			<%= photo_comment_button.html_safe %>
             </div>
             <%= my_notice %>
-            <%= newMessageFormInitial('none', '#new_message').html_safe %>
+            <%= newMessageFormInitial('block', '#new_message').html_safe %>
 			<% if @photo.comments != [] %>
 				<% i=0 %>
 				<% @photo.comments.each do |message| %>

@@ -98,7 +98,7 @@ module PhotoAlbumsHelper
 		if pathName == 'index' || pathName == 'visota_life'
 			v = [{:name => 'Перейти', :access => true, :type => 'follow', :link => "#{photo_album_path(album)}"}]
 		elsif pathName == 'show' and @album != nil
-			v = [{:name => 'Добавить комментарий', :access => userCanCreateMsg?, :type => 'add', :id => 'newMsgBut'}]
+			v = [{:name => 'Добавить комментарий', :access => userCanCreateMsg?, :type => 'add', :id => 'newMsgBut', :link => '#new_message'}]
 		end
 		val = "#{control_buttons(v)}" if v != []
 		return val

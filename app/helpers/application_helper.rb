@@ -193,31 +193,22 @@ require 'open-uri' #для парсера
 					 ]
 	end
 	def user_session_menu
-    if user_type == 'guest'
 			b = [
-					{:name => 'Вход', :link => '/signin'},
-					{:name => 'Регистрация', :link => '/signup'}
-				]
-		else
-			b = [
-					{:name => 'Пилоты', :link => '/pilots'},
 					{:name => 'Лента событий', :link => '/feed'},
-					{:name => 'Профиль', :link => user_path(current_user)},
-					{:name => 'Выйти', :link => '/signout'}
-				]
-		end
+          {:name => 'Пилоты', :link => '/pilots'},
+					{:name => 'Профиль', :link => user_path(current_user)}
+			    ]
 		v = ''
 		b.each do |i|
 			v += (current_page?(i[:link]))? "<li id = 'c_nav_li' link_to = '#{i[:link]}'>#{i[:name]}</li>":"<li link_to = '#{i[:link]}'>#{i[:name]}</li>"
 		end
-		return "<ul>#{v}</ul>"
+		return "<ul id = 'userMenu'>#{v}</ul>"
 	end
 	def topMainMenu #меню в шапке сайта
 		value = ""
 		primaryMenuItems.each do |item|
 			value += "<li id = '#{is_selected(item)}'><a href = '#{item[:link]}'><span>#{item[:name]}</span></a></li>"
 		end
-		
 		return "<ul>#{value}</ul>"
 	end
 	def bottomMainMenu
@@ -444,6 +435,18 @@ end
       </ul>
     "
   end 
+  
+  def myLinkButton(text, link)
+    "
+      <ul class = 'myBut'>
+          <a href='#{link}'>
+          <li>
+            #{text}
+          </li>
+          </a>
+      </ul>
+    "
+  end
 	def my_time(date)
 		time = Time.now
 		value = ''

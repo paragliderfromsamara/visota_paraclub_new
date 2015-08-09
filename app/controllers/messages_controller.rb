@@ -111,6 +111,8 @@ class MessagesController < ApplicationController
 		@theme = Theme.find_by(id: params[:message][:theme_id], status_id: 1)				#ищем тему.
 		@photo = Photo.find_by(id: params[:message][:photo_id], status_id: 1)				#ищем фотографию.
 		@album = PhotoAlbum.find_by(id: params[:message][:photo_album_id], status_id: 1)  #ищем фотоальбом.
+    @video = Video.find_by(id: params[:message][:video_id])
+    @createNotice = 'Сообщение успешно добавлено...'
 		if @theme != nil
 			@path_array = [
 							{:name => 'Клубная жизнь', :link => '/visota_life'},
@@ -120,10 +122,14 @@ class MessagesController < ApplicationController
 						  ]
 		end
 		if @album != nil
+      @createNotice = 'Комментарий успешно добавлен...'
 			if @photo != nil
 				
 			end
 		end
+    if @video != nil
+      @createNotice = 'Комментарий успешно добавлен...'
+    end
 		if @message_to != nil
 			if @message_to.photo != nil
 				params[:message][:photo_id] = @message_to.photo_id
@@ -151,7 +157,7 @@ class MessagesController < ApplicationController
 			#link = "#{photo_path(@message.photo_album_id)}" if @message.photo_album != nil
 			@message.assign_entities_from_draft(current_user.message_draft)	#ищем черновик и привязываем		
 			@theme.last_msg_upd if @theme != nil
-			format.html { redirect_to link + "#msg_#{@message.id}", :notice => 'Сообщение успешно размещено'}
+			format.html { redirect_to link + "#msg_#{@message.id}", :notice => @createNotice}
 			format.json { render :json => @message, :status => :created, :location => @message }
 		  else
 			format.html { render :action => "new" }
