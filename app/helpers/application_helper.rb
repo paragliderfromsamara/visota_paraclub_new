@@ -71,7 +71,8 @@ require 'open-uri' #для парсера
 				{link: "#{path}4.jpg", BlockHeight: 397},
 				{link: "#{path}5.jpg", BlockHeight: 397},
         {link: "#{path}6.jpg", BlockHeight: 397},
-        {link: "#{path}7.jpg", BlockHeight: 422}
+        {link: "#{path}7.jpg", BlockHeight: 422},
+        {link: "#{path}default.png", BlockHeight: 296}
 			  ]
 		return arr
   end
