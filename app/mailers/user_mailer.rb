@@ -12,14 +12,14 @@ class UserMailer < ActionMailer::Base
   end
   
   def mail_remember_password(user)
-	@user = user
-	action = 'action_type=remember_password'
-	site_link = 'localhost:3000' #'http://visota-paraclub.ru'
-	@target_link = "<a href = 'http://#{site_link}/mail_switcher?email=#{user.email}&value=#{user.salt}&name=#{@user.name}&#{action}'>Ссылка на страницу восстановления пароля</a>"
-	mail(
-			:to => user.email,
-			:subject => "Восстановление пароля"
-		)
+  	@user = user
+  	action = 'action_type=remember_password'
+  	site_link = 'localhost:3000' #'http://visota-paraclub.ru'
+  	@target_link = "<a href = 'http://#{site_link}/mail_switcher?email=#{user.email}&value=#{user.salt}&name=#{@user.name}&#{action}'>Ссылка на страницу восстановления пароля</a>"
+  	mail(
+  			:to => user.email,
+  			:subject => "Восстановление пароля"
+  		)
   end
   
   def user_check(user, password)

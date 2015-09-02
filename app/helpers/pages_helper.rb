@@ -571,8 +571,8 @@ end
 		max_index = pages_count #Номер последнего элемента
 		pages_string = ""
 		numbers_string = ""
-		first_number = " <a href = '#{current_feed_part[:path]}&page=1'>1</a> ..."
-		last_number = " ... <a href = '#{current_feed_part[:path]}&page=#{pages_count}'>#{pages_count}</a>"
+		first_number = " <a href = '#{@paginationLink}&page=1'>1</a> ..."
+		last_number = " ... <a href = '#{@paginationLink}&page=#{pages_count}'>#{pages_count}</a>"
 		if max_index > max_number_in_line
 			offset = (max_number_in_line - 1)/2 #смещение относительно текущей точки
 			if (cur_index) <= offset + 1 #in case 123456789..90
@@ -591,7 +591,7 @@ end
 		else	
 				numbers_string = make_numbers_string_on_feed(0, max_index, cur_index)
 		end
-		return "#{link_to '<', "#{current_feed_part[:path]}&page=#{cur_index}" if cur_index > 0} #{'<' if cur_index == 0}  #{numbers_string}  #{link_to '>', "#{current_feed_part[:path]}&page=#{cur_index + 2}" if cur_index < (max_index - 1)} #{'>' if cur_index == (max_index - 1)}".html_safe
+		return "#{link_to '<', "#{@paginationLink}&page=#{cur_index}" if cur_index > 0} #{'<' if cur_index == 0}  #{numbers_string}  #{link_to '>', "#{@paginationLink}&page=#{cur_index + 2}" if cur_index < (max_index - 1)} #{'>' if cur_index == (max_index - 1)}".html_safe
 	end
 	def make_numbers_string_on_feed(start_index, end_index, cur_index)
 		value = ''
@@ -600,7 +600,7 @@ end
 			if i == cur_index
 				value += " #{i+1}"
 			else
-				value += " <a href = '#{current_feed_part[:path]}&page=#{i+1}'}'>#{i+1}</a>"
+				value += " <a href = '#{@paginationLink}&page=#{i+1}'}'>#{i+1}</a>"
 			end
 			i += 1
 		end until(i == end_index or i == pages_count)
@@ -686,14 +686,176 @@ def search_in_albums(words)
 	
 end
 
-def search_in_messages(words)
+def search_in_old_messages
+  old_messages = OldMessage.all
+  oldMsgsResult = []
+  if old_messages != []
+    old_messages.each do |msg|
+      dwnCaseMsgText = msg.content.mb_chars.downcase
+      oldMsgsResult[oldMsgsResult.length] = [msg.created_when, msg] if isLikebleText?(dwnCaseMsgText, @searchHashParams[:search_query])
+    end
+  end
+  return oldMsgsResult
 end
 
-def search_in_themes(words)
-	
+
+def search_in_themes
+  if is_not_authorized?
+    vsId = 1
+  else
+    vsId = [1,2]
+  end 
+  themes = Theme.where(:status_id => [1,3], :visibility_status_id => vsId, :topic_id => getTopicIdsFromSearchHash).order('created_at ASC')
+  downcaseQueryText = @searchHashParams[:search_query] 
+  resultThemes = []
+  resultMessages = []
+  if themes != [] 
+    themes.each do |th| #ищем в темах
+      dwnCaseThText = th.name.mb_chars.downcase
+      if isLikebleText?(dwnCaseThText, @searchHashParams[:search_query])
+        resultThemes[resultThemes.length] = [th.created_at, th]
+      else
+        dwnCaseThText = th.content.mb_chars.downcase
+        if isLikebleText?(dwnCaseThText, @searchHashParams[:search_query])
+          resultThemes[resultThemes.length] = [th.created_at, th]
+        else #если не находим в темах листаем сообщения и ищем в них
+          msgs = th.visible_messages
+          if msgs != []
+            msgs.each do |msg|
+              dwnCaseThText = msg.content.mb_chars.downcase
+              resultMessages[resultMessages.length] = [msg.created_at, msg] if isLikebleText?(dwnCaseThText, @searchHashParams[:search_query])
+            end
+          end
+        end
+      end
+    end
+  end
+	return {:themes => resultThemes, :messages => resultMessages}
 end
 
+def makeSearchParameters
+  @searchHashParams = {}
+  @searchHashParams[:search_query] = (params[:search_query] != nil)? params[:search_query]:""
+  @searchHashParams[:in_themes_and_messages] = (params[:in_themes_and_messages] == 'on')? true:false
+  @searchHashParams[:in_articles] = (params[:in_articles] == 'on')? true:false
+  @searchHashParams[:in_events] = (params[:in_events] == 'on')? true:false
+  topics = Topic.all
+  if topics != []
+    topics.each do |t|
+      h = "t_#{t.id}".to_sym
+      @searchHashParams[h] = (params[h] == 'on' && @searchHashParams[:in_themes_and_messages])? true:false
+    end  
+  end
+  @searchHashParams[:o_gb] = (params[:o_gb] == 'on' && @searchHashParams[:in_themes_and_messages])? true:false
+end
 
+def getTopicIdsFromSearchHash
+  val = []
+  if @searchHashParams[:in_themes_and_messages]
+    topics = Topic.all
+    if topics != []
+      topics.each do |t|
+        h = "t_#{t.id}".to_sym
+        val[val.length] = t.id if @searchHashParams[h]
+      end  
+    end
+  end
+  return val
+end
+
+def isSearchInTopics?
+  val = false
+  if @searchHashParams[:in_themes_and_messages]
+    topics = Topic.all
+    if topics != []
+      topics.each do |t|
+        h = "t_#{t.id}".to_sym
+        val |= @searchHashParams[h]
+      end  
+    end
+    val |= @searchHashParams[:o_gb]
+  end
+  return val  
+end
+
+def build_search_pagination_link
+  val = "/search"
+  val += (@searchHashParams[:search_query] != nil)? "?search_query=#{@searchHashParams[:search_query]}":""
+  if searchParamsIsNotEmpty? 
+    val += (@searchHashParams[:in_articles])? "&in_articles=on":""
+    val += (@searchHashParams[:in_events])? "&in_events=on":""
+    if isSearchInTopics?
+      val += (@searchHashParams[:in_themes_and_messages])? "&in_themes_and_messages=on":""
+      tpcs = Topic.all
+      tpcs.each do |t|
+        h = "t_#{t.id}".to_sym
+        val += (@searchHashParams[h])? "&t_#{t.id}=on":""
+      end
+      val += (@searchHashParams[:o_gb])? "&o_gb=on":""
+    end
+    return val
+  end
+  
+  
+end
+
+def searchParamsIsNotEmpty?
+  result = false
+  result = @searchHashParams[:in_articles] | @searchHashParams[:in_events] | isSearchInTopics?
+  return result
+end
+
+def theme_block_for_search_result(theme, i)
+  html = "<h3>Тема в разделе #{theme.topic.name}</h3>
+	<table style = 'width: 100%;'>
+		<tr>
+			<td valign = 'middle' align = 'left'  style='height: 45px;'>
+				#{themeInformation(theme)}
+			</td>
+			<td valign = 'middle' align = 'right' style='height: 45px;'>
+				<p class = 'istring_m norm'>Тема создана #{my_time(theme.created_at)}</p>
+			</td>
+		</tr>
+		<tr>
+			<td valign = 'middle' align = 'left'  style='height: 45px;'>
+				<span class = 'istring_m norm'>Заголовок темы:</span> <span istring_m norm>#{theme.name}</span>
+			</td>
+			<td valign = 'middle' align = 'right' style='height: 45px;'>
+				
+		</tr>
+		<tr>
+			<td valign = 'middle' align = 'left' colspan = '2'>
+				<span class = 'istring_m norm'>Автор темы: </span>#{link_to theme.user.name, theme.user, :class => 'b_link_i'}
+			</td>
+		</tr>
+		<tbody id = 'middle'>
+			<tr>
+			<td  colspan = '2'>
+					<span id = 'content' class = 'mText'>#{theme.content_html}</span>
+					#{theme.updater_string}
+					#{"<br /><div class = 'central_field' style = 'width: 1000px;'>#{theme_list_photos(theme)}</div>" if theme.photos != []}
+					#{"<br />#{list_attachments(theme.attachment_files)}" if theme.attachment_files != []}
+			</td>
+			</tr>
+		</tbody>
+		<tr>
+			<td colspan = '2'>
+				<div>
+					 #{control_buttons([{:name => "Перейти", :access => true, :type => 'follow', :link => theme_path(theme)}])}
+				</div>
+			</td>
+		</tr>
+	</table>		
+	"
+         
+	p = {
+			:tContent => html, 
+			:idLvl_2 => 'thBody',
+			:classLvl_2 => 'tb-pad-m',
+			:parity => i
+		}
+    return c_box_block(p)
+end
 #поиск по сайту-end----------------------------------------------------------------------------------------------------------------------------------------------------
   def mediaTypeMenu
     v = ''

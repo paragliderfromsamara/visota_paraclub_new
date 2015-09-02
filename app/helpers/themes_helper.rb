@@ -171,6 +171,7 @@ module ThemesHelper
 		</table>		
 		"
 	end
+  
 	def theme_owner_buttons #в контроллере themes#show
 		buttons_array = []
 		buttons_array += [{:name => 'Новое сообщение', :access => userCanCreateMsgInTheme?(@theme), :type => 'add', :id => 'newMsgBut', :link => '#new_message'}]

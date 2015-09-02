@@ -1,5 +1,106 @@
-<% @words_arr.each do |w| %>
-	<%= w %><br />
+<%= my_alert %>
+<div class = 'c_box'>
+    <div class = 'm_1000wh tb-pad-s'>
+        <form id='searchForm'>
+            <div class = 'section group'>
+                <div class = 'col span_5_of_12'>
+                    <input id = 'search_query' type='text' name = 'search_query' placeholder = 'Что ищете?' class = 'sQuery' value = "<%= @searchHashParams[:search_query] %>" />
+                </div>
+                <div class = 'col span_1_of_12'> 
+                    <%= myLinkButton('искать', '/search').html_safe %>
+                </div>
+                <div class = 'col span_1_of_12'>
+                </div>
+                <div class = 'col span_4_of_12'>
+                    <span class = 'istring'>Найдено тем:</span> <%= @themes.count %>; <span class = 'istring'>Сообщений:</span> <%= @messages.count  %>;
+                </div>
+            </div>
+            <h3>
+                Дополнительные параметры поиска
+            </h3>
+            <div class = 'section group'>
+                <div class = 'col span_5_of_12'>
+                    <span class = 'istring'>Искать в...</span><br />
+                    <table style = "width: 100%;">
+                        <tr>
+                            <td colspan = '2'>
+                                <input id = 'in_events' type = 'checkbox' name = 'in_events' <%= (@searchHashParams[:in_events]==true)? "checked='checked'":""  %> /> <label for = 'in_events'>новостях</label>
+                            </td> 
+                        </tr>
+                        <tr>
+                            <td colspan = '2'>
+                                <input id = 'in_articles' type = 'checkbox' name = 'in_articles' <%= (@searchHashParams[:in_articles]==true)? "checked='checked'":""  %>  /> <label for = 'in_articles'>статьях</label>
+                            </td> 
+                        </tr>
+                        <tr>
+                            <td colspan = '2'>
+                                <input id = 'in_themes_and_messages' type = 'checkbox' name = 'in_themes_and_messages' <%= (@searchHashParams[:in_themes_and_messages])? "checked='checked'":""  %> /> <label for = 'in_themes_and_messages'>темах и сообщениях</label>
+                            </td>
+                        </tr>
+                        <tbody id = "topicsList" style = 'display:<%= (@searchHashParams[:in_themes_and_messages])?'block':'none' %>;'>
+                            <tr>
+                                <td>
+                                </td>
+                                <td style = 'width: 390px;'>
+                                        <% topics = Topic.all %>
+                                        <% topics.each do |topic| %>
+                                            <% h = "t_#{topic.id}".to_sym %>
+                                            <input id = 't_<%= topic.id.to_s %>' type = 'checkbox' name = 't_<%= topic.id.to_s %>' <%= (@searchHashParams[h])? "checked='checked'":""  %>/>
+                                             <label for = "t_<%= topic.id.to_s %>"><%= topic.name %></label><br />
+                                        <% end %>
+                                        <input id = 'o_gb' type = 'checkbox' name = 'o_gb' <%= (@searchHashParams[:o_gb])? "checked='checked'":""  %> /> <label for = 'o_gb'>В старой гостевой</label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class = 'm_1000wh'>
+    <div class = 'section group'>
+        <div class = 'col span_8_of_12'>
+        </div>
+        <div class = 'col span_4_of_12'>
+			<div class = 'pagination'>
+				<%= feed_pagination if @entity_array.length > @entity_on_page %>
+			</div>
+        </div>
+    </div>
+</div>
+<% if @entity_array != [] %>
+    <% i=0 %>
+	<% array_to_view.each do |v| %>
+        <% entity = v[1] %>
+        <% case entity.class.name %>
+        <% when "OldMessage" %>
+            <%= old_message_box(entity, i).html_safe %> 
+        <% when "Theme" %>
+            <%= theme_block_for_search_result(entity, i).html_safe %>
+        <% else %>
+        <%= v[1].class.name %>
+        <% end %>
+        
+        <% i+=1 %>
+	<% end %>
+<% else %>
+    <div class = 'c_box even'>
+        <div class = 'm_1000wh tb-pad-m'>
+           <p class = 'istring medium-opacity'>
+               По вашему запросу ничего не найдено
+           </p>
+        </div>
+    </div>
 <% end %>
-<%= @l %><br />
-<%= @fuck.html_safe %><br />
+<div class = 'm_1000wh'>
+    <div class = 'section group'>
+        <div class = 'col span_8_of_12'>
+        </div>
+        <div class = 'col span_4_of_12'>
+			<div class = 'pagination'>
+				<%= feed_pagination if @entity_array.length > @entity_on_page %>
+			</div>
+        </div>
+    </div>
+</div>

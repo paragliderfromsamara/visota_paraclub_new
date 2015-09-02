@@ -37,6 +37,7 @@ resources :voices, :only => [:create, :destroy]
 	get "admin_tools/entities_recovery"	#Восстановление удалённых объектов
 	get "admin_tools/disabled_events" #Скрытые новости
 	get "admin_tools/adaptation_to_new"     #Создать темы
+  get "/functions_test", :to => 'admin_tools#functions_test'     #Тест
   #admin_tools_end
   
   #articles
@@ -156,6 +157,7 @@ resources :voices, :only => [:create, :destroy]
   get '/contacts', :to => 'pages#contacts'
   get '/paragliding', :to => 'pages#paragliding'
   get '/feed', :to => 'pages#feed'
+  post '/search', :to => 'pages#search'
   get '/search', :to => 'pages#search'
   get '/equipment', :to => 'pages#equipment'
   get '/media', :to => 'pages#media'

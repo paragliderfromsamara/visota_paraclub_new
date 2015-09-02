@@ -266,7 +266,7 @@ ul.myBut
 {
 	list-style: none; 
 	float: left;
-    a{text-decoration:none; color:grey;}
+    a{text-decoration:none; color:white;}
     
     li{
         font-size: 12px; 
@@ -274,6 +274,7 @@ ul.myBut
         background-color: #afc5d1;
         cursor:pointer;
         border-radius: 10px;
+        color:white;
         @include animation($time_1);
       }
     li:hover, li.disabled
@@ -281,7 +282,18 @@ ul.myBut
         background-color: #cbd0d3;
     }
 }
-
+.sQuery
+{
+    width: 350px;
+    font-size: 12px;
+    border-radius: 8px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #afc5d1;
+    padding: 5px;
+    margin:0px;
+    color: #898f99;
+}
 #ses_p 
 {
     ul#userMenu 
@@ -305,23 +317,26 @@ ul.myBut
           }
     }
     .sesLink, .sesText
-    {
-        font-size: 10px;
-        padding: 0px;
-        margin:0px;
-        text-decoration:none;
-        color: #afafaf;
-    }
-    .sesLink:hover {text-decoration:underline;}
+        {
+            font-size: 12px;
+            padding: 0px;
+            margin:0px;
+            text-decoration:none;
+            color: #898f99;
+        }
     #sesText
-    {
-        border-radius: 8px;
-        border-width: 1px;
-        width: 130px;
-        font-size: 12px;
-        padding: 5px;
-    }
+        {
+            border-radius: 8px;
+            border-width: 1px;
+            border-style: solid;
+            border-color: #afc5d1;
+            width: 130px;
+            font-size: 12px;
+            padding: 5px;
+        }
+    .sesLink:hover {text-decoration:underline;}
 }
+
 #mLogo 
 {
     cursor:pointer;

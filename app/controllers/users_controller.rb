@@ -21,6 +21,7 @@ include UsersHelper
 		@active_button = 0
 		@users = User.paginate(:page => params[:page], :per_page => 10).where(user_group_id: [1, 0, 2, 6]).order('user_group_id DESC')
 	end
+  @header = @title
     respond_to do |format|
       format.html # index.html.erb
       format.json { render :json => @users }
@@ -376,25 +377,25 @@ include UsersHelper
   end
   
   def check_email_and_name
-	@status = {:status => 'false'}
-  users = User.all
-  users.each do |u|
-    if params[:email] != '' and params[:email] != nil
-      if u.email.downcase == params[:email].downcase
-        @status = {:status => 'true'}
-        break
+  	@status = {:status => 'false'}
+    users = User.all
+    users.each do |u|
+      if params[:email] != '' and params[:email] != nil
+        if u.email.downcase == params[:email].downcase
+          @status = {:status => 'true'}
+          break
+        end
+      end
+      if params[:name] != '' and params[:name] != nil
+        if u.name.mb_chars.downcase == params[:name].mb_chars.downcase
+          @status = {:status => 'true'}
+          break
+        end
       end
     end
-    if params[:name] != '' and params[:name] != nil
-      if u.name.mb_chars.downcase == params[:name].mb_chars.downcase
-        @status = {:status => 'true'}
-        break
-      end
-    end
-  end
-	respond_to do |format|
-		format.json { render :json => @status }
-	end
+  	respond_to do |format|
+  		format.json { render :json => @status }
+  	end
   end
   
   def mail_test

@@ -1,5 +1,11 @@
 class AdminToolsController < ApplicationController
 include AdminToolsHelper  
+  def functions_test
+    @title = @header = 'Тест функций'
+    theme = current_user.themes.last
+    ThemesMailer.new_theme_notification(theme, current_user).deliver
+  end
+   
   def hidden_entities #скрытые объекты
   	  if user_type == 'admin' or user_type == 'super_admin'
 		@title = 'Скрытые объекты'

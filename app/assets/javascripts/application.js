@@ -188,12 +188,42 @@ function my_functions()
 	};
 
 function submitMyForm(id, el){
-                            if ($(el).hasClass('disabled') == false)
-                            {
-                                document.getElementById(id).submit();
-                            }
-                                
-                         }
+                                if ($(el).hasClass('disabled') == false)
+                                {
+                                    document.getElementById(id).submit();
+                                }    
+                             }
+function initSearchForm()
+        {
+            
+            //alert(curTopicListDispAttr);
+            var but = $("#searchForm").find(".myBut");
+            but.click(function(){
+                                    //alert($("#searchForm").serialize());
+
+                                        but.find('a').attr('href', "/search?" + $("#searchForm").serialize());
+                                        //goToLink($("#searchForm").serialize());
+                                        //else alert('Введите поисковую фразу.');
+                                });
+            $("#in_themes_and_messages").change(
+                                                        function(){
+                                                                    var curTopicListDispAttr = $("#topicsList").css("display");
+                                                                    if (curTopicListDispAttr == 'none')
+                                                                    {
+                                                                        $('#topicsList').find(":checkbox").each(function(i){
+                                                                                                                                $(this).attr('checked', 'checked');
+                                                                                                                                $(this).removeAttr('disabled');
+                                                                                                                           });
+                                                                    }else $('#topicsList').find(":checkbox").each(function(i){if ($(this).attr('checked') == 'checked')
+                                                                                                                                        
+                                                                                                                                        $(this).removeAttr('checked');
+                                                                                                                                        $(this).attr('disabled','false');
+                                                                                                                                        $(this).click();
+                                                                                                                              });
+                                                                    $('#topicsList').toggle(200);
+
+                                                                  });
+        }
 function scrollControl() //Управление панелькой перемотки
 	{
 		var wH,blSH,sT,sB, botH,topH,t=300; 
@@ -272,10 +302,7 @@ function setLogoImgSize()
 	{
 		$('#top_photo').height($('#top_photo').width()/3);
 	}
-function goToLink(link)
-	{
-		if (link !== '') {document.location.href = link;}
-	};
+
 
 	
 //Слайдер

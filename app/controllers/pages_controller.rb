@@ -5,16 +5,16 @@ include PagesHelper
 #include VideosHelper
 
   def index
-	@title = "Главная"
-	@topSlider = true
-	@add_functions = "myParalaxes();"
-	@events = Event.where(display_area_id: ([1, 3]), occupation: 'Code Artist').order('post_date DESC').limit(5)
-	@albums = PhotoAlbum.where(status_id: 1).order("created_at DESC").limit(5)
-	@videos = Video.all.order('created_at DESC').limit(3)
+	  @title = "Главная"
+	  @topSlider = true
+	  @add_functions = "myParalaxes();"
+	  @events = Event.where(display_area_id: ([1, 3]), occupation: 'Code Artist').order('post_date DESC').limit(5)
+	  @albums = PhotoAlbum.where(status_id: 1).order("created_at DESC").limit(5)
+	  @videos = Video.all.order('created_at DESC').limit(3)
   end
 
   def school
-	@title = "Обучение"
+	  @title = "Обучение"
   end
 
   def equipment
@@ -86,6 +86,30 @@ include PagesHelper
   end
   
   def search
-	  visota_search("Нет ничего лучше борща с грибами, Shit'a Fuck'a", 'all')
+    @header = @title = "Поиск по сайту"
+    @themes = []
+    @messages = []
+    @articles = []
+    @events = []
+    @entity_array = []
+    @add_functions = "initSearchForm();"
+    @entity_on_page = 15
+    makeSearchParameters
+    if @searchHashParams[:search_query].strip != "" and searchParamsIsNotEmpty?
+      @header = @title = "Результат поиска по запросу: \"#{@searchHashParams[:search_query]}\""
+      @searchHashParams[:search_query] = @searchHashParams[:search_query].mb_chars.downcase
+      @paginationLink = build_search_pagination_link
+      if isSearchInTopics?
+        searchResult = search_in_themes
+        @messages = searchResult[:messages]
+        @messages += search_in_old_messages if @searchHashParams[:o_gb]
+        @themes = searchResult[:themes]
+      end
+      @entity_array = @messages + @themes + @articles + @events
+      
+    else
+      flash.now[:alert] = "Введите поисковую фразу" if searchParamsIsNotEmpty? and params[:search_query] == ""
+      flash.now[:alert] = "Не выбраны разделы для поиска" if !searchParamsIsNotEmpty? and params[:search_query] != nil
+    end
   end
 end

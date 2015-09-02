@@ -5,9 +5,13 @@ include TopicsHelper
   # GET /themes
   # GET /themes.json
   def index
-	@title = 'Поиск темы'
-    @themes = Theme.paginate(:page => params[:page], :per_page => 25, :order => 'last_message_date DESC').find_all_by_status_id(([1, 4]))
-	respond_to do |format|
+	@title = @header = 'Все темы'
+    @themes = Theme.paginate(:page => params[:page], :per_page => 25).where(:status_id => [1, 4]).order('last_message_date DESC')
+		@path_array = [
+						        {:name => 'Общение', :link => '/visota_life'},
+						        {:name => @title}
+					        ]
+    respond_to do |format|
       format.html # index.html.erb
       format.json { render :json => @themes }
     end

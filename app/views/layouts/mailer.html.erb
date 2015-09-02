@@ -1,0 +1,43 @@
+<html>
+  <body>
+        <div>
+          <div style = 'background-color:#3084c9; width: 1000px; height: 60px; color:white;'>
+              <img style = 'float: left; padding: 5px 5px 5px 5px;' height = '50px' src = 'http://visota-paraclub.ru/logoImages/logo_white.png'>
+              <div style = 'display: block;position: relative; padding: 10px; float: left;'>самарский<br />парапланерный <br />клуб</div>
+          <div style = 'position: relative; padding: 15px;'>
+              <ul style = 'list-style:none;'>
+                  <li style = 'display: inline-block;'>
+                    <a style = 'color: white;' href = 'http://visota-paraclub.ru'>На главную</a>
+                  </li>
+                  <li style = 'display: inline-block;'>
+                    <a style = 'color: white;'  href = 'http://visota-paraclub.ru/about_us'>О клубе</a>
+                  </li>
+                  <li style = 'display: inline-block;'>
+                    <a style = 'color: white;'  href = 'http://visota-paraclub.ru/school'>Обучение</a>
+                  </li>
+                  <li style = 'display: inline-block;'>
+                    <a style = 'color: white;'  href = 'http://visota-paraclub.ru/media'>Медиа</a>
+                  </li>
+                  <li style = 'display: inline-block;'>
+                    <a style = 'color: white;'  href = 'http://visota-paraclub.ru/contacts'>Контакты</a>
+                  </li>
+                  <li style = 'display: inline-block;'>
+                    <a style = 'color: white;'  href = 'http://visota-paraclub.ru/visota_life'>Общение</a>
+                  </li>
+              </ul>
+          </div>
+          </div>
+          
+          <div style = 'width: 1000px;'>
+            <br />
+            <br />
+            <%= yield %>
+            <br />
+            <br />
+          </div>
+        </div>
+        <div style = 'background-color: grey; width: 1000px; height: 40px; color: white;'>
+            <div style = 'display: block; width: 200px;position: relative; padding: 15px; float: left;'>©СПК "Высота", 2000-<%= Time.now.strftime('%Y') %></div>
+        </div>
+  </body>
+</html>
