@@ -4,24 +4,24 @@ module StepsHelper
 		@curTopImage = topImages.last
 		if controller.controller_name == 'pages' #@page_params[:part_id] == 0 #pages
 			if controller.action_name == 'about_us'
-				@curTopImage = topImages[1]
+				@curTopImage = topImages[0]
 			elsif controller.action_name == 'index'
-				@curTopImage = topImages.first
+				@curTopImage = topImageMainPage
 			elsif controller.action_name == 'equipment'
-				@curTopImage = topImages[3] 
+				@curTopImage = topImages[2] 
 			elsif controller.action_name == 'contacts'
-				@curTopImage = topImages[2]
+				@curTopImage = topImages[1]
 			elsif controller.action_name == 'paragliding'
-				@curTopImage = topImages[4]
+				@curTopImage = topImages[3]
 			elsif controller.action_name == 'school'
-				@curTopImage = topImages[5]
+				@curTopImage = topImages[4]
 			end
 			
 		elsif controller.controller_name == 'topics' #@page_params[:part_id] == 1 #topics
 			@curMenuItem = 'Клубная жизнь'
 			make_signed_step
 		elsif controller.controller_name == 'users' #@page_params[:part_id] == 2 #users
-      @curTopImage = topImages[6]
+      @curTopImage = topImages[5]
 		elsif controller.controller_name == 'photo_albums' #@page_params[:part_id] == 3 #photo_albums
 			@curMenuItem = 'Фото'
 			make_step

@@ -62,10 +62,14 @@ require 'open-uri' #для парсера
 			return '"ВЫСОТА"-Самарский Парапланерный Клуб'
 		end
 	end
+  def topImageMainPage
+    path = "/sliderImages/main_"
+    arr = [1, 2]
+    return {link: "#{path}#{arr.shuffle.first}.jpg", BlockHeight: 531}
+  end
 	def topImages
 		path = "/sliderImages/"
 		arr = [
-				{link: "#{path}1.jpg", BlockHeight: 531},
 				{link: "#{path}2.jpg", BlockHeight: 397},
 				{link: "#{path}3.jpg", BlockHeight: 397},
 				{link: "#{path}4.jpg", BlockHeight: 397},
@@ -76,6 +80,7 @@ require 'open-uri' #для парсера
 			  ]
 		return arr
   end
+  
 
   def primaryMenuItems
 	  [{
