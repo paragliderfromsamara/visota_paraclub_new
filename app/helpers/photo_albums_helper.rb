@@ -104,9 +104,9 @@ module PhotoAlbumsHelper
 		return val
 	end
 	def albumInformation(album)
-		v = "<img src = '/files/camera_g.png' width = '18px' style = 'float: left; padding-left: 5px;'/><span title = 'Фотографий в альбоме' class = 'stat'>#{album.photos.count}</span> "
-		v += "<img src = '/files/answr_g.png' width = '20px' style = 'float: left; padding-left: 5px;'/><span title = 'Комментарии' class = 'stat'>#{album.comments.count.to_s}</span> "
-		v += "<img src = '/files/eye_g.png' width = '20px' style = 'float: left;' /><span title = 'Просмотры' class = 'stat'>0</span> "#{album.views.count}
+		v = "<img src = '/files/camera_g.png' width = '18px' style = 'float: left; padding-left: 5px; padding-right: 4px;'/><span title = 'Фотографий в альбоме' class = 'stat'>#{album.photos.count}</span> "
+		v += "<img src = '/files/answr_g.png' width = '20px' style = 'float: left; padding-left: 5px; padding-right: 4px;'/><span title = 'Комментарии' class = 'stat'>#{album.comments.count.to_s}</span> "
+		v += "<img src = '/files/eye_g.png' width = '20px' style = 'float: left; padding-left: 5px; padding-right: 4px;' /><span title = 'Просмотры' class = 'stat'>0</span> "#{album.views.count}
 		return "#{v}"
 	end
 #album block end

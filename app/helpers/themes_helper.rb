@@ -120,9 +120,9 @@ module ThemesHelper
 		vh = theme.vStatusHash
 		v = ''
 		v += "#{image_tag vh[:img], :height => '20px', :style => 'float: left;', :title => vh[:ru], :id=>'vStatusImg' } " if vh[:value] == 'hidden'
-		v += "#{image_tag h[:img], :height => '20px', :style => 'float: left; padding-left: 5px;', :title => h[:ru], :id=>'statusImg' } "
-		v += "<img src = '/files/answr_g.png' width = '20px' style = 'float: left; padding-left: 5px;'/><span title = 'Сообщений по теме' class = 'stat'>#{theme.visible_messages.count.to_s}</span> "
-		v += "<img src = '/files/eye_g.png' width = '20px' style = 'float: left;' /><span title = 'Просмотры' class = 'stat'>#{theme.views.count}</span> "
+		v += "#{image_tag h[:img], :height => '20px', :style => 'float: left; padding-left: 3px;', :title => h[:ru], :id=>'statusImg' } "
+		v += "<img src = '/files/answr_g.png' width = '20px' style = 'float: left; padding-left: 5px; padding-right: 3px;'/><span title = 'Сообщений по теме' class = 'stat'>#{theme.visible_messages.count.to_s}</span> "
+		v += "<img src = '/files/eye_g.png' width = '20px' style = 'float: left;padding-left: 5px; padding-right: 3px;' /><span title = 'Просмотры' class = 'stat'>#{theme.views.count}</span> "
 		return v
 	end
 	def theme_show_block(showBut)
