@@ -381,7 +381,7 @@ def control_buttons(buttons)
 			if button[:access] == true
 				button[:type] = 'c_loc_li' if button[:selected] == true
 				value += "<a #{button_attrs(button)}><li>"
-				value += "<img src = '/files/#{button[:type]}_b.png' style = 'float: left; padding-right: 6px;' height = '20px' />" if button[:type] != nil and button[:type] != ''
+				value += "<img src = '/files/#{button[:type]}_b.png' style = 'float: left; padding-right: 6px;' height = '18px' />" if button[:type] != nil and button[:type] != ''
 				value += "#{button[:name]}</li></a>"
 			end
 		end
