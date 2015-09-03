@@ -1,6 +1,29 @@
 <div class = 'c_box even'>
     <div class = 'm_1000wh' style = 'z-index: 15;'>
-        <%= top_index_topic_buttons.html_safe %>
+        <div class = 'section group'>
+            <div class = 'col span_4_of_12'>
+                <%= top_index_topic_buttons.html_safe %>
+            </div>
+            <div class = 'col span_3_of_12'>
+            </div>
+            <form id='searchForm'>
+
+            <div class = 'col span_4_of_12' style = 'padding-top: 5px;'>
+                        
+                            <input type = 'hidden' name = 'in_themes_and_messages' value = 'on'/>
+                            <% topics = Topic.all %>
+                            <% topics.each do |topic| %>
+                                <% h = "t_#{topic.id}".to_sym %>
+                                <input type = 'hidden' name = 't_<%= topic.id.to_s %>' value = 'on'/>
+                            <% end %>
+                            <input type = 'hidden' value = 'on' name = 'o_gb' />
+                                    <input id = 'search_query' type='text' name = 'search_query' placeholder = 'Что ищете?' class = 'sQuery' />      
+            </div>
+            <div class = 'col span_1_of_12' style = 'padding-top: 5px;'> 
+                <%= myLinkButton('искать', '/search').html_safe %>
+            </div>
+            </form>
+        </div>
     </div>
 </div>
 <div class = 'c_box odd'>

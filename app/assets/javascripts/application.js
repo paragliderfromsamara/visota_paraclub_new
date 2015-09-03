@@ -198,6 +198,17 @@ function initSearchForm()
             
             //alert(curTopicListDispAttr);
             var but = $("#searchForm").find(".myBut");
+            if ($("#in_themes_and_messages").attr('checked') !== 'checked')
+            {
+                $('#topicsList').find(":checkbox").each(function(i){$(this).attr('disabled','false');});
+            }
+            $("#searchFormContainer").mouseleave(function(){
+                                                            var curTopicListDispAttr = $("#topicsList").css("display");
+                                                            if (curTopicListDispAttr != 'none') $("#topicsList").hide(100);
+                                                });
+        
+                                                $("#t_and_msg_s").mousemove(function(){ var curTopicListDispAttr = $("#topicsList").css("display");
+                                                            if (curTopicListDispAttr == 'none') $("#topicsList").show(100);});
             but.click(function(){
                                     //alert($("#searchForm").serialize());
 
@@ -208,19 +219,20 @@ function initSearchForm()
             $("#in_themes_and_messages").change(
                                                         function(){
                                                                     var curTopicListDispAttr = $("#topicsList").css("display");
-                                                                    if (curTopicListDispAttr == 'none')
+                                                                    
+                                                                    
+                                                                    if ($(this).attr('checked') !== 'checked')
                                                                     {
+                                                                        $(this).attr('checked', 'checked');
                                                                         $('#topicsList').find(":checkbox").each(function(i){
                                                                                                                                 $(this).attr('checked', 'checked');
                                                                                                                                 $(this).removeAttr('disabled');
                                                                                                                            });
-                                                                    }else $('#topicsList').find(":checkbox").each(function(i){if ($(this).attr('checked') == 'checked')
-                                                                                                                                        
-                                                                                                                                        $(this).removeAttr('checked');
-                                                                                                                                        $(this).attr('disabled','false');
-                                                                                                                                        $(this).click();
-                                                                                                                              });
-                                                                    $('#topicsList').toggle(200);
+                                                                    }else {
+                                                                        $(this).removeAttr('checked');
+                                                                        $('#topicsList').find(":checkbox").each(function(i){if ($(this).attr('checked') == 'checked') $(this).attr('disabled','false');});
+                                                                    }
+                                                                    //$('#topicsList').toggle(200);
 
                                                                   });
         }

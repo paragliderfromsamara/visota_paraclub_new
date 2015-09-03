@@ -6,6 +6,7 @@ include EventsHelper
   def index
     @topics = Topic.all
 	  @title = @header = "Общение"
+    @add_functions = "initSearchForm();"
     respond_to do |format|
 	  format.html# index.html.erb
       format.json { render :json => @topics }

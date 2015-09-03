@@ -682,8 +682,8 @@ def make_word_arr(txt)
 	return arr
 end
 
-def search_in_albums(words)
-	
+def search_in_events
+	#@events = Event.
 end
 
 def search_in_old_messages
