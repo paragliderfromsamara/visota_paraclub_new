@@ -197,10 +197,15 @@ mount_uploader :photo, UserPhotoUploader
 	end
   end
   #управление черновиками тем и сообщений
-  def message_draft #выдает, а если необходимо создает черновик сообщения
-	draft = Message.find_by(user_id: self.id, status_id: 0)
-	draft = self.messages.create(:status_id => 0) if draft == nil 
-	return draft
+  def theme_message_draft(theme) #выдает, а если необходимо создает черновик сообщения
+	  draft = Message.find_by(user_id: self.id, status_id: 0, theme_id: theme.id)
+	  draft = self.messages.create(:status_id => 0, theme_id: theme.id) if draft == nil 
+	  return draft
+  end
+  def album_message_draft(album)
+    draft = Message.find_by(user_id: self.id, status_id: 0, photo_album_id: album.id)
+	  draft = self.messages.create(:status_id => 0, album_id: album.id) if draft == nil 
+	  return draft
   end
   def theme_draft #выдает, а если необходимо создает черновик темы
 	draft = Theme.find_by(user_id: self.id, status_id: 0)

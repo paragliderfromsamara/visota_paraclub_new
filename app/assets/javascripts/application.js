@@ -300,7 +300,7 @@ function bottomControl()
 		var sum_h, window_h, new_middle_h;
 		sum_h = $(document).height();
 		window_h = $(window).height();
-        $("#test").text($(document).height());
+        //$("#test").text($(document).height());
 		if (sum_h < window_h)
 		{
 			new_middle_h = window_h - $("#top").outerHeight(true) - $("#bottom").outerHeight(true);

@@ -43,11 +43,11 @@ class Message < ActiveRecord::Base
   end
   validate :validation_content
   def validation_content
-		if (self.photos == [] || self.photos == nil) and (self.attachment_files == [] || self.attachment_files == nil) and self.status_id != 0 and self.user.message_draft.photos == []
+		if (self.photos == [] and self.photos == nil) and (self.attachment_files == [] and self.attachment_files == nil) and self.status_id != 0 and self.user.message_draft.photos == []
 			errors.add(:content, "Содержимое сообщения не может быть пустым...") if self.content.strip == ''
 		end
 		if content != nil and content != ''
-			errors.add(:content, "Содержимое не может быть длиннее 15000 символов") if content.mb_chars.size > 20000
+			errors.add(:content, "Содержимое не может быть длиннее 150000 символов") if content.mb_chars.size > 200000
 		end
   end
   

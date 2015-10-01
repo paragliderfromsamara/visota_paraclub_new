@@ -11,9 +11,9 @@
 		<% if @video != nil %>
 			<%= video_show_block.html_safe %>
 		<% end %>
-		<%= newMessageFormInitial('none', '#new_message').html_safe %>
+		<%= newMessageFormInitial.html_safe %>
 		<% i=1 %>
-		<%= message_theme_box(@message, true, i).html_safe %>
+		<%= message_theme_box(@message, (@message.status_id > 0 && params[:preview_mode] != 'true'), i).html_safe %>
 		<% if @messages != [] %>
 			<% @messages.each do |message| %>
 				<% i+=1 %>

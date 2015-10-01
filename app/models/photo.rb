@@ -189,10 +189,10 @@ end
   end
   
   def set_as_on_deleted_entity #Пометить как прикреплённый к удалённому объекту
-	self.update_attribute(:status_id => 3)
+	self.update_attribute(:status_id, 3)
 	if messages != []
 		messages.each do |msg|
-			msg.update_attributes(:status_id => 3)
+			msg.update_attributes(:status_id=> 3)
 		end
 	end
   end

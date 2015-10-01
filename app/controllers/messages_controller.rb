@@ -173,57 +173,65 @@ class MessagesController < ApplicationController
   # PUT /messages/1.json
   def update
     @message = Message.find(params[:id])
-	if userCanEditMsg?(@message)
-		params[:message][:updater_id] = current_user.id if @message.status == 1
-		respond_to do |format|
-		  if @message.update_attributes(params[:message])
-			link = "#{theme_path(@message.theme_id)}#msg_#{@message.id}" if @message.theme != nil
-			link = "#{video_path(@message.video_id)}#msg_#{@message.id}" if @message.video != nil
-			if params[:photo_editions]!= nil and params[:photo_editions] != []
-				photos_params = params[:photo_editions][:photos]
-				photos_params.each do |x|
-					photo = Photo.find_by_id(x[1][:id])
-					if photo != nil
-						if photo.description != x[1][:description]
-							photo.update_attribute(:description, x[1][:description])
-						end
-					end
-				end
-			end
-			#link = message_path(@message.id)
-			#link = "#{theme_path(@message.theme_id)}#msg_#{@message.id}" if @message.theme != nil
-			#link = "#{video_path(@message.video_id)}" if @message.video != nil
-			#link = "#{photo_path(@message.photo_id)}" if @message.photo != nil
-			format.html { redirect_to link, :notice => 'Сообщение успешно обновлено.' }
-			format.json { head :no_content }
-		  else
-			current_user.message_draft.clean
-			@message_to = Message.find_by(id: params[:message][:message_id], status_id: 1)
-			@theme = Theme.find_by(id: @message.theme_id, status_id: 1)
-			@photo = Photo.find_by(id: @message.photo_id, status_id: 1)
-			@video = Video.find_by(id: @message.video_id)
-			@add_functions = "initMessageForm(#{@message.id.to_s}, '.edit_message');" #включаем функцию отрисовки формы
-			if @theme != nil
-				@title = 'Изменение сообщения'
-				@topic = Topic.find_by(id: @message.topic_id)
-				@path_array = [
-								{:name => 'Клубная жизнь', :link => '/visota_life'},
-								{:name => @theme.topic.name, :link => topic_path(@theme.topic)},
-								{:name => @theme.name, :link => theme_path(@theme)},
-								{:name => @title, :link => '#'}
-							  ]
-			end
-			if @photo != nil
-			end
-			if @video != nil
-			end				
-			format.html { render :action => "edit" }
-			format.json { render :json => @message.errors, :status => :unprocessable_entity }
-		  end
-		end
-	else
-		redirect_to "/404"
-	end
+
+  	if userCanEditMsg?(@message)
+  		params[:message][:updater_id] = current_user.id if @message.status_id == 1
+      old_status_id = @message.status_id
+      new_status_id = 0
+      new_status_id = params[:message][:status_id].to_i if params[:message][:status_id] != nil
+      noticeText = (new_status_id > old_status_id)? ("Сообщение успешно добавлено."):("Сообщение успешно обновлено.")
+  		respond_to do |format|
+  		  if @message.update_attributes(params[:message])
+  			link = "#{theme_path(@message.theme_id)}#msg_#{@message.id}" if @message.theme != nil
+  			link = "#{video_path(@message.video_id)}#msg_#{@message.id}" if @message.video != nil
+  			if params[:photo_editions]!= nil and params[:photo_editions] != []
+  				photos_params = params[:photo_editions][:photos]
+  				photos_params.each do |x|
+  					photo = Photo.find_by_id(x[1][:id])
+  					if photo != nil
+  						if photo.description != x[1][:description]
+  							photo.update_attribute(:description, x[1][:description])
+  						end
+  					end
+  				end
+  			end
+        jsonData = {
+                    content: @message.content_html
+                   }
+  			#link = message_path(@message.id)
+  			#link = "#{theme_path(@message.theme_id)}#msg_#{@message.id}" if @message.theme != nil
+  			#link = "#{video_path(@message.video_id)}" if @message.video != nil
+  			#link = "#{photo_path(@message.photo_id)}" if @message.photo != nil
+  			format.html { redirect_to link, :notice => noticeText}
+  			format.json { render :json => jsonData }
+  		  else
+  			current_user.message_draft.clean
+  			@message_to = Message.find_by(id: params[:message][:message_id], status_id: 1)
+  			@theme = Theme.find_by(id: @message.theme_id, status_id: 1)
+  			@photo = Photo.find_by(id: @message.photo_id, status_id: 1)
+  			@video = Video.find_by(id: @message.video_id)
+  			@add_functions = "initMessageForm(#{@message.id.to_s}, '.edit_message');" #включаем функцию отрисовки формы
+  			if @theme != nil
+  				@title = 'Изменение сообщения'
+  				@topic = Topic.find_by(id: @message.topic_id)
+  				@path_array = [
+  								{:name => 'Клубная жизнь', :link => '/visota_life'},
+  								{:name => @theme.topic.name, :link => topic_path(@theme.topic)},
+  								{:name => @theme.name, :link => theme_path(@theme)},
+  								{:name => @title, :link => '#'}
+  							  ]
+  			end
+  			if @photo != nil
+  			end
+  			if @video != nil
+  			end				
+  			format.html { render :action => "edit" }
+  			format.json { render :json => @message.errors, :status => :unprocessable_entity }
+  		  end
+  		end
+  	else
+  		redirect_to "/404"
+  	end
   end
 
   # DELETE /messages/1

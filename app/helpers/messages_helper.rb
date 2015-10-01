@@ -58,7 +58,6 @@ module MessagesHelper
 							#{message_user_row(message)}
 							<br />
 								#{author_string(message)}
-							#{("<br />#{link_to 'Редактировать фото', "/edit_photos?e=message&e_id=#{message.id}", :class => 'b_link'}") if message.user == current_user and message.photos != []}
 						</td>
 						<td>
 							<div class = 'central_field' style = 'width: 95%;'>
@@ -121,22 +120,19 @@ module MessagesHelper
 		end
 	end
 	#new_message_init
-	def newMessageFormInitial(display, formClass)
+	def newMessageFormInitial
 		form = ''
 		flag = false
 		type = 'comment'
+    formId = ""
 		if (@theme != nil || @photo != nil || @album != nil || @video != nil) && (user_type != 'bunned' and user_type != 'guest')
-			@tmpMessage = current_user.message_draft
-			if @theme != nil
+			if @theme != nil    
 				if userCanCreateMsgInTheme?(@theme)
+          @tmpMessage = current_user.theme_message_draft(@theme)
 					@alterReturnTo = theme_path(@theme)
 					flag = true
 					type = 'message' if @photo == nil
 					type = 'comment' if @photo != nil
-					if @tmpMessage.theme_id != @theme.id and @tmpMessage.topic_id != @theme.topic_id
-						@tmpMessage.clean
-						@tmpMessage.update_attributes(:theme_id => @theme.id, :topic_id => @topic_id)
-					end
 				end
 			end
 			if @video != nil 
@@ -155,13 +151,13 @@ module MessagesHelper
 					chAlbumFlag = false
 					chPhotoFlag = false
 					@alterReturnTo = photo_album_path(@album)
+          @tmpMessage = current_user.album_message_draft(@album)
 					if @photo != nil
 						@alterReturnTo = photo_path(@photo)
 						chPhotoFlag = true if @tmpMessage.photo_id != @photo.id
 					end
 					chAlbumFlag = true if @tmpMessage.photo_album_id != @album.id
 					if chAlbumFlag || chPhotoFlag
-						@tmpMessage.clean
 						if chAlbumFlag and chPhotoFlag
 							@tmpMessage.update_attributes(:photo_id => @photo.id, :photo_album_id => @photo.photo_album_id)
 						elsif chAlbumFlag and !chPhotoFlag
@@ -174,28 +170,27 @@ module MessagesHelper
 				flag = true
 			end
 		end
+    if @formMessage != nil
+      @tmpMessage = @formMessage
+    end
 		flag &= userCanCreateMsg?
 		if flag == true
-			ent = @tmpMessage
-			if @formMessage == nil
-				@formMessage = Message.new
-			else
-				ent = @formMessage
-			end
-			@add_functions = (@add_functions == nil)? "initMessageForm(#{ent.id.to_s}, '#{formClass}', '#{type}');":@add_functions+"initMessageForm(#{ent.id.to_s}, '#{formClass}', '#{type}');"
-			form = "<div style = 'display: #{display};' id = 'newMsgForm'>#{buildMsgForm(type)}</div>"
+      formClass = "edit_message"
+			@add_functions = (@add_functions == nil)? "initMessageForm(#{@tmpMessage.id.to_s}, '.#{formClass}', '#{type}');":@add_functions+"initMessageForm(#{@tmpMessage.id.to_s}, '.#{formClass}', '#{type}');"
+			form = "<div id = 'newMsgForm'>#{buildMsgForm(type, formClass)}</div>"
 			p = {:tContent => form, :classLvl_1 => 'mForm'}
 			return c_box_block(p)
 		else
 			return ''
 		end
 	end
-	def buildMsgForm(type)
+	def buildMsgForm(type, formClass)
 		#отрисовывается с помощью js функции initMessageForm(msg_id)
-		form_for(@formMessage, :multipart => 'true') do |f|
+		form_for(@tmpMessage, :multipart => 'true') do |f|
 		"
 				<a name = 'add_message'></a>
-        <div style = 'display: none;'>#{ f.file_field :uploaded_photos, :multiple => 'true' if type != 'comment'}</div>
+        <div style = 'display: none;'>
+        #{ f.file_field :uploaded_photos, :multiple => 'true' if type != 'comment'}</div>
 				#{ hidden_field :info, :return_to_link, :value => getMsgPathLinkAfterSave}
 				#{ f.hidden_field :message_id, :value => @message_to.id if @message_to != nil }
 				#{ f.hidden_field :theme_id, :value => @theme.id if @theme != nil}
@@ -216,17 +211,19 @@ module MessagesHelper
 											<td id = 'formMenus'>
 											</td>
 										</tr>
+                    <tr>
+                      <td>
+    									#{ f.text_area :content, :cols => 115, :rows => '7', :defaultRows => '7', :placeholder => "#{(type == 'comment')? "Текст комментария":"Текст сообщения"}", :class=> 't_area', :style => 'width:980px; padding: 10px;', value: @tmpMessage.content}
+                      </td>
+                    </tr>
 									</table>
-									#{ f.label :content, 'Текст сообщения' if type == 'message'}#{ f.label :content, 'Комментарий' if type == 'comment'}<br />
-									#{ f.text_area :content, :cols => 115, :rows => '7', :defaultRows => '7', :class=> 't_area', :style => 'margin-right:auto; margin-left:auto; display: block;'}
+									
 									<div id = 'answr_to_str' style = 'display:none;'></div>
                   <div><p class = 'istring #{@content_f_color if @content_f_color != nil}' id = 'cLength'><span id = 'txtL'></span> <span id = 'txtErr'>#{@content_error if @content_error != nil}</span><span id = 'txtErrSrv'>#{@content_error if @content_error != nil}</span></p></div>
-								<div class='actions'>
-									#{ f.submit 'Отправить', :class=>'butt' }
+								<div class='actions tb-pad-s'>           
+									#{ mySubmitButton("Отправить", "#{formClass}_#{@tmpMessage.id}")}
 								</div>
-								<div id = 'editorPreview' class = 'mText' style = 'position: relative; width: 100%; margin-top: 20px; margin-bottom: 20px; '>
-								
-								</div>
+
 							</td>
 							#{"
 							<tr>
@@ -242,6 +239,10 @@ module MessagesHelper
 					</table>
 					<br />
 				</div>
+				<div id = 'editorPreview' class = 'mText' style = 'position: relative; width: 100%; margin-top: 20px; margin-bottom: 20px; '>
+				
+				</div>
+        <br />
 			".html_safe
 		end
 	end

@@ -9,7 +9,7 @@ function initReportForm(art_id, formName)
 	f.aButList = [1, 0];	
 	f.getPhsToForm();
 	f.photosUploader();
-	f.contentFieldMaxLength = 15000;
+	f.contentFieldMaxLength = 150000;
 	f.contentFieldMinLength = 150;
 	f.parentElID = '#articleForm'; 
 	f.shortContentErr = 'Минимально допустимое количество знаков статьи ' + f.contentFieldMinLength;
@@ -73,7 +73,7 @@ function initAccidentForm(art_id, formName)
 	//f.aButList = [];	
 	f.getPhsToForm();
 	f.photosUploader();
-	f.contentFieldMaxLength = 15000;
+	f.contentFieldMaxLength = 150000;
 	f.contentFieldMinLength = 75;
 	f.parentElID = '#articleForm'; 
 	f.shortContentErr = 'Минимально допустимое количество знаков статьи ' + f.contentFieldMinLength;
@@ -108,7 +108,7 @@ function initThemeForm(th_id, formName)
 	form.initPanel();
 	form.getPhsToForm();
 	form.photosUploader();
-	form.contentFieldMaxLength = 15000;
+	form.contentFieldMaxLength = 150000;
 	form.contentFieldMinLength = minContentLength;
 	form.parentElID = '#articleForm'; 
 	form.shortContentErr = 'Минимально допустимое количество знаков темы ' + form.contentFieldMinLength;
@@ -139,7 +139,7 @@ function initMessageForm(msg_id, formName, msgType)
 	f = new myForm('message', msg_id, formName);
 	f.parentElID = '#newMsgForm';
 	f.aButList = [0, 2];
-	f.contentFieldMaxLength = 15000;
+	f.contentFieldMaxLength = 150000;
 	f.contentFieldMinLength = minContentLength;
 	f.contentField = f.formElement.find('#message_content');
 	f.shortContentErr = 'Сообщение не должно быть пустым';
@@ -151,7 +151,7 @@ function initMessageForm(msg_id, formName, msgType)
 	f.initPanel();
 	f.photosUploader();
 	f.getPhsToForm();
-	
+	f.submitButt.bind("mouseup", function(e){if(!f.submitButt.hasClass("disabled")) {f.formElement.append("<input type = 'hidden' name = 'message[status_id]' value = '1' />")};});
 	setInterval(function(){
 							var cFlag, iFlag;
 							//f.getAlignArray();
@@ -162,8 +162,8 @@ function initMessageForm(msg_id, formName, msgType)
 							if (f.imagesLength>0){f.contentFieldMinLength = 0;}else{f.contentFieldMinLength = minContentLength;}
 							if (cFlag || iFlag)
 							{
-								f.formElement.find('.butt').removeAttr('disabled');
-							}else{f.formElement.find('.butt').attr('disabled', 'true');};
+								f.submitButt.removeClass('disabled');
+							}else{f.submitButt.addClass('disabled');};
 						  }, 300);
                           
 	$('a#answer_but').click(function() {
@@ -219,6 +219,7 @@ function initEventForm(id, formName)
 	f = new myForm('event', id, formName);
 	f.contentField = f.formElement.find('#event_content');
 	f.nameField = f.formElement.find('#event_title');
+
 	f.contentFieldMaxLength = 1000;
     f.contentFieldMinLength = 20;
 	f.nameFieldMaxLength = 150;
@@ -330,6 +331,7 @@ function myForm(type, entityID, formName)
 	this.type = type;
 	this.entityID = entityID;
 	this.formElement = $(formName);
+    this.submitButt = this.formElement.find(formName.replace(".", "#") + "_" + entityID + "_button");
 	this.tEditor = null;
 	this.parentElID = 'none'; 
 	this.imgAddr = '/files/';
@@ -1068,6 +1070,7 @@ function textEditor(el)
 	{
 		this.formElement = el.formElement;
 		this.tArea = el.contentField;
+        this.el = el;
 		this.imgAddr = '/files/';
 		this.tAlignMenus = ['lAlign', 'cAlign', 'rAlign', 'quote', 'fNum'];
 		this.tAlignMenusDescription = ['Выравнивание по левому краю', 'Выравнивание по центру', 'Выравнивание по правому краю', 'Цитирование', 'Нумерованный список'];
@@ -1192,62 +1195,19 @@ function textEditor(el)
 		}
 		this.drawCode = function()
 		{
-			var str=$.trim(this.tArea.val());
-			var names = this.tAlignMenus;
-			var b = new bbCodeObj('lAlign', 'none')
-			var c;
-			
-			if (str.length > 0)
-			{
-				
-				str = str.replace(/https?:\/\/(www.)?(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/watch\?feature=(player_detailpage|player_embedded)&amp;v=)([A-Za-z0-9_-]*)(\&\S+)?(\?\S+)?/g, '<br /><div id = "video" class = "central_field" style = "width: 640px;"><iframe width="640" height="480" src="//www.youtube.com/embed/$4" frameborder="0" allowfullscreen></iframe></div><br />');
-				for(var i=1; i< names.length; i++)
-				{
-					b.name = names[i];
-					c = b.getClassName();
-					j = 0;
-					if (c !== 'none' && c !== undefined)
-					{
-						if (b.name != 'fNum')
-						{
-						str = str.replace(new RegExp("\\["+names[i]+"\\]",'g'), '<div class = '+ c +'><p>');
-						str = str.replace(new RegExp("\\[\/"+names[i]+"\\]",'g'), '</p></div>');
-						}
-						else if(b.name == 'fNum') {
-							var coords = b.getTagFromStr(str);
-							if (coords.start > -1 && coords.end > -1)
-							{
-								do
-								{
-									var t1 = (coords.start == 0)? "":str.substring(0, coords.start);
-									var tCur = str.substring(coords.start, coords.end);
-									var t2 = str.substring(coords.end+b.tagName().end.length, str.length);
+            var url = "/"+this.el.type+"s/"+this.el.entityID;
+            var arr = '';
+            arr = this.formElement.serialize();
+            $.ajax(
+                    {
+                        url: url,
+                        dataType: "json",
+                        type: "POST",
+                        data: arr,
+                        success: function(data){$("#editorPreview").load(url + "?preview_mode=true #m_" + el.entityID);}
+                    }
+                  );
 
-									tCur = tCur.replace(/^(\d+)\.\s(.*)/gm, '<li type = "1" value = $1> $2</li>');
-									tCur = tCur.replace(new RegExp("\n",'g'), '');
-									tCur = tCur.replace(new RegExp("\\["+names[i]+"\\]",'g'), '<ul class = "'+c+'">');
-									tCur = tCur.replace(new RegExp("\\[/"+names[i]+"\\]",'g'), '</ul>');
-									//tCur = tCur.replace(/\d\.\s(.*)\n/g, '<li type = "1"> $1</li>');
-									//str = str.replace(new RegExp("\n",'g'), '');
-									str = t1+tCur+t2;
-									coords = b.getTagFromStr(str);
-								}while(coords.start > -1 && coords.end > -1);
-							}
-							
-						}
-						
-					} 
-				}
-				for (var i=1; i<35; i++)
-				{
-					str = str.replace(new RegExp('\\*sm'+i+'\\*', 'g'), '<img src = "/smiles/'+i+'.gif">');
-				}
-				
-				str = str.replace(new RegExp("\n",'g'), '<br />');
-				
-			}
-			
-			this.formElement.find('#editorPreview').html(str);		
 		}
 		function initAPanel(e) //инициализация панели отступов
 		{
