@@ -62,7 +62,8 @@ module PhotoAlbumsHelper
 		value = ''
 		photos = []
 		width = (pathName == 'visota_life')? '510px':'903px'
-		if pathName == 'index'
+		allPhotosCount = album.photos.count 
+    if pathName == 'index'
 			photos = album.index_photos
 		elsif pathName == 'show'
 			photos = album.photos
@@ -75,6 +76,7 @@ module PhotoAlbumsHelper
 				value += "<a href = '#{photo_path(p)}' title = '#{p.description}' alt = '#{photo_path(p)}' ><div class = 'inline-blocks inline-thumb'><div class = 'central_field' style = 'width: 250px; margin-top: 15px;'>#{image_tag p.link.thumb, :width => '250px'}</div><div style = 'width: 100px; height: 23px; position: absolute; bottom: 5px; right: 15px;'>#{photoInfo(p)}</div></div></a>" if pathName == 'show'
 			end
 			value = "<div class = 'central_field' style = 'width: #{width}; padding-top: 10px; padding-bottom:10px;'>#{value}</div>"
+      value += "<br /><p class = 'istring_m medium-opacity'>показано #{photos.count} из #{allPhotosCount}</p>" if allPhotosCount > photos.count
 		end
 		return value
 	end

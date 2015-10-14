@@ -110,8 +110,6 @@ var allowArrows = true;
 function my_functions()
 	{
 		var enteredLi, leftLi; //для управления главным меню
-        var wbFrst = new waitbar('video_wait_check');
-        wbFrst.startInter();
 		setInterval(function(){bottomControl()}, 500);
 		Dropzone.autoDiscover = false;
 		//initNavWrapper();
@@ -260,35 +258,26 @@ function scrollControl() //Управление панелькой перемо�
 
 function waitbar(id)
     {
+        var wl = $("#" + id);
+        var tNull = 100;
+        var loopTime = wl.find(".wl-item").length*tNull + tNull;
         this.curVisible = 0;
         this.interval = null;
-        this.startInter = function()
-        {
-            this.interval = setInterval(function() 
-            {
-                for(var i=1; i<4; i++)
-                {
-                    if(i==1)
-                    {
-                        $('#'+id).find('#wb3').hide();
-                        $('#'+id).find('#wb1').show();
-                        $('#'+id).find('#wb2').hide();
-                       
-                    } else if(i==2)
-                    {
-                        $('#'+id).find('#wb1').hide();
-                        $('#'+id).find('#wb2').show();
-                        $('#'+id).find('#wb3').hide();
-                    }else if(i==3)
-                    {
-                        $('#'+id).find('#wb2').hide();
-                        $('#'+id).find('#wb3').show();
-                        $('#'+id).find('#wb1').hide();
-                    }
-                    window.setTimeout(500);
-                }
-            }, 1000);
-        }
+        this.startInterval = function () {this.interval = setInterval(function() {
+    							var t = tNull;
+    							wl.find(".wl-item").css("background-color", "grey");
+							
+    							wl.find(".wl-item").each(function(i){
+    																	var el = $(this);
+    																	setTimeout(
+    																				function() {
+    																							el.css("background-color", "black");
+    																						   }, t
+    																			  );
+    																	t += tNull;
+    															   });
+    						   }, loopTime);}
+        
         this.stopInterval = function()
         {
             if (this.interval !== null) clearInterval(this.interval);
@@ -777,10 +766,9 @@ function myPhotoPage()
 function setPhotoSizeByScreen(width, height)
 {
    var wHeight =  $(window).height();
-   var pagHeight = $("#photoPagination").outerHeight(true);
+   var pagHeight = $("#photoPagination").outerHeight(true) + $("#topPhotoPanel").outerHeight(true);
    var newHeight = wHeight-pagHeight;
    var iconsTop = 200;
-   $("#test").text(allowArrows);
    $(document).keyup(
        function(event){
            if (allowArrows == true)

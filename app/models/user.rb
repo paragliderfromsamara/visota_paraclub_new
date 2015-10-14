@@ -203,14 +203,27 @@ mount_uploader :photo, UserPhotoUploader
 	  return draft
   end
   def album_message_draft(album)
-    draft = Message.find_by(user_id: self.id, status_id: 0, photo_album_id: album.id)
-	  draft = self.messages.create(:status_id => 0, album_id: album.id) if draft == nil 
+    draft = Message.find_by(user_id: self.id, status_id: 0, photo_album_id: !nil)
+    if draft != nil
+      draft.clean
+      draft.update_attribute(:photo_id, photo.id)
+    end
+	  draft = self.messages.create(:status_id => 0, photo_album_id: album.id) if draft == nil 
 	  return draft
   end
-  def theme_draft #выдает, а если необходимо создает черновик темы
-	draft = Theme.find_by(user_id: self.id, status_id: 0)
+  def photo_comment_draft(photo)
+    draft = Message.find_by(user_id: self.id, status_id: 0, photo_id: !nil)
+    if draft != nil
+      draft.clean
+      draft.update_attribute(:photo_id, photo.id)
+    end
+	  draft = self.messages.create(:status_id => 0, photo_id: photo.id) if draft == nil 
+	  return draft
+  end
+  def theme_draft(topic) #выдает, а если необходимо создает черновик темы
+	draft = Theme.find_by(user_id: self.id, status_id: 0, topic_id: topic.id)
 	if draft == nil
-		draft = Theme.new(:user_id => self.id, :status_id => 0)# if draft == nil 
+		draft = Theme.new(:user_id => self.id, :status_id => 0, topic_id: topic.id)# if draft == nil 
 		draft.save(:validate => false) #отключаем проверку длины названия темы
 	end
 	return draft
@@ -254,9 +267,9 @@ mount_uploader :photo, UserPhotoUploader
 				   :on => :create
 
   validates :email,  :presence => {:message => "Поле 'E-mail' не должно быть пустым"},
-				     :format => {:with => email_regex, :message => "Поле 'E-mail' не соответсвует формату адреса электронной почты 'user@mail-provider.ru'"},
-				     :uniqueness => {:case_sensitive => false, :message => "E-mail уже используется"},
-					 :allow_nil => true
+				    :format => {:with => email_regex, :message => "Поле 'E-mail' не соответсвует формату адреса электронной почты 'user@mail-provider.ru'"},
+				    :uniqueness => {:case_sensitive => false, :message => "E-mail уже используется"},
+		  			:allow_nil => true
   
   validate :old_password_exists, :on => :update
   validate :current_password_check, :on => :update

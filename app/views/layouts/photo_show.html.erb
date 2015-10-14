@@ -9,11 +9,47 @@
   <script type = 'text/javascript'>$(document).ready(function(){my_functions(); wheatherPanel(); <%= js_functions %> myPhotoPage();});</script>
 </head>
 <body>
+    <div style = "position: relative; width: 100%; height: 65px; background-color: black;" id = "topPhotoPanel">
+        <div  class = "m_1000wh">
+            <div class = "section group">
+                <div style = "margin:0; padding:0;" class = "col span_2_of_12">
+                    <a href = "/index" title = "На главную"><img height = "55px" src = "/logoimages/white_logo_ns.png"/></a>
+                </div>
+                <div id = "mmPhPath" style = "margin:0; padding:0;" class = "col span_8_of_12">
+                    <%= topMainMenu.html_safe %>
+                </div>
+                <div id = "mmPhPath" style = "margin:0; padding:0;" class = "col span_2_of_12">
+                    <ul>
+                        <a href = "<%= @photo.parent[:parent_link] %>">
+                            <li>
+                                <%= @photo.parent[:link_name] %>
+                            </li>
+                        </a>
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
+    </div>
 	<div id = 'phContent'>
 		<%= yield %>
 	</div>
 	<div id = 'bottom' style = 'width: 100%;'>
 		<div id = 'test'></div><br />
+	</div>
+	<div id = 'footer'>
+		<div class = 'm_1000wh'  style = 'top: 30%;'>
+			<div class = 'section group'>
+				<div class = 'col span_9_of_12'>
+					<div id = 'bottomMenu'>
+					  <%= bottomMainMenu.html_safe %>
+					</div>
+				</div>
+				<div class = 'col span_3_of_12'>
+				   <p id = 'bottomClubName'> © СПК "Высота", 2000-<%= Time.now.year %></p>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

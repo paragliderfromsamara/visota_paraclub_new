@@ -71,7 +71,7 @@ class Theme < ActiveRecord::Base
 	return true if self.status_id != 0
   end
   def has_attachments_and_photos?	
-	if (self.photos == [] || self.photos == nil) and (self.attachment_files == [] || self.attachment_files == nil)and status_id != 0 and self.user.theme_draft.photos == []
+	if (self.photos == [] || self.photos == nil) and (self.attachment_files == [] || self.attachment_files == nil)and status_id != 0
 		return true
 	else
 		return true if self.content.strip.length > 0

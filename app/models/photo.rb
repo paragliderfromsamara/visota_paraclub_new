@@ -29,13 +29,13 @@ class Photo < ActiveRecord::Base
   end
   
   def parent #{:parent_type, :parent_link, :parent_name}
-	type = {:published_in => '', :parent_type => '', :parent_link => '', :parent_name => '', :title_name => ''}
-	type = {:published_in => 'в материале', :parent_type => 'Материал', :parent_link => "/articles/#{article.id.to_s}", :parent_name => article.name, :title_name => "#{article.type_name_single} '#{article.name}'"} if article != nil
-	type = {:published_in => 'в альбоме', :parent_type => 'Альбом', :parent_link => "/photo_albums/#{photo_album.id.to_s}", :parent_name => photo_album.name, :title_name => "Фотоальбом '#{photo_album.name}'"} if photo_album != nil
+	type = {:published_in => '', :parent_type => '', :parent_link => '', :parent_name => '', :title_name => '', :link_name => ""}
+	type = {:published_in => 'в материале', :parent_type => 'Материал', :parent_link => "/articles/#{article.id.to_s}", :parent_name => article.name, :title_name => "#{article.type_name_single} '#{article.name}'", :link_name => "К материалу"} if article != nil
+	type = {:published_in => 'в альбоме', :parent_type => 'Альбом', :parent_link => "/photo_albums/#{photo_album.id.to_s}", :parent_name => photo_album.name, :title_name => "Фотоальбом '#{photo_album.name}'", :link_name => "К альбому"} if photo_album != nil
 	#type = {:published_in => 'в новости', :parent_type => 'Новость', :parent_link => "/events/#{event.id.to_s}", :parent_name => event.title, :title_name => "Новость '#{event.title}'"} if event != nil and photo_album == nil
-	type = {:published_in => 'в теме', :parent_type => 'Тема', :parent_link => "/themes/#{theme.id.to_s}", :parent_name => theme.name, :title_name => "Тема '#{theme.name}'"} if theme != nil
+	type = {:published_in => 'в теме', :parent_type => 'Тема', :parent_link => "/themes/#{theme.id.to_s}", :parent_name => theme.name, :title_name => "Тема '#{theme.name}'", :link_name => "К теме"} if theme != nil
 	if message != nil
-		type = {:published_in => 'в сообщении темы', :parent_type => 'Сообщение в теме', :parent_link => "/themes/#{message.theme.id.to_s}#msg_#{message.id.to_s}", :parent_name => message.theme.name, :title_name => "Сообщение в теме '#{message.theme.name}'"} if message.theme != nil
+		type = {:published_in => 'в сообщении темы', :parent_type => 'Сообщение в теме', :parent_link => "/themes/#{message.theme.id.to_s}#msg_#{message.id.to_s}", :parent_name => message.theme.name, :title_name => "Сообщение в теме '#{message.theme.name}'", :link_name => "К теме"} if message.theme != nil
 	end
 	return type
   end

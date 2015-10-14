@@ -113,7 +113,7 @@ class PhotoAlbum < ActiveRecord::Base
 	self.photos.order('created_at ASC').limit(9)
   end
   def comments
-	self.messages.where(:status_id => 1).order('created_at ASC')
+	  self.messages.where(:status_id => 1, :photo_id => nil).order('created_at ASC')
   end
   
   def views

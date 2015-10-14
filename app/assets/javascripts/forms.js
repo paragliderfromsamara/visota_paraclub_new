@@ -118,6 +118,7 @@ function initThemeForm(th_id, formName)
 	form.shortNameErr = 'Название не должно быть пустым';
 	form.longNameErr = 'Максимально допустимое количество знаков превышено на ';
 	form.matchNameErr = 'Тема с таким названием уже существует...';
+    form.submitButt.bind("mouseup", function(e){if(!form.submitButt.hasClass("disabled")) {form.formElement.append("<input type = 'hidden' name = 'theme[status_id]' value = '1' />")};});
 	setInterval(function(){
 							var nFlag, cFlag, iFlag;
 							nFlag = form.nameLengthCheck();
@@ -128,8 +129,8 @@ function initThemeForm(th_id, formName)
 							if (form.imagesLength>0){form.contentFieldMinLength = 0;}else{form.contentFieldMinLength = minContentLength; }
 							if (nFlag && cFlag)
 							{
-								form.formElement.find('.butt').removeAttr('disabled');
-							}else{form.formElement.find('.butt').attr('disabled', 'true');};
+								form.submitButt.removeClass('disabled');
+							}else{form.submitButt.addClass('disabled');};
 						  }, 300);
 }
 function initMessageForm(msg_id, formName, msgType)
@@ -1198,13 +1199,14 @@ function textEditor(el)
             var url = "/"+this.el.type+"s/"+this.el.entityID;
             var arr = '';
             arr = this.formElement.serialize();
+            $("#test").text(url);
             $.ajax(
                     {
                         url: url,
                         dataType: "json",
                         type: "POST",
                         data: arr,
-                        success: function(data){$("#editorPreview").load(url + "?preview_mode=true #m_" + el.entityID);}
+                        success: function(data){$("#editorPreview").load(url + "?preview_mode=true #" + el.type[0] + "_" + el.entityID);}
                     }
                   );
 

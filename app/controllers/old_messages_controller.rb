@@ -3,10 +3,10 @@ include OldMessagesHelper
   # GET /old_messages
   # GET /old_messages.json
   def index
-    @old_messages = OldMessage.paginate(:page => params[:page], :per_page => 25).all.order('created_when DESC')
-	@title = 'Архив сообщений с para.saminfo.ru'
+  @old_messages = OldMessage.paginate(:page => params[:page], :per_page => 25).all.order('created_when DESC')
+	@title = @header = 'Архив сообщений с para.saminfo.ru'
 	@path_array = [
-					{:name => 'Клубная жизнь', :link => '/visota_life'},
+					{:name => 'Общение', :link => '/visota_life'},
 					{:name => @title, :link => '/'}
 				  ]
     respond_to do |format|

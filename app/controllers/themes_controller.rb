@@ -21,32 +21,32 @@ include TopicsHelper
   # GET /themes/1.json
   def show
     @theme = Theme.find_by_id(params[:id])
-	if userCanSeeTheme?(@theme)
-		@page_params = {:part_id => 9, :page_id => 1, :entity_id => @theme.id}
-		@jsonTheme = {:author => @theme.user.role_card("Автор темы: "), :content => @theme.content_html}
-		@title = @header = @theme.name
-		@path_array = [
-						{:name => 'Общение', :link => '/visota_life'},
-						{:name => @theme.topic.name, :link => topic_path(@theme.topic)},
-						{:name => @theme.name, :link => theme_path(@theme)}
-					  ]
-		#выборка выдаваемых сообщений
-			msg_status_id = 1
-			msg_status_id = 4 if @theme.status == 'to_delete' 
-			@messages = @theme.messages.where(:status_id => msg_status_id).order('created_at ASC')
-		#выборка выдаваемых сообщений end
-		respond_to do |format|
-		  format.html# show.html.erb
-		  format.json { render :json => @jsonTheme }
-		end
-	else
-		redirect_to '/404'
-	end
+  	if userCanSeeTheme?(@theme)
+  		@page_params = {:part_id => 9, :page_id => 1, :entity_id => @theme.id}
+  		@jsonTheme = {:author => @theme.user.role_card("Автор темы: "), :content => @theme.content_html}
+  		@title = @header = @theme.name
+  		@path_array = [
+  					          {:name => 'Общение', :link => '/visota_life'},
+  						        {:name => @theme.topic.name, :link => topic_path(@theme.topic)},
+  						        {:name => @theme.name, :link => theme_path(@theme)}
+  					        ]
+  		#выборка выдаваемых сообщений
+  			msg_status_id = 1
+  			msg_status_id = 4 if @theme.status == 'to_delete' 
+  			@messages = @theme.messages.where(:status_id => msg_status_id).order('created_at ASC')
+  		#выборка выдаваемых сообщений end
+  		respond_to do |format|
+  		  format.html# show.html.erb
+  		  format.json { render :json => @jsonTheme }
+  		end
+  	else
+  		redirect_to '/404'
+  	end
   end
 
   # GET /themes/new
   # GET /themes/new.json
-  def new
+  def new 
 	@topic = Topic.find_by_id(params[:t])
 	@button_name = 'Создать тему'
 	if userCreateThemeInTopic?(@topic)
@@ -55,14 +55,10 @@ include TopicsHelper
 						{:name => @topic.name, :link => topic_path(@topic)},
 						{:name => "Новая тема"}
 					  ]
-		@draft = current_user.theme_draft
-		if @draft.topic != @topic
-			@draft.clean
-			@draft.update_attribute(:topic_id, @topic.id)
-		end
-		@formTheme = Theme.new
-		@title = "Новая тема в разделе #{@topic.name}"
-		@add_functions = "initThemeForm(#{@draft.id}, '#new_theme');"
+		@draft = current_user.theme_draft(@topic)
+		@formTheme = @draft 
+		@title = @header = "Новая тема в разделе #{@topic.name}"
+		@add_functions = "initThemeForm(#{@draft.id}, '.edit_theme');"
 		respond_to do |format|
 		  format.html# new.html.erb
 		  format.json { render :json => @theme }
@@ -78,7 +74,7 @@ include TopicsHelper
     @formTheme = Theme.find(params[:id])
 	if userCanEditTheme?(@formTheme)
 		@topic = @formTheme.topic 
-		@title = "Изменение темы '#{@formTheme.name}'"
+		@title = @header = "Изменение темы '#{@formTheme.name}'"
 		@add_functions = "initThemeForm(#{@formTheme.id}, '#edit_theme_#{@formTheme.id}');"
 		@path_array = [
 						{:name => 'Клубная жизнь', :link => '/visota_life'},

@@ -26,15 +26,10 @@
                 </div>
 			</div>
         </div>
-
         <div class = 'cBoxSplitter'>
             <div class = 'm_1000wh'><h3>Комментарии к фото</h3></div>
-		</div>
-        
+		</div>   
 		<div class = 'c_box'>
-    		<div class = 'm_1000wh tb-pad-s'>
-    			<%= photo_comment_button.html_safe %>
-            </div>
             <%= my_notice %>
             <%= newMessageFormInitial.html_safe %>
 			<% if @photo.comments != [] %>
@@ -45,7 +40,7 @@
 				<% end %>
 			<% else %>
 				<div class = 'm_1000wh'>
-                    <p class = 'istring norm'>Не ни одного комментария...</p>
+                    <p class = 'istring norm tb-pad-m'>Не ни одного комментария...</p>
                 </div>
 			<% end %>
         </div>	

@@ -6,15 +6,15 @@
 					<% if is_super_admin? %>
 						<% @users = User.all.order('created_at ASC') %>
 						<%= f.label :user_id, 'Автор' %><br />
-						<%= f.collection_select :user_id, @users, :id, :name, {}, {:class => 'c_select'} %><br /><br />
+						<%= f.collection_select :user_id, @users, :id, :name, {}, {:class => 'c_select'} %><br />
 					<% end %>
 					<%= f.label :category_id, 'Категория' %><br />
 					<%= my_collection_select(@albumToForm.categories, "category_id", 'photo_album', {}, '') %><br /><br />				   
 					<%= f.label :name, 'Название альбома' %><br />									
-					<%= f.text_field :name, :size => '60', :class=> 't_field', :autocomplete => 'off' %>
+					<%= f.text_field :name, :size => '60', :class=> 't_field', :autocomplete => 'off', :placeholder => "Введите название альбома", :style => "padding: 5px 10px 5px 10px;" %>
 					<div><p class = 'istring <%= @name_f_color if @name_f_color != nil%>' id = 'nLength'><span id = 'txtL'></span> <span class = 'err' id = 'txtMatchesErr'></span><span id = 'txtErr'></span><span id = 'txtErrSrv'><%= @name_error if @name_error != nil %></span></p></div>
 					<div style = 'position: relative; z-index: 1000; width: 100%;' id = 'likebleNames'></div>
-					<br /><br />
+					<br />
 					<%= f.label :description, 'Описание' %><br />
 					<%= f.text_area :description, :cols => 55, :rows => 5, :class=> 't_area', :defaultRows => 5, :onkeyup => 'changingTextarea(this)' %>
 					<div id = 'formPhotos'>

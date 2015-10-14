@@ -87,7 +87,8 @@ module MessagesHelper
 							</table>
 						</td>
 					</tr>			
-				</table>		
+				</table>	
+        	
 		"
 		return html
 	end
@@ -148,20 +149,22 @@ module MessagesHelper
 			if @album != nil 
 				if !is_not_authorized?
 					flag = true
+          type = 'comment'
 					chAlbumFlag = false
 					chPhotoFlag = false
 					@alterReturnTo = photo_album_path(@album)
           @tmpMessage = current_user.album_message_draft(@album)
 					if @photo != nil
 						@alterReturnTo = photo_path(@photo)
-						chPhotoFlag = true if @tmpMessage.photo_id != @photo.id
+            @tmpMessage = current_user.photo_comment_draft(@photo)
+						#chPhotoFlag = true if @tmpMessage.photo_id != @photo.id
 					end
-					chAlbumFlag = true if @tmpMessage.photo_album_id != @album.id
+					#chAlbumFlag = true if @tmpMessage.photo_album_id != @album.id
 					if chAlbumFlag || chPhotoFlag
 						if chAlbumFlag and chPhotoFlag
-							@tmpMessage.update_attributes(:photo_id => @photo.id, :photo_album_id => @photo.photo_album_id)
+						#	@tmpMessage.update_attributes(:photo_id => @photo.id, :photo_album_id => @photo.photo_album_id)
 						elsif chAlbumFlag and !chPhotoFlag
-							@tmpMessage.update_attribute(:photo_album_id, @album.id)
+						#	@tmpMessage.update_attribute(:photo_album_id, @album.id)
 						end	
 					end
 				end
@@ -188,7 +191,7 @@ module MessagesHelper
 		#отрисовывается с помощью js функции initMessageForm(msg_id)
 		form_for(@tmpMessage, :multipart => 'true') do |f|
 		"
-				<a name = 'add_message'></a>
+				<a name = 'new_message'></a>
         <div style = 'display: none;'>
         #{ f.file_field :uploaded_photos, :multiple => 'true' if type != 'comment'}</div>
 				#{ hidden_field :info, :return_to_link, :value => getMsgPathLinkAfterSave}
@@ -218,7 +221,7 @@ module MessagesHelper
                     </tr>
 									</table>
 									
-									<div id = 'answr_to_str' style = 'display:none;'></div>
+									<div id = 'answr_to_str' style = 'display:#{(@tmpMessage.message != nil)? "block":"none"};'><a id = 'ans_link' class = 'b_link_i' href = '#m_#{@tmpMessage.message.id if @tmpMessage.message != nil}'>ответ пользователю #{@tmpMessage.message.user.name if @tmpMessage.message != nil}</a></div>
                   <div><p class = 'istring #{@content_f_color if @content_f_color != nil}' id = 'cLength'><span id = 'txtL'></span> <span id = 'txtErr'>#{@content_error if @content_error != nil}</span><span id = 'txtErrSrv'>#{@content_error if @content_error != nil}</span></p></div>
 								<div class='actions tb-pad-s'>           
 									#{ mySubmitButton("Отправить", "#{formClass}_#{@tmpMessage.id}")}

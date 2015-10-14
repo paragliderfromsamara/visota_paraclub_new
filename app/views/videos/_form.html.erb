@@ -25,7 +25,7 @@
 			<td align = 'left' valign = 'top' <%= @link_f_color.html_safe %>>
 				<%= @link_error.html_safe %>
 				<%= f.text_area :link, :rows => '3', :cols => '60' %>
-                <%= waitbar('video_wait_check').html_safe %>
+                <%= waitline('video_wait_check').html_safe %>
                 <div class = 'video_preview'></div>
 			</td>
 		</tr>

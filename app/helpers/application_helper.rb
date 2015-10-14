@@ -6,13 +6,20 @@
 module ApplicationHelper
 require 'open-uri' #для парсера
 
-  def waitbar(id)
+  def waitline(id)
     "
-    <div class = 'waitbar' id = '#{id}'>
-      <div id = 'wb1' class = 'wb-items' style = 'display: none; background-image:url(/waitbar/1.png);'></div>
-      <div id = 'wb2' class = 'wb-items' style = 'display: none; background-image:url(/waitbar/2.png);'></div>
-      <div id = 'wb3' class = 'wb-items' style = 'display: none; background-image:url(/waitbar/3.png);'></div>
-    </div>
+		<div id = '#{id}' class = 'wl'>
+			<div class = 'wl-item'>
+			</div>
+			<div class = 'wl-item'>
+			</div>
+			<div class = 'wl-item'>
+			</div>
+			<div class = 'wl-item'>
+			</div>
+			<div class = 'wl-item'>
+			</div>
+		</div>
     " 
   end 
 	def alter_logo
@@ -80,7 +87,6 @@ require 'open-uri' #для парсера
 			  ]
 		return arr
   end
-  
 
   def primaryMenuItems
 	  [{

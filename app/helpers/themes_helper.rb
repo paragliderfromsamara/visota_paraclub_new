@@ -3,18 +3,14 @@ module ThemesHelper
 		#отрисовывается с помощью js функции initMessageForm(msg_id)
 		form_for(@formTheme, :multipart => 'true') do |f|
 		"
-			<div class = 'tForm'>
 				<div style = 'display: none;'>#{ f.file_field :uploaded_photos, :multiple => 'true'}</div>
-				<div class = 'central_field' style = 'width: 950px;'>
-					<br />
 					<table id = 'msg_table'>
 						<tr>
 							<td>
 								#{ f.hidden_field :topic_id, :value => @topic.id}	
-								#{ f.label :name, 'Заголовок темы'}<br />
-								#{ f.text_field :name, :size => '100', :class => 't_field', :autocomplete=>'off'}	
+								#{ f.text_field :name, :size => '157', :class => 't_field', :placeholder => 'Заголовок темы', :style => 'padding: 5px;', :autocomplete=>'off'}	
 								<div><p class = 'istring #{@name_f_color if @name_f_color != nil}' id = 'nLength'><span id = 'txtL'></span> <span class = 'err' id = 'txtMatchesErr'></span> <span id = 'txtErr'>#{@name_error if @name_error != nil}</span><span id = 'txtErrSrv'>#{@name_error if @name_error != nil}</span></p></div><br />									
-								<div style = 'position: relative; z-index: 1000; width: 100%;' id = 'likebleNames'></div><br />
+								<div style = 'position: relative; z-index: 1000; width: 100%;' id = 'likebleNames'></div>
 							</td>
 						</tr>
 						<tr>
@@ -28,21 +24,21 @@ module ThemesHelper
 											<td id = 'formMenus'>
 											</td>
 										</tr>
+                    <tr>
+                      <td>
+    									  #{ f.text_area :content, :cols => '140', :rows => '7', :defaultRows => '7', :class=> 't_area', :placeholder => 'Текст темы...', :onkeyup => 'changingTextarea(this)', :style => 'position: relative; width: 980px; display: block; padding: 10px;' }
+    									  <div><p class = 'istring #{@content_f_color if @content_f_color != nil}' id = 'cLength'><span id = 'txtL'></span> <span id = 'txtErr'>#{@content_error if @content_error != nil}</span><span id = 'txtErrSrv'>#{@content_error if @content_error != nil}</span></p></div>
+                      </td>
+                    </tr>
 									</table>
-									<div class = 'central_field' style = 'width: 85%;'>
-									#{ f.label :content, 'Текст темы'}<br />
-									#{ f.text_area :content, :cols => '100', :rows => '7', :defaultRows => '7', :class=> 't_area', :onkeyup => 'changingTextarea(this)', :style => 'position: relative; margin-left: auto; margin-right: auto; display: block;' }
-									<div><p class = 'istring #{@content_f_color if @content_f_color != nil}' id = 'cLength'><span id = 'txtL'></span> <span id = 'txtErr'>#{@content_error if @content_error != nil}</span><span id = 'txtErrSrv'>#{@content_error if @content_error != nil}</span></p></div>
-									</div>
-									<br />
 									#{ hidden_check_box(f) }
 							</td>
 						</tr>
 						<tr>
 							<td>
-								<div class='actions'><br />
-									#{ f.submit @button_name, :class=>'butt' }
-								</div>
+						      <div class='actions tb-pad-s'>           
+							      #{ mySubmitButton("Отправить", "edit_theme_#{@formTheme.id}")}
+							    </div>
 								<br /><br />
 							</td>
 						</tr>
@@ -57,9 +53,9 @@ module ThemesHelper
 							</td>
 						</tr>
 					</table>
-					<br />
-				</div>
-			</div>
+  				<div id = 'editorPreview' class = 'mText' style = 'position: relative; width: 100%; margin-top: 20px; margin-bottom: 20px; '>
+				
+  				</div>
 			".html_safe
 		end
 	end
@@ -131,6 +127,7 @@ module ThemesHelper
 		p = {
 				:tContent => html, 
 				:idLvl_2 => 'thBody',
+        :idLvl_1 => "t_#{@theme.id}",
 				:classLvl_2 => 'tb-pad-m',
 				:parity => 0
 			}
@@ -164,7 +161,7 @@ module ThemesHelper
 			<tr>
 				<td colspan = '2'>
 					<div>
-						#{theme_owner_buttons if showBut == true }
+						#{theme_owner_buttons if showBut == true and !params[:preview_mode]}
 					</div>
 				</td>
 			</tr>

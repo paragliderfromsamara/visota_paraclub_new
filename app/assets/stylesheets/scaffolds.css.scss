@@ -101,7 +101,7 @@ textarea {resize: none;}
 	INPUT.t_field, select.c_select {
 									border-radius: 4px; 
 									border-width: 1px; 
-									font-size:12pt;		
+									font-size:13px;		
 								}
 	INPUT.check_box {
 						width: 18px;
@@ -113,7 +113,7 @@ textarea {resize: none;}
 			  }
 	textarea.t_area
 			   {
-				font-size:15px; 
+				font-size:13px; 
 				font-family: $font_family_1;
 				resize: none;
 			  }
@@ -589,6 +589,26 @@ ul.myBut
 			}
 	}
 /*------Пагинация end--*/
+ 
+/* wait line */
+    .wl
+    {
+    	position: relative;
+    	width: 125px;
+    	height: 10px;
+    }
+
+    .wl-item
+    {
+    	position: relative;
+    	height: 100%;
+    	width: 20px;
+    	margin-right: 5px;
+    	float: left;
+    	background-color: grey;
+    }
+/* wait line end */ 
+    
  
 /* block */
 .inline-blocks

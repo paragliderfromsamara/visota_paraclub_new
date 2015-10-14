@@ -125,5 +125,5 @@ module PhotosHelper
 		end
 		return value
 	end
-  
+
 end

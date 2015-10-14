@@ -16,21 +16,42 @@ class MessagesController < ApplicationController
 	if userCanSeeMessage?(@message)
 		#themes part
 		@theme = Theme.find_by(id: @message.theme_id, status_id: ([1, 3]))
+    @photo_album = @message.photo_album
+    @photo = Photo.find_by(id: @message.photo_id, status_id: 1)
 		if @theme != nil
 			@title = "Ответы на сообщение от #{@message.created_at.to_s(:ru_datetime)}"
 			@path_array = [
-							{:name => 'Клубная жизнь', :link => '/visota_life'},
-							{:name => @theme.topic.name, :link => topic_path(@theme.topic)},
-							{:name => @theme.name, :link => theme_path(@theme)},
-							{:name => @title, :link => ''}
-						  ]
+							        {:name => 'Клубная жизнь', :link => '/visota_life'},
+						          {:name => @theme.topic.name, :link => topic_path(@theme.topic)},
+					            {:name => @theme.name, :link => theme_path(@theme)},
+					            {:name => @title, :link => ''}
+					          ]
 		end
 		#themes part end
 		#photos part
-		@photo = Photo.find_by(id: @message.photo_id, status_id: 1)
-		if @photo != nil
-			#todo
+    if @photo_album != nil
+      if @photo != nil
+    			@title = @header = "Комментарий к фото"
+    			@path_array = [
+                          {:name => 'Медиа', :link => '/media'},
+		                      {:name => 'Фотоальбомы', :link => '/media?t=albums&c=all'},
+		                      {:name => @photo_album.category_name, :link => "/media?t=albums&c=#{@photo_album.category_id}"},
+		                      {:name => @photo_album.name,:link => photo_album_path(@photo_album)},
+                          {:name => @title}
+    					          ]
+      else
+  			@title = @header = "Комментарий к фотоальбому"
+    		@path_array = [
+                        {:name => 'Медиа', :link => '/media'},
+    						        {:name => 'Фотоальбомы', :link => '/media?t=albums&c=all'},
+    						        {:name => @photo_album.category_name, :link => "/media?t=albums&c=#{@photo_album.category_id}"},
+    						        {:name => @photo_album.name, :link => photo_album_path(@photo_album)},
+                        {:name => @title}
+    					        ]
+      end
+		
 		end
+
 		#photos part end
 		#videos part
 		@video = Video.find_by(id: @message.video_id)
@@ -184,6 +205,8 @@ class MessagesController < ApplicationController
   		  if @message.update_attributes(params[:message])
   			link = "#{theme_path(@message.theme_id)}#msg_#{@message.id}" if @message.theme != nil
   			link = "#{video_path(@message.video_id)}#msg_#{@message.id}" if @message.video != nil
+        link = "#{photo_album_path(@message.photo_album_id)}#msg_#{@message.id}" if @message.photo_album != nil
+        link = "#{photo_path(@message.photo_id)}#msg_#{@message.id}" if @message.photo != nil
   			if params[:photo_editions]!= nil and params[:photo_editions] != []
   				photos_params = params[:photo_editions][:photos]
   				photos_params.each do |x|
@@ -215,13 +238,14 @@ class MessagesController < ApplicationController
   				@title = 'Изменение сообщения'
   				@topic = Topic.find_by(id: @message.topic_id)
   				@path_array = [
-  								{:name => 'Клубная жизнь', :link => '/visota_life'},
+  						    {:name => 'Клубная жизнь', :link => '/visota_life'},
   								{:name => @theme.topic.name, :link => topic_path(@theme.topic)},
   								{:name => @theme.name, :link => theme_path(@theme)},
   								{:name => @title, :link => '#'}
   							  ]
   			end
   			if @photo != nil
+          
   			end
   			if @video != nil
   			end				
