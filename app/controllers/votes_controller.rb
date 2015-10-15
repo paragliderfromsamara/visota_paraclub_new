@@ -17,7 +17,7 @@ class VotesController < ApplicationController
 	@vote = Vote.find(params[:id])
   @title = @vote.name
 	@path_array = [
-						{:name => 'Клубная жизнь', :link => '/visota_life'},
+						{:name => 'Общение', :link => '/visota_life'},
 						{:name => 'Опросы', :link => votes_path},
 						{:name => @vote.name}
 				  ]
@@ -34,7 +34,7 @@ class VotesController < ApplicationController
   def new
 	if !is_not_authorized?
 		@vote = Vote.new
-		@title = 'Новый опрос'
+		@title = @header = 'Новый опрос'
 		@add_functions = "initVoteForm('#new_vote');"
 		@path_array = [
 						{:name => 'Клубная жизнь', :link => '/visota_life'},
@@ -52,13 +52,13 @@ class VotesController < ApplicationController
 		@vote = Vote.new(params[:vote])
 		respond_to do |format|
 		 if @vote.save
-			format.html { redirect_to @vote, :notice => 'Опрос добавлен...' }
+			format.html { redirect_to @vote, :notice => 'Опрос успешно добавлен...' }
 			format.json { render :json => @vote, :status => :created, :location => @vote }
 		 else
 			@title = 'Новый опрос'
 			@add_functions = "initVoteForm('#new_vote');"
 			@path_array = [
-						{:name => 'Клубная жизнь', :link => '/visota_life'},
+						{:name => 'Общение', :link => '/visota_life'},
 						{:name => 'Опросы', :link => votes_path},
 						{:name => 'Новый опрос'}
 					  ]

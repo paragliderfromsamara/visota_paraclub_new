@@ -18,6 +18,29 @@
 			<% end %>
         </div>
     </div>
+<% elsif session[:media_type] == 'articles'%>
+    <div class = 'c_box odd'>
+        <div class = 'm_1000wh tb-pad-m' >
+    		<% if @entities != [] %>
+    			<table class = 'v_table' id = 'article_table'>
+        			<% @entities.each do |article| %>
+        				<tbody class = 't_link' link_to = '<%= article_path(article) %>'>
+        					<tr>
+        						<td align = 'left' class = 'name' id = 'first'>
+        							<%= article.name %>
+        						</td>
+        						<td align = 'right' class = 'date' id = 'last'>
+        							 <%= my_time(article.accident_date) %>
+        						</td>
+        					</tr>
+        				</tbody>
+        			<% end %>
+                </table>
+    		<% else %>
+    			<p class = 'istring norm'>В данной категории нет материалов...</p>
+    		<% end %>
+        </div>
+    </div>
 <% else %>
 	<% @entities.each do |alb| %>
 		<div class = 'c_box'>

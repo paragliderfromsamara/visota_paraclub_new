@@ -12,9 +12,8 @@ module VotesHelper
 			<tbody id = 'middle'>
 				<tr>
 				<td  colspan = '2'>
-					<div class = 'central_field' style = 'width: 95%;'>
+					<div class = 'm_1000wh'>
 						<span id = 'content' class = 'mText'><p>#{vote.content}</p></span>
-						<br /><br />
 						<div id = 'vtValues'>
 						#{vote_values_table(vote)}
 						</div>
@@ -31,7 +30,7 @@ module VotesHelper
 		p = {
 				:tContent => html, 
 				:classLvl_1 => 'even', 
-				:classLvl_2 => 'm_1000wh'
+				:classLvl_2 => 'm_1000wh tb-pad-m'
 			}
 		return c_box_block(p)
 	end
@@ -63,7 +62,6 @@ module VotesHelper
 					 </tr>
 					 <tr id = 'voteVal#{val.id}'>
 						  #{vote_result_row(val)}
-						 
 					 </tr>
 					 "
 			end

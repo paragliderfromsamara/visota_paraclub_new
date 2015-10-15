@@ -861,25 +861,40 @@ end
     v = ''
     buttons = [
                  {:name => "Фотоальбомы", :access => true, :type => 'b_grey', :link => "/media?t=albums", :data_remote => true},
-                 {:name => "Видео", :access => true, :type => 'b_grey', :link => "/media?t=videos", :data_remote => true}
+                 {:name => "Видео", :access => true, :type => 'b_grey', :link => "/media?t=videos", :data_remote => true},
+                 {:name => "Материалы", :access => true, :type => 'b_grey', :link => "/media?t=articles", :data_remote => true}
               ]
     
     if session[:media_type] == 'videos'
       buttons[1][:selected] = true
+    elsif session[:media_type] == 'articles'
+      buttons[2][:selected] = true
     else
       buttons[0][:selected] = true
     end 
     return buttons_in_line_b(buttons).html_safe
   end
   def mediaCategoryMenu
-    album = PhotoAlbum.new
-    buttons = [{:name => "Все категории", :access => true, :type => 'b_grey', :link => "/media?c=all", :data_remote => true}]
-    buttons.first[:selected] = true if session[:media_category] == 'all'
-    i = 0
-    album.categories.each do |c|
-      i += 1
-      buttons[i] = {:name => c[:name], :access => true, :type => 'b_grey', :link => "/media?c=#{c[:value]}", :data_remote => true}
-      buttons[i][:selected] = true if session[:media_category] == c[:value]
+    if session[:media_type] == 'videos' || session[:media_type] == 'albums'
+      album = PhotoAlbum.new
+      buttons = [{:name => "Все категории", :access => true, :type => 'b_grey', :link => "/media?c=all", :data_remote => true}]
+      buttons.first[:selected] = true if session[:media_category] == 'all'
+      i = 0
+      album.categories.each do |c|
+        i += 1
+        buttons[i] = {:name => c[:name], :access => true, :type => 'b_grey', :link => "/media?c=#{c[:value]}", :data_remote => true}
+        buttons[i][:selected] = true if session[:media_category] == c[:value]
+      end
+    elsif session[:media_type] == 'articles'
+      article = Article.new
+      buttons = []
+      i = 0
+      article.types.each do |c|
+        buttons[i] = {:name => c[:multiple_name], :access => true, :type => 'b_grey', :link => "/media?c=#{c[:value]}", :data_remote => true}
+        buttons[i][:selected] = true if session[:media_category] == c[:value]
+        i += 1
+      end
+      buttons.first[:selected] = true if session[:media_category] == 'all'
     end
     return buttons_in_line(buttons).html_safe
   end
@@ -890,8 +905,8 @@ end
   def setMediaSessionHash
     session[:media_year] = 'all' if session[:media_year] == nil
     session[:media_category] = 'all' if session[:media_category] == nil 
-    if params[:t] != 'videos' and params[:t] != 'albums'
-      session[:media_type] = 'albums' if session[:media_type] != 'videos'
+    if params[:t] != 'videos' and params[:t] != 'albums' and params[:t] != 'articles'
+      session[:media_type] = 'albums' if session[:media_type] != 'videos' and session[:media_type] != 'articles' 
     else
        session[:media_type] = params[:t]
     end

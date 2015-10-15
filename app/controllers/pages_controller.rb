@@ -76,6 +76,12 @@ include PagesHelper
       else
         @entities  = Video.paginate(:page => params[:page], :per_page => 12).where(category_id: category).order('created_at DESC')
       end
+    elsif session[:media_type] == 'articles'
+      if category == 'all'
+        @entities = Article.paginate(:page => params[:page], :per_page => 12).where(status_id: 1).order('created_at DESC')
+      else
+        @entities = Article.paginate(:page => params[:page], :per_page => 12).where(article_type_id: category, status_id: 1).order('created_at DESC')
+      end
     else
       if category == 'all'
         @entities = PhotoAlbum.paginate(:page => params[:page], :per_page => 5).where(status_id: 1).order('created_at DESC')

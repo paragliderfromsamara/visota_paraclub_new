@@ -2,21 +2,22 @@ class ArticlesController < ApplicationController
   # GET /articles
   # GET /articles.json
   def index
-	article = Article.new
-	@curArtCat = article.types.first
-	article.types.each do |t|
-		if params[:c] == t[:link]
-			@curArtCat = t
-			break
-		end
-	end  
-	@title = @curArtCat[:multiple_name]
-  vStatus = (is_not_authorized?)? [1]:[1,2]
-	@articles = Article.where(article_type_id: @curArtCat[:value], status_id: 1, visibility_status_id: vStatus).order('accident_date DESC')
-	  respond_to do |format|
-      format.html # index.html.erb
-      format.json { render :json => @articles }
-    end
+    redirect_to "/media?t=articles&c=3"
+  #article = Article.new
+	#@curArtCat = article.types.first
+	#article.types.each do |t|
+	#	if params[:c] == t[:link]
+	#		@curArtCat = t
+	#		break
+	#	end
+	#end  
+	#  @title = @header = @curArtCat[:multiple_name]
+  #  vStatus = (is_not_authorized?)? [1]:[1,2]
+	#  @articles = Article.where(article_type_id: @curArtCat[:value], status_id: 1, visibility_status_id: vStatus).order('accident_date DESC')
+	#  respond_to do |format|
+  #    format.html # index.html.erb
+  #    format.json { render :json => @articles }
+  #  end
   end
 
 
@@ -24,14 +25,15 @@ class ArticlesController < ApplicationController
   # GET /articles/1.json
   def show
     @article = Article.find(params[:id])
-	@photos = Photo.select(:id)
-	@events = Event.where(display_area_id: ([2, 3])).order('post_date DESC').limit(3)
-	@path_array = [
-					{:name => 'Материалы', :link => '/articles'},
-					{:name => @article.type_name_multiple, :link => @article.type_path},
+	  @photos = Photo.select(:id)
+	  @events = Event.where(display_area_id: ([2, 3])).order('post_date DESC').limit(3)
+	  @path_array = [
+          {:name => 'Медиа', :link => '/media'},
+					{:name => 'Материалы', :link => '/media?t=articles'},
+					{:name => @article.type_name_multiple, :link => "/media?t=articles&c=#{@article.type[:value]}"},
 					{:name => @article.alter_name, :link => article_path(@article)}
 				  ]
-	@title = @article.alter_name
+  	@title = @header = @article.alter_name
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @article }

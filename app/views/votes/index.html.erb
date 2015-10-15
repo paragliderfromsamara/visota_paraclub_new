@@ -1,9 +1,9 @@
-<div class = 'm_1000wh'>
+<div class = 'm_1000wh tb-pad-s'>
     <%= navigation_string.html_safe %>
 </div>
 <%= "<div class = 'c_box'><div class = 'm_1000wh'>#{control_buttons(index_votes_buttons)}</div></div>".html_safe if control_buttons(index_votes_buttons) != ''%>
 <div class = 'c_box'>
-	<div class = 'm_1000wh'>
+	<div class = 'm_1000wh tb-pad-m'>
                 <h2>Активные опросы</h2>
             	<% if @active_votes != [] %>
             		<table class = 'v_table'>
@@ -45,14 +45,12 @@
             			<% end %>
             		</table>
             	<% else %>
-            			<p class = 'istring norm medium-opacity'>Нет ни одного активного опроса...</p>
+            			<p class = 'istring norm medium-opacity tb-pad-m'>Нет ни одного активного опроса...</p>
             	<% end %>
-            		<br />
-            		<br />
 	</div>
 </div>
 <div class = 'c_box'>
-	<div class = 'm_1000wh'>
+	<div class = 'm_1000wh tb-pad-m'>
     	<h2>Завершённые опросы</h2>
     	<% if @completed_votes != [] %>
     		<table class = 'v_table'>
@@ -94,9 +92,12 @@
     			<% end %>
     		</table>
     	<% else %>
-    			<p class = 'istring norm medium-opacity'>Нет ни одного завершённого опроса...</p>
+    			<p class = 'istring norm medium-opacity tb-pad-m'>Нет ни одного завершённого опроса...</p>
     	<% end %>
     		<br />
     		<br />
 	</div>
+</div>
+<div class = 'm_1000wh tb-pad-s'>
+    <%= navigation_string.html_safe %>
 </div>
