@@ -56,6 +56,18 @@ class Photo < ActiveRecord::Base
 	p[:height] = image.rows
 	return p
   end
+  
+  def getSizeByWidth(width)
+    w = nw = self.widthAndHeight[:width].to_f
+    h = nh =self.widthAndHeight[:height].to_f
+    p = w/h
+    if w > width.to_f
+      nw = width.to_f
+      nh = nw/p.to_f
+    end
+    return {:height => nh, :width => nw}
+  end
+  
   def exif_data_xmp(name)
     v = ''
     path = Rails.root.join("public#{self.link}").to_s

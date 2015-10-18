@@ -107,17 +107,17 @@ class Article < ActiveRecord::Base
      return true if self.status_id == 1
    end
    def types
-	[
-		{:value => 3, :form_title => 'Новый отчёт', :add_but_name => 'отчёт', :name => 'Отчёт', :multiple_name => 'Отчёты по мепроприятиям', :link => 'reports'},
-		{:value => 5, :form_title => 'Новый отзыв', :add_but_name => 'отзыв', :name => 'Отзыв', :multiple_name => 'Отзывы по снаряжению', :link => 'reviews'},
-		{:value => 1, :form_title => 'Новый отчёт о лётном происшествии', :add_but_name => 'отчёт о лётном происшествии', :name => 'Отчёт о лётном происшествии', :multiple_name => 'Лётные происшествия', :link => 'flight_accidents'},
-		{:value => 4, :form_title => 'Новая статья', :add_but_name => 'статью', :name => 'Статья', :multiple_name => 'Статьи', :link => 'club_articles'},
-		{:value => 6, :form_title => 'Новая статья', :add_but_name => 'статью', :name => 'Восставшие из руин', :multiple_name => 'Восставшие из руин', :link => 'risen_from_the_ruin'},
-		{:value => 2, :form_title => 'Новый документ', :add_but_name => 'документ', :name => 'Документ', :multiple_name => 'Документы', :link => 'documents'}
-	]
+    	[
+    		{:value => 3, :form_title => 'Новый отчёт', :add_but_name => 'отчёт', :name => 'Отчёт', :multiple_name => 'Отчёты по мепроприятиям', :link => 'reports', :media_name => 'Отчёты'},
+    		{:value => 5, :form_title => 'Новый отзыв', :add_but_name => 'отзыв', :name => 'Отзыв', :multiple_name => 'Отзывы по снаряжению', :link => 'reviews', :media_name => 'О снаряжении'},
+    		{:value => 1, :form_title => 'Новый отчёт по лётному происшествию', :add_but_name => 'отчёт по лётному происшествию',:multiple_name =>'Отчёты по лётным происшествиям', :name => 'Отчёт по лётному происшествию', :media_name => 'Отчеты по ЛП', :link => 'flight_accidents'},
+    		{:value => 4, :form_title => 'Новая статья', :add_but_name => 'статью', :name => 'Статья', :multiple_name => 'Статьи', :link => 'club_articles', :media_name => 'Статьи'},
+    		#{:value => 6, :form_title => 'Новая статья', :add_but_name => 'статью', :name => 'Восставшие из руин', :multiple_name => 'Восставшие из руин', :link => 'risen_from_the_ruin'},
+    		{:value => 2, :form_title => 'Новый документ', :add_but_name => 'документ', :name => 'Документ', :multiple_name => 'Документы', :link => 'documents', :media_name => 'Документы'}
+    	]
    end
    
-   def type
+  def type
 	types.each do |t|
 		return t if self.article_type_id == t[:value]
 	end
@@ -166,6 +166,16 @@ class Article < ActiveRecord::Base
 	return value
    end
    
+   def getTypeIdByLink(link) 
+   	value = types.first
+   	types.each do |type|
+   		if type[:link] == link
+        value = type
+        break
+      end
+   	end
+   	return value
+   end
    def type_name_multiple
 		t = get_type_by_id(article_type_id)
 		return t[:multiple_name]

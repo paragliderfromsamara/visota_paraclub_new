@@ -24,19 +24,21 @@ class ArticlesController < ApplicationController
   # GET /articles/1
   # GET /articles/1.json
   def show
-    @article = Article.find(params[:id])
-	  @photos = Photo.select(:id)
-	  @events = Event.where(display_area_id: ([2, 3])).order('post_date DESC').limit(3)
-	  @path_array = [
-          {:name => 'Медиа', :link => '/media'},
-					{:name => 'Материалы', :link => '/media?t=articles'},
-					{:name => @article.type_name_multiple, :link => "/media?t=articles&c=#{@article.type[:value]}"},
-					{:name => @article.alter_name, :link => article_path(@article)}
-				  ]
-  	@title = @header = @article.alter_name
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render :json => @article }
+    @article = Article.find_by(id: params[:id])
+    if userCanSeeArticle(@article)
+  	  @photos = Photo.select(:id)
+  	  @path_array = [
+                      {:name => 'Медиа', :link => '/media'},
+  					          {:name => @article.type_name_multiple, :link => "/media?t=#{@article.type[:link]}"},
+  					          {:name => @article.alter_name, :link => article_path(@article)}
+  				          ]
+    	@title = @header = @article.alter_name
+      respond_to do |format|
+        format.html # show.html.erb
+        format.json { render :json => @article }
+      end
+    else
+      redirect_to '/404'
     end
   end
 
@@ -46,12 +48,18 @@ class ArticlesController < ApplicationController
 	@formArticle = Article.new
 	@type = @formArticle.get_type_by_id(params[:c])
 	if userCanCreateArticle? and @type != nil
+	  @title = @header = "#{@type[:form_title]}"
+    @path_array = [
+                    {:name => 'Медиа', :link => '/media'},
+					          {:name => @type[:multiple_name], :link => "/media?t=#{@type[:link]}"},
+					          {:name => "#{@header}"}
+				          ]
 		@draft = current_user.article_draft
     if @draft.article_type_id != 	params[:c].to_i
       @draft.clean
       @draft.update_attribute(:article_type_id, params[:c])
     end
-		@title = "#{@type[:form_title]}"
+		
 		respond_to do |format|
 		  format.html # new.html.erb
 		  format.json { render :json => @formArticle }
@@ -65,10 +73,16 @@ class ArticlesController < ApplicationController
   def edit
     @formArticle = Article.find(params[:id])
 	if userCanEditArtilcle?(@formArticle)
+    @title = @header = "Изменение материала"
 		@type = @formArticle.type
 		@draft = @formArticle
     redirect_to '/404' if @type == nil 
-		@title = "Изменение материала"
+    @path_array = [
+                    {:name => 'Медиа', :link => '/media'},
+					          {:name => @type[:multiple_name], :link => "/media?t=#{@type[:link]}"},
+                    {:name => @formArticle.alter_name, :link => article_path(@formArticle)},
+					          {:name => "#{@header}"}
+				          ]
 	else 
 		redirect_to '/404'
 	end
@@ -86,7 +100,7 @@ class ArticlesController < ApplicationController
 		@type = @article.get_type_by_id(params[:v])
 		respond_to do |format|
 		  if @article.save
-			format.html { redirect_to @article.type_path, :notice => 'Материал успешно добавлен' }
+			format.html { redirect_to @article, :notice => 'Материал успешно добавлен' }
 			format.json { render :json => @article, :status => :created, :location => @article }
 		  else
 			format.html { render :action => "new"  }
@@ -120,13 +134,17 @@ class ArticlesController < ApplicationController
   # DELETE /articles/1
   # DELETE /articles/1.json
   def destroy
-    @article = Article.find(params[:id])
-	  type = @article.get_type_by_id(@article.article_type_id)
-    @article.destroy
+    @article = Article.find_by(id: params[:id])
+    if userCanDeleteArticle(@article)
+  	  type = @article.get_type_by_id(@article.article_type_id)
+      @article.destroy
 
-    respond_to do |format|
-      format.html { redirect_to articles_path(:c=>type[:link]) }
-      format.json { head :no_content }
+      respond_to do |format|
+        format.html { redirect_to articles_path(:c=>type[:link]) }
+        format.json { head :no_content }
+      end
+    else
+      redirect_to '/404'
     end
   end
   def upload_photos

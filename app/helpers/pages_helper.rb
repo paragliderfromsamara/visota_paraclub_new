@@ -857,23 +857,84 @@ def theme_block_for_search_result(theme, i)
     return c_box_block(p)
 end
 #поиск по сайту-end----------------------------------------------------------------------------------------------------------------------------------------------------
-  def mediaTypeMenu
-    v = ''
-    buttons = [
-                 {:name => "Фотоальбомы", :access => true, :type => 'b_grey', :link => "/media?t=albums", :data_remote => true},
-                 {:name => "Видео", :access => true, :type => 'b_grey', :link => "/media?t=videos", :data_remote => true},
-                 {:name => "Материалы", :access => true, :type => 'b_grey', :link => "/media?t=articles", :data_remote => true}
-              ]
-    
-    if session[:media_type] == 'videos'
-      buttons[1][:selected] = true
-    elsif session[:media_type] == 'articles'
-      buttons[2][:selected] = true
-    else
-      buttons[0][:selected] = true
-    end 
-    return buttons_in_line_b(buttons).html_safe
+def mediaTypes 
+  article = Article.new
+  album = PhotoAlbum.new
+  video = Video.new
+  val = [
+           {ru_name: "Фотоальбомы", en_name: "albums", className: "albums", categories: album.categories}, 
+           {ru_name: "Видео", en_name: "videos", className: "videos", categories: video.categories}
+        ]
+  article.types.each do |t|
+    val[val.length] = {ru_name: t[:media_name], en_name: t[:link], className: "articles", categories: []}
   end
+  return val
+end 
+
+def makeMediaPartHash
+  mHash = {
+            typeName: "",
+            cTypeName: "",
+            typeButtons: [], 
+            categoryButtons: []
+          }
+  mTypes = mediaTypes
+  flag = false
+  type = mTypes.first
+  typeButtons = []
+  categoryButtons = []
+  mTypes.each do |t|
+    typeButtons[typeButtons.length] = {:name => t[:ru_name], :access => true, :type => 'b_grey', :link => "/media?t=#{t[:en_name]}", :data_remote => true}
+    if t[:en_name] == session[:media_type]
+      type = t
+      typeButtons.last[:selected] = true
+      flag = true
+      if t[:categories] != [] and t[:categories] != nil
+        cFlag = false
+        categoryButtons[categoryButtons.length] = {:name => "Все категории", :access => true, :type => 'b_grey', :link => "/media?c=all", :data_remote => true}
+        categoryButtons.first[:selected] = true if session[:media_category] == 'all'
+        t[:categories].each do |c|
+            categoryButtons[categoryButtons.length] = {:name => c[:name], :access => true, :type => 'b_grey', :link => "/media?c=#{c[:value]}", :data_remote => true}
+            if session[:media_category] == c[:value]
+              categoryButtons.last[:selected] = true  
+              mHash[:cTypeName] = c[:name]
+              cFlag = true
+            end
+        end
+        if !cFlag
+          categoryButtons.first[:selected] = true
+          session[:media_category] = "all"
+        end
+        mHash[:categoryButtons] = categoryButtons
+      end
+    end
+  end 
+  if !flag
+    typeButtons.first[:selected] = true
+    session[:media_type] = type[:en_name]
+    session[:media_year] = 'all'
+    session[:media_category] = 'all'
+    if type[:categories] != [] and type[:categories] != nil
+      categoryButtons[categoryButtons.length] = {:name => "Все категории", :access => true, selected: true,:type => 'b_grey', :link => "/media?c=all", :data_remote => true}
+      type[:categories].each do |c|
+         categoryButtons[categoryButtons.length] = {:name => c[:name], :access => true, :type => 'b_grey', :link => "/media?c=#{c[:value]}", :data_remote => true}
+      end
+      mHash[:categoryButtons] = categoryButtons
+    end 
+  end
+  mHash[:typeButtons] = typeButtons  
+  mHash[:typeName] = type[:className]
+  return mHash   
+end
+
+def setDefaultSessionMediaHash
+  session[:media_type] = 'albums'
+  session[:media_year] = 'all'
+  session[:media_category] = 'all'
+end
+
+
+
   def mediaCategoryMenu
     if session[:media_type] == 'videos' || session[:media_type] == 'albums'
       album = PhotoAlbum.new
@@ -903,19 +964,16 @@ end
   end
 
   def setMediaSessionHash
+    #заполняем если хэш пустой
+    session[:media_type] = 'albums' if session[:media_type] == nil
     session[:media_year] = 'all' if session[:media_year] == nil
     session[:media_category] = 'all' if session[:media_category] == nil 
-    if params[:t] != 'videos' and params[:t] != 'albums' and params[:t] != 'articles'
-      session[:media_type] = 'albums' if session[:media_type] != 'videos' and session[:media_type] != 'articles' 
-    else
-       session[:media_type] = params[:t]
-    end
-    if params[:year] != nil
-      session[:media_year] = 'all'
-    else
-      session[:media_year] = params[:year]
-    end
-    if params[:c] != nil && params[:c] != ''
+    #обновляем хэш если параметры новые
+    session[:media_type] = params[:t] if params[:t] != nil
+    #if params[:year] != nil
+    #  session[:media_year] = params[:year]
+    # end
+    if params[:c] != nil
       session[:media_category] = params[:c].to_i if params[:c] != 'all'
       session[:media_category] = params[:c] if params[:c] == 'all'
     end
@@ -925,10 +983,13 @@ end
     if is_not_authorized?
       ''
     else
-      p = [
-            {:name => 'Добавить альбом', :access => true, :type => 'add', :link => new_photo_album_path},
-            {:name => 'Добавить видео', :access => true, :type => 'add', :link => new_video_path}
-          ]
+      if @mediaPartHash[:typeName] == 'videos'
+        p = [{:name => 'Добавить видео', :access => true, :type => 'add', :link => new_video_path}]
+      elsif @mediaPartHash[:typeName] == 'albums'
+        p = [{:name => 'Добавить альбом', :access => true, :type => 'add', :link => new_photo_album_path}]
+      elsif @mediaPartHash[:typeName] == 'articles'
+        p = [new_article_button(@articleType)]  
+      end
       v = "<div class = 'c_box'><div class = 'm_1000wh'>#{control_buttons(p)}</div></div>"
       return v.html_safe 
     end 

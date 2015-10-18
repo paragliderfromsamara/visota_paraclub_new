@@ -111,6 +111,7 @@ function my_functions()
 	{
 		var enteredLi, leftLi; //для управления главным меню
 		setInterval(function(){bottomControl()}, 500);
+        //$(window).resize(function(){bottomControl();});
 		Dropzone.autoDiscover = false;
 		//initNavWrapper();
 		top_slider();
@@ -119,7 +120,7 @@ function my_functions()
 		$('.quickScroll #aUp').click(function(){$(window).scrollTop(0);});
 		$('.quickScroll #aDwn').click(function(){var p=$("#top").outerHeight(true)+$("#middle").outerHeight(true);$(window).scrollTop(p);});
 		//scroller end
-		$(window).resize(function(){setLogoImgSize();bottomControl();});
+
 		$(document).on("click", ".slider .nav span", function() { // slider click navigate
 		var sl = $(this).closest(".slider"); // находим, в каком блоке был клик
 		$(sl).find("span").removeClass("on"); // убираем активный элемент
@@ -287,22 +288,19 @@ function waitbar(id)
 function bottomControl()
 	{
 		var sum_h, window_h, new_middle_h;
-		sum_h = $(document).height();
+		sum_h = blocksSumHeight();
 		window_h = $(window).height();
         //$("#test").text($(document).height());
 		if (sum_h < window_h)
 		{
-			new_middle_h = window_h - $("#top").outerHeight(true) - $("#bottom").outerHeight(true);
+			new_middle_h = window_h - $("#top").outerHeight(true) - $("#bottom").outerHeight(true) - $("#ses_p").outerHeight(true);
 			$('#middle').height(new_middle_h);
 			$("#bottom").css('position', 'fixed').css('bottom', '0');
 		}else{$("#bottom").css('position', 'relative').css('bottom', 'none');}
 		scrollControl();
 	}
-function blocksSumHeight(){return $("#top").outerHeight(true) + $("#middle").outerHeight(true) + $("#bottom").outerHeight(true);} 
-function setLogoImgSize()
-	{
-		$('#top_photo').height($('#top_photo').width()/3);
-	}
+function blocksSumHeight(){return $("#top").outerHeight(true) + $("#middle").outerHeight(true) + $("#bottom").outerHeight(true) + $("#ses_p").outerHeight(true);} 
+
 
 
 	

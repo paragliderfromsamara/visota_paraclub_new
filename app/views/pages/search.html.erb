@@ -11,37 +11,37 @@
                 </div>
                 <div class = 'col span_7_of_12'>
                     <div class = 'central_field' style = 'width: 90%;'>
-                    <table>
-                        <tr>
-                            <td valign = 'top' >
-                                <span class = 'istring medium-opacity'>
-                                    искать в...
-                                </span>
-                            </td>
-                            <td valign = 'top' style = 'width:90px;'>
-                                <input id = 'in_events' type = 'checkbox' name = 'in_events' <%= (@searchHashParams[:in_events]==true)? "checked='checked'":""  %> /> <label for = 'in_events'>новостях</label>
-                            </td>
-                            <td valign = 'top' style = 'width:80px;'>
-                                <input id = 'in_articles' type = 'checkbox' name = 'in_articles' <%= (@searchHashParams[:in_articles]==true)? "checked='checked'":""  %>  /> <label for = 'in_articles'>статьях</label>
-                            </td>
-                            <td id = 't_and_msg_s' valign = 'top' style = 'width: 200px;'>
-<input id = 'in_themes_and_messages' type = 'checkbox' name = 'in_themes_and_messages' <%= (@searchHashParams[:in_themes_and_messages])? "checked='checked'":""  %> /> <label for = 'in_themes_and_messages'>темах и сообщениях</label>
+                                            <table>
+                                                <tr>
+                                                    <td valign = 'top' >
+                                                        <span class = 'istring medium-opacity'>
+                                                            искать в...
+                                                        </span>
+                                                    </td>
+                                                    <td valign = 'top' style = 'width:90px;'>
+                                                        <input id = 'in_events' type = 'checkbox' name = 'in_events' <%= (@searchHashParams[:in_events]==true)? "checked='checked'":""  %> /> <label for = 'in_events'>новостях</label>
+                                                    </td>
+                                                    <td valign = 'top' style = 'width:80px;'>
+                                                        <input id = 'in_articles' type = 'checkbox' name = 'in_articles' <%= (@searchHashParams[:in_articles]==true)? "checked='checked'":""  %>  /> <label for = 'in_articles'>статьях</label>
+                                                    </td>
+                                                    <td id = 't_and_msg_s' valign = 'top' style = 'width: 200px;'>
+                        <input id = 'in_themes_and_messages' type = 'checkbox' name = 'in_themes_and_messages' <%= (@searchHashParams[:in_themes_and_messages])? "checked='checked'":""  %> /> <label for = 'in_themes_and_messages'>темах и сообщениях</label>
 
-                                    <div id = "topicsList" style = 'display:<%= (@searchHashParams[:in_themes_and_messages])?'block':'none' %>;'>
+                                                            <div id = "topicsList" style = 'display:<%= (@searchHashParams[:in_themes_and_messages])?'block':'none' %>;'>
 
-                                                    <% topics = Topic.all %>
-                                                    <% topics.each do |topic| %>
-                                                        <% h = "t_#{topic.id}".to_sym %>
-                                                        <input id = 't_<%= topic.id.to_s %>' type = 'checkbox' name = 't_<%= topic.id.to_s %>' <%= (@searchHashParams[h])? "checked='checked'":""  %>/>
-                                                         <label for = "t_<%= topic.id.to_s %>"><%= topic.name %></label><br />
-                                                    <% end %>
-                                                    <input id = 'o_gb' type = 'checkbox' name = 'o_gb' <%= (@searchHashParams[:o_gb])? "checked='checked'":""  %> /> <label for = 'o_gb'>В старой гостевой</label>
+                                                                            <% topics = Topic.all %>
+                                                                            <% topics.each do |topic| %>
+                                                                                <% h = "t_#{topic.id}".to_sym %>
+                                                                                <input id = 't_<%= topic.id.to_s %>' type = 'checkbox' name = 't_<%= topic.id.to_s %>' <%= (@searchHashParams[h])? "checked='checked'":""  %>/>
+                                                                                 <label for = "t_<%= topic.id.to_s %>"><%= topic.name %></label><br />
+                                                                            <% end %>
+                                                                            <input id = 'o_gb' type = 'checkbox' name = 'o_gb' <%= (@searchHashParams[:o_gb])? "checked='checked'":""  %> /> <label for = 'o_gb'>В старой гостевой</label>
 
-                                    </div>
-                            </td>
-                        </tr>
-                    </table>
-                    
+                                                            </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                    </div>
                 </div>
             </div>
         </form>

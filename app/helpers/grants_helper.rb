@@ -112,7 +112,27 @@ end
 	end
 	#photos_part_end
 	#articles_part
-	def userCanCreateArticle?
+	def userCanSeeArticle(article)
+    if article != nil
+      if is_not_authorized?
+        if article.user == current_user and current_user != nil
+          return true if article.status_id == 1 
+        else
+          return true if article.status_id == 1 and article.visibility_status_id == 1
+        end
+      else
+        if article.user != current_user
+          return true if article.status_id == 1 
+        else
+          return true if article.status_id != 3
+        end 
+      end
+      return true if is_super_admin?
+    end
+    return false
+  end
+  
+  def userCanCreateArticle?
 		if !is_not_authorized?
 			if user_type != 'friend'
 				return true
@@ -121,10 +141,10 @@ end
 		return false
 	end
 	def userCanEditArtilcle?(article)
-		isEntityOwner?(article) || is_super_admin?
+		isEntityOwner?(article)
 	end
   def userCanDeleteArticle(article)
-    return true if Time.now < (article.created_at + 1.day) 
+    return true if Time.now < (article.created_at + 1.day) and isEntityOwner?(article)
   end
 	#articles_part end
 	#events_part

@@ -104,7 +104,7 @@ include UsersHelper
   def articles
       @user = User.find_by_id(params[:id])
     	if @user != nil
-    		@title = "Материалы пользователя #{@user.name}"
+    		@title = @header = "Материалы пользователя #{@user.name}"
       	article = Article.new
       	@curArtCat = article.types.first
       	article.types.each do |t|

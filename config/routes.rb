@@ -42,9 +42,7 @@ resources :voices, :only => [:create, :destroy]
   
   #articles
   resources :articles
-  get "articles/bind_videos_and_albums"
-  post "articles/upload_photos"
-  get '/articles/:id/upload_photos', :to => 'articles#upload_photos'
+  post '/articles/:id/upload_photos', :to => 'articles#upload_photos'
   get '/articles/:id/bind_videos_and_albums', :to => 'articles#bind_videos_and_albums'
   #articles_end
 

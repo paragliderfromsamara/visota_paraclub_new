@@ -95,6 +95,12 @@ require 'open-uri' #для парсера
 	   :title => "История клуба",
 	   :drop_items => 'none'
 	  },
+    {
+    	   :name => 'Новости', 
+    	   :link => "/events", 
+    	   :title => "История клуба",
+    	   :drop_items => 'none'
+    	  },
 	  {
 	   :name => 'Обучение', 
 	   :link => "/school", 

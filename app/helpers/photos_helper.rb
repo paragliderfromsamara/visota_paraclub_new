@@ -99,7 +99,7 @@ module PhotosHelper
 		phts = msg.visible_photos
 		if phts != []
 			phts.each do |photo|
-				value += "<a href = '#{photo_path(photo)}' title = '#{photo.description}' alt = '#{photo_path(photo)}' ><div class = 'inline-blocks inline-thumb'><div class = 'central_field' style = 'width: 250px; margin-top: 15px;'>#{image_tag photo.link.thumb, :width => '250px'}</div><div style = 'width: 100px; height: 23px; position: absolute; bottom: 5px; right: 15px;'>#{photoInfo(photo)}</div></div></a>"
+				value += "<a href = '#{photo_path(photo)}'  title = '#{photo.description}' alt = '#{photo_path(photo)}' ><div class = 'inline-blocks inline-thumb'><div class = 'central_field' style = 'width: 250px; margin-top: 15px;'>#{image_tag photo.link.thumb, :width => '250px'}</div><div style = 'width: 100px; height: 23px; position: absolute; bottom: 5px; right: 15px;'>#{photoInfo(photo)}</div></div></a>"
 			end
 		end
 		return value
@@ -110,7 +110,7 @@ module PhotosHelper
 		phts = th.visible_photos
 		if phts != []
 			phts.each do |photo|
-				value += "<a href = '#{photo_path(photo)}' title = '#{photo.description}' alt = '#{photo_path(photo)}' ><div class = 'inline-blocks inline-thumb'><div class = 'central_field' style = 'width: 250px; margin-top: 15px;'>#{image_tag photo.link.thumb, :width => '250px'}</div><div style = 'width: 100px; height: 23px; position: absolute; bottom: 5px; right: 15px;'>#{photoInfo(photo)}</div></div></a>"
+				value += "<a href = '#{photo.link}' data-lightbox = 'th_#{th.id}' title = '#{photo.description}' alt = '#{photo_path(photo)}' ><div class = 'inline-blocks inline-thumb'><div class = 'central_field' style = 'width: 250px; margin-top: 15px;'>#{image_tag photo.link.thumb, :width => '250px'}</div><div style = 'width: 100px; height: 23px; position: absolute; bottom: 5px; right: 15px;'>#{photoInfo(photo)}</div></div></a>"
 			end
 		end
 		return value

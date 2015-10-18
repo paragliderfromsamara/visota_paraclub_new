@@ -1,9 +1,13 @@
 <div class = 'm_1000wh'>
-	<%= articles_path_buttons.html_safe %>
+    <%= articles_path_buttons.html_safe %>
 </div>
-<% if !is_not_authorized? %>
-	<div class = 'c_box'><div class = 'm_1000wh'><%= new_article_button.html_safe %></div></div>	
-<% end %>
+<%  if @user == nil  %>
+    <div class = 'c_box'>
+        <div class = 'm_1000wh'>
+            <%= new_article_button.html_safe %>
+        </div>
+    </div>
+<%end%>	
 <div class = 'c_box'>
     <div class = 'm_1000wh tb-pad-m'>
 		<% if @articles != [] %>

@@ -66,28 +66,27 @@ include PagesHelper
   end
   
   def media
-    setMediaSessionHash
+    setMediaSessionHash  #обновление перменных сессии
+    @mediaPartHash = makeMediaPartHash 
 	  @title = @header = "Медиа"
     category = session[:media_category]
     @entities = []
-    if session[:media_type] == 'videos'
+    if @mediaPartHash[:typeName] == 'videos'
       if category == 'all'
         @entities = Video.paginate(:page => params[:page], :per_page => 12).all.order('created_at DESC')
       else
         @entities  = Video.paginate(:page => params[:page], :per_page => 12).where(category_id: category).order('created_at DESC')
       end
-    elsif session[:media_type] == 'articles'
-      if category == 'all'
-        @entities = Article.paginate(:page => params[:page], :per_page => 12).where(status_id: 1).order('created_at DESC')
-      else
-        @entities = Article.paginate(:page => params[:page], :per_page => 12).where(article_type_id: category, status_id: 1).order('created_at DESC')
-      end
-    else
+    elsif @mediaPartHash[:typeName] == 'albums'
       if category == 'all'
         @entities = PhotoAlbum.paginate(:page => params[:page], :per_page => 5).where(status_id: 1).order('created_at DESC')
       else
         @entities = PhotoAlbum.paginate(:page => params[:page], :per_page => 5).where(category_id: category, status_id: 1).order('created_at DESC')
       end
+    elsif @mediaPartHash[:typeName] == 'articles'
+      article = Article.new
+      @articleType = article.getTypeIdByLink(session[:media_type]) 
+      @entities = Article.paginate(:page => params[:page], :per_page => 12).where(status_id: 1, article_type_id: @articleType[:value]).order('created_at DESC')
     end
   end
   

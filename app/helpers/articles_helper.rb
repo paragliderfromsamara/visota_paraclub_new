@@ -47,10 +47,10 @@ module ArticlesHelper
 	end
 	def top_article_buttons
 		buttons = [
-                {:name => 'К списку материалов', :access => true, :type => 'follow', :link => articles_path},
+                {:name => 'К списку материалов', :access => true, :type => 'follow', :link => "/media?t=#{@article.type[:link]}"},
                 {:name => 'К материалам пользователя', :access => true, :type => 'follow', :link => "/users/#{@article.user_id}/articles"},
 				        {:name => 'Редактировать', :access => userCanEditArtilcle?(@article), :type => 'edit', :link => edit_article_path(@article, :v => @article.article_type_id)},
-                {:name => 'Удалить', :access => true, :type => 'del', :link => article_path(@article), :data_method => 'delete', :rel => 'no-follow', :data_confirm => 'Вы уверены, что хотите удалить данный материал?'}
+                {:name => 'Удалить', :access => userCanDeleteArticle(@article), :type => 'del', :link => article_path(@article), :data_method => 'delete', :rel => 'no-follow', :data_confirm => 'Вы уверены, что хотите удалить данный материал?'}
                 	
 				      ]
 		return "<div class = 'c_box'><div class = 'm_1000wh'>#{control_buttons(buttons)}</div></div>"
@@ -231,10 +231,13 @@ module ArticlesHelper
 	
 	def new_article_button
 		buttons = [
-					{:name => "Добавить #{@curArtCat[:add_but_name]}", :access => userCanCreateArticle?, :type => 'add', :link => new_article_path(:c => @curArtCat[:value])}
-				  ]
+			          {:name => "Добавить #{@curArtCat[:add_but_name]}", :access => userCanCreateArticle?, :type => 'add', :link => new_article_path(:c => @curArtCat[:value])}
+				      ]
 		return control_buttons(buttons)
 	end
+  def new_article_button(type) #для страницы media
+    {:name => "Добавить #{type[:add_but_name]}", :access => userCanCreateArticle?, :type => 'add', :link => new_article_path(:c => type[:value])}
+  end
 	def article_errors
 		@content_error = ''
 		@content_f_color = ''

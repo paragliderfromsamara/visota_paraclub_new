@@ -1,8 +1,8 @@
 <div class = 'm_1000wh'>
     <div class = 'section group'>
         <div class = 'col span_10_of_12'>
-            <%= mediaTypeMenu %>
-            <%= mediaCategoryMenu %>
+            <%= buttons_in_line_b(@mediaPartHash[:typeButtons]).html_safe  %>
+            <%= buttons_in_line(@mediaPartHash[:categoryButtons]).html_safe %>
         </div>
         <div class = 'col span_2_of_12'>
             <%= will_paginate @entities %>
@@ -10,7 +10,7 @@
     </div>
 </div> 
 <%= newMediaPanel %>  
-<% if session[:media_type] == 'videos'%>
+<% if @mediaPartHash[:typeName] == 'videos'%>
     <div class = 'c_box odd'>
         <div class = 'm_1000wh tb-pad-m' >
 			<% @entities.each do |vid| %>
@@ -18,7 +18,7 @@
 			<% end %>
         </div>
     </div>
-<% elsif session[:media_type] == 'articles'%>
+<% elsif @mediaPartHash[:typeName] == 'articles'%>
     <div class = 'c_box odd'>
         <div class = 'm_1000wh tb-pad-m' >
     		<% if @entities != [] %>
@@ -41,7 +41,7 @@
     		<% end %>
         </div>
     </div>
-<% else %>
+<% elsif @mediaPartHash[:typeName] == 'albums' %>
 	<% @entities.each do |alb| %>
 		<div class = 'c_box'>
             <div class = 'm_1000wh tb-pad-s'>
@@ -53,7 +53,7 @@
 <div class = 'm_1000wh tb-pad-s'>
     <div class = 'section group'>
         <div class = 'col span_10_of_12'>
-            <%= mediaCategoryMenu %>
+            <%= buttons_in_line(@mediaPartHash[:typeButtons]).html_safe %>
         </div>
         <div class = 'col span_2_of_12'>
             <%= will_paginate @entities %>
