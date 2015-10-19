@@ -72,8 +72,8 @@ module PhotoAlbumsHelper
 		end
 		if photos != []
 			photos.each do |p|
-				value += "<a href = '#{photo_path(p)}' title = '#{p.description}' alt = '#{photo_path(p)}' ><div class = 'inline-blocks inline-mini'><div class = 'central_field' style = 'width: 150px; margin-top: 7px;'>#{image_tag p.link.thumb, :width => '150px'}</div></div></a>" if pathName == 'index' || pathName == 'visota_life'
-				value += "<a href = '#{photo_path(p)}' title = '#{p.description}' alt = '#{photo_path(p)}' ><div class = 'inline-blocks inline-thumb'><div class = 'central_field' style = 'width: 250px; margin-top: 15px;'>#{image_tag p.link.thumb, :width => '250px'}</div><div style = 'width: 100px; height: 23px; position: absolute; bottom: 5px; right: 15px;'>#{photoInfo(p)}</div></div></a>" if pathName == 'show'
+				value += "<a href = '#{photo_path(p)}' title = '#{p.description}' alt = '#{photo_path(p)}' ><div class = 'inline-blocks inline-mini'><div class = 'central_field' style = 'width: 150px; margin-top: 7px;'>#{image_tag p.link.thumb, :style => "display: none;", :width => '150px'}</div></div></a>" if pathName == 'index' || pathName == 'visota_life'
+				value += "<a href = '#{photo_path(p)}' title = '#{p.description}' alt = '#{photo_path(p)}' ><div class = 'inline-blocks inline-thumb'><div class = 'central_field' style = 'width: 250px; margin-top: 15px;'>#{image_tag p.link.thumb, :style => "display: none;", :width => '250px'}</div><div style = 'width: 100px; height: 23px; position: absolute; bottom: 5px; right: 15px;'>#{photoInfo(p)}</div></div></a>" if pathName == 'show'
 			end
 			value = "<div class = 'central_field' style = 'width: #{width}; padding-top: 10px; padding-bottom:10px;'>#{value}</div>"
       value += "<br /><p class = 'istring_m medium-opacity'>показано #{photos.count} из #{allPhotosCount}</p>" if allPhotosCount > photos.count

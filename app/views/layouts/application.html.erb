@@ -6,7 +6,7 @@
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
   <% define_action %>
-  <script type = 'text/javascript'>$(document).ready(function(){my_functions(); wheatherPanel(); <%= js_functions %> bottomControl();});</script>
+  <script type = 'text/javascript'>$(document).ready(function(){$('img').load(function(){$(this).fadeIn(1000);}); my_functions(); wheatherPanel(); <%= js_functions %> bottomControl();});</script>
 </head>
 <body>
 <!--
