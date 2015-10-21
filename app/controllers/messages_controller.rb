@@ -228,7 +228,7 @@ class MessagesController < ApplicationController
   			format.html { redirect_to link, :notice => noticeText}
   			format.json { render :json => jsonData }
   		  else
-  			current_user.message_draft.clean
+  			#current_user.message_draft.clean
   			@message_to = Message.find_by(id: params[:message][:message_id], status_id: 1)
   			@theme = Theme.find_by(id: @message.theme_id, status_id: 1)
   			@photo = Photo.find_by(id: @message.photo_id, status_id: 1)

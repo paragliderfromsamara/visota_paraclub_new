@@ -138,18 +138,16 @@ module MessagesHelper
 			end
 			if @video != nil 
 				if !is_not_authorized?
-					@alterReturnTo = video_path(@video)
+					@tmpMessage = current_user.video_comment_draft(@video)
+          type = 'message'
+          @alterReturnTo = video_path(@video)
 					flag = true
-					if @tmpMessage.video_id != @video.id
-						@tmpMessage.clean
-						@tmpMessage.update_attribute(:video_id, @video.id)
-					end
 				end
 			end
 			if @album != nil 
 				if !is_not_authorized?
 					flag = true
-          type = 'comment'
+          type = 'message'
 					chAlbumFlag = false
 					chPhotoFlag = false
 					@alterReturnTo = photo_album_path(@album)

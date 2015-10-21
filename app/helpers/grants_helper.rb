@@ -268,6 +268,9 @@ end
         if msg.photo != nil
           return true if userCanSeePhoto?(msg.photo)
         end
+        if msg.video != nil
+          return true
+        end
 			end
 		end 
 		#return true if is_super_admin?
@@ -278,6 +281,7 @@ end
 			return userCanSeeTheme?(msg.theme) if msg.theme_id != nil
       return userCanSeeAlbum?(msg.photo_album) if msg.photo_album != nil
       return userCanSeePhoto?(msg.photo) if msg.photo != nil
+      return !is_not_authorized? if msg.video != nil
 		end
 		return false
 	end

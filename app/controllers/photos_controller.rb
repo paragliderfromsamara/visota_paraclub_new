@@ -111,7 +111,10 @@ include MessagesHelper
 		@message = Message.find_by(id: params[:e_id])
 		redirect_to '/404' if !isEntityOwner?(@message)
 		@photos = @message.photos
-		@link_to = theme_path(@message.theme_id)
+		@link_to = theme_path(@message.theme_id) if @message.theme != nil
+    @link_to = photo_album_path(@message.photo_album_id) if @message.photo_album != nil
+    @link_to = photo_path(@message.photo) if @message.photo != nil
+    @link_to = video_path(@message.video_id) if @message.video != nil
 	when "article" #Фотографии в статье...
 		@article = Article.find_by(id: params[:e_id])
 		redirect_to '/404' if !isEntityOwner?(@article)

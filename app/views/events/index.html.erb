@@ -1,13 +1,16 @@
-<div class = 'm_1000wh'>
-    <%= will_paginate @event %>
-</div>
-<% if userCanCreateEvent? %>
-    <div class = 'c_box'>
-        <div class = 'm_1000wh'>
-            <%= add_new_event %>
+<div class = 'c_box'>
+    <div class = 'm_1000wh'>
+        <div class = "section group">
+            <div class = "col span_4_of_12">
+                <%= add_new_event if userCanCreateEvent?%>
+            </div>
+            <div class = "col span_8_of_12">
+                <%= will_paginate @event %>
+            </div>
         </div>
     </div>
-<%end%>
+</div>
+
 <% if @events != [] %>
     <% i = 0 %>
     <% @events.each do |event| %>
@@ -21,7 +24,15 @@
         </p>
     </div>
 <% end %>
-<div class = 'm_1000wh'>
-    <%= will_paginate @event %>
+<div class = "c_box">
+    <div class = 'm_1000wh '>
+        <div class = "section group">
+            <div class = "col span_4_of_12">
+            </div>
+            <div class = "col span_8_of_12">
+                <%= will_paginate @event %>
+            </div>
+        </div>
+    </div>
 </div>
 

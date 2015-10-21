@@ -220,6 +220,17 @@ mount_uploader :photo, UserPhotoUploader
 	  draft = self.messages.create(:status_id => 0, photo_id: photo.id) if draft == nil 
 	  return draft
   end
+  def video_comment_draft(video)
+    draft = Message.find_by(user_id: self.id, status_id: 0, video_id: !nil)
+    if draft != nil
+       if draft.video_id != video.id
+         draft.clean
+         draft.update_attribute(:video_id, video.id)
+       end
+    end
+	  draft = self.messages.create(:status_id => 0, video_id: video.id) if draft == nil 
+	  return draft
+  end
   def theme_draft(topic) #выдает, а если необходимо создает черновик темы
 	draft = Theme.find_by(user_id: self.id, status_id: 0, topic_id: topic.id)
 	if draft == nil
