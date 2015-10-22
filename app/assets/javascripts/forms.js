@@ -1,4 +1,29 @@
 
+function initVideoForm()
+{
+    var wb = new waitbar("wait_video_check");
+    $("#video_link").change(function() {
+                                        var e=this;
+                                        
+                                        wb.startInterval();
+                                        $.ajax(
+                                                {
+                                                    url: "/videos/new.json",
+                                                    dataType: "json",
+                                                    type: "GET",
+                                                    data: ({link: $(e).val()}),
+                                                    error: function(XMLHttpRequest, textStatus, errorThrown){console.log(errorThrown);console.log(textStatus); wb.stopInterval();},
+                                                    success: function(data){
+                                                                            if (data.link_html !== "" && data.link_html !== $(e).val())
+                                                                                {
+                                                                                    $("#video_preview").html(data.link_html);
+                                                                                } else {$("#video_preview").html("Ссылка указана в неправильном формате");}
+                                                                            console.log(data.link_html); wb.stopInterval();
+                                                                           }
+                                                }
+                                              );//console.log("hello");
+                                       });
+}
 
 function initReportForm(art_id, formName)
 {

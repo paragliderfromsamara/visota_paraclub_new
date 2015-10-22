@@ -264,8 +264,11 @@ function waitbar(id)
         var loopTime = wl.find(".wl-item").length*tNull + tNull;
         this.curVisible = 0;
         this.interval = null;
-        this.startInterval = function () {this.interval = setInterval(function() {
+        this.startInterval = function () {
+                                wl.fadeIn(200);
+                                this.interval = setInterval(function() {
     							var t = tNull;
+                                
     							wl.find(".wl-item").css("background-color", "grey");
 							
     							wl.find(".wl-item").each(function(i){
@@ -281,7 +284,7 @@ function waitbar(id)
         
         this.stopInterval = function()
         {
-            if (this.interval !== null) clearInterval(this.interval);
+            if (this.interval !== null) {clearInterval(this.interval); wl.fadeOut(200);}
         }
         
     }

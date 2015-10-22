@@ -1,7 +1,17 @@
 <% video_errors %>
 	<%= form_for(@video) do |f| %>
 	  <table style = 'width: 100%;'>
-	  	<tr>
+	  	<% if @users != nil %>
+            <tr>
+    		  <td align = 'right' valign = 'middle' >
+    			    <%= f.label :user_id, 'Разместил' %>
+    		  </td>
+    		  <td align = 'left' valign = 'middle'>
+    			    <%= f.collection_select :user_id, @users, :id, :name %>
+    		  </td>
+    		</tr>
+        <% end %>
+        <tr>
 		  <td align = 'right' valign = 'middle' >
 			<%= f.label :category_id, 'Категория' %>
 		  </td>
@@ -25,8 +35,8 @@
 			<td align = 'left' valign = 'top' <%= @link_f_color.html_safe %>>
 				<%= @link_error.html_safe %>
 				<%= f.text_area :link, :rows => '3', :cols => '60' %>
-                <%= waitline('video_wait_check').html_safe %>
-                <div class = 'video_preview'></div>
+                <%= waitline("wait_video_check").html_safe %>
+                <div id = 'video_preview'></div>
 			</td>
 		</tr>
 		<tr>

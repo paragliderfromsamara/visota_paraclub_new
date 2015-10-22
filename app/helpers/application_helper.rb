@@ -8,7 +8,7 @@ require 'open-uri' #для парсера
 
   def waitline(id)
     "
-		<div id = '#{id}' class = 'wl'>
+		<div style = 'display:none;' id = '#{id}' class = 'wl'>
 			<div class = 'wl-item'>
 			</div>
 			<div class = 'wl-item'>

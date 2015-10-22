@@ -64,14 +64,16 @@ include ApplicationHelper
   def new
   	if !is_not_authorized?
   		@video = Video.new
+      @video.mini_link = params[:link] if params[:link] != nil
   		@path_array = [
                       {:name => 'Медиа', :link => '/media'},
           						{:name => 'Новое видео'}
   					        ]
+      @add_functions = "initVideoForm();"
   		@title = @header = 'Новое видео'
   		respond_to do |format|
   		  format.html # new.html.erb
-  		  format.json { render :json => @video }
+  		  format.json { render :json => {:link_html => @video.mini_link_html} }
   		end
   	else
   		redirect_to '/404'
@@ -82,6 +84,7 @@ include ApplicationHelper
   def edit
     @video = Video.find(params[:id])
     @title = @header = "Изменение видео"
+    @users = User.order("name ASC") if is_super_admin?
 		@path_array = [
                     {:name => 'Медиа', :link => '/media'},
         						{:name => 'Видео', :link => '/media?t=videos&c=all'},

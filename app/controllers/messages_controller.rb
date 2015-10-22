@@ -102,7 +102,7 @@ class MessagesController < ApplicationController
 			@video = Video.find_by(id: @formMessage.video_id)
 			@button_name = 'Сохранить изменения'
 			if @theme != nil
-				@title = 'Изменение сообщения'
+				@title = @header = 'Изменение сообщения'
 				@topic = Topic.find_by(id: @formMessage.topic_id)
 				@path_array = [
 								{:name => 'Общение', :link => '/visota_life'},
