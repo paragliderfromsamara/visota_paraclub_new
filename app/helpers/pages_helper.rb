@@ -984,9 +984,9 @@ end
       ''
     else
       if @mediaPartHash[:typeName] == 'videos'
-        p = [{:name => 'Добавить видео', :access => true, :type => 'add', :link => new_video_path}]
+        p = [{:name => 'Добавить видео', :access => true, :type => 'plus', :link => new_video_path}]
       elsif @mediaPartHash[:typeName] == 'albums'
-        p = [{:name => 'Добавить альбом', :access => true, :type => 'add', :link => new_photo_album_path}]
+        p = [{:name => 'Добавить альбом', :access => true, :type => 'plus', :link => new_photo_album_path}]
       elsif @mediaPartHash[:typeName] == 'articles'
         p = [new_article_button(@articleType)]  
       end

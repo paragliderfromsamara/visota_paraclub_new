@@ -3,10 +3,14 @@
 <head>
   <title><%= my_title %></title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
+  <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
   <% define_action %>
-  <script type = 'text/javascript'>$(document).ready(function(){$('img').load(function(){$(this).fadeIn(1000);}); my_functions(); wheatherPanel(); <%= js_functions %> bottomControl();});</script>
+  <script type = 'text/javascript'>
+  var ready = function(){$('img').load(function(){$(this).fadeIn(1000);}); my_functions(); wheatherPanel(); <%= js_functions %> bottomControl();};
+      $(document).ready(ready);
+      $(document).on('page:load',ready);
+  </script>
 </head>
 <body>
 <!--
@@ -36,8 +40,8 @@
 </div> 
 -->
 <div class='quickScroll' style = 'display: none;'>
-	<div class = 'arrow' id = 'aUp' style = 'display: none;'></div>
-	<div class = 'arrow' id = 'aDwn' style = 'display: none;'></div>
+	<div class = 'arrow fi-arrow-up' id = 'aUp' style = 'display: none;'></div>
+	<div class = 'arrow fi-arrow-down' id = 'aDwn' style = 'display: none;'></div>
 </div>
 <% if @hideSesPanel != true %>
     <div id = 'ses_p' class = 'm_1000wh' >

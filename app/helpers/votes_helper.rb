@@ -41,8 +41,8 @@ module VotesHelper
 	
 	def vote_show_buttons
 		b = []
-    b += [{:name => "К списку опросов", :access => true, :type => 'follow', :link => votes_path}]
-    b += [{:name => "Удалить опрос", :access => userCanEditVote?(@vote), :type => 'del', :link => vote_path(@vote), :data_method => 'delete', :data_confirm => 'Вы уверены, что хотите удалить данное голосование?', :rel => 'nofollow'}]
+    b += [{:name => "К списку опросов", :access => true, :type => 'arrow-right', :link => votes_path}]
+    b += [{:name => "Удалить опрос", :access => userCanEditVote?(@vote), :type => 'trash', :link => vote_path(@vote), :data_method => 'delete', :data_confirm => 'Вы уверены, что хотите удалить данное голосование?', :rel => 'nofollow'}]
 	  return control_buttons(b)
   end
 	
@@ -81,7 +81,7 @@ module VotesHelper
 	
 	def index_votes_buttons
 		[
-		 {:name => "Добавить опрос", :access => !is_not_authorized?, :type => 'add', :link => "#{new_vote_path}", :id => 'newVote'} 
+		 {:name => "Добавить опрос", :access => !is_not_authorized?, :type => 'plus', :link => "#{new_vote_path}", :id => 'newVote'} 
 		]
 	end
 	

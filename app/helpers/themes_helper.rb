@@ -104,7 +104,7 @@ module ThemesHelper
 			else
 				rows += "<td class = 'usr'>#{th.user.name}</td><td class = 'date'>#{my_time(th.created_at)}</td>"
 			end
-			rows += "<td class = 'stat' valign = 'middle' id = 'last'>#{themeInformation(th)}</td>"
+			rows += "<td class = 'stat' valign = 'top' id = 'last'>#{themeInformation(th)}</td>"
 			rows += '</tr>'
 			rows += "</tbody>"
 		end
@@ -115,10 +115,10 @@ module ThemesHelper
 		h = theme.statusHash
 		vh = theme.vStatusHash
 		v = ''
-		v += "#{image_tag vh[:img], :height => '20px', :style => 'float: left;', :title => vh[:ru], :id=>'vStatusImg' } " if vh[:value] == 'hidden'
-		v += "#{image_tag h[:img], :height => '20px', :style => 'float: left; padding-left: 15px;', :title => h[:ru], :id=>'statusImg' } "
-		v += "<img src = '/files/answr_g.png' width = '20px' style = 'float: left; padding-left: 15px; padding-right: 3px;'/><span title = 'Сообщений по теме' class = 'stat'>#{theme.visible_messages.count.to_s}</span> "
-		v += "<img src = '/files/eye_g.png' width = '20px' style = 'float: left;padding-left: 15px; padding-right: 3px;' /><span title = 'Просмотры' class = 'stat'>#{theme.views.count}</span> "
+		v += "<div class='stat fi-float-left' title = '#{vh[:ru]}'>#{drawIcon(vh[:img], 'medium', 'grey')}</div>" if vh[:value] == 'hidden'
+		v += "<div class='stat fi-float-left' title = '#{h[:ru]}'>#{drawIcon(h[:img], 'medium', 'grey')}</div>"
+		v += "<div class='stat fi-float-left'>#{drawIcon('comments', 'medium', 'grey')}<span>112</span></div>"
+		v += "<div class='stat fi-float-left'>#{drawIcon('eye', 'medium', 'grey')}<span>11119</span></div>"
 		return v
 	end
 	def theme_show_block(showBut)
@@ -171,18 +171,15 @@ module ThemesHelper
   
 	def theme_owner_buttons #в контроллере themes#show
 		buttons_array = []
-		buttons_array += [{:name => 'Новое сообщение', :access => userCanCreateMsgInTheme?(@theme), :type => 'add', :id => 'newMsgBut', :link => '#new_message'}]
+		buttons_array += [{:name => 'Новое сообщение', :access => userCanCreateMsgInTheme?(@theme), :type => 'comment', :id => 'newMsgBut', :link => '#new_message'}]
 		buttons_array += [themeNotificationButton(@theme.id)] if signed_in?
 		buttons_array += [
-							{:name => "Редактировать", :access => userCanEditTheme?(@theme), :type => 'edit', :link => "#{edit_theme_path(@theme)}", :id => 'editTheme'}
-							#{:name => "Добавить фото", :access => userCanEditTheme?(@theme), :type => 'camera', :link => "#{theme_path(@theme)}/add_photos", :title => 'Добавить фотографии к теме...'},
-							#{:name => "Добавить файл", :access => userCanEditTheme?(@theme), :type => 'file', :link => "#{theme_path(@theme)}/add_files", :title => 'Добавить файлы к теме...'}
-						]
-		#buttons_array[buttons_array.length] = {:name => "Изменить фотографии", :access => isThemeOwner?(@theme),  :link => "/edit_photos?e=th&e_id=#{@theme.id}"} if @theme.photos != [] and @theme.status != 'closed'
-		buttons_array[buttons_array.length] = {:name => 'Объединить с...', :access => is_super_admin?, :type => 'merge', :link => theme_path(@theme) + "/merge_themes", :title => "Объединить с другой темой", :id => 'mergeTheme'} if @theme.merge_with == nil 
+							        {:name => "Редактировать", :access => userCanEditTheme?(@theme), :type => 'pencil', :link => "#{edit_theme_path(@theme)}", :id => 'editTheme'}
+						         ]
+		buttons_array[buttons_array.length] = {:name => 'Объединить с...', :access => is_super_admin?, :type => 'shuffle', :link => theme_path(@theme) + "/merge_themes", :title => "Объединить с другой темой", :id => 'mergeTheme'} if @theme.merge_with == nil 
 		buttons_array[buttons_array.length] = {:name => 'Закрыть тему', :access => userCanSwitchTheme?(@theme), :type => 'lock',  :link => "/themes/#{@theme.id}/theme_switcher?to_do=close", :rel => 'nofollow', :id => 'themeClose'}  if @theme.status != 'closed'
 		buttons_array[buttons_array.length] = {:name => 'Открыть тему', :access => userCanSwitchTheme?(@theme), :type => 'unlock',  :link => "/themes/#{@theme.id}/theme_switcher?to_do=open", :rel => 'nofollow', :id=> 'themeOpen'} if @theme.status != 'open'
-		buttons_array[buttons_array.length] = {:name => 'Удалить тему', :access => userCanSwitchTheme?(@theme), :type => 'del', :link => theme_path(@theme), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить тему?', :data_method => 'delete', :id=> 'deleteTheme'}
+		buttons_array[buttons_array.length] = {:name => 'Удалить тему', :access => userCanSwitchTheme?(@theme), :type => 'trash', :link => theme_path(@theme), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить тему?', :data_method => 'delete', :id=> 'deleteTheme'}
 		
 		return control_buttons(buttons_array).html_safe
 	end

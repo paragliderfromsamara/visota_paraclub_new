@@ -1,33 +1,33 @@
 module VideosHelper
 	def index_videos_buttons
 		[	
-		 {:name => 'Добавить видео', :access => !is_not_authorized?, :type => 'add', :link => "#new", :id => 'toggle_but'}
+		 {:name => 'Добавить видео', :access => !is_not_authorized?, :type => 'plus', :link => "#new", :id => 'toggle_but'}
 		]		
 	end
 	def user_videos_buttons
 		[
-		{:name => 'К странице пользователя', :access => true, :type => 'follow', :link => "#{user_path(@user)}"},
-		{:name => 'Все видео', :access => true, :type => 'follow', :link => "#{videos_path}"}
+		{:name => 'К странице пользователя', :access => true, :type => 'arrow-right', :link => "#{user_path(@user)}"},
+		{:name => 'Все видео', :access => true, :type => 'arrow-right', :link => "#{videos_path}"}
 		]
 	end
 	def top_video_buttons
 		[
-		 {:name => 'К списку видео', :access => true, :type => 'follow', :link => "#{videos_path}"}, 
-		 {:name => 'Все видео пользователя', :access => true, :type => 'follow', :link => "/users/#{@video.user.id.to_s}/videos"},
-     {:name => 'Изменить видео', :access => isEntityOwner?(@video), :type => 'edit', :link => edit_video_path(@video)},  
-     {:name => 'Удалить', :access => isEntityOwner?(@video), :type => 'del', :link => "#{video_path(@video)}", :data_confirm => 'Вы уверены что хотите удалить данное видео?', :data_method => 'delete', :rel => 'nofollow'}
+		 {:name => 'К списку видео', :access => true, :type => 'arrow-right', :link => "#{videos_path}"}, 
+		 {:name => 'Все видео пользователя', :access => true, :type => 'arrow-right', :link => "/users/#{@video.user.id.to_s}/videos"},
+     {:name => 'Изменить видео', :access => isEntityOwner?(@video), :type => 'pencil', :link => edit_video_path(@video)},  
+     {:name => 'Удалить', :access => isEntityOwner?(@video), :type => 'trash', :link => "#{video_path(@video)}", :data_confirm => 'Вы уверены что хотите удалить данное видео?', :data_method => 'delete', :rel => 'nofollow'}
 		]
 	end
 	def bottom_video_buttons
 		[
-		 {:name => 'Добавить комментарий', :access => !is_not_authorized?, :type => 'add', :id => 'newMsgBut', :link => '#new_message'}
+		 {:name => 'Добавить комментарий', :access => !is_not_authorized?, :type => 'comment', :id => 'newMsgBut', :link => '#new_message'}
 		]
 	end
 	def videoInformation(video)
 		#h = theme.statusHash
 		#v = "#{image_tag h[:img], :height => '20px', :style => 'float: left;', :title => h[:ru] } "
-		v = "<img src = '/files/answr_g.png' width = '20px' style = 'float: left; padding-left: 5px;'/><span title = 'Комментарии' class = 'stat'>#{video.visible_messages.count.to_s}</span> "
-		v += "<img src = '/files/eye_g.png' width = '20px' style = 'float: left;' /><span title = 'Просмотры' class = 'stat'>0</span> "
+		v = "<div class='stat fi-float-left'>#{drawIcon('comments', 'medium', 'grey')}<span>#{video.visible_messages.count.to_s}</span></div>"
+		v += "<div class='stat fi-float-left'>#{drawIcon('eye', 'medium', 'grey')}<span>0</span></div>"
 		return v
 	end
 	def video_show_block
@@ -105,7 +105,7 @@ module VideosHelper
 												#{link_to "Перейти", video, :class => 'b_link'}
 										</td>
 										<td align = 'right'>
-											<span title = 'Комментарии'>#{image_tag('/files/answr_g.png', :width => '20px', :valign => 'bottom')} <span class='istring_m norm medium-opacity'>#{video.messages.where(:status_id => 1).count.to_s}</span></span>
+											<div class='stat fi-float-left'><i class = 'fi-comments fi-large fi-grey'></i><span>#{video.messages.where(:status_id => 1).count.to_s}</span></div>
 										</td>
 									</tr>
 								</table>
@@ -144,13 +144,12 @@ module VideosHelper
 		v = Video.new
 		link = videos_path
 		link = "/users/#{@user.id.to_s}/videos" if @user != nil
-		
 		cur = params[:c]
 		all_but = {:name => 'Все', :access => true, :type => 'b_grey', :link => link} 
 		all_but[:selected] = true if cur == nil or cur == []
 		buttons_array = [
-							all_but   
-						]
+							        all_but   
+						        ]
 		v.categories.each do |c|
 			categoryVideos = Video.where(category_id: c[:value]) if @user == nil
 			categoryVideos = Video.where(category_id: c[:value], user_id: @user.id) if @user != nil

@@ -105,12 +105,12 @@ class Theme < ActiveRecord::Base
 #статусы...  
   def statuses 
 	[	
-		{:id => 0, :value => 'draft', :img => '/files/unlock_g.png', :ru => 'Черновик'},	  #черновики
+		{:id => 0, :value => 'draft', :img => 'unlock', :ru => 'Черновик'},	  #черновики
 		#отображенные
-		{:id => 1, :value => 'open', :img => '/files/unlock_g.png', :ru => 'Открыта'},     #отображенные
-		{:id => 2, :value => 'open_to_delete', :img => '/files/unlock_g.png', :ru => 'Удалена'},#в очереди на удаление
-		{:id => 3, :value => 'closed', :img => '/files/lock_g.png', :ru => 'Закрыта'},    #Тема закрыта
-		{:id => 4, :value => 'closed_to_delete', :img => '/files/lock_g.png', :ru => 'Закрыта и удалена'}    #Тема закрыта    #Тема закрыта и удалена
+		{:id => 1, :value => 'open', :img => 'unlock', :ru => 'Открыта'},     #отображенные
+		{:id => 2, :value => 'open_to_delete', :img => 'unlock', :ru => 'Удалена'},#в очереди на удаление
+		{:id => 3, :value => 'closed', :img => 'lock', :ru => 'Закрыта'},    #Тема закрыта
+		{:id => 4, :value => 'closed_to_delete', :img => 'lock', :ru => 'Закрыта и удалена'}    #Тема закрыта    #Тема закрыта и удалена
 		#отображенные end
 	]
   end
@@ -121,8 +121,8 @@ class Theme < ActiveRecord::Base
   end
   def v_statuses #статус отображения
 	[
-	{:id => 1, :value => 'visible', :img => '/', :ru => 'Для всех'},
-	{:id => 2, :value => 'hidden', :img => '/files/privacy_g.png', :ru => 'Только для авторизванных пользователей'}
+	{:id => 1, :value => 'visible', :img => 'none', :ru => 'Для всех'},
+	{:id => 2, :value => 'hidden', :img => 'shield', :ru => 'Только для авторизванных пользователей'}
 	]
   end
   def v_status #статус отображения

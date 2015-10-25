@@ -125,7 +125,7 @@ AutoHtml.add_filter(:my_vimeo).with(:width => 640, :height => 480, :show_title =
   end
 end
 AutoHtml.add_filter(:fNum) do |text|
-	text.gsub(/\[fNum\](\n|\r)+((\d+\.\s.*(\n|\r)+)+)\[\/fNum\]/) do #\n((\d+\.\s.*\n)*)(\n)*\ \n\d+\.\s.*\n\[\/fNum\]
+	text.gsub(/\[list-number\](\n|\r)+((\d+\.\s.*(\n|\r)+)+)\[\/list-number\]/) do #\n((\d+\.\s.*\n)*)(\n)*\ \n\d+\.\s.*\n\[\/fNum\]
 		c = $2
 		if c != '' and c != nil 
 			c = c.gsub(/(\d+)\.\s(.*)(\n|\r)/){"<li type = '1' value = #{$1}>#{$2}</li>"}
@@ -139,8 +139,8 @@ end
 AutoHtml.add_filter(:my_quotes) do |text|
   variants = [
 				{:tagName => 'quote', :className => 'cnt-quotes'},
-				{:tagName => 'cAlign', :className => 'cnt-al-c'},
-				{:tagName => 'rAlign', :className => 'cnt-al-r'}
+				{:tagName => 'align-center', :className => 'cnt-al-c'},
+				{:tagName => 'align-right', :className => 'cnt-al-r'}
 				
 			 ]
   cText = text

@@ -41,20 +41,20 @@ module EventsHelper
 	
 	def event_manage_buttons(event)
 		[
-			{:name => 'Изменить', :access => userCanEditEvent?(event), :type => 'edit', :link => edit_event_path(event)},
-			{:name => 'Удалить', :access => userCanEditEvent?(event), :type => 'del', :link => event_path(event), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить новость???', :data_method => 'delete'}
+			{:name => 'Изменить', :access => userCanEditEvent?(event), :type => 'pencil', :link => edit_event_path(event)},
+			{:name => 'Удалить', :access => userCanEditEvent?(event), :type => 'trash', :link => event_path(event), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить новость???', :data_method => 'delete'}
 		]
 	end
 	def event_index_buttons(event)
-		[{:name => 'Перейти', :access => true, :type => 'follow', :link => event.link_to}] + event_manage_buttons(event) 
+		[{:name => 'Перейти', :access => true, :type => 'arrow-right', :link => event.link_to}] + event_manage_buttons(event) 
 	end
 	def event_show_buttons
-		val = [{:name => 'К списку новостей', :access => true, :type => 'follow', :link => events_path}] + event_manage_buttons(@event)
-		val[val.length] = {:name => 'Редактировать фотографии', :access => userCanEditEvent?(@event), :type => 'edit', :link => "/edit_photos?e=ev&e_id=#{@event.id}"} if @event.photos != []
+		val = [{:name => 'К списку новостей', :access => true, :type => 'arrow-right', :link => events_path}] + event_manage_buttons(@event)
+		val[val.length] = {:name => 'Редактировать фотографии', :access => userCanEditEvent?(@event), :type => 'pencil', :link => "/edit_photos?e=ev&e_id=#{@event.id}"} if @event.photos != []
 		return val
 	end
 	def add_new_event
-		control_buttons([{:name => 'Добавить новость', :access => userCanCreateEvent?, :type => 'add', :link => new_event_path}]).html_safe
+		control_buttons([{:name => 'Добавить новость', :access => userCanCreateEvent?, :type => 'plus', :link => new_event_path}]).html_safe
 	end
 	
 	def event_show_photos

@@ -47,10 +47,10 @@ module ArticlesHelper
 	end
 	def top_article_buttons
 		buttons = [
-                {:name => 'К списку материалов', :access => true, :type => 'follow', :link => "/media?t=#{@article.type[:link]}"},
-                {:name => 'К материалам пользователя', :access => true, :type => 'follow', :link => "/users/#{@article.user_id}/articles"},
-				        {:name => 'Редактировать', :access => userCanEditArtilcle?(@article), :type => 'edit', :link => edit_article_path(@article, :v => @article.article_type_id)},
-                {:name => 'Удалить', :access => userCanDeleteArticle(@article), :type => 'del', :link => article_path(@article), :data_method => 'delete', :rel => 'no-follow', :data_confirm => 'Вы уверены, что хотите удалить данный материал?'}
+                {:name => 'К списку материалов', :access => true, :type => 'arrow-right', :link => "/media?t=#{@article.type[:link]}"},
+                {:name => 'К материалам пользователя', :access => true, :type => 'arrow-right', :link => "/users/#{@article.user_id}/articles"},
+				        {:name => 'Редактировать', :access => userCanEditArtilcle?(@article), :type => 'pencil', :link => edit_article_path(@article, :v => @article.article_type_id)},
+                {:name => 'Удалить', :access => userCanDeleteArticle(@article), :type => 'trash', :link => article_path(@article), :data_method => 'delete', :rel => 'no-follow', :data_confirm => 'Вы уверены, что хотите удалить данный материал?'}
                 	
 				      ]
 		return "<div class = 'c_box'><div class = 'm_1000wh'>#{control_buttons(buttons)}</div></div>"
@@ -231,12 +231,12 @@ module ArticlesHelper
 	
 	def new_article_button
 		buttons = [
-			          {:name => "Добавить #{@curArtCat[:add_but_name]}", :access => userCanCreateArticle?, :type => 'add', :link => new_article_path(:c => @curArtCat[:value])}
+			          {:name => "Добавить #{@curArtCat[:add_but_name]}", :access => userCanCreateArticle?, :type => 'plus', :link => new_article_path(:c => @curArtCat[:value])}
 				      ]
 		return control_buttons(buttons)
 	end
   def new_article_button(type) #для страницы media
-    {:name => "Добавить #{type[:add_but_name]}", :access => userCanCreateArticle?, :type => 'add', :link => new_article_path(:c => type[:value])}
+    {:name => "Добавить #{type[:add_but_name]}", :access => userCanCreateArticle?, :type => 'plus', :link => new_article_path(:c => type[:value])}
   end
 	def article_errors
 		@content_error = ''
@@ -303,11 +303,4 @@ module ArticlesHelper
 		"#<span id = 'album_#{ photo.photo_album.id.to_s }_#{i}' style = 'display: none;'><a class = 'b_link' href = '#{photo_path(photo)}'>Комментарии</a></span>
 	end
 	
-	def content_icons(article)
-		value = ''
-		value += "#{image_tag('/files/album_black.png')}<span style = 'font-size: 13pt;'>#{article.photo_albums.count}<span>"
-		value += " #{image_tag('/files/mini_ph_black.png', :width => '25px')} <span style = 'font-size: 13pt;'>#{article.photos.count}<span>"
-		value += " #{image_tag('/files/video_black.png', :width => '25px')} <span style = 'font-size: 13pt;'>#{article.videos.count}<span>"
-		return value
-	end
 end

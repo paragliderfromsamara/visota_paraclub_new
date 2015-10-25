@@ -360,9 +360,9 @@ function myForm(type, entityID, formName)
     this.submitButt = this.formElement.find(formName.replace(".", "#") + "_" + entityID + "_button");
 	this.tEditor = null;
 	this.parentElID = 'none'; 
-	this.imgAddr = '/files/';
-	this.nameList = ['addSmiles', 'binding', 'addImg'];
-	this.descList = ['Улыбки', 'Вложить альбомы и видео', 'Добавить фотографии'];
+    this.classPrefix = 'fi-'
+	this.nameList = ['paw', 'link', 'photo'];
+	this.descList = ['Эмоции', 'Вложить альбомы и видео', 'Добавить фотографии'];
 	this.aButList = []; //список используемых кнопок отражает номер кнопки в массивах descList и nameList
 	//включение 
 	//наименование
@@ -739,10 +739,10 @@ function myForm(type, entityID, formName)
 							for (j=0; j<this.aButList.length; j++)
 							{
 								i = this.aButList[j]; 
-								cur_addr=this.imgAddr+this.nameList[i]+'_g'; 
+								cur_addr=this.classPrefix + this.nameList[i]; 
 								curButClass = ' hItem';
 								curMenuClass = ' hMenu';
-								buttons += '<li class = "mItem'+curButClass+'" title = "'+this.descList[i]+'" id = "'+this.nameList[i]+'"><img src = "'+cur_addr+'.png" width = "25px"/></li>';
+								buttons += '<li class = "mItem'+curButClass+'" title = "'+this.descList[i]+'" id = "'+this.nameList[i]+'">'+drawIcon(cur_addr, "fi-largest", "fi-grey")+'</li>';
 								menus += '<div class = "mMenus'+curMenuClass+'" id = "'+this.nameList[i]+'Menu">'+menuContent(this.nameList[i], this)+'</div>';
 								
 							}
@@ -766,13 +766,13 @@ function myForm(type, entityID, formName)
 
 	function menuContent(n, el){
 								var val;
-								if(n=='addSmiles')
+								if(n=='paw')
 									{val='<div class = "central_field" style = "width: 90%;">'+drawSmiles()+'</div>';}
 								else if(n=='binding')
 									{
 										val = '<table style = "width: 100%;"><tr><td><label>Вложенные альбомы</label><div class = "art-binding-ent-list" id = "ab_albums"></div></td><td><label>Вложенное видео</label><div class = "art-binding-ent-list" id = "ab_videos"></div></td></tr><tr><td style = "width: 50%; " ><br /><label>Доступные альбомы</label><br /><div class = "art-binding-ent-list" id = "b_albums"></div></td><td style = "width: 50%; "><br /><label>Доступные видео</label><br /><div class = "art-binding-ent-list" id = "b_videos"></div></td></tr></table>';
 									}
-                                    else if(n=='addImg')
+                                    else if(n=='photo')
                                     {
                                         val = '<div class = "dropzone" id = "ph_to_frm"></div>';
                                     }
@@ -789,17 +789,17 @@ function myForm(type, entityID, formName)
 			{
                 if ($('li#'+el.nameList[i]).hasClass('sItem'))
                 {
-                    $('li#'+el.nameList[i]).find('img').attr('src', el.imgAddr+el.nameList[i]+'_g.png');
+                    $('li#'+el.nameList[i]).find('i').addClass('fi-grey').removeClass('fi-blue');
                 }else
                 {
-    				$('li#'+el.nameList[i]).find('img').attr('src', el.imgAddr+el.nameList[i]+'_b.png');
+    				$('li#'+el.nameList[i]).find('i').addClass('fi-blue').removeClass('fi-grey');
                 }
 				$('li#'+el.nameList[i]).toggleClass('sItem').toggleClass('hItem');
                 $('div#' + el.nameList[i] + 'Menu').toggleClass('sMenu').toggleClass('hMenu');
 
 			}else{
 					$('li#'+el.nameList[i]).addClass('hItem').removeClass('sItem');
-					$('li#'+el.nameList[i]).find('img').attr('src', el.imgAddr+el.nameList[i]+'_g.png');
+					$('li#'+el.nameList[i]).find('i').addClass('fi-grey').removeClass('fi-blue');
 					$('div#'+el.nameList[i]+'Menu').addClass('hMenu').removeClass('sMenu');
 				}
 		}
@@ -979,7 +979,7 @@ function bbCodeObj(n, p) {
 						this.params=p;
 						this.sTagStart=0;
 						this.eTagStart=0;
-						this.tagsCollection = [{name: 'cAlign', className: 'cnt-al-c'}, {name: 'rAlign', className: 'cnt-al-r'}, {name: 'quote', className: 'cnt-quotes'}, {name: 'fNum', className: 'cnt-un-num'}];
+						this.tagsCollection = [{name: 'align-center', className: 'cnt-al-c'}, {name: 'align-right', className: 'cnt-al-r'}, {name: 'quote', className: 'cnt-quotes'}, {name: 'list-number', className: 'cnt-un-num'}];
 						this.getContent = function(s)
 						{
 							if (this.sTagStart+1 == this.eTagStart)
@@ -992,14 +992,14 @@ function bbCodeObj(n, p) {
 						} 
 						this.tagName = function(){
 													var p = (this.params == 'none') ? '':'='+this.params;
-													var e = (this.name == 'fNum') ? '\n':''; 
+													var e = (this.name == 'list-number') ? '\n':''; 
 													if (this.name == 'i') 
 													{
 														return {start: this.params +". ", end: ""};
 													}
 													else
 													{
-														return {start: (this.name == 'lAlign') ? "":"["+this.name+p+"]" + e, end: (this.name == 'lAlign') ? "": e + "[/"+this.name+"]"};};
+														return {start: (this.name == 'align-left') ? "":"["+this.name+p+"]" + e, end: (this.name == 'align-left') ? "": e + "[/"+this.name+"]"};};
 													}
 													
 						this.initBb = function(a){
@@ -1007,7 +1007,7 @@ function bbCodeObj(n, p) {
 													var cur = a.getCurAlignBbCode();											
 													if (this.name != cur.name) 
 														  {
-															if (this.name != 'lAlign' && cur.name != 'lAlign')
+															if (this.name != 'align-left' && cur.name != 'align-left')
 															{
 																if (cur.getContent(a.tArea.val()).length > 0)
 																{
@@ -1026,14 +1026,14 @@ function bbCodeObj(n, p) {
 																		
 																	  }
 																
-															} else if (this.name != 'lAlign' && cur.name == 'lAlign'){
+															} else if (this.name != 'align-left' && cur.name == 'align-left'){
 																		this.sTagStart = a.tArea.getSelection().start;
 																		this.eTagStart = a.tArea.getSelection().start + this.tagName().start.length;
 																		t = this.tagName().start+this.tagName().end;
 																		a.tArea.replaceSelection(t);
 																		a.tArea.setCurretPosition(this.sTagStart+this.tagName().start.length );
 																	  }
-															 else if (this.name == 'lAlign' && cur.name != 'lAlign'){
+															 else if (this.name == 'align-left' && cur.name != 'align-left'){
 																		if (cur.getContent(a.tArea.val()).length > 0)
 																		{
 																			a.tArea.setCurretPosition(cur.eTagStart + cur.tagName().end.length);
@@ -1044,7 +1044,7 @@ function bbCodeObj(n, p) {
 																			  }
 																		
 																	  }
-															if (this.name == 'fNum')
+															if (this.name == 'list-number')
 																		{
 																			var nItem = new bbCodeObj('i', '1');
 																			nItem.initTBb(a);
@@ -1097,11 +1097,11 @@ function textEditor(el)
 		this.formElement = el.formElement;
 		this.tArea = el.contentField;
         this.el = el;
-		this.imgAddr = '/files/';
-		this.tAlignMenus = ['lAlign', 'cAlign', 'rAlign', 'quote', 'fNum'];
+		this.imgAddr = 'fi-';
+		this.tAlignMenus = ['align-left', 'align-center', 'align-right', 'quote', 'list-number'];
 		this.tAlignMenusDescription = ['Выравнивание по левому краю', 'Выравнивание по центру', 'Выравнивание по правому краю', 'Цитирование', 'Нумерованный список'];
 		this.curFormat = 'none';
-		this.init = function(){return initAPanel(this) + '<li id = "updTextPrewiew" title = "Обновить поле предварительного просмотра"><img src = "/files/reload_g.png" width = "25px"/></li>';};
+		this.init = function(){return initAPanel(this) + '<li id = "updTextPrewiew" title = "Обновить поле предварительного просмотра">'+drawIcon("fi-refresh", "fi-largest", "fi-grey")+'</li>';};
 		this.initListeners = function() {
 											var el;
 											el = this;
@@ -1113,21 +1113,21 @@ function textEditor(el)
 																								{
 																									var bb = new bbCodeObj(el.tAlignMenus[i], 'none');
 																									bb.initBb(el);
-																									
 																									$('li#'+el.tAlignMenus[i]).addClass('sItem').removeClass('hItem');
-																									$('li#'+el.tAlignMenus[i]).find('img').attr('src', el.imgAddr+el.tAlignMenus[i]+'_b.png');
-																									//el.curAlign = i;
+                                                                                                    switchClasses("fi-blue", "fi-grey", $('li#'+el.tAlignMenus[i]).find('i'));
+
 																									
 																								}
 																								else{
 																										$('li#'+el.tAlignMenus[i]).addClass('hItem').removeClass('sItem');
-																										$('li#'+el.tAlignMenus[i]).find('img').attr('src', el.imgAddr+el.tAlignMenus[i]+'_g.png');
+																										switchClasses("fi-grey", "fi-blue", $('li#'+el.tAlignMenus[i]).find('i'));
+                                                                                
 																									}
 																								}
 																							  });
 											this.tArea.keyup(function(e){
 																			var c = updateAlignMenu(el);
-																			if (c.name == 'fNum')
+																			if (c.name == 'list-number')
 																			{
 																				if (e.keyCode == 13)
 																				{
@@ -1170,7 +1170,7 @@ function textEditor(el)
 		{
 			var str = this.tArea.val();
 			var names = this.tAlignMenus;
-			var b = new bbCodeObj('lAlign', 'none');
+			var b = new bbCodeObj('align-left', 'none');
 			var j = 0;
 			for (var i=1; i<names.length; i++)
 			{
@@ -1198,7 +1198,7 @@ function textEditor(el)
 						j++;
 				}while(j<str.length);
 			}
-			b.name = 'lAlign';
+			b.name = 'align-left';
 			b.sTagStart = str.length;
 			b.eTagStart = str.length;	
 			return b;
@@ -1238,14 +1238,15 @@ function textEditor(el)
 		}
 		function initAPanel(e) //инициализация панели отступов
 		{
-			var v = '', cBCl, cImg;
+			var v = '', cBCl, nImg, sImg,cImg;
 			var curBbAlign = e.getCurAlignBbCode();
 			for(var i=0; i<e.tAlignMenus.length; i++)
 			{
 				cBCl = (curBbAlign.name == e.tAlignMenus[i]) ? "sItem":"hItem";
-				cImg = (curBbAlign.name == e.tAlignMenus[i]) ? '_b':'_g';
-				cImg = e.imgAddr+e.tAlignMenus[i]+cImg;
-				v += '<li class = "alItem '+cBCl+'" title = "'+e.tAlignMenusDescription[i]+'" id = "'+e.tAlignMenus[i]+'"><img src = "'+cImg+'.png" width = "25px"/></li>'
+				cImg = (curBbAlign.name == e.tAlignMenus[i]) ? 'fi-blue':'fi-grey';
+				nImg = e.imgAddr+e.tAlignMenus[i];
+                sImg = "fi-largest";
+				v += '<li class = "alItem '+cBCl+'" title = "'+e.tAlignMenusDescription[i]+'" id = "'+e.tAlignMenus[i]+'">'+drawIcon(nImg, sImg, cImg)+'</li>';
 			}
 			return v;
 		}
@@ -1257,17 +1258,27 @@ function textEditor(el)
 			if(c.name==el.tAlignMenus[i])
 			{
 				$('li#'+el.tAlignMenus[i]).addClass('sItem').removeClass('hItem');
-				$('li#'+el.tAlignMenus[i]).find('img').attr('src', el.imgAddr+el.tAlignMenus[i]+'_b.png');
+                switchClasses("fi-blue", "fi-grey", $('li#'+el.tAlignMenus[i]).find('i'));
 			}
 			else{
 					$('li#'+el.tAlignMenus[i]).addClass('hItem').removeClass('sItem');
-					$('li#'+el.tAlignMenus[i]).find('img').attr('src', el.imgAddr+el.tAlignMenus[i]+'_g.png');
+					switchClasses("fi-grey", "fi-blue", $('li#'+el.tAlignMenus[i]).find('i'));
 				}
 			}
 			return c;
 		}
 		
 	}
+
+function drawIcon(n, s, c)
+    {
+        return "<i class = \""+n+" "+s+" "+c+"\"></i>";
+    }
+function switchClasses(cOn, cOff, e)
+    {
+        if (e.hasClass(cOff)) e.removeClass(cOff);
+        if (!e.hasClass(cOn)) e.addClass(cOn);
+    }
 //votes
 
 //votes end

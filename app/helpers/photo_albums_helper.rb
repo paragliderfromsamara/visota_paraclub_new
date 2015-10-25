@@ -16,7 +16,7 @@ module PhotoAlbumsHelper
 			<table style = 'width: 100%;'>				
 				#{"<tr><td colspan = '2'><h3>#{album.name}</h3></td></tr>" if pathName == 'index' || pathName == 'visota_life'}
 				<tr>
-					<td align='right' valign='middle'>
+					<td align='left' valign='middle'>
 						#{albumInformation(album)}
 					</td>
 					<td align = 'right' valign='middle'>
@@ -85,10 +85,10 @@ module PhotoAlbumsHelper
 		val=''
 		if pathName == 'show' and @album != nil
 			v = [
-				 {:name => 'К списку альбомов', :access => true, :type => 'follow', :link => "/media?t=albums&c=all"}, 
-				 {:name => 'Все альбомы пользователя', :access => true, :type => 'follow', :link => "/users/#{@album.user.id.to_s}/photo_albums"},
-				 {:name => 'Редактировать', :access => isEntityOwner?(@album), :type => 'edit', :link => "#{edit_photo_album_path(@album)}"},	
-				 {:name => 'Удалить', :access => isEntityOwner?(@album), :type => 'del', :link => photo_album_path(@album), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить альбом и всё, что с ним связанно?', :data_method => 'delete'}
+				 {:name => 'К списку альбомов', :access => true, :type => 'arrow-right', :link => "/media?t=albums&c=all"}, 
+				 {:name => 'Все альбомы пользователя', :access => true, :type => 'arrow-right', :link => "/users/#{@album.user.id.to_s}/photo_albums"},
+				 {:name => 'Редактировать', :access => isEntityOwner?(@album), :type => 'pencil', :link => "#{edit_photo_album_path(@album)}"},	
+				 {:name => 'Удалить', :access => isEntityOwner?(@album), :type => 'trash', :link => photo_album_path(@album), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить альбом и всё, что с ним связанно?', :data_method => 'delete'}
 			]
 		end
 		val = "#{control_buttons(v)}" if v != []
@@ -98,17 +98,17 @@ module PhotoAlbumsHelper
 		v = []
 		val = ''
 		if pathName == 'index' || pathName == 'visota_life'
-			v = [{:name => 'Перейти', :access => true, :type => 'follow', :link => "#{photo_album_path(album)}"}]
-		elsif pathName == 'show' and @album != nil
-			v = [{:name => 'Добавить комментарий', :access => userCanCreateMsg?, :type => 'add', :id => 'newMsgBut', :link => '#new_message'}]
+			v = [{:name => 'Перейти', :access => true, :type => 'arrow-right', :link => "#{photo_album_path(album)}"}]
+      #elsif pathName == 'show' and @album != nil
+			#v = [{:name => 'Добавить комментарий', :access => userCanCreateMsg?, :type => 'plus', :id => 'newMsgBut', :link => '#new_message'}]
 		end
 		val = "#{control_buttons(v)}" if v != []
 		return val
 	end
 	def albumInformation(album)
-		v = "<img src = '/files/camera_g.png' width = '18px' style = 'float: left; padding-left: 5px; padding-right: 4px;'/><span title = 'Фотографий в альбоме' class = 'stat'>#{album.photos.count}</span> "
-		v += "<img src = '/files/answr_g.png' width = '20px' style = 'float: left; padding-left: 5px; padding-right: 4px;'/><span title = 'Комментарии' class = 'stat'>#{album.comments.count.to_s}</span> "
-		v += "<img src = '/files/eye_g.png' width = '20px' style = 'float: left; padding-left: 5px; padding-right: 4px;' /><span title = 'Просмотры' class = 'stat'>0</span> "#{album.views.count}
+		v = "<div title = 'Фотографий в альбоме' class='stat fi-float-left'><i class = 'fi-camera fi-medium fi-grey'></i><span>#{album.photos.count}</span></div>"
+    v += "<div title = 'Комментарии' class='stat fi-float-left'><i class = 'fi-comments fi-medium fi-grey'></i><span>#{album.comments.count.to_s}</span></div>"
+		v += "<div class='stat fi-float-left'><i class = 'fi-eye fi-medium fi-grey'></i><span>0</span></div>" #{album.views.count}
 		return "#{v}"
 	end
 #album block end
@@ -233,7 +233,7 @@ module PhotoAlbumsHelper
 
 	def index_albums_buttons
 		[	
-		 {:name => 'Добавить новый альбом', :access => !is_not_authorized?, :type => 'add', :link => new_photo_album_path}
+		 {:name => 'Добавить новый альбом', :access => !is_not_authorized?, :type => 'plus', :link => new_photo_album_path}
 		]
 	end
 	def user_albums_buttons

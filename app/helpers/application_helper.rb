@@ -393,7 +393,7 @@ def control_buttons(buttons)
 			if button[:access] == true
 				button[:type] = 'c_loc_li' if button[:selected] == true
 				value += "<a #{button_attrs(button)}><li>"
-				value += "<img src = '/files/#{button[:type]}_b.png' style = 'float: left; padding-right: 6px;' height = '18px' />" if button[:type] != nil and button[:type] != ''
+				value += "<div style = 'padding-right: 5px;' class = 'fi-float-left'>#{drawIcon(button[:type], 'medium', 'blue')}</div>" if button[:type] != nil and button[:type] != ''
 				value += "#{button[:name]}</li></a>"
 			end
 		end
@@ -401,7 +401,11 @@ def control_buttons(buttons)
 	end
 	return value
 end
-
+#icons-draw
+def drawIcon(name, size, color)
+  "<i class = 'fi-#{name} fi-#{size} fi-#{color}'></i>"
+end
+#icons end
 #my_search engine
 
 
@@ -547,24 +551,7 @@ end
 	events = Event.find_all_by_status_id(1)
 	return events.count.to_s
   end
-	
-	def random_photos(count)
-		value = ''
-		new_arr = @photos.shuffle!
-		photos = Photo.find_all_by_id((new_arr[0..count-1]))
-		photos.each do |photo|
-			max_name_length =  30 - photo.parent[:parent_type].length - 2
-			
-			value += "<div class = 'photo_thumbs' style = 'background-image: url(#{photo.link.thumb});'>
-					  		<div style = 'position: absolute; height: 50px; bottom: 0; width: 100%;'>
-							<div style = 'bottom: 0; width: 100%; height: 100%; background-color: black; opacity: 0.7; position: absolute; '>
-							</div>
-							<div style = 'position: absolute; left: 5px; bottom: 10px; color: white; font-weight: bolder; font-size: 12px; z-index: 150;'>#{photo.parent[:parent_type] + ': ' +  link_to(truncate(photo.parent[:parent_name], :length => max_name_length), photo.parent[:parent_link], :class => 'black_bg_link') if photo.parent[:parent_name] != ''}<br />#{ 'Разместил: ' + link_to(truncate(photo.user.name, :length => 20), photo.user, :class => 'black_bg_link', :title => 'Перейти к профилю') if photo.user != nil}</div>
-							</div>
-					  </div>"
-		end
-		return value
-	end
+
 #Основные блоки
 	# def main_entity_block(p)
 		# ("

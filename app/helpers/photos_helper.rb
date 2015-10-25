@@ -86,8 +86,8 @@ module PhotosHelper
     return "<table style = 'width: 98%; font-size: 14pt;'>#{value}</table>"
 	end
 	def photoInfo(photo)
-		v = "<img src = '/files/answr_g.png' width = '17px' style = 'float: left; padding-left: 7px;'/><span title = 'Комментарии' class = 'stat'>#{photo.comments.count.to_s}</span> "
-		v += "<img src = '/files/eye_g.png' width = '20px' style = 'float: left;  padding-left: 7px;' /><span title = 'Просмотры' class = 'stat'>#{photo.views.count}</span> "#{album.views.count}
+		v = "<div title = 'Комментарии' class='stat fi-float-left'><i class = 'fi-comments fi-medium fi-grey'></i><span>#{photo.comments.count.to_s}</span></div>"
+    v += "<div title = 'Просмотры' class='stat fi-float-left'><i class = 'fi-eye fi-medium fi-grey'></i><span>0</span></div>"#{album.views.count}
 		return "<div class = 'medium-opacity' id = 'right_f'>#{v}</div>"
 	end
 	def photo_comment_button

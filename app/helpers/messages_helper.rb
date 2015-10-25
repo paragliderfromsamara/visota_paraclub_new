@@ -281,36 +281,36 @@ module MessagesHelper
 	end
 	def msg_block_buttons_bottom_in_theme(message, treadCount)
 		buttons = []
-		buttons += [{:name => 'Ответить', :access => userCanCreateMsgInTheme?(message.theme), :type => 'answr', :alt => message.id, :id => 'answer_but', :link => '#new_message'}] if (user_type != 'bunned' and user_type != 'guest' || (user_type == 'new_user' and @theme.topic_id == 6)) if @theme.status == 'open'
-		buttons += [{:name => 'К обсуждению', :access => true, :type => 'follow', :link => "#{message_path(message.id)}"}] if treadCount != 0 and @message != message
-		buttons += [{:name => 'Изменить', :access => userCanEditMsg?(message), :type => 'edit', :link => "#{edit_message_path(message)}"}]
-		buttons += [{:name => 'Удалить', :access => userCanDeleteMessage?(message), :type => 'del', :link => message_path(message), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить сообщение?', :data_method => 'delete'}] if @theme.status == 'open'
-		buttons[buttons.length] = {:name => 'Перенести сообщение', :access => is_admin?, :link => "/messages/#{message.id}/replace_message"}
+		buttons += [{:name => 'Ответить', :access => userCanCreateMsgInTheme?(message.theme), :type => 'comments', :alt => message.id, :id => 'answer_but', :link => '#new_message'}] if (user_type != 'bunned' and user_type != 'guest' || (user_type == 'new_user' and @theme.topic_id == 6)) if @theme.status == 'open'
+		buttons += [{:name => 'К обсуждению', :access => true, :type => 'arrow-right', :link => "#{message_path(message.id)}"}] if treadCount != 0 and @message != message
+		buttons += [{:name => 'Изменить', :access => userCanEditMsg?(message), :type => 'pencil', :link => "#{edit_message_path(message)}"}]
+		buttons += [{:name => 'Удалить', :access => userCanDeleteMessage?(message), :type => 'trash', :link => message_path(message), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить сообщение?', :data_method => 'delete'}] if @theme.status == 'open'
+		buttons[buttons.length] = {:name => 'Перенести сообщение', :type => "page-export", :access => is_admin?, :link => "/messages/#{message.id}/replace_message"}
 		return buttons
 	end
 	def msg_block_buttons_bottom_in_video(message, treadCount)
-		buttons = [{:name => 'Ответить', :access => !is_not_authorized?, :type => 'answr', :alt => message.id, :id => 'answer_but', :link => '#new_message'}]
-		buttons += [{:name => 'К обсуждению', :access => true, :type => 'follow', :link => "#{message_path(message)}"}] if treadCount != 0 and @message != message
+		buttons = [{:name => 'Ответить', :access => !is_not_authorized?, :type => 'comments', :alt => message.id, :id => 'answer_but', :link => '#new_message'}]
+		buttons += [{:name => 'К обсуждению', :access => true, :type => 'arrow-right', :link => "#{message_path(message)}"}] if treadCount != 0 and @message != message
 		buttons += [
-					{:name => 'Изменить', :access => false, :type => 'edit', :link => "#{edit_message_path(message)}"}, 
-					{:name => 'Удалить', :access => false, :type => 'del', :link => ""}
-				   ]
+					      {:name => 'Изменить', :access => false, :type => 'pencil', :link => "#{edit_message_path(message)}"}, 
+				        {:name => 'Удалить', :access => false, :type => 'trash', :link => ""}
+				       ]
 		return buttons
 	end
 	def msg_block_buttons_bottom_in_album(message, treadCount)
-	    buttons = [{:name => 'Ответить', :access => !is_not_authorized?, :type => 'answr', :alt => message.id, :id => 'answer_but', :link => '#new_message'}]
-		buttons += [{:name => 'К обсуждению', :access => true, :type => 'follow', :link => "#{message_path(message)}"}] if treadCount != 0 and @message != message
+	    buttons = [{:name => 'Ответить', :access => !is_not_authorized?, :type => 'comments', :alt => message.id, :id => 'answer_but', :link => '#new_message'}]
+		buttons += [{:name => 'К обсуждению', :access => true, :type => 'arrow-right', :link => "#{message_path(message)}"}] if treadCount != 0 and @message != message
 		buttons += [
-					{:name => 'Изменить', :access => false, :type => 'edit', :link => "#{edit_message_path(message)}"}, 
-					{:name => 'Удалить', :access => false, :type => 'del', :link => ""}
-				   ]
+					        {:name => 'Изменить', :access => false, :type => 'pencil', :link => "#{edit_message_path(message)}"}, 
+					        {:name => 'Удалить', :access => false, :type => 'trash', :link => ""}
+				       ]
 		return buttons
 	end
 	def message_panel
 		link_name = 'Новое сообщение'
 		link_name = 'Добавить комментарий' if controller.controller_name == "videos" or controller.controller_name == "photo_albums" or controller.controller_name == "photos"
 		[
-			{:name => link_name, :access => ['super_admin', 'admin', 'club_pilot', 'manager', 'friend'], :type => 'add', :id => 'toggle_msg'}
+			{:name => link_name, :access => ['super_admin', 'admin', 'club_pilot', 'manager', 'friend'], :type => 'plus', :id => 'toggle_msg'}
 		]
 	end
 	

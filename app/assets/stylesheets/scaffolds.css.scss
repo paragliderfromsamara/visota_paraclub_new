@@ -159,22 +159,22 @@ textarea {resize: none;}
 	 }
 /*quickScroll*/
 .quickScroll{
-			 .arrow {cursor: pointer; width:100%;height:40px;position: absolute;background: no-repeat;border-width:1px; @include my_opacity(0.2); @include animation($time_1);}
-			 .arrow:hover {@include my_opacity(0.5); z-index: 9005;}
+			 
+             .arrow {cursor: pointer; width:100%;height:40px;position: absolute; @include my_opacity(0.3); @include animation($time_1);}
+			 .arrow:hover {@include my_opacity(0.8); z-index: 9005;}
 			 #aUp{
-					background-image: url('/files/arrUp_g.png');
+					color: grey;
 				 }
-			 #aUp:hover {background-image: url('/files/arrUp_b.png');}
+			 #aUp:hover {color:$main_color;}
 			 #aDwn{
-					top:40px;
-					background-image: url('/files/arrDwn_g.png');
+					top:50px;
+                    color: grey;
 				  }
-			 #aDwn:hover {background-image: url('/files/arrDwn_b.png');}
+			 #aDwn:hover {color:$main_color;}
 			 position: fixed;
 			 left: 30px;
 			 top: 10%;
-			 width: 40px;
-			 height: 80px;
+             font-size: 60px;
 			 z-index: 9000;
 			}
 /*quickScroll end*/
@@ -385,18 +385,11 @@ ul.myBut
 	    font-size: 0.8125em;
 	    text-decoration: none;
     }
-    #mark_img
-    {
-        position:relative;
-        width: 18px;
-        height: 15px;
-        background-repeat:no-repeat;
-    }
 }
 .like_marks:hover 
 {
     #mark_link {text-decoration: underline;}
-    #mark_img {background-image: url(/files/like_b.png);}
+    #mark_img {color: $main_color;}
 }
 /*like_marks end*/    
 /*mainMenu*/
@@ -789,7 +782,7 @@ ul.myBut
 
 
 /* themes_table */
-	span.stat {font-size: 13px;color:$text_color_1;font-family:$font_family_1;float: left;} /*Информация о теме*/
+	.stat span {font-size: 12px;color:$text_color_1;font-family:$font_family_1; padding-left:2px;} /*Информация о теме*/
 	table.v_table
 	{
 		width: 100%;
@@ -821,7 +814,7 @@ ul.myBut
 	table#themes_list {
 						
 						td.t_name {
-									width: 400px;
+									width: 350px;
 								  }
 						td.date {
 								width: 100px;
@@ -968,6 +961,16 @@ ul.ctrl_but
 .vt-voice-line{width: 90%; height: 14px; div{position:relative; height:14px; background-color: $text_color_5;}}
 .vt-variant{font-family: $font_family_1;}
 /*votes end*/
+
+/*foundation_icons*/
+.fi-medium {font-size: 18px;}
+.fi-large {font-size: 24px;}
+.fi-largest {font-size: 32px;}
+.fi-grey {color: grey;}
+.fi-blue {color: $main_color;}
+.fi-float-left {display: inline-block; padding-left:10px;}
+.fi-float-right {float: right;}
+
 /*dropzone stylesheets*/
 /* The MIT License */
 /*

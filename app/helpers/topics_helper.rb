@@ -2,17 +2,17 @@ module TopicsHelper
 	
 	def index_topic_buttons(topic)
 		[
-		 {:name => 'Перейти в раздел', :access => true, :link => "#{topic_path(topic)}", :type => 'follow', :id => 'showTopic' },
+		 {:name => 'Перейти в раздел', :access => true, :link => "#{topic_path(topic)}", :type => 'arrow-right', :id => 'showTopic' },
 		 #{:name => "Добавить тему в раздел \"#{topic.name}\"", :access => userCreateThemeInTopic?(topic), :type => 'add', :link => "#{new_theme_path(:t => topic.id)}", :id => 'newTheme'}, 
-		 {:name => 'Редактировать', :access => is_super_admin?, :type => 'edit', :link => "#{edit_topic_path(topic)}", :id => 'editTopic'}
+		 {:name => 'Редактировать', :access => is_super_admin?, :type => 'pencil', :link => "#{edit_topic_path(topic)}", :id => 'editTopic'}
 		]
 	end
 	def top_index_topic_buttons
-		"#{control_buttons([{:name => "Опросы", :access => true, :type => 'chart', :link => votes_path}, {:name => 'Новый раздел', :access => is_super_admin?, :type => 'add', :link => "#{new_topic_path}", :id => 'newTopic'}])}"
+		"#{control_buttons([{:name => "Опросы", :access => true, :type => 'graph-bar', :link => votes_path}, {:name => 'Новый раздел', :access => is_super_admin?, :type => 'plus', :link => "#{new_topic_path}", :id => 'newTopic'}])}"
 	end
 	def show_topic_buttons(topic)
 		[
-		 {:name => "Добавить тему", :access => userCreateThemeInTopic?(topic), :type => 'add', :link => "#{new_theme_path(:t => topic.id)}", :id => 'newTheme'}, 
+		 {:name => "Добавить тему", :access => userCreateThemeInTopic?(topic), :type => 'plus', :link => "#{new_theme_path(:t => topic.id)}", :id => 'newTheme'}, 
 		]
 	end
 	def visota_life_panel
@@ -114,7 +114,7 @@ module TopicsHelper
 			<table style = 'width: 100%;'>
 				<tr>
 					<td align = 'left' valign = 'middle'>
-						#{ control_buttons([{:name=> 'Перейти в раздел', :type => 'follow', :link => old_messages_path, :access=>true}]).html_safe }
+						#{ control_buttons([{:name=> 'Перейти в раздел', :type => 'arrow-right', :link => old_messages_path, :access=>true}]).html_safe }
 					</td>
 					<td style = 'width: 200px;'>
 						<p class = 'istring_m norm medium-opacity'>Сообщений: #{ OldMessage.all.count }</p>

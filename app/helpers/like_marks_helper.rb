@@ -1,59 +1,23 @@
 module LikeMarksHelper
   def user_photo_like_link(photo)
-    v = ''
-    i = '/files/like_g.png'
-    counter = "<span id = 'mark_count'>#{photo.photo_like_marks.count.to_s}</span>"
-    if signed_in?
-      like = photo.photo_like_marks.where(:user_id => current_user.id)
-      if like == []
-        v = "Мне нравится"
-        i = '/files/like_g.png'
-      else
-        v = "Больше не нравится"
-        i = '/files/like_b.png'
-      end
-      v = "<a id = 'mark_link'>#{v}</a>"
-    end
-    v = v = "<div class = 'like_marks' onclick = \"switchLikeMark(#{photo.id}, 'photo')\" id = 'photo_#{photo.id}_mark'><table><tr><td valign = 'midle'>#{v}</td><td><div id = 'mark_img' style = 'background-image: url(#{i});'></div></td><td valign = 'middle'>#{counter}</td></tr></table></div>"
-    return v.html_safe
+    givenLike = (signed_in?)? photo.photo_like_marks.where(:user_id => current_user.id).count : 0
+    f = (givenLike  > 0)? true : false
+    c = photo.photo_like_marks.count
+    return makeLikeBut(f, photo, c).html_safe
   end
   
   def user_photo_album_like_link(album)
-    v = ''
-    i = '/files/like_g.png'
-    counter = "<span id = 'mark_count'>#{album.photo_album_like_marks.count.to_s}</span>"
-    if signed_in?
-      like = album.photo_album_like_marks.where(:user_id => current_user.id)
-      if like == []
-        v = "Мне нравится"
-        i = '/files/like_g.png'
-      else
-        v = "Больше не нравится"
-        i = '/files/like_b.png'
-      end
-      v = "<a id = 'mark_link'>#{v}</a>"
-    end
-    v = "<div class = 'like_marks' onclick = \"switchLikeMark(#{album.id}, 'photo_album')\" id = 'photo_album_#{album.id}_mark'><table><tr><td valign = 'midle'>#{v}</td><td><div id = 'mark_img' style = 'background-image: url(#{i});'></div></td><td valign = 'middle'>#{counter}</td></tr></table></div>"
-    return v.html_safe
+    givenLike = (signed_in?)? album.photo_album_like_marks.where(:user_id => current_user.id).count : 0
+    f = (givenLike  > 0)? true : false
+    c = album.photo_album_like_marks.count
+    return makeLikeBut(f, album, c).html_safe
   end
   
   def user_video_like_link(video)
-    v = ''
-    i = '/files/like_g.png'
-    counter = "<span id = 'mark_count'>#{video.video_like_marks.count.to_s}</span>"
-    if signed_in?
-      like = video.video_like_marks.where(:user_id => current_user.id)
-      if like == []
-        v = "Мне нравится"
-        i = '/files/like_g.png'
-      else
-        v = "Больше не нравится"
-        i = '/files/like_b.png'
-      end
-      v = "<a id = 'mark_link'>#{v}</a>"
-    end
-    v = "<div class = 'like_marks' onclick = \"switchLikeMark(#{video.id}, 'video')\" id = 'video_#{video.id}_mark'><table><tr><td valign = 'middle'>#{v}</td><td><div id = 'mark_img' style = 'background-image: url(#{i});'></div></td><td valign = 'middle'>#{counter}</td></tr></table></div>"
-    return v.html_safe
+    givenLike = (signed_in?)? video.video_like_marks.where(:user_id => current_user.id).count : 0
+    f = (givenLike  > 0)? true : false
+    c = video.video_like_marks.count
+    return makeLikeBut(f, video, c).html_safe
   end
   
   def switchPhotoLike(id)
@@ -113,10 +77,16 @@ module LikeMarksHelper
     end
   end 
   
-  def likeBut(c)
-    {:linkName => "Мне нравится", :mCount => c, :img => '_g'}
+  def makeLikeBut(f, e, c)
+    t = (f)? (disLikeBut(c)):(likeBut(c))
+    v = (is_not_authorized?)? (""):("<span id = 'mark_link'>#{t[:linkName]}</span>")
+    return "<div onclick = \"switchLikeMark(#{e.id}, '#{e.class.name.downcase}')\" id = '#{e.class.name.downcase}_#{e.id}_mark' class='stat fi-float-right like_marks'>#{v}<i id = 'mark_img' class = 'fi-heart fi-large #{t[:img]}'></i><span id = 'mark_count'>#{t[:mCount]}</span></div>"
   end
+  def likeBut(c)
+    {:linkName => "Мне нравится", :mCount => c, :img => 'fi-grey'}
+  end
+  
   def disLikeBut(c)
-    {:linkName => "Больше не нравится", :mCount => c, :img => '_b'}
+    {:linkName => "Больше не нравится", :mCount => c, :img => 'fi-blue'}
   end
 end

@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require turbolinks
 //= require_tree
 
 (function() {
@@ -818,7 +819,15 @@ function switchLikeMark(id, type)
 					type: "POST",
 					url: "/switch_mark.json",
 					data: ({mark:({type: type, id: id})}),
-					success: function(v){var el = $('#' + type + '_' + id + '_mark'); el.find('#mark_link').text(v.linkName); el.find('#mark_count').text(v.mCount); el.find('#mark_img').attr('style', 'background-image: url(/files/like'+ v.img +'.png);');}
+					success: function(v){
+                                            var el = $('#' + type + '_' + id + '_mark');
+                                            var toRemoveClass = (v.img == "fi-blue")? "fi-grey":"fi-blue";
+                                            var toAddClass = (v.img == "fi-blue")? "fi-blue":"fi-grey"; 
+                                            el.find('#mark_link').text(v.linkName); 
+                                            el.find('#mark_count').text(v.mCount); 
+                                            el.find('#mark_img').removeClass(toRemoveClass);
+                                            el.find('#mark_img').addClass(toAddClass);
+                                        }
 })
 }
 //Старые функции, удалять лишнее

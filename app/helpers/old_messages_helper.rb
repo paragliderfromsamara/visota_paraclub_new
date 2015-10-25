@@ -67,8 +67,8 @@ module OldMessagesHelper
 
 	def old_msg_block_buttons_bottom(message)
 		[
-		 {:name => 'Изменить', :access => is_admin?, :type => 'edit', :link => "#{edit_old_message_path(message)}"}, 
-		 {:name => 'Удалить', :access => is_admin?, :type => 'del', :link => "#{edit_old_message_path(message)}"}
+		 {:name => 'Изменить', :access => is_admin?, :type => 'pencil', :link => "#{edit_old_message_path(message)}"}, 
+		 {:name => 'Удалить', :access => is_admin?, :type => 'trash', :link => "#{edit_old_message_path(message)}"}
 		]
 	end
 	def old_message_user_row(message)

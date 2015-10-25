@@ -6,7 +6,7 @@ include LikeMarksHelper
 			v = {}
       if markData[:type] == 'photo'
         v = switchPhotoLike(markData[:id])
-      elsif markData[:type] == 'photo_album'
+      elsif markData[:type] == 'photoalbum'
         v = switchPhotoAlbumLike(markData[:id])
       elsif markData[:type] == 'video'
         v = switchVideoLike(markData[:id])
