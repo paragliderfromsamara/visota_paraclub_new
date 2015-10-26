@@ -6,13 +6,14 @@
   <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
   <% define_action %>
-  <script type = 'text/javascript'>
-  var ready = function(){$('img').load(function(){$(this).fadeIn(1000);}); my_functions(); wheatherPanel(); <%= js_functions %> bottomControl();};
-      $(document).ready(ready);
-      $(document).on('page:load',ready);
-  </script>
+
 </head>
 <body>
+    <script type = 'text/javascript'>
+    var ready = function(){bindCoordetecter(); $('img, style').load(function(){$(this).fadeIn(1000);}); my_functions(); wheatherPanel(); <%= js_functions %> bottomControl();};
+        $(document).ready(ready);
+        $(document).on('page:load',ready);
+    </script>
 <!--
 <div class = 'right_menu'>
 	<div id = 'wh_cont' style = 'width: 580px;'>
