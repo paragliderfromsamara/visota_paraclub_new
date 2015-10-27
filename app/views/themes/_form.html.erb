@@ -15,10 +15,10 @@
 		<%= f.label "Вложения" %>
 		<%= f.file_field :attachment_files, :multiple => true %>
 	  </div>
-	  <div class="field" <%= @content_f_color.html_safe %>>
-		<%= @content_error.html_safe %>
+	  <div class="field">
 		<%= f.label :content, 'Содержимое темы' %><br />
 		<%= f.text_area :content, :rows => '10', :cols => '85', :onKeyUp => 'changingTextarea(this)', :defaultRows => '10' %>
+        <div><p class = 'istring #{@content_f_color if @content_f_color != nil}' id = 'cLength'><span id = 'txtL'></span> <span id = 'txtErr'>#{@content_error if @content_error != nil}</span><span id = 'txtErrSrv'>#{@content_error if @content_error != nil}</span></p></div>
 	  </div>
 	  <div class="actions">
 		<%= f.submit @button_name %>

@@ -18,11 +18,6 @@ module VideosHelper
      {:name => 'Удалить', :access => isEntityOwner?(@video), :type => 'trash', :link => "#{video_path(@video)}", :data_confirm => 'Вы уверены что хотите удалить данное видео?', :data_method => 'delete', :rel => 'nofollow'}
 		]
 	end
-	def bottom_video_buttons
-		[
-		 {:name => 'Добавить комментарий', :access => !is_not_authorized?, :type => 'comment', :id => 'newMsgBut', :link => '#new_message'}
-		]
-	end
 	def videoInformation(video)
 		#h = theme.statusHash
 		#v = "#{image_tag h[:img], :height => '20px', :style => 'float: left;', :title => h[:ru] } "
@@ -60,7 +55,6 @@ module VideosHelper
 					</tr>
 					<tr>
 						<td valign = 'middle' align = 'left'  style = 'height: 40px;'>
-							#{ control_buttons(bottom_video_buttons) }
 						</td>	
             <td valign = 'middle' align = 'right'>
               #{user_video_like_link(@video)}
@@ -122,21 +116,21 @@ module VideosHelper
 		@link_f_color = ''
 		@description_f_color = ''
 		if @video.errors[:name] != nil and @video.errors[:name] != []
-			@name_f_color = "style = 'background-color: red; color: white;'"
+			@name_f_color = "style = 'err'"
 			@video.errors[:name].each do |err|
-				@name_error += "<span style = 'color: white;  padding-left: 5px;'>#{err}</span><br />"
+				@name_error += "#{err}; "
 			end
 		end
 		if @video.errors[:link] != nil and @video.errors[:link] != []
-			@link_f_color = "style = 'background-color: red; color: white;'"
+			@link_f_color = "err"
 			@video.errors[:link].each do |err|
-				@link_error += "<span style = 'color: white;'>#{err}</span><br />"
+				@link_error += "#{err}; "
 			end
 		end
 		if @video.errors[:description] != nil and @video.errors[:description] != []
-			@description_f_color = "style = 'background-color: red; color: white;'"
+			@description_f_color = "err"
 			@video.errors[:description].each do |err|
-				@description_error += "<span style = 'color: white;'>#{err}</span><br />"
+				@description_error += "#{err}; "
 			end
 		end
 	end

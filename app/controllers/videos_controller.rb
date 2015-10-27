@@ -69,7 +69,6 @@ include ApplicationHelper
                       {:name => 'Медиа', :link => '/media'},
           						{:name => 'Новое видео'}
   					        ]
-      @add_functions = "initVideoForm();"
   		@title = @header = 'Новое видео'
   		respond_to do |format|
   		  format.html # new.html.erb

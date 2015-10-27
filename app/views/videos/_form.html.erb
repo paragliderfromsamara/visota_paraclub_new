@@ -1,3 +1,14 @@
+<%
+    if @video.id != nil
+        fn = "edit_video_#{@video.id}"
+        butName = "Сохранить изменения"
+    else
+        fn = "new_video"
+        butName = "Добавить"
+    end
+    @add_functions  = "initVideoForm(\"#{fn}\");"
+    
+%>
 <% video_errors %>
 	<%= form_for(@video) do |f| %>
 	  <table style = 'width: 100%;'>
@@ -23,9 +34,10 @@
 		  <td align = 'right' valign = 'middle' >
 			<%= f.label :name, 'Название' %>
 		  </td>
-		  <td align = 'left' valign = 'middle' <%= @name_f_color.html_safe %>>
+		  <td align = 'left' valign = 'middle'>
 			<%= @name_error.html_safe %>
 			<%= f.text_field :name, :size => '84' %>
+                         <div><p class = 'istring <%= @name_f_color if @name_f_color != nil %>' id = 'nLength'><span id = 'txtL'></span> <span id = 'txtErr'><%= @name_error if @name_error != nil %></span><span id = 'txtErrSrv'><%= @name_error if @name_error != nil %></span></p></div>
 		  </td>
 		</tr>
 		<tr>
@@ -36,7 +48,8 @@
 				<%= @link_error.html_safe %>
 				<%= f.text_area :link, :rows => '3', :cols => '60' %>
                 <%= waitline("wait_video_check").html_safe %>
-                <div id = 'video_preview'></div>
+                <div id = 'video_preview' style = "position:relative;"></div>
+                <div><p class = 'istring <%= @link_f_color if @link_f_color != nil %>' id = 'tError'><span id = 'txtL'></span> <span id = 'txtErr'><%= @link_error if @link_error != nil %></span><span id = 'txtErrSrv'><%= @link_error if @link_error != nil %></span></p></div>
 			</td>
 		</tr>
 		<tr>
@@ -46,6 +59,7 @@
 			<td align = 'left' valign = 'middle' <%= @description_f_color.html_safe %>>
 				<%= @description_error.html_safe %>
 				<%= f.text_area :description, :rows => '13', :cols => '60' %>
+                        <div><p class = 'istring <%= @description_f_color if @description_f_color != nil %>' id = 'cLength'><span id = 'txtL'></span> <span id = 'txtErr'><%= @description_error if @description_error != nil %></span><span id = 'txtErrSrv'><%= @description_error if @description_error != nil %></span></p></div>
 			</td>
 		</tr>
 		<tr>
@@ -53,7 +67,7 @@
 				
 			</td>
 			<td>
-                <%= f.submit 'Сохранить' %>
+                <%= mySubmitButton(butName, fn).html_safe %>
 			</td>
 		</tr>
 	</table>

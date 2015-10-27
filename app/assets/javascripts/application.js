@@ -15,101 +15,6 @@
 //= require turbolinks
 //= require_tree
 
-function bindCoordetecter()
-{
-    (function() {
-
-    	var fieldSelection = {
-
-    		getSelection: function() {
-
-    			var e = (this.jquery) ? this[0] : this;
-
-    			return (
-
-    				/* mozilla / dom 3.0 */
-    				('selectionStart' in e && function() {
-    					var l = e.selectionEnd - e.selectionStart;
-    					return { start: e.selectionStart, end: e.selectionEnd, length: l, text: e.value.substr(e.selectionStart, l) };
-    				}) ||
-
-    				/* exploder */
-    				(document.selection && function() {
-
-    					e.focus();
-
-    					var r = document.selection.createRange();
-    					if (r === null) {
-    						return { start: 0, end: e.value.length, length: 0 }
-    					}
-
-    					var re = e.createTextRange();
-    					var rc = re.duplicate();
-    					re.moveToBookmark(r.getBookmark());
-    					rc.setEndPoint('EndToStart', re);
-
-    					return { start: rc.text.length, end: rc.text.length + r.text.length, length: r.text.length, text: r.text };
-    				}) ||
-
-    				/* browser not supported */
-    				function() { return null; }
-
-    			)();
-
-    		},
-
-    		replaceSelection: function() {
-
-    			var e = (this.jquery) ? this[0] : this;
-    			var text = arguments[0] || '';
-
-    			return (
-
-    				/* mozilla / dom 3.0 */
-    				('selectionStart' in e && function() {
-    					e.value = e.value.substr(0, e.selectionStart) + text + e.value.substr(e.selectionEnd, e.value.length);
-    					return this;
-    				}) ||
-
-    				/* exploder */
-    				(document.selection && function() {
-    					e.focus();
-    					document.selection.createRange().text = text;
-    					return this;
-    				}) ||
-
-    				/* browser not supported */
-    				function() {
-    					e.value += text;
-    					return jQuery(e);
-    				}
-
-    			)();
-
-    		},
-    		setCurretPosition: function(start, end) {
-    														if(!end) end = start; 
-    														return this.each(function() {
-    																						if (this.setSelectionRange) {
-    																							this.focus();
-    																							this.setSelectionRange(start, end);
-    																						} else if (this.createTextRange) {
-    																															var range = this.createTextRange();
-    																															range.collapse(true);
-    																															range.moveEnd('character', end);
-    																															range.moveStart('character', start);
-    																															range.select();
-    																														 }
-    																					}
-    																		);
-    												}
-
-    	};
-
-    	jQuery.each(fieldSelection, function(i) { jQuery.fn[i] = this; });
-	
-    })();
-}
 var allowArrows = true;
 function my_functions()
 	{
@@ -117,9 +22,6 @@ function my_functions()
 		setInterval(function(){bottomControl()}, 500);
         //$(window).resize(function(){bottomControl();});
 		Dropzone.autoDiscover = false;
-		//initNavWrapper();
-		top_slider();
-		//initNavBar();
 		//scroller
 		$('.quickScroll #aUp').click(function(){$(window).scrollTop(0);});
 		$('.quickScroll #aDwn').click(function(){var p=$("#top").outerHeight(true)+$("#middle").outerHeight(true);$(window).scrollTop(p);});
@@ -239,27 +141,7 @@ function initSearchForm()
 
                                                                   });
         }
-function scrollControl() //Управление панелькой перемотки
-	{
-		var wH,blSH,sT,sB, botH,topH,t=300; 
-		wH = $(window).height();
-		blSH = blocksSumHeight();
-		sT = $(window).scrollTop();
-		topH = $("div#top").outerHeight(true);
-		botH = $("div#bottom").outerHeight(true);
-		if ((blSH-topH-botH) > wH)
-		{
-			$('.quickScroll').fadeIn(t);
-			if (sT>topH) {
-							$('.quickScroll #aUp').fadeIn(t);
-						 }else{$('.quickScroll #aUp').fadeOut();}
-			if ((blSH-sT)>wH)
-							{
-								$('.quickScroll #aDwn').fadeIn(t);
-							}else{$('.quickScroll #aDwn').fadeOut();}
-		} else {$('.quickScroll').fadeOut();}
 
-	}
 
 function waitbar(id)
     {
@@ -294,46 +176,46 @@ function waitbar(id)
     }
 function bottomControl()
 	{
-		var sum_h, window_h, new_middle_h;
+		var sum_h, window_h, new_middle_h, markOffset; 
 		sum_h = blocksSumHeight();
 		window_h = $(window).height();
-        //$("#test").text($(document).height());
-		if (sum_h < window_h)
+        markOffset = $("#footerMark").offset().top;
+       // $("#test").text(markOffset);
+		if (markOffset + $("#bottom").outerHeight(true) < window_h)
 		{
 			new_middle_h = window_h - $("#top").outerHeight(true) - $("#bottom").outerHeight(true) - $("#ses_p").outerHeight(true);
 			$('#middle').height(new_middle_h);
 			$("#bottom").css('position', 'fixed').css('bottom', '0');
-		}else{$("#bottom").css('position', 'relative').css('bottom', 'none');}
+		}else{
+                new_middle_h = markOffset - $("#top").outerHeight(true) - $("#ses_p").outerHeight(true);
+                $("#bottom").css('position', 'relative').css('bottom', 'none');
+                $('#middle').height(new_middle_h);
+             }
 		scrollControl();
 	}
 function blocksSumHeight(){return $("#top").outerHeight(true) + $("#middle").outerHeight(true) + $("#bottom").outerHeight(true) + $("#ses_p").outerHeight(true);} 
 
+function scrollControl() //Управление панелькой перемотки
+	{
+		var wH,blSH,sT,sB, botH,topH,t=300; 
+		wH = $(window).height();
+		blSH = blocksSumHeight();
+		sT = $(window).scrollTop();
+		topH = $("div#top").outerHeight(true);
+		botH = $("div#bottom").outerHeight(true);
+		if ((blSH-topH-botH) > wH)
+		{
+			$('.quickScroll').fadeIn(t);
+			if (sT>topH) {
+							$('.quickScroll #aUp').fadeIn(t);
+						 }else{$('.quickScroll #aUp').fadeOut();}
+			if ((blSH-sT)>wH)
+							{
+								$('.quickScroll #aDwn').fadeIn(t);
+							}else{$('.quickScroll #aDwn').fadeOut();}
+		} else {$('.quickScroll').fadeOut();}
 
-
-	
-//Слайдер
-function top_slider() 
-{
- $(".slider").each(function () { // обрабатываем каждый слайдер
-  var obj = $(this);
-  $(obj).append("<div class='nav'></div>");
-  $(obj).find("li").each(function () {
-   $(obj).find(".nav").append("<span rel='"+$(this).index()+"'></span>"); // добавляем блок навигации
-   $(this).addClass("slider"+$(this).index());
-  });
-  $(obj).find("span").first().addClass("on"); // делаем активным первый элемент меню
- });
-}
-
-
-function sliderJS (obj, sl) { // slider function
- var ul = $(sl).find("ul"); // находим блок
- var bl = $(sl).find("li.slider"+obj); // находим любой из элементов блока
- var step = $(bl).width(); // ширина объекта
- $(ul).animate({marginLeft: "-"+step*obj}, 500); // 500 это скорость перемотки
-}
-//Слайдер end
-
+	}
 //Wheater_panel
 function wheatherPanel()
 {

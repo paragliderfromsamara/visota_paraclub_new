@@ -1,10 +1,28 @@
 
-function initVideoForm()
+function initVideoForm(id)
 {
     var wb = new waitbar("wait_video_check");
+    var f = new myForm('video', null, "#" + id);
+    var nFlag = false;
+    var dFlag = false;
+	f.contentField = f.formElement.find('#video_description');
+	f.nameField = f.formElement.find('#video_name');
+    f.submitButt = f.formElement.find("#"+id+"_button");
+	f.contentFieldMaxLength = 400;
+	f.contentFieldMinLength = 0;
+	f.nameFieldMaxLength = 70;
+	f.nameFieldMinLength = 0;
+    f.longContentErr = 'Максимально допустимое количество знаков превышено на ';
+    f.longNameErr = 'Максимально допустимое количество знаков превышено на ';
+	nFlag = f.nameLengthCheck();
+	cFlag = f.contentLengthCheck();
+    f.nameField.keyup(function(){nFlag = f.nameLengthCheck(); f.switchSubmitBut(f.videoLinkFlag & nFlag & cFlag);});
+    f.contentField.keyup(function(){cFlag = f.contentLengthCheck(); f.switchSubmitBut(f.videoLinkFlag & nFlag & cFlag);});
+    f.videoLinkFlag = false;
+    f.switchSubmitBut(f.videoLinkFlag & nFlag & cFlag);
+    //console.log(f.switchSubmitBut.attr('class'));
     $("#video_link").change(function() {
                                         var e=this;
-                                        
                                         wb.startInterval();
                                         $.ajax(
                                                 {
@@ -12,17 +30,22 @@ function initVideoForm()
                                                     dataType: "json",
                                                     type: "GET",
                                                     data: ({link: $(e).val()}),
-                                                    error: function(XMLHttpRequest, textStatus, errorThrown){console.log(errorThrown);console.log(textStatus); wb.stopInterval();},
+                                                    error: function(XMLHttpRequest, textStatus, errorThrown){console.log(errorThrown);console.log(textStatus); wb.stopInterval();f.videoLinkFlag = false; f.switchSubmitBut(f.videoLinkFlag & nFlag & cFlag);},
                                                     success: function(data){
                                                                             if (data.link_html !== "" && data.link_html !== $(e).val())
                                                                                 {
                                                                                     $("#video_preview").html(data.link_html);
-                                                                                } else {$("#video_preview").html("Ссылка указана в неправильном формате");}
+                                                                                    $("#tError").empty();
+                                                                                    f.videoLinkFlag = true;
+                                                                                
+                                                                                } else {$("#tError").html("Ccылка должна быть указана в формате \"youtube\", \"vk\", \"vimeo\"..."); f.videoLinkFlag = false;}
                                                                             console.log(data.link_html); wb.stopInterval();
+                                                                            f.switchSubmitBut(f.videoLinkFlag & nFlag & cFlag);
                                                                            }
                                                 }
                                               );//console.log("hello");
                                        });
+
 }
 
 function initReportForm(art_id, formName)
@@ -160,10 +183,11 @@ function initThemeForm(th_id, formName)
 }
 function initMessageForm(msg_id, formName, msgType)
 {
-	var f, formAnswer, minContentLength, curVisFrm;
+	var f, formAnswer, minContentLength, curVisFrm, iFlag, cFlag;
 	minContentLength = 1;
 	f = new myForm('message', msg_id, formName);
 	f.parentElID = '#newMsgForm';
+    f.submitButt = f.formElement.find(formName.replace(".", "#") + "_" + msg_id + "_button");
 	f.aButList = [0, 2];
 	f.contentFieldMaxLength = 150000;
 	f.contentFieldMinLength = minContentLength;
@@ -178,20 +202,16 @@ function initMessageForm(msg_id, formName, msgType)
 	f.photosUploader();
 	f.getPhsToForm();
 	f.submitButt.bind("mouseup", function(e){if(!f.submitButt.hasClass("disabled")) {f.formElement.append("<input type = 'hidden' name = 'message[status_id]' value = '1' />")};});
-	setInterval(function(){
-							var cFlag, iFlag;
-							//f.getAlignArray();
-							iFlag = f.imagesLengthCheck();
-							cFlag = f.contentLengthCheck();
-							//$("#test").text(f.tEditor.escapeBbText());
-							//f.tEditor.drawCode();  
-							if (f.imagesLength>0){f.contentFieldMinLength = 0;}else{f.contentFieldMinLength = minContentLength;}
-							if (cFlag || iFlag)
-							{
-								f.submitButt.removeClass('disabled');
-							}else{f.submitButt.addClass('disabled');};
-						  }, 300);
-                          
+    checkAll();
+    f.contentField.keyup(function(){checkAll();});
+    f.formElement.mouseover(function(){checkAll();});
+
+    function checkAll() {
+                              iFlag = f.imagesLengthCheck();
+                              if (f.imagesLength>0) f.contentFieldMinLength = 0; else f.contentFieldMinLength = minContentLength;                        	
+                              cFlag = f.contentLengthCheck();
+                              f.switchSubmitBut(iFlag || cFlag);
+                          }                      
 	$('a#answer_but').click(function() {
 											var msgToId = $(this).attr('alt');
 											if (f.formElement.find('#message_message_id').val() == undefined)
@@ -243,6 +263,7 @@ function initEventForm(id, formName)
 {
 	var f;
 	f = new myForm('event', id, formName);
+    
 	f.contentField = f.formElement.find('#event_content');
 	f.nameField = f.formElement.find('#event_title');
 
@@ -357,7 +378,7 @@ function myForm(type, entityID, formName)
 	this.type = type;
 	this.entityID = entityID;
 	this.formElement = $(formName);
-    this.submitButt = this.formElement.find(formName.replace(".", "#") + "_" + entityID + "_button");
+    this.submitButt = null;
 	this.tEditor = null;
 	this.parentElID = 'none'; 
     this.classPrefix = 'fi-'
@@ -377,21 +398,24 @@ function myForm(type, entityID, formName)
 										{
 											var d, err ='', s, f = true;
 											s = this.formElement.find('p#nLength');
-											if (this.nameFieldMaxLength != 0 && this.nameField.val().length > this.nameFieldMaxLength)
-											{
-												d = this.nameField.val().length - this.nameFieldMaxLength;
-												err = this.longNameErr + d;
-												f = false;
-											}
-											if (this.nameFieldMinLength != 0 && this.nameField.val().length < this.nameFieldMinLength)
-											{
-												err = this.shortNameErr;
-												f = false;
-											}
-											s.find('#txtL').text(this.nameField.val().length +' из ' + this.nameFieldMaxLength);
+                                            if (this.nameField.val() !== undefined)
+                                            {
+    											if (this.nameFieldMaxLength != 0 && this.nameField.val().length > this.nameFieldMaxLength)
+    											{
+    												d = this.nameField.val().length - this.nameFieldMaxLength;
+    												err = this.longNameErr + d;
+    												f = false;
+    											}
+    											if (this.nameFieldMinLength != 0 && this.nameField.val().length < this.nameFieldMinLength)
+    											{
+    												err = this.shortNameErr;
+    												f = false;
+    											}
+    											s.find('#txtL').text(this.nameField.val().length +' из ' + this.nameFieldMaxLength);
 											
-											s.find('#txtErr').text(err);
-											switchErr(s, f);
+    											s.find('#txtErr').text(err);
+    											switchErr(s, f);
+                                            }
 											return f;
 										};
 	this.nameMatchesCheck = function() {
@@ -444,36 +468,41 @@ function myForm(type, entityID, formName)
 	this.contentField = null;
 	this.curBbFont = null;
 	this.curBbAlign = null;
+    this.videoLinkFlag = null;
 	this.getAlignArray = function() 
 	{
 		var str = this.contentField.val();
 		var names = this.tEditor.tAlignMenus;
 		var arr = new Array();
-		for (var i=1; i< names.length; i++)
-		{
-			var c = 0; f=false;
-			for(var l=0; l<(this.contentFieldMaxLength/(names[i].length+2)); l++)
-			{
-				var b = new bbCodeObj(names[i], 'none');
+        if (str !== undefined)
+        {
+    		for (var i=1; i< names.length; i++)
+    		{
+    			var c = 0; f=false;
+    			for(var l=0; l<(this.contentFieldMaxLength/(names[i].length+2)); l++)
+    			{
+    				var b = new bbCodeObj(names[i], 'none');
 
-					b.sTagStart = str.indexOf(b.tagName().start, c);
+    					b.sTagStart = str.indexOf(b.tagName().start, c);
 					
-					if (b.sTagStart == -1 || (b.sTagStart == c && c > 0 ) || b.sTagStart == str.length)
-					{
-						break;
-					}else{
-							b.eTagStart = str.indexOf(b.tagName().end, b.sTagStart+b.eTagStart.length);
-							if  (b.eTagStart == -1 || (b.eTagStart == c && c > 0 )|| b.eTagStart == str.length)
-							{
-								break;
-							}else{
-									arr[arr.length] = b; 
+    					if (b.sTagStart == -1 || (b.sTagStart == c && c > 0 ) || b.sTagStart == str.length)
+    					{
+    						break;
+    					}else{
+    							b.eTagStart = str.indexOf(b.tagName().end, b.sTagStart+b.eTagStart.length);
+    							if  (b.eTagStart == -1 || (b.eTagStart == c && c > 0 )|| b.eTagStart == str.length)
+    							{
+    								break;
+    							}else{
+    									arr[arr.length] = b; 
 									
-									c=b.eTagStart+b.tagName().end.length;
-								}
-						 }
-			}
-		}
+    									c=b.eTagStart+b.tagName().end.length;
+    								}
+    						 }
+    			}
+    		}
+        }
+		
 	}
 	this.contentFieldMaxLength = 0;
 	this.contentFieldMinLength = 0;
@@ -497,23 +526,27 @@ function myForm(type, entityID, formName)
 											var d, err ='', s, f = true, str, maxTxtL;
 											s = this.formElement.find('p#cLength');
 											str = this.alterText();
-											maxTxtL = this.contentFieldMaxLength - (this.contentField.val().length - str.length);
-											if (maxTxtL < 0) maxTxtL = 0; 
-											if (this.contentFieldMaxLength != 0 && this.alterText().length > maxTxtL && maxTxtL > 0)
-											{
+											if (str !== undefined && this.contentField.val() !== undefined)
+                                            {
+                                                maxTxtL = this.contentFieldMaxLength - (this.contentField.val().length - str.length);
+    											if (maxTxtL < 0) maxTxtL = 0; 
+    											if (this.contentFieldMaxLength != 0 && this.alterText().length > maxTxtL && maxTxtL > 0)
+    											{
 												
-												d = this.alterText().length - maxTxtL;
-												err = this.longContentErr + d;
-												f = false;
-											}
-											if (this.contentFieldMinLength != 0 && this.alterText().length < this.contentFieldMinLength)
-											{
-												err = this.shortContentErr;
-												f = false;
-											}
-											s.find('#txtL').text(this.alterText().length +' из ' + maxTxtL);
-											s.find('#txtErr').text(err);
-											switchErr(s, f);
+    												d = this.alterText().length - maxTxtL;
+    												err = this.longContentErr + d;
+    												f = false;
+    											}
+    											if (this.contentFieldMinLength != 0 && this.alterText().length < this.contentFieldMinLength)
+    											{
+    												err = this.shortContentErr;
+    												f = false;
+    											}
+    											s.find('#txtL').text(this.alterText().length +' из ' + maxTxtL);
+    											s.find('#txtErr').text(err);
+    											switchErr(s, f);
+                                            }
+                                            
 											return f;
 										};
 	//содержимое end
@@ -523,6 +556,7 @@ function myForm(type, entityID, formName)
 	this.imagesMinLength = 0;
 	this.imagesMaxLengthErr = '';
 	this.imagesMinLengthErr = '';
+    this.imagesLenghtFlag = false;
 	this.imagesLengthCheck = function()	{
 											var l = 0, lFlag,eFlag=true, d, err='', s;
 											s = this.formElement.find('p#iLength');
@@ -550,6 +584,7 @@ function myForm(type, entityID, formName)
 											switchErr(s, eFlag);
 											s.find('#txtL').text('Фотографий добавлено: ' + l + ';');
 											s.find('#txtErr').text(err);
+                                            this.imagesLenghtFlag = lFlag&eFlag;
 											return lFlag&eFlag;
 											}
 											
@@ -734,6 +769,7 @@ function myForm(type, entityID, formName)
 								 }
 	this.initPanel = function(){
 							var buttons, menus, cur_addr, curMenuClass, i, curButClass, el; 
+                            bindCoordetecter();
 							menus = ''; 
 							buttons = '<ul>';
 							for (j=0; j<this.aButList.length; j++)
@@ -763,7 +799,12 @@ function myForm(type, entityID, formName)
 							this.contentField.keyup(function(){changingTextarea(el.contentField);});
 							
 						}
-
+    this.switchSubmitBut = function(f) {
+        		                if (f)
+                            		{
+                            			this.submitButt.removeClass('disabled');
+                            		}else{this.submitButt.addClass('disabled');};
+                                 }
 	function menuContent(n, el){
 								var val;
 								if(n=='paw')
@@ -1172,36 +1213,41 @@ function textEditor(el)
 			var names = this.tAlignMenus;
 			var b = new bbCodeObj('align-left', 'none');
 			var j = 0;
-			for (var i=1; i<names.length; i++)
-			{
-				var c = 0;
-				b.name = names[i];
-				do
-				{
-						b.sTagStart = str.indexOf(b.tagName().start, c);
-						if (b.sTagStart == -1 )
-						{
-							break;
-						}else{	
-								b.eTagStart = str.indexOf(b.tagName().end, b.sTagStart);
-								if  (b.eTagStart == -1)
-								{
-									break;
-								}else{
+            if (str !== undefined)
+            {
+    			for (var i=1; i<names.length; i++)
+    			{
+    				var c = 0;
+    				b.name = names[i];
+    				do
+    				{
+    						b.sTagStart = str.indexOf(b.tagName().start, c);
+    						if (b.sTagStart == -1 )
+    						{
+    							break;
+    						}else{	
+    								b.eTagStart = str.indexOf(b.tagName().end, b.sTagStart);
+    								if  (b.eTagStart == -1)
+    								{
+    									break;
+    								}else{
 										
-										if (this.tArea.getSelection().start > b.sTagStart && this.tArea.getSelection().end < b.eTagStart + b.tagName().end.length)
-										{
-											return b;
-										}else{c=b.eTagStart+b.tagName().end.length;}
-									 }
-							 }
-						j++;
-				}while(j<str.length);
-			}
-			b.name = 'align-left';
-			b.sTagStart = str.length;
-			b.eTagStart = str.length;	
-			return b;
+    										if (this.tArea.getSelection().start > b.sTagStart && this.tArea.getSelection().end < b.eTagStart + b.tagName().end.length)
+    										{
+    											return b;
+    										}else{c=b.eTagStart+b.tagName().end.length;}
+    									 }
+    							 }
+    						j++;
+    				}while(j<str.length);
+    			}
+    			b.name = 'align-left';
+    			b.sTagStart = str.length;
+    			b.eTagStart = str.length;
+                
+            }
+	        return b;
+			
 		}
 		this.escapeBbText = function()
 		{
@@ -1279,6 +1325,102 @@ function switchClasses(cOn, cOff, e)
         if (e.hasClass(cOff)) e.removeClass(cOff);
         if (!e.hasClass(cOn)) e.addClass(cOn);
     }
+
+function bindCoordetecter() //поиск координат курсора в текстовом поле
+{
+    (function() {
+
+    	var fieldSelection = {
+
+    		getSelection: function() {
+
+    			var e = (this.jquery) ? this[0] : this;
+
+    			return (
+
+    				/* mozilla / dom 3.0 */
+    				('selectionStart' in e && function() {
+    					var l = e.selectionEnd - e.selectionStart;
+    					return { start: e.selectionStart, end: e.selectionEnd, length: l, text: e.value.substr(e.selectionStart, l) };
+    				}) ||
+
+    				/* exploder */
+    				(document.selection && function() {
+
+    					e.focus();
+
+    					var r = document.selection.createRange();
+    					if (r === null) {
+    						return { start: 0, end: e.value.length, length: 0 }
+    					}
+
+    					var re = e.createTextRange();
+    					var rc = re.duplicate();
+    					re.moveToBookmark(r.getBookmark());
+    					rc.setEndPoint('EndToStart', re);
+
+    					return { start: rc.text.length, end: rc.text.length + r.text.length, length: r.text.length, text: r.text };
+    				}) ||
+
+    				/* browser not supported */
+    				function() { return null; }
+
+    			)();
+
+    		},
+
+    		replaceSelection: function() {
+
+    			var e = (this.jquery) ? this[0] : this;
+    			var text = arguments[0] || '';
+
+    			return (
+
+    				/* mozilla / dom 3.0 */
+    				('selectionStart' in e && function() {
+    					e.value = e.value.substr(0, e.selectionStart) + text + e.value.substr(e.selectionEnd, e.value.length);
+    					return this;
+    				}) ||
+
+    				/* exploder */
+    				(document.selection && function() {
+    					e.focus();
+    					document.selection.createRange().text = text;
+    					return this;
+    				}) ||
+
+    				/* browser not supported */
+    				function() {
+    					e.value += text;
+    					return jQuery(e);
+    				}
+
+    			)();
+
+    		},
+    		setCurretPosition: function(start, end) {
+    														if(!end) end = start; 
+    														return this.each(function() {
+    																						if (this.setSelectionRange) {
+    																							this.focus();
+    																							this.setSelectionRange(start, end);
+    																						} else if (this.createTextRange) {
+    																															var range = this.createTextRange();
+    																															range.collapse(true);
+    																															range.moveEnd('character', end);
+    																															range.moveStart('character', start);
+    																															range.select();
+    																														 }
+    																					}
+    																		);
+    												}
+
+    	};
+
+    	jQuery.each(fieldSelection, function(i) { jQuery.fn[i] = this; });
+
+    })();
+}
 //votes
 
 //votes end

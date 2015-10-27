@@ -10,9 +10,9 @@
 </head>
 <body>
     <script type = 'text/javascript'>
-    var ready = function(){bindCoordetecter(); $('img, style').load(function(){$(this).fadeIn(1000);}); my_functions(); wheatherPanel(); <%= js_functions %> bottomControl();};
+        var ready = function(){$('img, style').load(function(){$(this).fadeIn(1000);}); my_functions(); wheatherPanel(); <%= js_functions %> bottomControl();};
         $(document).ready(ready);
-        $(document).on('page:load',ready);
+        $(document).on('page:load', ready);
     </script>
 <!--
 <div class = 'right_menu'>
@@ -131,7 +131,9 @@
 <div id = 'middle'>
     <%= header_1 %>
 	<%= yield %>
+    <div style = "position: relative; width: 100%;" id = "footerMark"></div>
 </div>
+
 <div id = 'bottom'>
 	<div id = 'test'></div>
 	<% if controller.controller_name == 'pages' and controller.action_name != 'visota_life' and controller.action_name != 'feed' and controller.action_name != 'search' %>
@@ -197,6 +199,7 @@
 			</div>
 		</div>
 	<% end %>
+    
 	<div id = 'footer'>
 		<div class = 'm_1000wh'  style = 'top: 30%;'>
 			<div class = 'section group'>
