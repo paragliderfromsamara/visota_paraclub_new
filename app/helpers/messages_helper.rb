@@ -120,142 +120,6 @@ module MessagesHelper
 			return "<span class = 'istring_m norm'>Гость</span><br />#{image_tag('/files/undefined.png', :width => '90px')}"
 		end
 	end
-	#new_message_init
-	def newMessageFormInitial
-		form = ''
-		flag = false
-		type = 'comment'
-    formId = ""
-		if (@theme != nil || @photo != nil || @album != nil || @video != nil) && (user_type != 'bunned' and user_type != 'guest')
-			if @theme != nil    
-				if userCanCreateMsgInTheme?(@theme)
-          @tmpMessage = current_user.theme_message_draft(@theme)
-					@alterReturnTo = theme_path(@theme)
-					flag = true
-					type = 'message' if @photo == nil
-					type = 'comment' if @photo != nil
-				end
-			end
-			if @video != nil 
-				if !is_not_authorized?
-					@tmpMessage = current_user.video_comment_draft(@video)
-          type = 'message'
-          @alterReturnTo = video_path(@video)
-					flag = true
-				end
-			end
-			if @album != nil 
-				if !is_not_authorized?
-					flag = true
-          type = 'message'
-					chAlbumFlag = false
-					chPhotoFlag = false
-					@alterReturnTo = photo_album_path(@album)
-          @tmpMessage = current_user.album_message_draft(@album)
-					if @photo != nil
-						@alterReturnTo = photo_path(@photo)
-            @tmpMessage = current_user.photo_comment_draft(@photo)
-						#chPhotoFlag = true if @tmpMessage.photo_id != @photo.id
-					end
-					#chAlbumFlag = true if @tmpMessage.photo_album_id != @album.id
-					if chAlbumFlag || chPhotoFlag
-						if chAlbumFlag and chPhotoFlag
-						#	@tmpMessage.update_attributes(:photo_id => @photo.id, :photo_album_id => @photo.photo_album_id)
-						elsif chAlbumFlag and !chPhotoFlag
-						#	@tmpMessage.update_attribute(:photo_album_id, @album.id)
-						end	
-					end
-				end
-			end
-			if @message_to != nil
-				flag = true
-			end
-		end
-    if @formMessage != nil
-      @tmpMessage = @formMessage
-    end
-		flag &= userCanCreateMsg?
-		if flag == true
-      formClass = "edit_message"
-			@add_functions = (@add_functions == nil)? "initMessageForm(#{@tmpMessage.id.to_s}, '.#{formClass}', '#{type}');":@add_functions+"initMessageForm(#{@tmpMessage.id.to_s}, '.#{formClass}', '#{type}');"
-			form = "<div id = 'newMsgForm'>#{buildMsgForm(type, formClass)}</div>"
-			p = {:tContent => form, :classLvl_1 => 'mForm'}
-			return c_box_block(p)
-		else
-			return ''
-		end
-	end
-	def buildMsgForm(type, formClass)
-		#отрисовывается с помощью js функции initMessageForm(msg_id)
-		form_for(@tmpMessage, :multipart => 'true') do |f|
-		"
-				<a name = 'new_message'></a>
-        <div style = 'display: none;'>
-        #{ f.file_field :uploaded_photos, :multiple => 'true' if type != 'comment'}</div>
-				#{ hidden_field :info, :return_to_link, :value => getMsgPathLinkAfterSave}
-				#{ f.hidden_field :message_id, :value => @message_to.id if @message_to != nil }
-				#{ f.hidden_field :theme_id, :value => @theme.id if @theme != nil}
-				#{ f.hidden_field :photo_id, :value => @photo.id if @photo != nil}
-				#{ f.hidden_field :video_id, :value => @video.id if @video != nil}
-				#{ f.hidden_field :photo_album_id, :value => @album.id if @album != nil}
-				<div class = 'm_1000wh'>
-					<br />
-					<table id = 'msg_table' style = 'width: 100%;'>
-						<tr>
-							<td id = 'frm' valign = 'top'>
-									<table id = 'formMenuTable'>
-										<tr>
-											<td id = 'formButtons'>
-											</td>
-										</tr>
-										<tr>
-											<td id = 'formMenus'>
-											</td>
-										</tr>
-                    <tr>
-                      <td>
-    									#{ f.text_area :content, :cols => 115, :rows => '7', :defaultRows => '7', :placeholder => "#{(type == 'comment')? "Текст комментария":"Текст сообщения"}", :class=> 't_area', :style => 'width:980px; padding: 10px;', value: @tmpMessage.content}
-                      </td>
-                    </tr>
-									</table>
-									
-									<div id = 'answr_to_str' style = 'display:#{(@tmpMessage.message != nil)? "block":"none"};'><a id = 'ans_link' class = 'b_link_i' href = '#m_#{@tmpMessage.message.id if @tmpMessage.message != nil}'>ответ пользователю #{@tmpMessage.message.user.name if @tmpMessage.message != nil}</a></div>
-                  <div><p class = 'istring #{@content_f_color if @content_f_color != nil}' id = 'cLength'><span id = 'txtL'></span> <span id = 'txtErr'>#{@content_error if @content_error != nil}</span><span id = 'txtErrSrv'>#{@content_error if @content_error != nil}</span></p></div>
-								<div class='actions tb-pad-s'>           
-									#{ mySubmitButton("Отправить", "#{formClass}_#{@tmpMessage.id}")}
-								</div>
-
-							</td>
-							#{"
-							<tr>
-
-							<td id = 'formPhotos'>
-								<div id = 'uploadedPhotos'>
-								</div>
-								<div><p class = 'istring #{@photos_f_color if @photos_f_color != nil}' id = 'iLength'><span id = 'txtL'></span> <span id = 'txtErr'>#{@photos_error if @photos_error != nil}</span><span id = 'txtErrSrv'>#{@photos_error if @photos_error != nil}</span></p></div>
-							</td>
-							</tr>
-							" if type != 'comment'}
-						</tr>
-					</table>
-					<br />
-				</div>
-				<div id = 'editorPreview' class = 'mText' style = 'position: relative; width: 100%; margin-top: 20px; margin-bottom: 20px; '>
-				
-				</div>
-        <br />
-			".html_safe
-		end
-	end
-	def getMsgPathLinkAfterSave
-		if @return_to == nil or @return_to == ''
-			return @alterReturnTo
-		else 
-			return @return_to
-		end
-		
-	end
-#new_message_init end
 	def answer_to_msg(message)		
 		if message.message == nil
 			return ""
@@ -292,8 +156,8 @@ module MessagesHelper
 		buttons = [{:name => 'Ответить', :access => !is_not_authorized?, :type => 'comments', :alt => message.id, :id => 'answer_but', :link => '#new_message'}]
 		buttons += [{:name => 'К обсуждению', :access => true, :type => 'arrow-right', :link => "#{message_path(message)}"}] if treadCount != 0 and @message != message
 		buttons += [
-					      {:name => 'Изменить', :access => false, :type => 'pencil', :link => "#{edit_message_path(message)}"}, 
-				        {:name => 'Удалить', :access => false, :type => 'trash', :link => ""}
+					      {:name => 'Изменить', :access => userCanEditMsg?(message), :type => 'pencil', :link => "#{edit_message_path(message)}"}, 
+				        {:name => 'Удалить', :access => userCanDeleteMessage?(message), :type => 'trash', :link => message_path(message), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить сообщение?', :data_method => 'delete'}
 				       ]
 		return buttons
 	end
@@ -301,17 +165,9 @@ module MessagesHelper
 	    buttons = [{:name => 'Ответить', :access => !is_not_authorized?, :type => 'comments', :alt => message.id, :id => 'answer_but', :link => '#new_message'}]
 		buttons += [{:name => 'К обсуждению', :access => true, :type => 'arrow-right', :link => "#{message_path(message)}"}] if treadCount != 0 and @message != message
 		buttons += [
-					        {:name => 'Изменить', :access => false, :type => 'pencil', :link => "#{edit_message_path(message)}"}, 
-					        {:name => 'Удалить', :access => false, :type => 'trash', :link => ""}
+					        {:name => 'Изменить', :access => userCanEditMsg?(message), :type => 'pencil', :link => "#{edit_message_path(message)}"}, 
+					        {:name => 'Удалить', :access => userCanDeleteMessage?(message), :type => 'trash', :link => message_path(message), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить сообщение?', :data_method => 'delete'}
 				       ]
 		return buttons
 	end
-	def message_panel
-		link_name = 'Новое сообщение'
-		link_name = 'Добавить комментарий' if controller.controller_name == "videos" or controller.controller_name == "photo_albums" or controller.controller_name == "photos"
-		[
-			{:name => link_name, :access => ['super_admin', 'admin', 'club_pilot', 'manager', 'friend'], :type => 'plus', :id => 'toggle_msg'}
-		]
-	end
-	
 end

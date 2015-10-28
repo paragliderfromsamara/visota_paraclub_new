@@ -96,28 +96,44 @@ class MessagesController < ApplicationController
   # GET /messages/1/edit
   def edit
     @formMessage = Message.find_by(id: params[:id], status_id: 1)
-	if userCanEditMsg?(@formMessage)
-			@theme = Theme.find_by(id: @formMessage.theme_id, status_id: 1)
-			@photo = Photo.find_by(id: @formMessage.photo_id, status_id: 1)
-			@video = Video.find_by(id: @formMessage.video_id)
-			@button_name = 'Сохранить изменения'
-			if @theme != nil
-				@title = @header = 'Изменение сообщения'
-				@topic = Topic.find_by(id: @formMessage.topic_id)
-				@path_array = [
-								{:name => 'Общение', :link => '/visota_life'},
-								{:name => @theme.topic.name, :link => topic_path(@theme.topic)},
-								{:name => @theme.name, :link => theme_path(@theme)},
-								{:name => @title, :link => '#'}
-							  ]
-			end
-			if @photo != nil
-			end
-			if @video != nil
-			end				
-	else
-		redirect_to '/404'
-	end
+  	if userCanEditMsg?(@formMessage)
+  			@theme = Theme.find_by(id: @formMessage.theme_id, status_id: 1)
+  			@photo = Photo.find_by(id: @formMessage.photo_id, status_id: 1)
+        @album = PhotoAlbum.find_by(id: @formMessage.photo_album_id, status_id: 1)
+  			@video = Video.find_by(id: @formMessage.video_id)
+  			if @theme != nil
+  				@title = @header = 'Изменение сообщения'
+  				@topic = Topic.find_by(id: @formMessage.topic_id)
+  				@path_array = [
+  								{:name => 'Общение', :link => '/visota_life'},
+  								{:name => @theme.topic.name, :link => topic_path(@theme.topic)},
+  								{:name => @theme.name, :link => theme_path(@theme)},
+  								{:name => @title, :link => '#'}
+  							  ]
+  			end
+  			if @album != nil
+          @title = @header = 'Изменение комментария'
+    			@path_array = [
+                          {:name => 'Медиа', :link => '/media'},
+            						  {:name => 'Видео', :link => '/media?t=videos&c=all'},
+            						  {:name => @album.category_name, :link => "/media?t=albums&c=#{@album.category_id}"},
+            						  {:name => @album.name, :link => photo_album_path(@album)},
+            						  {:name => @title}
+    						        ]
+  			end
+  			if @video != nil
+          @title = @header = 'Изменение комментария'
+    			@path_array = [
+                          {:name => 'Медиа', :link => '/media'},
+            						  {:name => 'Видео', :link => '/media?t=videos&c=all'},
+            						  {:name => @video.category_name, :link => "/media?t=videos&c=#{@video.category_id}"},
+            						  {:name => @video.alter_name, :link => video_path(@video)},
+            						  {:name => @title}
+    						        ]
+  			end				
+  	else
+  		redirect_to '/404'
+  	end
   end
 
   # POST /messages
@@ -126,8 +142,6 @@ class MessagesController < ApplicationController
 	if user_type != 'guest' and user_type != 'bunned'
 		@button_name = 'Создать'
 		params[:message][:user_id] = current_user.id
-		@draft = current_user.message_draft
-		@add_functions = "initMessageForm(#{@draft.id}, '#new_message');"
 		@message_to = Message.find_by(id: params[:message][:message_id], status_id: 1) 	#ищем ответ ли это на сообщение.
 		@theme = Theme.find_by(id: params[:message][:theme_id], status_id: 1)				#ищем тему.
 		@photo = Photo.find_by(id: params[:message][:photo_id], status_id: 1)				#ищем фотографию.
@@ -136,7 +150,7 @@ class MessagesController < ApplicationController
     @createNotice = 'Сообщение успешно добавлено...'
 		if @theme != nil
 			@path_array = [
-							{:name => 'Клубная жизнь', :link => '/visota_life'},
+							{:name => 'Общение', :link => '/visota_life'},
 							{:name => @theme.topic.name, :link => topic_path(@theme.topic)},
 							{:name => @theme.name, :link => theme_path(@theme)}, 
 							{:name => 'Новое сообщение', :link => '/#'}
@@ -144,12 +158,26 @@ class MessagesController < ApplicationController
 		end
 		if @album != nil
       @createNotice = 'Комментарий успешно добавлен...'
+			@path_array = [
+                    {:name => 'Медиа', :link => '/media'},
+        						{:name => 'Видео', :link => '/media?t=videos&c=all'},
+        						{:name => @video.category_name, :link => "/media?t=videos&c=#{@video.category_id}"},
+        						{:name => @video.alter_name, :link => video_path(@video)},
+        						{:name => @title}
+						  ]
 			if @photo != nil
 				
 			end
 		end
     if @video != nil
       @createNotice = 'Комментарий успешно добавлен...'
+			@path_array = [
+                    {:name => 'Медиа', :link => '/media'},
+        						{:name => 'Видео', :link => '/media?t=videos&c=all'},
+        						{:name => @video.category_name, :link => "/media?t=videos&c=#{@video.category_id}"},
+        						{:name => @video.alter_name, :link => video_path(@video)},
+        						{:name => @title}
+						  ]
     end
 		if @message_to != nil
 			if @message_to.photo != nil
@@ -233,12 +261,12 @@ class MessagesController < ApplicationController
   			@theme = Theme.find_by(id: @message.theme_id, status_id: 1)
   			@photo = Photo.find_by(id: @message.photo_id, status_id: 1)
   			@video = Video.find_by(id: @message.video_id)
-  			@add_functions = "initMessageForm(#{@message.id.to_s}, '.edit_message');" #включаем функцию отрисовки формы
+        @album = PhotoAlbum.find_by(id: @formMessage.photo_album_id, status_id: 1)
   			if @theme != nil
   				@title = 'Изменение сообщения'
   				@topic = Topic.find_by(id: @message.topic_id)
   				@path_array = [
-  						    {:name => 'Клубная жизнь', :link => '/visota_life'},
+  						    {:name => 'Общение', :link => '/visota_life'},
   								{:name => @theme.topic.name, :link => topic_path(@theme.topic)},
   								{:name => @theme.name, :link => theme_path(@theme)},
   								{:name => @title, :link => '#'}
@@ -248,6 +276,14 @@ class MessagesController < ApplicationController
           
   			end
   			if @video != nil
+  				@title = @header = 'Изменение комментария'
+  				@path_array = [
+                        {:name => 'Медиа', :link => '/media'},
+            						{:name => 'Видео', :link => '/media?t=videos&c=all'},
+            						{:name => @video.category_name, :link => "/media?t=videos&c=#{@video.category_id}"},
+            						{:name => @video.alter_name, :link => video_path(@video)},
+            						{:name => @title}
+  							  ]
   			end				
   			format.html { render :action => "edit" }
   			format.json { render :json => @message.errors, :status => :unprocessable_entity }
@@ -262,26 +298,27 @@ class MessagesController < ApplicationController
   # DELETE /messages/1.json
   def destroy
     @message = Message.find(params[:id])
-	ent = @message.theme if @message.theme != nil
-	ent = @message.photo if @message.photo != nil
-	ent = @message.photo_album if @message.photo_album != nil
-	if userCanDeleteMessage?(@message)
-		if is_admin?
-			if @message.status_id == 3
-				@message.destroy
-			else
-				@message.set_as_delete
-			end 
-		else
-			@message.destroy
-		end
-		respond_to do |format|
-		  format.html { redirect_to ent }
-		  format.json { head :no_content }
-		end
-	else
-		redirect_to '/404'
-	end
+	  ent = @message.theme if @message.theme != nil
+	  ent = @message.photo if @message.photo != nil
+	  ent = @message.photo_album if @message.photo_album != nil
+    ent = @message.video if @message.video != nil
+  	if userCanDeleteMessage?(@message)
+  		if is_admin?
+  			if @message.status_id == 3
+  				@message.destroy
+  			else
+  				@message.set_as_delete
+  			end 
+  		else
+  			@message.destroy
+  		end
+  		respond_to do |format|
+  		  format.html { redirect_to ent }
+  		  format.json { head :no_content }
+  		end
+  	else
+  		redirect_to '/404'
+  	end
   end
   
   def recovery
@@ -348,16 +385,16 @@ class MessagesController < ApplicationController
 	end
   end
   def upload_photos
-	message = Message.find(params[:id]) 
-	if isEntityOwner?(message)
-		@photo = Photo.new(message_id: message.id, user_id: message.user.id, link: params[:message][:uploaded_photos], status_id: 0)
-		if @photo.save
-			render :json => {message: 'success', photoID: @photo.id }
-		else
-			render :json => {:error => @photo.errors.full_messages.join(',')}
-		end
-	else
-		redirect_to '/404'
-	end
+	  message = Message.find(params[:id]) 
+  	if isEntityOwner?(message)
+  		@photo = Photo.new(message_id: message.id, user_id: message.user.id, link: params[:message][:uploaded_photos], status_id: 0)
+  		if @photo.save
+  			render :json => {message: 'success', photoID: @photo.id }
+  		else
+  			render :json => {:error => @photo.errors.full_messages.join(',')}
+  		end
+  	else
+  		redirect_to '/404'
+  	end
   end
 end

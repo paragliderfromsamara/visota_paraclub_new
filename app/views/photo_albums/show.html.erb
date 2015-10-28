@@ -9,7 +9,7 @@
 		<h3>Комментарии</h3>
 	</div>
 </div>
-<%= newMessageFormInitial.html_safe %>
+<%= render "messages/form" %>
 <% if @album.comments != [] %>
 	<% @album.comments.each do |c| %>
 		<% i+=1 %>

@@ -260,16 +260,16 @@ end
 		if isEntityOwner?(msg) 
 			if !msg.tread_has_another_user_message?
 				if msg.theme_id != nil
-					return true if msg.theme.status == 'open'
+					return true if msg.theme.status == 'open' if Time.now < msg.created_at + 5.hour 
 				end
         if msg.photo_album != nil
-          return true if userCanSeeAlbum?(msg.photo_album)
+          return true if userCanSeeAlbum?(msg.photo_album) and Time.now < msg.created_at + 1.hour
         end
         if msg.photo != nil
           return true if userCanSeePhoto?(msg.photo)
         end
         if msg.video != nil
-          return true
+          return true if Time.now < msg.created_at + 1.hour # || is_super_admin?
         end
 			end
 		end 

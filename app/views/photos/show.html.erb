@@ -31,7 +31,7 @@
 		</div>   
 		<div class = 'c_box'>
             <%= my_notice %>
-            <%= newMessageFormInitial.html_safe %>
+            <%= render "messages/form" %>
 			<% if @photo.comments != [] %>
 				<% i=0 %>
 				<% @photo.comments.each do |message| %>

@@ -184,23 +184,35 @@ function initThemeForm(th_id, formName)
 function initMessageForm(msg_id, formName, msgType)
 {
 	var f, formAnswer, minContentLength, curVisFrm, iFlag, cFlag;
-	minContentLength = 1;
-	f = new myForm('message', msg_id, formName);
+	minContentLength = 3;
+	f = new myForm(msgType, msg_id, formName);
 	f.parentElID = '#newMsgForm';
     f.submitButt = f.formElement.find(formName.replace(".", "#") + "_" + msg_id + "_button");
-	f.aButList = [0, 2];
-	f.contentFieldMaxLength = 150000;
-	f.contentFieldMinLength = minContentLength;
-	f.contentField = f.formElement.find('#message_content');
-	f.shortContentErr = 'Сообщение не должно быть пустым';
+    f.contentField = f.formElement.find('#message_content');
 	f.longContentErr = 'Максимально допустимое количество знаков превышено на ';
-	f.imagesMaxLength = 20;
-	f.imagesMaxLengthErr = 'Максимально допустимое количество фотографий для сообщения превышено на ';
-	f.curContentValue = f.contentField.val();
-    f.tEditor = new textEditor(f);
-	f.initPanel();
-	f.photosUploader();
-	f.getPhsToForm();
+    if (msgType == 'comment')
+    {
+        f.aButList = [0];
+        f.contentFieldMaxLength = 10000;
+        f.contentFieldMinLength = 3;
+        f.shortContentErr = 'Комментарий не должен быть пустым';
+        f.tEditor = new textEditor(f);
+        f.initPanel();
+    }else
+    {
+        f.aButList = [0, 2];
+        f.contentFieldMaxLength = 150000;
+        f.shortContentErr = 'Сообщение не должно быть пустым';
+    	f.imagesMaxLength = 40;
+    	f.imagesMaxLengthErr = 'Максимально допустимое количество фотографий для сообщения превышено на ';
+        f.contentFieldMinLength = minContentLength;
+    	f.curContentValue = f.contentField.val();
+        f.tEditor = new textEditor(f);
+    	f.initPanel();
+    	f.photosUploader();
+    	f.getPhsToForm();
+    }
+    f.curContentValue = f.contentField.val();
 	f.submitButt.bind("mouseup", function(e){if(!f.submitButt.hasClass("disabled")) {f.formElement.append("<input type = 'hidden' name = 'message[status_id]' value = '1' />")};});
     checkAll();
     f.contentField.keyup(function(){checkAll();});

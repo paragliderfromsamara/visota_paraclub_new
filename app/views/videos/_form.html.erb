@@ -2,12 +2,13 @@
     if @video.id != nil
         fn = "edit_video_#{@video.id}"
         butName = "Сохранить изменения"
+        v = true
     else
         fn = "new_video"
         butName = "Добавить"
+        v = false
     end
     @add_functions  = "initVideoForm(\"#{fn}\");"
-    
 %>
 <% video_errors %>
 	<%= form_for(@video) do |f| %>
@@ -46,9 +47,9 @@
 			</td>
 			<td align = 'left' valign = 'top' <%= @link_f_color.html_safe %>>
 				<%= @link_error.html_safe %>
-				<%= f.text_area :link, :rows => '3', :cols => '60' %>
+				<%= f.text_area :link, :rows => '3', :cols => '60', :disabled => v %>
                 <%= waitline("wait_video_check").html_safe %>
-                <div id = 'video_preview' style = "position:relative;"></div>
+                <div id = 'video_preview' style = "position:relative;"><%= @video.mini_link_html if v %></div>
                 <div><p class = 'istring <%= @link_f_color if @link_f_color != nil %>' id = 'tError'><span id = 'txtL'></span> <span id = 'txtErr'><%= @link_error if @link_error != nil %></span><span id = 'txtErrSrv'><%= @link_error if @link_error != nil %></span></p></div>
 			</td>
 		</tr>

@@ -20,9 +20,9 @@ include EventsHelper
 	@title = @header = @topic.name
 	@themes_per_page = 25
 	if is_not_authorized?
-		@themes = @topic.themes.where('status_id in (1, 4) and visibility_status_id = 1').order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+		@themes = @topic.themes.where(status_id: [1, 3], visibility_status_id: 1).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
 	else
-		@themes = @topic.themes.where('status_id in (1, 4)and visibility_status_id in (1,2)').order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+		@themes = @topic.themes.where(status_id: [1, 3], visibility_status_id: [1,2]).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
 	end
 	@path_array = [
 					        {:name => 'Общение', :link => '/visota_life'},
