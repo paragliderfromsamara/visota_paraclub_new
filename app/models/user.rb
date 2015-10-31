@@ -199,7 +199,10 @@ mount_uploader :photo, UserPhotoUploader
   #управление черновиками тем и сообщений
   def theme_message_draft(theme) #выдает, а если необходимо создает черновик сообщения
 	  draft = Message.find_by(user_id: self.id, status_id: 0, theme_id: theme.id)
-	  draft = self.messages.create(:status_id => 0, theme_id: theme.id) if draft == nil 
+	  draft = self.messages.create(:status_id => 0, theme_id: theme.id, content: "") if draft == nil
+    if draft.content == nil
+      draft.update_attribute(:content, "")
+    end 
 	  return draft
   end
   def album_message_draft(album)

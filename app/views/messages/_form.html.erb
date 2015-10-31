@@ -69,7 +69,7 @@ end
 				<%= f.hidden_field :photo_id, :value => @photo.id if @photo != nil%>
 				<%= f.hidden_field :video_id, :value => @video.id if @video != nil%>
 				<%= f.hidden_field :photo_album_id, :value => @album.id if @album != nil%>
-				
+				<%= f.hidden_field :deleted_photos, :value => '' if controller.action_name == 'edit' || controller.action_name == 'update'%>
 					<br />
 					<table id = 'msg_table' style = 'width: 100%;'>
 						<tr>
@@ -108,10 +108,10 @@ end
 					</table>
 					<br />
 				
-				<div id = 'editorPreview' class = 'mText' style = 'position: relative; width: 100%; margin-top: 20px; margin-bottom: 20px; '>
+				<% if controller.action_name != 'edit' and controller.action_name != 'update' %>
+                    <div id = 'editorPreview' class = 'mText' style = 'position: relative; width: 100%; margin-top: 20px; margin-bottom: 20px; '>
 				</div>
-        <br />
-        
+                <%end%>
         <% end %>
 <% else %>
     <p class = 'istring err tb-pad-l'>

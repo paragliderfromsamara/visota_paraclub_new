@@ -16,6 +16,13 @@ class Photo < ActiveRecord::Base
   has_many :photo_like_marks, :dependent  => :delete_all #Комментарии к фото
   mount_uploader :link, PhotoUploader
   before_destroy :delPhoto
+  #photo_relations
+  has_many :message_photos
+  has_many :theme_photos
+  has_many :article_photos
+  has_many :event_photos
+  #photo_relations end
+  
   def comments
 	self.messages.where(:status_id=>1).order('created_at ASC')
   end
@@ -165,56 +172,56 @@ end
 	self.update_attribute(:status_id, 4) if self.status_id != 4 #Пометить как видимый
   end
   
-  def set_as_on_visible_entity #сделать прикреплённый к видимой сущности
-	self.update_attribute(:status_id, 1) if self.status_id != 1 #Пометить как видимый
-  end
+#  def set_as_on_visible_entity #сделать прикреплённый к видимой сущности
+#	self.update_attribute(:status_id, 1) if self.status_id != 1 #Пометить как видимый
+#  end
   
   def set_as_visible
-	self.update_attribute(:visibility_status_id, 1) if self.visibility_status_id != 1 #Пометить как видимый
+	  self.update_attribute(:visibility_status_id, 1) if self.visibility_status_id != 1 #Пометить как видимый
   end
   
   def set_as_hidden
-	self.update_attribute(:visibility_status_id, 2) if self.visibility_status_id != 2 #Пометить как скрытый
+    self.update_attribute(:visibility_status_id, 2) if self.visibility_status_id != 2 #Пометить как скрытый
   end
   
-  def isNotFullDelete?
-	v = false
-	if self.status == 'normal'
-		if self.photo_album != nil
-			if self.photo_album.status == 'normal'
-				v = true
-			end
-		end
-	end
-	return v
-  end
+# def isNotFullDelete?
+#	v = false
+#	if self.status == 'normal'
+#		if self.photo_album != nil
+#			if self.photo_album.status == 'normal'
+#				v = true
+#			end
+#		end
+#	end
+#	return v
+#  end
   
-  def set_as_delete
-	self.update_attribute(:status_id, 2)
-	if messages != []
-		messages.each do |msg|
-			msg.update_attribute(:status_id, 3)
-		end
-	end #Пометить на удаление
-	
+#  def set_as_delete
+#	self.update_attribute(:status_id, 2)
+#	if messages != []
+#		messages.each do |msg|
+#			msg.update_attribute(:status_id, 3)
+#		end
+#	end #Пометить на удаление
+#	
+#  
+#  end
   
-  end
+ # def set_as_on_deleted_entity #Пометить как прикреплённый к удалённому объекту
+#	self.update_attribute(:status_id, 3)
+#	if messages != []
+#		messages.each do |msg|
+#			msg.update_attributes(:status_id=> 3)
+#		end
+#	end
+#  end
   
-  def set_as_on_deleted_entity #Пометить как прикреплённый к удалённому объекту
-	self.update_attribute(:status_id, 3)
-	if messages != []
-		messages.each do |msg|
-			msg.update_attributes(:status_id=> 3)
-		end
-	end
-  end
-  
-  def statusIsValid? #проверка статуса сообщения
-	if self.status_id == 0 || self.status_id == 2 || self.status_id == 3
-		return false #нет если удалён, черновик, или на удалённой сущности
-	else
-		return true  #да во всех остальных случаях
-	end
-  end
+#  def statusIsValid? #проверка статуса сообщения
+#	if self.status_id == 0 || self.status_id == 2 || self.status_id == 3
+#		return false #нет если удалён, черновик, или на удалённой сущности
+#	else
+#		return true  #да во всех остальных случаях
+#	end
+#  end
 #Управление статусами end...
 end

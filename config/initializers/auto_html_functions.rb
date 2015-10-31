@@ -167,13 +167,15 @@ AutoHtml.add_filter(:my_quotes) do |text|
   text
 end
 AutoHtml.add_filter(:my_photo_hash) do |text|
-  text.gsub(/#Photo(\d+)/) do
+  text.gsub(/#Photo(\d+)/) do 
     photo = Photo.find_by(:id => $1)
-	if photo != nil
-    h = photo.getSizeByWidth(700)[:height]
-    w = photo.getSizeByWidth(700)[:width]
-		"<br /><div class = 'central_field' style = 'width: #{w}px; height:#{h}px;'>#{"<p class = 'istring norm'>#{photo.description}</p>" if photo.description != nil and photo.description != ''}<img style = 'width: #{w}px; height: #{h}px;' src = '#{photo.link}'></div><br />"
-	end
+  	if photo != nil
+      h = photo.getSizeByWidth(700)[:height]
+      w = photo.getSizeByWidth(700)[:width]
+  		"<br /><div class = 'central_field' style = 'width: #{w}px; height:#{h}px;'>#{"<p class = 'istring norm'>#{photo.description}</p>" if photo.description != nil and photo.description != ''}<img style = 'width: #{w}px; height: #{h}px;' src = '#{photo.link}'></div><br />"
+    else
+      "Фотография не найдена"
+    end
   end
 end
 
@@ -184,7 +186,9 @@ AutoHtml.add_filter(:theme_hash) do |text|
 		name = $3 if $3 != nil and $3 != ''
 		name = theme.name if $3 == nil or $3 == ''
 		"<a class = 'b_link' href = '/themes/#{theme.id.to_s}' target = '_blank'>#{name}</a>"
-	end
+  else
+    "Тема не найдена"
+  end
   end
 end
 
@@ -195,7 +199,9 @@ AutoHtml.add_filter(:user_hash) do |text|
 		name = $3 if $3 != nil and $3 != ''
 		name = user.name if $3 == nil or $3 == ''
 		"<a class = 'b_link' title = 'Перейти к теме' href = '/users/#{user.id.to_s}' target = '_blank'>#{name}</a>"
-	end
+  else
+    "Пользователь не найден"
+  end
   end
 end
 

@@ -191,9 +191,6 @@ include MessagesHelper
   def destroy
     @photo = Photo.find(params[:id])
     if userCanDeletePhoto?(@photo)
-		if @photo.isNotFullDelete?
-			@photo.set_as_delete
-		else
 			if @photo.destroy
 				respond_to do |format|
 				  format.html { redirect_to photos_url }
@@ -201,29 +198,9 @@ include MessagesHelper
 				end
 			end
 		end
-	else
-		if isEntityOwner?(@photo)
-			render :json => {:callback => 'Невозможно удалить фотографию'}
-		else
-			redirect_to '/404'
-		end
-	end
   end
+  
   def recovery
-	@photo = Photo.find(params[:id])
-	if isEntityOwner?(@photo)
-		if @photo.isNotFullDelete?
-			@photo.set_as_delete
-		else
-			if @photo.destroy
-				respond_to do |format|
-				  format.html { redirect_to photos_url }
-				  format.json { render :json => {:callback => 'success'} }
-				end
-			end
-		end
-	else
 		redirect_to '/404'
-	end
   end
 end

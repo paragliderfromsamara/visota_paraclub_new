@@ -1,12 +1,13 @@
 class MessagesController < ApplicationController
   # GET /messages
   # GET /messages.json
-  def index
-    @messages = Message.all #Ищем все первые сообщения в обсуждениях
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render :json => @messages }
-    end
+  def index #has test 31.10.2015
+    redirect_to "/visota_life"
+    #@messages = Message.all #Ищем все первые сообщения в обсуждениях
+    #respond_to do |format|
+    #  format.html # index.html.erb
+    #  format.json { render :json => @messages }
+    #end
   end
 
   # GET /messages/1
@@ -19,7 +20,7 @@ class MessagesController < ApplicationController
     @photo_album = @message.photo_album
     @photo = Photo.find_by(id: @message.photo_id, status_id: 1)
 		if @theme != nil
-			@title = "Ответы на сообщение от #{@message.created_at.to_s(:ru_datetime)}"
+			@title = @header = "Ответы на сообщение от #{@message.created_at.to_s(:ru_datetime)}"
 			@path_array = [
 							        {:name => 'Клубная жизнь', :link => '/visota_life'},
 						          {:name => @theme.topic.name, :link => topic_path(@theme.topic)},
@@ -78,19 +79,19 @@ class MessagesController < ApplicationController
   # GET /messages/new
   # GET /messages/new.json
   def new
-	@button_name = 'Создать'
-	if user_type != 'bunned' and user_type != 'guest' and (@message_to || @theme_to || @photo_to || @album_to)
-		@message = Message.new
+	#@button_name = 'Создать'
+	#if user_type != 'bunned' and user_type != 'guest' and (@message_to || @theme_to || @photo_to || @album_to)
+	#	@message = Message.new
 		#if @message_to.theme != nil
 			#redirect_to '/404' and return if @message_to.theme.status_id != 1 
 		#end
-		respond_to do |format|
-		  format.html # new.html.erb
-		  format.json { render :json => @message }
-		end
-	else
-		redirect_to '/404'
-	end
+	#	respond_to do |format|
+	#	  format.html # new.html.erb
+	#	  format.json { render :json => @message }
+	#	end
+	#else
+		redirect_to '/visota_life'
+  #end
   end
 
   # GET /messages/1/edit
@@ -132,7 +133,7 @@ class MessagesController < ApplicationController
     						        ]
   			end				
   	else
-  		redirect_to '/404'
+  		redirect_to '/visota_life'
   	end
   end
 
@@ -204,7 +205,7 @@ class MessagesController < ApplicationController
 			#link = "#{video_path(@message.video_id)}#msg_#{@message.id}" if @message.video != nil
 			#link = "#{photo_path(@message.photo_id)}" if @message.photo != nil
 			#link = "#{photo_path(@message.photo_album_id)}" if @message.photo_album != nil
-			@message.assign_entities_from_draft(current_user.message_draft)	#ищем черновик и привязываем		
+			#@message.assign_entities_from_draft(current_user.message_draft)	#ищем черновик и привязываем		
 			@theme.last_msg_upd if @theme != nil
 			format.html { redirect_to link + "#msg_#{@message.id}", :notice => @createNotice}
 			format.json { render :json => @message, :status => :created, :location => @message }
@@ -222,7 +223,6 @@ class MessagesController < ApplicationController
   # PUT /messages/1.json
   def update
     @message = Message.find(params[:id])
-
   	if userCanEditMsg?(@message)
   		params[:message][:updater_id] = current_user.id if @message.status_id == 1
       old_status_id = @message.status_id
@@ -231,63 +231,65 @@ class MessagesController < ApplicationController
       noticeText = (new_status_id > old_status_id)? ("Сообщение успешно добавлено."):("Сообщение успешно обновлено.")
   		respond_to do |format|
   		  if @message.update_attributes(params[:message])
-  			link = "#{theme_path(@message.theme_id)}#msg_#{@message.id}" if @message.theme != nil
-  			link = "#{video_path(@message.video_id)}#msg_#{@message.id}" if @message.video != nil
-        link = "#{photo_album_path(@message.photo_album_id)}#msg_#{@message.id}" if @message.photo_album != nil
-        link = "#{photo_path(@message.photo_id)}#msg_#{@message.id}" if @message.photo != nil
-  			if params[:photo_editions]!= nil and params[:photo_editions] != []
-  				photos_params = params[:photo_editions][:photos]
-  				photos_params.each do |x|
-  					photo = Photo.find_by_id(x[1][:id])
-  					if photo != nil
-  						if photo.description != x[1][:description]
-  							photo.update_attribute(:description, x[1][:description])
-  						end
-  					end
-  				end
-  			end
-        jsonData = {
-                    content: @message.content_html
-                   }
-  			#link = message_path(@message.id)
-  			#link = "#{theme_path(@message.theme_id)}#msg_#{@message.id}" if @message.theme != nil
-  			#link = "#{video_path(@message.video_id)}" if @message.video != nil
-  			#link = "#{photo_path(@message.photo_id)}" if @message.photo != nil
-  			format.html { redirect_to link, :notice => noticeText}
-  			format.json { render :json => jsonData }
+          newTime = Time.now
+          @message.update_attributes(created_at: newTime, updated_at: newTime) if new_status_id > old_status_id
+    			link = "#{theme_path(@message.theme_id)}#msg_#{@message.id}" if @message.theme != nil
+    			link = "#{video_path(@message.video_id)}#msg_#{@message.id}" if @message.video != nil
+          link = "#{photo_album_path(@message.photo_album_id)}#msg_#{@message.id}" if @message.photo_album != nil
+          link = "#{photo_path(@message.photo_id)}#msg_#{@message.id}" if @message.photo != nil
+    			if params[:photo_editions]!= nil and params[:photo_editions] != []
+    				photos_params = params[:photo_editions][:photos]
+    				photos_params.each do |x|
+    					photo = Photo.find_by_id(x[1][:id])
+    					if photo != nil
+    						if photo.description != x[1][:description]
+    							photo.update_attribute(:description, x[1][:description])
+    						end
+    					end
+    				end
+    			end
+          jsonData = {
+                      content: @message.content_html
+                     }
+    			#link = message_path(@message.id)
+    			#link = "#{theme_path(@message.theme_id)}#msg_#{@message.id}" if @message.theme != nil
+    			#link = "#{video_path(@message.video_id)}" if @message.video != nil
+    			#link = "#{photo_path(@message.photo_id)}" if @message.photo != nil
+    			format.html { redirect_to link, :notice => noticeText}
+    			format.json { render :json => jsonData }
   		  else
-  			#current_user.message_draft.clean
-  			@message_to = Message.find_by(id: params[:message][:message_id], status_id: 1)
-  			@theme = Theme.find_by(id: @message.theme_id, status_id: 1)
-  			@photo = Photo.find_by(id: @message.photo_id, status_id: 1)
-  			@video = Video.find_by(id: @message.video_id)
-        @album = PhotoAlbum.find_by(id: @formMessage.photo_album_id, status_id: 1)
-  			if @theme != nil
-  				@title = 'Изменение сообщения'
-  				@topic = Topic.find_by(id: @message.topic_id)
-  				@path_array = [
-  						    {:name => 'Общение', :link => '/visota_life'},
-  								{:name => @theme.topic.name, :link => topic_path(@theme.topic)},
-  								{:name => @theme.name, :link => theme_path(@theme)},
-  								{:name => @title, :link => '#'}
-  							  ]
-  			end
-  			if @photo != nil
+    			#current_user.message_draft.clean
+    			@message_to = Message.find_by(id: params[:message][:message_id], status_id: 1)
+    			@theme = Theme.find_by(id: @message.theme_id, status_id: 1)
+    			@photo = Photo.find_by(id: @message.photo_id, status_id: 1)
+    			@video = Video.find_by(id: @message.video_id)
+          @album = PhotoAlbum.find_by(id: @formMessage.photo_album_id, status_id: 1)
+    			if @theme != nil
+    				@title = 'Изменение сообщения'
+    				@topic = Topic.find_by(id: @message.topic_id)
+    				@path_array = [
+    						    {:name => 'Общение', :link => '/visota_life'},
+    								{:name => @theme.topic.name, :link => topic_path(@theme.topic)},
+    								{:name => @theme.name, :link => theme_path(@theme)},
+    								{:name => @title, :link => '#'}
+    							  ]
+    			end
+    			if @photo != nil
           
-  			end
-  			if @video != nil
-  				@title = @header = 'Изменение комментария'
-  				@path_array = [
-                        {:name => 'Медиа', :link => '/media'},
-            						{:name => 'Видео', :link => '/media?t=videos&c=all'},
-            						{:name => @video.category_name, :link => "/media?t=videos&c=#{@video.category_id}"},
-            						{:name => @video.alter_name, :link => video_path(@video)},
-            						{:name => @title}
-  							  ]
-  			end				
-  			format.html { render :action => "edit" }
-  			format.json { render :json => @message.errors, :status => :unprocessable_entity }
-  		  end
+    			end
+    			if @video != nil
+    				@title = @header = 'Изменение комментария'
+    				@path_array = [
+                          {:name => 'Медиа', :link => '/media'},
+              						{:name => 'Видео', :link => '/media?t=videos&c=all'},
+              						{:name => @video.category_name, :link => "/media?t=videos&c=#{@video.category_id}"},
+              						{:name => @video.alter_name, :link => video_path(@video)},
+              						{:name => @title}
+    							        ]
+    			end				
+    			format.html { render :action => "edit" }
+    			format.json { render :json => @message.errors, :status => :unprocessable_entity }
+    		  end
   		end
   	else
   		redirect_to "/404"
@@ -322,12 +324,12 @@ class MessagesController < ApplicationController
   end
   
   def recovery
-	msg = Message.find_by(id: params[:id])
-	if msg != nil and is_admin?
-		msg.set_as_visible
-	else
-		redirect_to '/404'
-	end
+  	msg = Message.find_by(id: params[:id])
+  	if msg != nil and is_admin?
+  		msg.set_as_visible
+  	else
+  		redirect_to '/404'
+  	end
   end
   
   def replace_message
@@ -387,7 +389,7 @@ class MessagesController < ApplicationController
   def upload_photos
 	  message = Message.find(params[:id]) 
   	if isEntityOwner?(message)
-  		@photo = Photo.new(message_id: message.id, user_id: message.user.id, link: params[:message][:uploaded_photos], status_id: 0)
+  		@photo = Photo.new(message_id: message.id, user_id: message.user.id, link: params[:message][:uploaded_photos])
   		if @photo.save
   			render :json => {message: 'success', photoID: @photo.id }
   		else

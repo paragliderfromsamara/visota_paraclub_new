@@ -183,7 +183,7 @@ function initThemeForm(th_id, formName)
 }
 function initMessageForm(msg_id, formName, msgType)
 {
-	var f, formAnswer, minContentLength, curVisFrm, iFlag, cFlag;
+	var f, formAnswer, minContentLength, curVisFrm, iFlag, cFlag, delImagesFlag;
 	minContentLength = 3;
 	f = new myForm(msgType, msg_id, formName);
 	f.parentElID = '#newMsgForm';
@@ -220,9 +220,11 @@ function initMessageForm(msg_id, formName, msgType)
 
     function checkAll() {
                               iFlag = f.imagesLengthCheck();
+                              
                               if (f.imagesLength>0) f.contentFieldMinLength = 0; else f.contentFieldMinLength = minContentLength;                        	
                               cFlag = f.contentLengthCheck();
                               f.switchSubmitBut(iFlag || cFlag);
+                              console.log("{0} : {1}", cFlag, iFlag);
                           }                      
 	$('a#answer_but').click(function() {
 											var msgToId = $(this).attr('alt');
@@ -542,14 +544,14 @@ function myForm(type, entityID, formName)
                                             {
                                                 maxTxtL = this.contentFieldMaxLength - (this.contentField.val().length - str.length);
     											if (maxTxtL < 0) maxTxtL = 0; 
-    											if (this.contentFieldMaxLength != 0 && this.alterText().length > maxTxtL && maxTxtL > 0)
+    											if (this.contentFieldMaxLength !== 0 && this.alterText().length > maxTxtL && maxTxtL > 0)
     											{
 												
     												d = this.alterText().length - maxTxtL;
     												err = this.longContentErr + d;
     												f = false;
     											}
-    											if (this.contentFieldMinLength != 0 && this.alterText().length < this.contentFieldMinLength)
+    											if (this.contentFieldMinLength !== 0 && this.alterText().length < this.contentFieldMinLength)
     											{
     												err = this.shortContentErr;
     												f = false;
@@ -570,12 +572,14 @@ function myForm(type, entityID, formName)
 	this.imagesMinLengthErr = '';
     this.imagesLenghtFlag = false;
 	this.imagesLengthCheck = function()	{
-											var l = 0, lFlag,eFlag=true, d, err='', s;
+											var l = 0, lFlag, eFlag=true, err='', s;
 											s = this.formElement.find('p#iLength');
-											l = this.formElement.find('.tImage').length;
-											this.imagesLength = l;
+											l = this.formElement.find('.tImage').length - this.formElement.find('.del-photo').length;
+                                            //del = this.formElement.find('.del-photo').length;
+											//this.imagesLength = l-del;
 											if (l==0){lFlag=false;}
 											else{lFlag=true;}
+                                            this.imagesLength = l;
 											if (this.imagesMaxLength != 0)
 												{
 													if (l>this.imagesMaxLength)
@@ -597,7 +601,7 @@ function myForm(type, entityID, formName)
 											s.find('#txtL').text('Фотографий добавлено: ' + l + ';');
 											s.find('#txtErr').text(err);
                                             this.imagesLenghtFlag = lFlag&eFlag;
-											return lFlag&eFlag;
+											return lFlag&&eFlag;
 											}
 											
 									
@@ -934,12 +938,22 @@ function update_ids_array(id_array,id){
 function deletePhotoInTable(delBut)
 {
  var id = $(delBut).attr('photo_id');
-if ($("#photo_album_deleted_photos").val() != undefined)
+ var m, t, a, n;
+ m = '#message_deleted_photos';
+ t = '#theme_deleted_photos';
+ a = '#photo_album_deleted_photos';
+ n = null;
+ if ($(m).val() != undefined) n = m;
+ else if ($(t).val() != undefined) n = t;
+ else if ($(a).val() != undefined) n = a;
+if (n != null)
  {
-     var v = $('#photo_album_deleted_photos').val();
-     $('#photo_album_deleted_photos').val(addScobes(update_ids_array(getIdsArray(v),id)));
+     var v = $(n).val();
+     $(n).val(addScobes(update_ids_array(getIdsArray(v),id)));
      $(delBut).attr('onclick', 'recoveryPhotoInTable(this)');
      $(delBut).text('Восстановить');
+     $('#img_'+id).find('.addHashCode').hide();
+     $('#img_'+id).addClass('del-photo');
  }else
  {
      var v = confirm("Вы уверены что хотите удалить фото?");
@@ -957,11 +971,25 @@ if ($("#photo_album_deleted_photos").val() != undefined)
 }
 function recoveryPhotoInTable(but)
 {
- var v = $('#photo_album_deleted_photos').val();
  var id = $(but).attr('photo_id');
- $(but).attr('onclick', 'deletePhotoInTable(this)');
- $(but).text('Удалить');
- $('#photo_album_deleted_photos').val(addScobes(update_ids_array(getIdsArray(v),id)));
+ var m, t, a, n;
+ m = '#message_deleted_photos';
+ t = '#theme_deleted_photos';
+ a = '#photo_album_deleted_photos';
+ n = null;
+ if ($(m).val() != undefined) n = m;
+ else if ($(t).val() != undefined) n = t;
+ else if ($(a).val() != undefined) n = a;
+ if (n !== null)
+ {
+     var v = $(n).val();
+     $(but).attr('onclick', 'deletePhotoInTable(this)');
+     $(but).text('Удалить');
+     $(n).val(addScobes(update_ids_array(getIdsArray(v),id)));
+     $('#img_'+id).find('.addHashCode').show();
+     $('#img_'+id).removeClass('del-photo');
+ }
+
 }
 function themeObj()
 	{
@@ -1154,7 +1182,11 @@ function textEditor(el)
 		this.tAlignMenus = ['align-left', 'align-center', 'align-right', 'quote', 'list-number'];
 		this.tAlignMenusDescription = ['Выравнивание по левому краю', 'Выравнивание по центру', 'Выравнивание по правому краю', 'Цитирование', 'Нумерованный список'];
 		this.curFormat = 'none';
-		this.init = function(){return initAPanel(this) + '<li id = "updTextPrewiew" title = "Обновить поле предварительного просмотра">'+drawIcon("fi-refresh", "fi-largest", "fi-grey")+'</li>';};
+        this.editorPreview = document.getElementById('editorPreview');
+		this.init = function(){     var t = initAPanel(this);
+                                    t = (this.editorPreview == null)? t:t+'<li id = "updTextPrewiew" title = "Обновить поле предварительного просмотра">'+drawIcon("fi-refresh", "fi-largest", "fi-grey")+'</li>';
+                                    return t;
+                              };
 		this.initListeners = function() {
 											var el;
 											el = this;
@@ -1279,17 +1311,19 @@ function textEditor(el)
 		}
 		this.drawCode = function()
 		{
-            var url = "/"+this.el.type+"s/"+this.el.entityID;
+            var t = (this.el.type == "comment")? "message":this.el.type; //необходимо для того чтобы обновлять комметарии
+            var url = "/"+t+"s/"+this.el.entityID;
             var arr = '';
             arr = this.formElement.serialize();
-            $("#test").text(url);
+            $("#test").text(url + "?preview_mode=true #" + t[0] + "_" + el.entityID);
             $.ajax(
                     {
                         url: url,
                         dataType: "json",
                         type: "POST",
                         data: arr,
-                        success: function(data){$("#editorPreview").load(url + "?preview_mode=true #" + el.type[0] + "_" + el.entityID);}
+                        error: function(x, y, z){console.log(x)},
+                        success: function(data){$("#editorPreview").load(url + "?preview_mode=true #" + t[0] + "_" + el.entityID);}
                     }
                   );
 

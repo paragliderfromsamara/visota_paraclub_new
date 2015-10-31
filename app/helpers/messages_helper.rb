@@ -44,7 +44,7 @@ module MessagesHelper
 			#{'' if message.user == message.theme.user}
 	end
 	def message_body(message, show_buttons)
-		tread = message.get_visible_tread
+		tread = message.get_visible_tread.count
 		html = "
 				<a name = 'msg_#{message.id}'></a>
 				<table>
@@ -76,19 +76,18 @@ module MessagesHelper
 							<table style = 'width: 100%; height: 100%;'>
 								<tr>
 									<td align = 'left' valign = 'middle' style = 'width: 60%;'>
-										#{control_buttons(msg_block_buttons_bottom_in_theme(message, tread.count)) if show_buttons == true and @theme != nil}
-										#{control_buttons(msg_block_buttons_bottom_in_video(message, tread.count)) if show_buttons == true and @video != nil}
-										#{control_buttons(msg_block_buttons_bottom_in_album(message, tread.count)) if show_buttons == true and @album != nil}
+										#{control_buttons(msg_block_buttons_bottom_in_theme(message, tread)) if show_buttons == true and @theme != nil}
+										#{control_buttons(msg_block_buttons_bottom_in_video(message, tread)) if show_buttons == true and @video != nil}
+										#{control_buttons(msg_block_buttons_bottom_in_album(message, tread)) if show_buttons == true and @album != nil}
 									</td>
 									<td align = 'right' valign = 'middle'>
-										<span  class = 'istring_m norm medium-opacity'>Ответов: #{tread.count}</span>
+										<span  class = 'istring_m norm medium-opacity'>Ответов: #{tread}</span>
 									</td>
 								</tr> 
 							</table>
 						</td>
 					</tr>			
 				</table>	
-        	
 		"
 		return html
 	end
@@ -146,7 +145,7 @@ module MessagesHelper
 	def msg_block_buttons_bottom_in_theme(message, treadCount)
 		buttons = []
 		buttons += [{:name => 'Ответить', :access => userCanCreateMsgInTheme?(message.theme), :type => 'comments', :alt => message.id, :id => 'answer_but', :link => '#new_message'}] if (user_type != 'bunned' and user_type != 'guest' || (user_type == 'new_user' and @theme.topic_id == 6)) if @theme.status == 'open'
-		buttons += [{:name => 'К обсуждению', :access => true, :type => 'arrow-right', :link => "#{message_path(message.id)}"}] if treadCount != 0 and @message != message
+		buttons += [{:name => 'Смотреть ответы', :access => true, :type => 'arrow-right', :link => "#{message_path(message.id)}"}] if treadCount != 0 and @message != message
 		buttons += [{:name => 'Изменить', :access => userCanEditMsg?(message), :type => 'pencil', :link => "#{edit_message_path(message)}"}]
 		buttons += [{:name => 'Удалить', :access => userCanDeleteMessage?(message), :type => 'trash', :link => message_path(message), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить сообщение?', :data_method => 'delete'}] if @theme.status == 'open'
 		buttons[buttons.length] = {:name => 'Перенести сообщение', :type => "page-export", :access => is_admin?, :link => "/messages/#{message.id}/replace_message"}
@@ -154,7 +153,7 @@ module MessagesHelper
 	end
 	def msg_block_buttons_bottom_in_video(message, treadCount)
 		buttons = [{:name => 'Ответить', :access => !is_not_authorized?, :type => 'comments', :alt => message.id, :id => 'answer_but', :link => '#new_message'}]
-		buttons += [{:name => 'К обсуждению', :access => true, :type => 'arrow-right', :link => "#{message_path(message)}"}] if treadCount != 0 and @message != message
+		buttons += [{:name => 'Смотреть ответы', :access => true, :type => 'arrow-right', :link => "#{message_path(message)}"}] if treadCount != 0 and @message != message
 		buttons += [
 					      {:name => 'Изменить', :access => userCanEditMsg?(message), :type => 'pencil', :link => "#{edit_message_path(message)}"}, 
 				        {:name => 'Удалить', :access => userCanDeleteMessage?(message), :type => 'trash', :link => message_path(message), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить сообщение?', :data_method => 'delete'}
@@ -163,7 +162,7 @@ module MessagesHelper
 	end
 	def msg_block_buttons_bottom_in_album(message, treadCount)
 	    buttons = [{:name => 'Ответить', :access => !is_not_authorized?, :type => 'comments', :alt => message.id, :id => 'answer_but', :link => '#new_message'}]
-		buttons += [{:name => 'К обсуждению', :access => true, :type => 'arrow-right', :link => "#{message_path(message)}"}] if treadCount != 0 and @message != message
+		buttons += [{:name => 'Смотреть ответы', :access => true, :type => 'arrow-right', :link => "#{message_path(message)}"}] if treadCount != 0 and @message != message
 		buttons += [
 					        {:name => 'Изменить', :access => userCanEditMsg?(message), :type => 'pencil', :link => "#{edit_message_path(message)}"}, 
 					        {:name => 'Удалить', :access => userCanDeleteMessage?(message), :type => 'trash', :link => message_path(message), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить сообщение?', :data_method => 'delete'}

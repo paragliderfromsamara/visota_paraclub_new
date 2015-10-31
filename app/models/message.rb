@@ -1,5 +1,6 @@
 class Message < ActiveRecord::Base
-  attr_accessible :content, :first_message_id, :message_id, :photo_id, :photo_album_id, :name, :theme_id, :topic_id, :updater_id, :user_id, :video_id, :uploaded_photos, :article_id, :attachment_files, :status_id, :created_at, :updated_at, :base_theme_id, :visibility_status_id
+  attr_accessor :deleted_photos
+  attr_accessible :content, :first_message_id, :message_id, :photo_id, :photo_album_id, :name, :theme_id, :topic_id, :updater_id, :user_id, :video_id, :uploaded_photos, :article_id, :attachment_files, :status_id, :created_at, :updated_at, :base_theme_id, :visibility_status_id, :deleted_photos
  
   belongs_to :user
   belongs_to :video
@@ -30,7 +31,8 @@ class Message < ActiveRecord::Base
   #start_quote
   #end_quote
   after_create :statusControl
-  after_save :updatePhotosStatusesAfterSave, :check_photos_in_content #проверить наличие хэш тэгов фотографий, прикреплённых к сообщению, в тексте перед сохранением
+  after_save :check_photos_in_content #проверить наличие хэш тэгов фотографий, прикреплённых к сообщению, в тексте перед сохранением
+  after_update :delete_selected_photos
   before_destroy :clean_binded_entities
   #before_save :make_first_message_id #хрен знает зачем это нужно...
   #-Валидации--------------------------------------------------
@@ -43,12 +45,30 @@ class Message < ActiveRecord::Base
   end
   validate :validation_content
   def validation_content
-		if (self.photos == [] and self.photos == nil) and (self.attachment_files == [] and self.attachment_files == nil) and self.status_id != 0 and self.user.message_draft.photos == []
+    delPhotosLenght = (self.deleted_photos != nil and self.deleted_photos != '')? getIds(self.deleted_photos).length : 0  
+    photosFlag = (self.photos == []) || (delPhotosLenght == self.photos.length)
+    statusFlag = self.status_id == 1
+    attachmentsFlag = self.attachment_files == [] || self.attachment_files == nil
+		if delPhotosLenght && photosFlag && statusFlag && attachmentsFlag
 			errors.add(:content, "Содержимое сообщения не может быть пустым...") if self.content.strip == ''
 		end
 		if content != nil and content != ''
 			errors.add(:content, "Содержимое не может быть длиннее 150000 символов") if content.mb_chars.size > 200000
 		end
+  end
+
+  def delete_selected_photos
+    if self.deleted_photos != nil and self.deleted_photos != ''
+      arr = getIds(self.deleted_photos)
+      if !(arr.length == self.photos.length and self.content.strip == '') 
+        if arr.length > 0
+          arr.each do |p_id|
+            ph = Photo.find_by(:id => p_id, :message_id => self.id)
+            ph.destroy if ph != nil
+          end
+        end
+      end
+    end
   end
   
   def statusControl
@@ -64,24 +84,12 @@ class Message < ActiveRecord::Base
 	return self.photo if self.photo != nil
 	return nil
   end
-  def updatePhotosStatusesAfterSave #Обновляет статусы фотографий после сохранения темы; 
-	#используется при объединении тем и сохранении сообщений
-	if self.photos != []
-		photos.each do |ph|
-			if ph.status == 'normal' and self.v_status == 'hidden' 
-				ph.update_attribute(:status_id, 4) #on_hidden_entity
-			elsif ph.status == 'normal' and self.v_status == 'visible'
-				ph.update_attribute(:status_id, 1) #normal
-			end
-		  #check_photo_in_content(ph)
-		end
-	end
-  end
+  
   def check_photos_in_content #ищем хэш тэг фотографии в сообщении
 	if photos != [] and photos != nil
 		photos.each do |ph|
 			check_photo_in_content(ph)
-			ph.update_attribute(:status_id, 1) if ph.status == 'draft'
+			ph.update_attribute(:status_id, 1) if ph.status != 'draft'
 		end
 	end
   end  
@@ -156,9 +164,11 @@ class Message < ActiveRecord::Base
   def message_updater #определяет кто последний обновлял сообщение
 	updater_text = ""
 	if updater_id != nil
-		updater = "Автором" if user_id == updater_id
-		updater = "Администратором" if user_id != updater_id
-		updater_text = "<p class = 'istring_m medium-opacity'>Сообщение обновлено #{updater} #{updated_at.to_s(:ru_datetime)}</p>"
+    if user_id == updater_id && self.created_at + 1.hour < self.updated_at
+		  	updater_text = "<p class = 'istring_m medium-opacity'>Сообщение обновлено Автором #{updated_at.to_s(:ru_datetime)}</p>"
+    elsif user_id != updater_id 
+      	updater_text = "<p class = 'istring_m medium-opacity'>Сообщение обновлено Администратором #{updated_at.to_s(:ru_datetime)}</p>"
+    end
 	end
 	return updater_text
   end
@@ -296,15 +306,15 @@ class Message < ActiveRecord::Base
   
   
   
-  def assign_entities_from_draft(draft) #привязка сущностей с черновика
-	if draft.photos != []
-		draft.photos.each do |ph|
-			ph.update_attributes(:message_id => self.id)
-			check_photo_in_content(ph)
-		end
-	end
-	self.update_attributes(:status_id => 1)
-  end
+#  def assign_entities_from_draft(draft) #привязка сущностей с черновика
+#	if draft.photos != []
+#		draft.photos.each do |ph|
+#			ph.update_attributes(:message_id => self.id)
+#			check_photo_in_content(ph)
+#		end
+#	end
+#	self.update_attributes(:status_id => 1)
+ # end
   
   def remove_attachments_and_photos #полное удаление 
 	if self.photos != []
@@ -330,6 +340,20 @@ class Message < ActiveRecord::Base
 							:content => ''
 						   )
 	self.remove_attachments_and_photos						
+  end
+  
+  def getIds(str)
+  	ids = []
+  	id = ''
+  	str.chars do |ch|
+  		if ch != '[' and ch != ']'
+  			id += ch
+  		elsif ch == ']'
+  			ids[ids.length] = id
+  			id = ''
+  		end
+  	end
+  	return ids
   end
 end
 
