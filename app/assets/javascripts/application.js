@@ -15,45 +15,30 @@
 //= require turbolinks
 //= require_tree
 
-var allowArrows = true;
+
+
+
 function my_functions()
 	{
 		var enteredLi, leftLi; //для управления главным меню
-		setInterval(function(){bottomControl()}, 500);
-        //$(window).resize(function(){bottomControl();});
 		Dropzone.autoDiscover = false;
-		//scroller
-		$('.quickScroll #aUp').click(function(){$(window).scrollTop(0);});
-		$('.quickScroll #aDwn').click(function(){var p=$("#top").outerHeight(true)+$("#middle").outerHeight(true);$(window).scrollTop(p);});
-		//scroller end
-
-		$(document).on("click", ".slider .nav span", function() { // slider click navigate
-		var sl = $(this).closest(".slider"); // находим, в каком блоке был клик
-		$(sl).find("span").removeClass("on"); // убираем активный элемент
-		$(this).addClass("on"); // делаем активным текущий
-		var obj = $(this).attr("rel"); // узнаем его номер
-		sliderJS(obj, sl); // слайдим
-		return false;
-		});
-		
-		$(window).scroll(function(){$('.scroll-test').text($(this).scrollTop()); scrollControl();});  
+        Dropzone.options.myAwesomeDropzone = false;
 		$('#mLogo, .nav_li, #ses_p li, .t_link, .ph-paginate, .ph-big-links,.wide-butt').click(function () {goToLink($(this).attr('link_to'));});
 		$('#split_theme_topic_id').change(function(){var th = new themeObj(); th.topic = $(this).val(); make_themes_list(th);});
-		
 		$('#add_attachments').click(function(){$('div#toggle_add_attachments').toggle(150);});
-		$('#add_photos').click(function(){$('div#toggle_add_photos').toggle(150);});
-		$("#nav_topics").hover(function(){$('div#nav_topics_list').show(100);},function(){$('div#nav_topics_list').hide(100);});
-		$("#nav_materials").hover(function(){$('div#nav_materials_list').show(100);},function(){$('div#nav_materials_list').hide(100);});
+		//$('#add_photos').click(function(){$('div#toggle_add_photos').toggle(150);});
+		//$("#nav_topics").hover(function(){$('div#nav_topics_list').show(100);},function(){$('div#nav_topics_list').hide(100);});
+		//$("#nav_materials").hover(function(){$('div#nav_materials_list').show(100);},function(){$('div#nav_materials_list').hide(100);});
 
-		$("div.index_miniature").hover(function(){
-													var dat_id=this.id.replace('icon_','#bgr_icon_');
-													$(dat_id).animate( { opacity: '0.7' }, { duration:500} );
-												},
-									   function(){
-													var dat_id=this.id.replace('icon_','#bgr_icon_');
-													$(dat_id).animate( { opacity: '0.2' }, { duration:500} );
-												}
-									  );
+		//$("div.index_miniature").hover(function(){
+		//											var dat_id=this.id.replace('icon_','#bgr_icon_');
+		//											$(dat_id).animate( { opacity: '0.7' }, { duration:500} );
+		//										},
+		//							   function(){
+		//											var dat_id=this.id.replace('icon_','#bgr_icon_');
+		//											$(dat_id).animate( { opacity: '0.2' }, { duration:500} );
+		//										}
+		//							  );
 		$('div#show_cmts').click(
 									function(){
 												var txt,c;
@@ -174,66 +159,6 @@ function waitbar(id)
         }
         
     }
-function bottomControl()
-	{
-		var sum_h, window_h, new_middle_h, markOffset; 
-		sum_h = blocksSumHeight();
-		window_h = $(window).height();
-        markOffset = $("#footerMark").offset().top;
-       // $("#test").text(markOffset);
-		if (markOffset + $("#bottom").outerHeight(true) < window_h)
-		{
-			new_middle_h = window_h - $("#top").outerHeight(true) - $("#bottom").outerHeight(true) - $("#ses_p").outerHeight(true);
-			$('#middle').height(new_middle_h);
-			$("#bottom").css('position', 'fixed').css('bottom', '0');
-		}else{
-                new_middle_h = markOffset - $("#top").outerHeight(true) - $("#ses_p").outerHeight(true);
-                $("#bottom").css('position', 'relative').css('bottom', 'none');
-                $('#middle').height(new_middle_h);
-             }
-		scrollControl();
-	}
-function blocksSumHeight(){return $("#top").outerHeight(true) + $("#middle").outerHeight(true) + $("#bottom").outerHeight(true) + $("#ses_p").outerHeight(true);} 
-
-function scrollControl() //Управление панелькой перемотки
-	{
-		var wH,blSH,sT,sB, botH,topH,t=300; 
-		wH = $(window).height();
-		blSH = blocksSumHeight();
-		sT = $(window).scrollTop();
-		topH = $("div#top").outerHeight(true);
-		botH = $("div#bottom").outerHeight(true);
-		if ((blSH-topH-botH) > wH)
-		{
-			$('.quickScroll').fadeIn(t);
-			if (sT>topH) {
-							$('.quickScroll #aUp').fadeIn(t);
-						 }else{$('.quickScroll #aUp').fadeOut();}
-			if ((blSH-sT)>wH)
-							{
-								$('.quickScroll #aDwn').fadeIn(t);
-							}else{$('.quickScroll #aDwn').fadeOut();}
-		} else {$('.quickScroll').fadeOut();}
-
-	}
-//Wheater_panel
-function wheatherPanel()
-{
-	var cont = $('.right_menu #cont');
-	var h_wr = cont.find('#h_wr');
-	$('#w_but').click(function(){
-									var wh_c = $('.right_menu #wh_cont');
-									h_wr.html(wh_c.html());
-									h_wr.width(wh_c.width());
-									h_wr.show(300);
-							    });
-	$('.right_menu').mouseleave(function(){
-											h_wr.hide(300);
-											h_wr.html('');
-										});
-	
-}
-//Wheater_panel end
 
 	function goToLink(link)
 	{
@@ -266,7 +191,6 @@ function renderImgForm(ph, el) //создаёт форму для фотогра
 	$(el).find("#uPhts").prepend(curHtml);
 }
 
-function getParentFormNode(e){return $(e+':parent').find('.answr, #newMsgForm');}
 function updUploadedImageButtons(id){$('a.addHashCode').each(function() {$(this).attr('onclick', 'addHashCodeToTextArea(this, "'+id+'")');});}
 function getPhotosToForm(entId, entName, el){var t = $(el).find("#uploadedPhotos"); $(t).load("/edit_photos #update_photos_form", { 'e': entName, 'e_id': entId, "hashToCont": "true", "submitBut": "false"}, function(){updUploadedImageButtons('newMsgForm')}); }
 
@@ -287,32 +211,6 @@ function newPhObj(id, description)
 	function entCounter(text){var c,v;c=text.length;v=0;if(c>0){for(var i=0;i<c;i++){if (text[i]=='\n'){v++;}if(i==(c-1)){return v;};}}else{return 0;}}
 	
 //message and themes part end
-function photosUploaderOld(ent_id, entity, el) //добавление фотографий к сообщению
-	{ 
-		var link = '/'+entity+'s/' + ent_id + '/upload_photos?format=json'; 
-		el.find('#ph_to_msg').empty();
-		el.find('#ph_to_msg').dropzone(
-									{ 
-										url: link,
-										acceptedFiles: "image/*",
-										paramName: entity+"[uploaded_photos]",
-										inputId: entity+"_uploaded_photos",
-										forceFallback: false,
-										success: function(file, response){
-																			var ph_id = response.photoID;
-																			getUploadedPhoto(ph_id, el, file.previewElement);
-																			
-																		 },
-										fallback: function(){
-																var v;
-																v='<div class = "dz-message"><p class = "istring norm">'+this.options.dictFallbackMessage+'</p></div>';
-																v+= '<p class = "istring norm">'+this.options.dictFallbackText+'</p><br />';
-																$(el).find('#ph_to_msg').append(v);
-																$(el).find('#ph_to_msg').append($('#'+this.options.inputId).clone());
-															}
-									}
-								);
-	}
 function initCardChecking(flds) //Инициализация
 			{
 				for (var i=0;i<flds.length;i++)
@@ -689,15 +587,7 @@ function voteShowPath(id)
 	
 }
 //vote_path end
-function switchThemeWatcher(el, th_id)
-{
-	$.ajax({
-					type: "POST",
-					url: "/theme_notifications.json",
-					data: ({theme_notifications:({type: 'single', theme_id: th_id})}),
-					success: function(but){$(el).html('<li><img src = "/files/'+but.type+'_b.png" style = "float: left;" height = "20px">'+but.name+'</li>');}
-})
-}
+
 function switchLikeMark(id, type)
 {
 	$.ajax({

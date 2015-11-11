@@ -248,7 +248,7 @@ class Message < ActiveRecord::Base
 		end
 	end
 	self.destroy
-	
+	return new_theme
   end  
 #Поиск потомков сообщения end
  

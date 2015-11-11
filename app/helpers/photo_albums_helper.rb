@@ -72,8 +72,8 @@ module PhotoAlbumsHelper
 		end
 		if photos != []
 			photos.each do |p|
-				value += "<a href = '#{photo_path(p)}' title = '#{p.description}' alt = '#{photo_path(p)}' ><div class = 'inline-blocks inline-mini'><div class = 'central_field' style = 'width: 150px; margin-top: 7px;'>#{image_tag p.link.thumb, :style => "display: none;", :width => '150px'}</div></div></a>" if pathName == 'index' || pathName == 'visota_life'
-				value += "<a href = '#{photo_path(p)}' title = '#{p.description}' alt = '#{photo_path(p)}' ><div class = 'inline-blocks inline-thumb'><div class = 'central_field' style = 'width: 250px; margin-top: 15px;'>#{image_tag p.link.thumb, :style => "display: none;", :width => '250px'}</div><div style = 'width: 100px; height: 23px; position: absolute; bottom: 5px; right: 15px;'>#{photoInfo(p)}</div></div></a>" if pathName == 'show'
+				value += "<a href = '#{photo_path(p)}' title = '#{p.description}' alt = '#{photo_path(p)}' ><div class = 'inline-blocks inline-mini'><div class = 'central_field' style = 'width: 150px; margin-top: 7px;'><img src = '#{p.link.thumb}' style = 'display: none;' width = '150px' /></div></div></a>" if pathName == 'index' || pathName == 'visota_life'
+				value += "<a href = '#{photo_path(p)}' title = '#{p.description}' alt = '#{photo_path(p)}' ><div class = 'inline-blocks inline-thumb'><div class = 'central_field' style = 'width: 250px; margin-top: 15px;'><img src = '#{p.link.thumb}' style = 'display: none;' width = '250px' /></div><div style = 'width: 100px; height: 23px; position: absolute; bottom: 5px; right: 15px;'>#{photoInfo(p)}</div></div></a>" if pathName == 'show'
 			end
 			value = "<div class = 'central_field' style = 'width: #{width}; padding-top: 10px; padding-bottom:10px;'>#{value}</div>"
       value += "<br /><p class = 'istring_m medium-opacity'>показано #{photos.count} из #{allPhotosCount}</p>" if allPhotosCount > photos.count
@@ -85,11 +85,11 @@ module PhotoAlbumsHelper
 		val=''
 		if pathName == 'show' and @album != nil
 			v = [
-				 {:name => 'К списку альбомов', :access => true, :type => 'arrow-right', :link => "/media?t=albums&c=all"}, 
-				 {:name => 'Все альбомы пользователя', :access => true, :type => 'arrow-right', :link => "/users/#{@album.user.id.to_s}/photo_albums"},
-				 {:name => 'Редактировать', :access => isEntityOwner?(@album), :type => 'pencil', :link => "#{edit_photo_album_path(@album)}"},	
-				 {:name => 'Удалить', :access => isEntityOwner?(@album), :type => 'trash', :link => photo_album_path(@album), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить альбом и всё, что с ним связанно?', :data_method => 'delete'}
-			]
+				   {:name => 'К списку альбомов', :access => true, :type => 'arrow-right', :link => "/media?t=albums&c=all"}, 
+				   {:name => 'Все альбомы пользователя', :access => true, :type => 'arrow-right', :link => "/users/#{@album.user.id.to_s}/photo_albums"},
+			     {:name => 'Редактировать', :access => isEntityOwner?(@album), :type => 'pencil', :link => "#{edit_photo_album_path(@album)}"},	
+			     {:name => 'Удалить', :access => isEntityOwner?(@album), :type => 'trash', :link => photo_album_path(@album), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить альбом и всё, что с ним связанно?', :data_method => 'delete'}
+		      ]
 		end
 		val = "#{control_buttons(v)}" if v != []
 		return val

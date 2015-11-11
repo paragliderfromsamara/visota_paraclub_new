@@ -5,7 +5,7 @@ include TopicsHelper
   # GET /themes
   # GET /themes.json
   def index
-	@title = @header = 'Все темы'
+	  @title = @header = 'Все темы'
     @themes = Theme.paginate(:page => params[:page], :per_page => 25).where(:status_id => [1, 4]).order('last_message_date DESC')
 		@path_array = [
 						        {:name => 'Общение', :link => '/visota_life'},
@@ -31,9 +31,7 @@ include TopicsHelper
   						        {:name => @theme.name, :link => theme_path(@theme)}
   					        ]
   		#выборка выдаваемых сообщений
-  			msg_status_id = 1
-  			msg_status_id = 4 if @theme.status == 'to_delete' 
-  			@messages = @theme.messages.where(:status_id => msg_status_id).order('created_at ASC')
+  			@messages = @theme.visible_messages
   		#выборка выдаваемых сообщений end
   		respond_to do |format|
   		  format.html# show.html.erb
@@ -47,84 +45,84 @@ include TopicsHelper
   # GET /themes/new
   # GET /themes/new.json
   def new 
-	@topic = Topic.find_by_id(params[:t])
-	@button_name = 'Создать тему'
-	if userCreateThemeInTopic?(@topic)
-		@path_array = [
-						{:name => 'Клубная жизнь', :link => '/visota_life'},
-						{:name => @topic.name, :link => topic_path(@topic)},
-						{:name => "Новая тема"}
-					  ]
-		@draft = current_user.theme_draft(@topic)
-		@formTheme = @draft 
-		@title = @header = "Новая тема в разделе #{@topic.name}"
-		@add_functions = "initThemeForm(#{@draft.id}, '.edit_theme');"
-		respond_to do |format|
-		  format.html# new.html.erb
-		  format.json { render :json => @theme }
-		end
-	else
-		redirect_to '/404'
-	end
+  	@topic = Topic.find_by_id(params[:t])
+  	@button_name = 'Создать тему'
+  	if userCreateThemeInTopic?(@topic)
+  		@path_array = [
+  						{:name => 'Клубная жизнь', :link => '/visota_life'},
+  						{:name => @topic.name, :link => topic_path(@topic)},
+  						{:name => "Новая тема"}
+  					  ]
+  		@draft = current_user.theme_draft(@topic)
+  		@formTheme = @draft 
+  		@title = @header = "Новая тема в разделе #{@topic.name}"
+  		#@add_functions = "initThemeForm(#{@draft.id}, '.edit_theme');"
+  		respond_to do |format|
+  		  format.html { render 'new'}# new.html.erb
+  		  format.json { render :json => @theme }
+  		end
+  	else
+  		redirect_to '/404'
+  	end
   end
 
   # GET /themes/1/edit
   def edit
     @button_name = 'Сохранить изменения'
     @formTheme = Theme.find(params[:id])
-	if userCanEditTheme?(@formTheme)
-		@topic = @formTheme.topic 
-		@title = @header = "Изменение темы '#{@formTheme.name}'"
-		@add_functions = "initThemeForm(#{@formTheme.id}, '#edit_theme_#{@formTheme.id}');"
-		@path_array = [
-						{:name => 'Клубная жизнь', :link => '/visota_life'},
-						{:name => @topic.name, :link => topic_path(@topic)},
-						{:name => @formTheme.name, :link => theme_path(@formTheme)},
-						{:name => 'Изменение темы'}
-					  ]
-		respond_to do |format|
-			format.html# show.html.erb
-			format.json { render :json => @formTheme }
-		end
-	else
-		redirect_to '/404'
-	end
+  	if userCanEditTheme?(@formTheme)
+  		@topic = @formTheme.topic 
+  		@title = @header = "Изменение темы '#{@formTheme.name}'"
+  		@add_functions = "initThemeForm(#{@formTheme.id}, '#edit_theme_#{@formTheme.id}');"
+  		@path_array = [
+  						{:name => 'Клубная жизнь', :link => '/visota_life'},
+  						{:name => @topic.name, :link => topic_path(@topic)},
+  						{:name => @formTheme.name, :link => theme_path(@formTheme)},
+  						{:name => 'Изменение темы'}
+  					  ]
+  		respond_to do |format|
+  			format.html# show.html.erb
+  			format.json { render :json => @formTheme }
+  		end
+  	else
+  		redirect_to '/404'
+  	end
   end
 
   # POST /themes
   # POST /themes.json
   def create
-	params[:theme][:status_id] = 1 #Создаёт тему отображаемую в клубной жизни...
-	@topic = Topic.find_by_id(params[:theme][:topic_id])
-	if userCreateThemeInTopic?(@topic) 
-		@theme = Theme.new(params[:theme])
-		@theme.user_id = current_user.id
-		respond_to do |format|
-		  if @theme.save
-			if params[:photo_editions]!= nil and params[:photo_editions] != []
-				photos_params = params[:photo_editions][:photos]
-				photos_params.each do |x|
-					photo = Photo.find_by_id(x[1][:id])
-					if photo != nil
-						if photo.description != x[1][:description]
-							photo.update_attribute(:description, x[1][:description])
-						end
-					end
-				end
-			end
-			@theme.assign_entities_from_draft(current_user.theme_draft)
-			format.html { redirect_to @theme, :notice => 'Тема успешно открыта' }
-			format.json { render :json => @theme, :status => :created, :location => @theme }
-		  else
-			@title = "Новая тема в разделе #{@topic.name}"
-			@button_name = 'Создать тему'
-			format.html { render :action => "new"}
-			format.json { render :json => @theme.errors, :status => :unprocessable_entity }
-		  end
-		end
-	else
-		redirect_to '/404'
-	end
+  	params[:theme][:status_id] = 1 #Создаёт тему отображаемую в клубной жизни...
+  	@topic = Topic.find_by_id(params[:theme][:topic_id])
+  	if userCreateThemeInTopic?(@topic) 
+  		@theme = Theme.new(params[:theme])
+  		@theme.user_id = current_user.id
+  		respond_to do |format|
+  		  if @theme.save
+  			if params[:photo_editions]!= nil and params[:photo_editions] != []
+  				photos_params = params[:photo_editions][:photos]
+  				photos_params.each do |x|
+  					photo = Photo.find_by_id(x[1][:id])
+  					if photo != nil
+  						if photo.description != x[1][:description]
+  							photo.update_attribute(:description, x[1][:description])
+  						end
+  					end
+  				end
+  			end
+  			@theme.assign_entities_from_draft(current_user.theme_draft)
+  			format.html { redirect_to @theme, :notice => 'Тема успешно открыта' }
+  			format.json { render :json => @theme, :status => :created, :location => @theme }
+  		  else
+  			@title = "Новая тема в разделе #{@topic.name}"
+  			@button_name = 'Создать тему'
+  			format.html { render :action => "new"}
+  			format.json { render :json => @theme.errors, :status => :unprocessable_entity }
+  		  end
+  		end
+  	else
+  		redirect_to '/404'
+  	end
   end
 
   # PUT /themes/1

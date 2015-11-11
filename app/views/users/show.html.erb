@@ -3,6 +3,7 @@
         <%= control_buttons(show_path_buttons).html_safe %>
     </div>
 </div>
+
 <div class = 'c_box even'>
     <%= my_notice %>
     <div class = 'm_1000wh tb-pad-m'>
@@ -38,15 +39,14 @@
 	</div>
 </div>
 <% i = 0 %>
-<% if @user == current_user %>
-    <% if @user.videos != [] %>
-        <% i+=1 %>
-		<div class = 'cBoxSplitter'>
-			<div class = 'm_1000wh'>
-				<h3>Крайние размещенные видео</h3>
-			</div>
+<% if @user.videos != [] %>
+    <% i+=1 %>
+	<div class = 'cBoxSplitter'>
+		<div class = 'm_1000wh'>
+			<h3>Крайние размещенные видео</h3>
 		</div>
-        <%= last_user_videos(i).html_safe %>
-    <% end %>
+	</div>
+    <%= last_user_videos(i).html_safe %>
 <% end %>
+
 

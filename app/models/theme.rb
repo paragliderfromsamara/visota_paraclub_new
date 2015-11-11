@@ -99,7 +99,7 @@ class Theme < ActiveRecord::Base
   end
   
   def check_visibility_status
-	self.visibility_status_id = 1 if self.visibility_status_id == nil
+    self.visibility_status_id = 1 if self.visibility_status_id == nil
   end
 #Валидация end----------------------------------------------------------------------
 #статусы...  
@@ -143,6 +143,9 @@ class Theme < ActiveRecord::Base
 	end
   end
 #статусы end...  
+def visible_messages
+  self.messages.where(status_id: 1).order("created_at ASC")
+end
   def merge(new_topic, new_theme) #объединение тем 
 	message_in_target_theme = Message.new(
 												:user_id => self.user_id, 
@@ -232,7 +235,7 @@ class Theme < ActiveRecord::Base
 	end
   end
 
- def check_photo_in_content(ph) #делаем фотографию невидимой в основном списке фотографий сообщения и делаем видимой, если её там нет
+  def check_photo_in_content(ph) #делаем фотографию невидимой в основном списке фотографий сообщения и делаем видимой, если её там нет
 		if content.index("#Photo#{ph.id}") != nil and content.index("#Photo#{ph.id}") != -1
 			ph.set_as_hidden
 		else

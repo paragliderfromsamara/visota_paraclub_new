@@ -28,9 +28,9 @@ module ThemeNotificationsHelper
 	end
 	
 	def watchBut(t)
-		{:name => "Отслеживать тему", :access => signed_in?, :type => 'eye', :id => 'watchTheme', :onclick => "switchThemeWatcher(this, #{t})"}
+		{:name => "Отслеживать тему", :access => signed_in?, :type => 'eye', :id => 'watchTheme', :value => "#{t}"}
 	end
 	def unWatchBut(t)
-		{:name => "Больше не отслеживать тему", :access => signed_in?, :type => 'eye', :id => 'watchTheme', :onclick => "switchThemeWatcher(this, #{t})"}
+		{:name => "Больше не отслеживать тему", :access => signed_in?, :type => 'eye', :id => 'watchTheme', :value => "#{t}"}
 	end
 end

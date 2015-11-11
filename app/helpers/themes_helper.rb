@@ -1,67 +1,7 @@
 module ThemesHelper
-	def buildThemeForm
-		#отрисовывается с помощью js функции initMessageForm(msg_id)
-		form_for(@formTheme, :multipart => 'true') do |f|
-		"
-				<div style = 'display: none;'>#{ f.file_field :uploaded_photos, :multiple => 'true'}</div>
-					<table id = 'msg_table'>
-						<tr>
-							<td>
-								#{ f.hidden_field :topic_id, :value => @topic.id}	
-								#{ f.text_field :name, :size => '157', :class => 't_field', :placeholder => 'Заголовок темы', :style => 'padding: 5px;', :autocomplete=>'off'}	
-								<div><p class = 'istring #{@name_f_color if @name_f_color != nil}' id = 'nLength'><span id = 'txtL'></span> <span class = 'err' id = 'txtMatchesErr'></span> <span id = 'txtErr'>#{@name_error if @name_error != nil}</span><span id = 'txtErrSrv'>#{@name_error if @name_error != nil}</span></p></div><br />									
-								<div style = 'position: relative; z-index: 1000; width: 100%;' id = 'likebleNames'></div>
-							</td>
-						</tr>
-						<tr>
-							<td id = 'frm' colspan = '2'>
-									<table id = 'formMenuTable'>
-										<tr>
-											<td id = 'formButtons'>
-											</td>
-										</tr>
-										<tr>
-											<td id = 'formMenus'>
-											</td>
-										</tr>
-                    <tr>
-                      <td>
-    									  #{ f.text_area :content, :cols => '140', :rows => '7', :defaultRows => '7', :class=> 't_area', :placeholder => 'Текст темы...', :onkeyup => 'changingTextarea(this)', :style => 'position: relative; width: 980px; display: block; padding: 10px;' }
-    									  <div><p class = 'istring #{@content_f_color if @content_f_color != nil}' id = 'cLength'><span id = 'txtL'></span> <span id = 'txtErr'>#{@content_error if @content_error != nil}</span><span id = 'txtErrSrv'>#{@content_error if @content_error != nil}</span></p></div>
-                      </td>
-                    </tr>
-									</table>
-									#{ hidden_check_box(f) }
-							</td>
-						</tr>
-						<tr>
-							<td>
-						      <div class='actions tb-pad-s'>           
-							      #{ mySubmitButton("Отправить", "edit_theme_#{@formTheme.id}")}
-							    </div>
-								<br /><br />
-							</td>
-						</tr>
-						<tr>
-							<td id = 'formPhotos'>
-								#{f.label :uploaded_photos, 'Фотографии темы'}<br />
-								<div class = 'dropzone' id = 'ph_to_frm'>
-								</div>
-								<div id = 'uploadedPhotos'>
-								</div>
-								<div><p class = 'istring #{@photos_f_color if @photos_f_color != nil}' id = 'iLength'><span id = 'txtL'></span> <span id = 'txtErr'>#{@photos_error if @photos_error != nil}</span><span id = 'txtErrSrv'>#{@photos_error if @photos_error != nil}</span></p></div>
-							</td>
-						</tr>
-					</table>
-  				<div id = 'editorPreview' class = 'mText' style = 'position: relative; width: 100%; margin-top: 20px; margin-bottom: 20px; '>
-				
-  				</div>
-			".html_safe
-		end
-	end
 	def hidden_check_box(f)
 		"#{ f.hidden_field :visibility_status_id, :value => 1}"	if is_not_authorized?  
-		"<br />#{ f.label :visibility_status_id, ('<img src="/files/privacy_g.png" style = "width: 20px;float: left;"/> Скрыть от не авторизованных пользователей').html_safe} #{ f.check_box :visibility_status_id, {:class=>'check_box'}, '2', '1'}<br />" if !is_not_authorized?
+		"<br />#{ f.label :visibility_status_id, ('<i class = "fi-shield fi-grey fi-medium"></i> Скрыть от не авторизованных пользователей').html_safe} #{ f.check_box :visibility_status_id, {:class=>'check_box'}, '2', '1'}<br />" if !is_not_authorized?
 	end
 	def themes_table(themes)
 		if themes != []
@@ -112,12 +52,13 @@ module ThemesHelper
 	end
 
 	def themeInformation(theme)
-		h = theme.statusHash
+		mCount = (@messages == nil)? theme.visible_messages.count : @messages.count 
+    h = theme.statusHash
 		vh = theme.vStatusHash
 		v = ''
 		v += "<div class='stat fi-float-left' title = '#{vh[:ru]}'>#{drawIcon(vh[:img], 'medium', 'grey')}</div>" if vh[:value] == 'hidden'
 		v += "<div class='stat fi-float-left' title = '#{h[:ru]}'>#{drawIcon(h[:img], 'medium', 'grey')}</div>"
-		v += "<div class='stat fi-float-left'>#{drawIcon('comments', 'medium', 'grey')}<span>112</span></div>"
+		v += "<div class='stat fi-float-left'>#{drawIcon('comments', 'medium', 'grey')}<span>#{mCount}</span></div>"
 		v += "<div class='stat fi-float-left'>#{drawIcon('eye', 'medium', 'grey')}<span>11119</span></div>"
 		return v
 	end

@@ -1,6 +1,7 @@
 // Place all the styles related to the Photos controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import "scaffolds";
 @mixin my_opacity($t){opacity: $t;filter: alpha(opacity=$t*100);-moz-opacity: $t;}
 @mixin animation($t)
 	{
@@ -41,6 +42,10 @@
         color: white;
     }
     a:hover {color: #3084c9;}
+}
+.del-photo-but
+{
+    color: $main_color;
 }
 #phContent 
 {

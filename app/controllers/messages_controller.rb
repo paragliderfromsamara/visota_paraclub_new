@@ -14,7 +14,7 @@ class MessagesController < ApplicationController
   # GET /messages/1.json
   def show
     @message = Message.find_by(id: params[:id])
-	if userCanSeeMessage?(@message)
+	if userCanSeeMessage?(@message) and params[:preview_mode] == 'true'
 		#themes part
 		@theme = Theme.find_by(id: @message.theme_id, status_id: ([1, 3]))
     @photo_album = @message.photo_album
@@ -366,7 +366,7 @@ class MessagesController < ApplicationController
 			if new_theme_flag == 1
 				if new_theme_name != ''
 					new_theme = message.makeThemeFromMessage(new_theme_name, new_topic)
-					redirect_to root_path
+					redirect_to new_theme
 				else
 					redirect_to replace_path, :notice => 'Введите название новой темы'
 				end
