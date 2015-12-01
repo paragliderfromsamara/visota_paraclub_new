@@ -1,3 +1,37 @@
 // Place all the styles related to the Votes controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import "scaffolds";
+.vt-table
+{
+    width: 100%; 
+    border-width: 0;
+    .section {width:95%;}
+}
+.vt-voice-line
+{
+    height: 14px; 
+    div
+    {
+        position:relative;
+        height:14px;
+        background-color: $text_color_5;
+    }
+}
+.vt-voice-count
+{
+    font-size: 14px;
+}
+.vt-variant
+{
+    font-family: $font_family_1;
+}
+
+.vt-odd
+{
+    background-color: #ffffff;
+}
+.vt-even
+{
+    background-color: #e9edf2;
+}

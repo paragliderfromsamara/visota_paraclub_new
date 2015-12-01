@@ -3,9 +3,12 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 arrows = true
+phTopMenu = document.getElementById("topPhotoPanel")
+topMenu = document.getElementById("top")
+topEl = if phTopMenu isnt null then phTopMenu else topMenu 
 
 blocksSumHeight = ()-> 
-    $("#top").outerHeight(true) + $("#middle").outerHeight(true) + $("#bottom").outerHeight(true) + $("#ses_p").outerHeight(true) 
+    $(topEl).outerHeight(true) + $("#middle").outerHeight(true) + $("#bottom").outerHeight(true) + $("#ses_p").outerHeight(true) 
 
 initScrollControl = ()->
     scrollControl()
@@ -14,7 +17,7 @@ initScrollControl = ()->
         scrollControl()
         true
     $('.quickScroll #aDwn').click ()->
-        p=$("#top").outerHeight(true)+$("#middle").outerHeight(true)
+        p=$(topEl).outerHeight(true)+$("#middle").outerHeight(true)
         $(window).scrollTop(p)
         p
     $('.quickScroll #aUp').click ()-> $(window).scrollTop(0)
@@ -24,7 +27,7 @@ scrollControl = ()->  #Управление панелькой перемотк�
     wH = $(window).height()
     blSH = blocksSumHeight()
     sT = $(window).scrollTop()
-    topH = $("div#top").outerHeight(true)
+    topH = $(topEl).outerHeight(true)
     botH = $("div#bottom").outerHeight(true)
     if (blSH-topH-botH) > wH
         $('.quickScroll').fadeIn(t)
@@ -39,7 +42,7 @@ bottomControl = ()->
     markOffset = $("#footerMark").offset().top
     new_middle_h = 0
     if (markOffset + $("#bottom").outerHeight(true)) < window_h
-        new_middle_h = window_h - $("#top").outerHeight(true) - $("#bottom").outerHeight(true) - $("#ses_p").outerHeight(true)
+        new_middle_h = window_h - $(topEl).outerHeight(true) - $("#bottom").outerHeight(true) - $("#ses_p").outerHeight(true)
         $('#middle').height(new_middle_h)
         $("#bottom").css('position', 'fixed').css('bottom', '0')
     else

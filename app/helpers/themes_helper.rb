@@ -94,7 +94,7 @@ module ThemesHelper
 				<td  colspan = '2'>
 						<span id = 'content' class = 'mText'>#{theme.content_html}</span>
 						#{theme.updater_string}
-						#{"<br /><div class = 'central_field' style = 'width: 1000px;'>#{theme_list_photos(theme)}</div>" if theme.photos != []}
+						#{"<br /><div class = 'central_field' style = 'width: 1000px;' id ='thPhotosField'>#{theme_list_photos(theme)}</div>" if theme.photos != []}
 						#{"<br />#{list_attachments(theme.attachment_files)}" if theme.attachment_files != []}
 				</td>
 				</tr>
@@ -112,7 +112,7 @@ module ThemesHelper
   
 	def theme_owner_buttons #в контроллере themes#show
 		buttons_array = []
-		buttons_array += [{:name => 'Новое сообщение', :access => userCanCreateMsgInTheme?(@theme), :type => 'comment', :id => 'newMsgBut', :link => '#new_message'}]
+		buttons_array += [{:name => 'Новое сообщение', :access => userCanCreateMsgInTheme?(@theme), :type => 'comment', :id => 'newMsgBut'}]
 		buttons_array += [themeNotificationButton(@theme.id)] if signed_in?
 		buttons_array += [
 							        {:name => "Редактировать", :access => userCanEditTheme?(@theme), :type => 'pencil', :link => "#{edit_theme_path(@theme)}", :id => 'editTheme'}
@@ -123,27 +123,6 @@ module ThemesHelper
 		buttons_array[buttons_array.length] = {:name => 'Удалить тему', :access => userCanSwitchTheme?(@theme), :type => 'trash', :link => theme_path(@theme), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить тему?', :data_method => 'delete', :id=> 'deleteTheme'}
 		
 		return control_buttons(buttons_array).html_safe
-	end
-	def add_photo_to_theme_form
-		form = form_for(@theme, :action => :update, :html => {:method => :put, :multipart => true}) do |f|
-				("
-					<input type = 'hidden' name = 'update_type' value = 'add_photos' />
-					#{f.file_field :photos, :multiple => true} #{f.submit 'Загрузить фотографии'}
-				").html_safe
-				end
-		container = "<div class = 'g_field' id = 'toggle_add_photos' style = 'position: relative; width: 100%; display: none; z-index: 1000; top: 5px;'>#{form}</div>"		
-		return container.html_safe
-	end
-	
-	def add_attachment_to_theme_form
-		form = form_for(@theme, :action => :update, :html => {:method => :put, :multipart => true}) do |f|
-				("
-					<input type = 'hidden' name = 'update_type' value = 'add_attachments' />
-					#{f.file_field :attachment_files, :multiple => true} #{f.submit 'Загрузить вложения'}
-				").html_safe
-				end
-		container = "<div class = 'g_field' id = 'toggle_add_attachments' style = 'position: relative; width: 100%; display: none; z-index: 1000; top: 5px;'>#{form}</div>"		
-		return container.html_safe
 	end
 	
 	def theme_errors

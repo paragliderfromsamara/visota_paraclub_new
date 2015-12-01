@@ -578,17 +578,7 @@ end
 			  "
 		return val
 	end
-	def list_attachments(attachment_files) #вложенные файлы
-		value = ''
-		if attachment_files != [] and attachment_files != nil
-			value = '<div class = "g_field"><div class = "central_field" style = "width: 98%;"><b>Вложения:</b> <br /><table style = "width: 600px;">'
-			attachment_files.each do |file|
-				value += "<tr><td align = 'left' style = 'min-width: 25px;'><a class = 'b_link' href = '#{file.link}'>#{file.name}</a></td><td align = 'left'>Размер: #{file.alter_size}</td></tr> "
-				value += "</table></div></div>" if file == attachment_files.last
-			end
-		end
-		return value
-  end
+
   def navigation_string #Навигационная строка 
 	value = ''
 	@path_array.each do |path|

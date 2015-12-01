@@ -73,7 +73,6 @@ include TopicsHelper
   	if userCanEditTheme?(@formTheme)
   		@topic = @formTheme.topic 
   		@title = @header = "Изменение темы '#{@formTheme.name}'"
-  		@add_functions = "initThemeForm(#{@formTheme.id}, '#edit_theme_#{@formTheme.id}');"
   		@path_array = [
   						{:name => 'Клубная жизнь', :link => '/visota_life'},
   						{:name => @topic.name, :link => topic_path(@topic)},
@@ -99,17 +98,17 @@ include TopicsHelper
   		@theme.user_id = current_user.id
   		respond_to do |format|
   		  if @theme.save
-  			if params[:photo_editions]!= nil and params[:photo_editions] != []
-  				photos_params = params[:photo_editions][:photos]
-  				photos_params.each do |x|
-  					photo = Photo.find_by_id(x[1][:id])
-  					if photo != nil
-  						if photo.description != x[1][:description]
-  							photo.update_attribute(:description, x[1][:description])
-  						end
-  					end
-  				end
-  			end
+  			#if params[:photo_editions]!= nil and params[:photo_editions] != []
+  			#	photos_params = params[:photo_editions][:photos]
+  			#	photos_params.each do |x|
+  			#		photo = Photo.find_by_id(x[1][:id])
+  			#		if photo != nil
+  			#			if photo.description != x[1][:description]
+  			#				photo.update_attribute(:description, x[1][:description])
+  			#			end
+  			#		end
+  			#	end
+  			#end
   			@theme.assign_entities_from_draft(current_user.theme_draft)
   			format.html { redirect_to @theme, :notice => 'Тема успешно открыта' }
   			format.json { render :json => @theme, :status => :created, :location => @theme }
@@ -130,21 +129,29 @@ include TopicsHelper
   def update
     @formTheme = Theme.find(params[:id])
 	if userCanEditTheme?(@formTheme) 
-		params[:theme][:updater_id] = current_user.id
+    curStatusId = @formTheme.status_id
+    newStatusId = (params[:theme][:status_id] == nil)? curStatusId : params[:theme][:status_id].to_i  
+    if curStatusId == 0 && newStatusId == 1
+      notice = 'Тема успешно добавлена' 
+      params[:theme][:created_at] = params[:theme][:updated_at] = Time.now
+    else
+      notice = 'Тема успешно обновлена' 
+      params[:theme][:updater_id] = current_user.id
+    end
 		respond_to do |format|
 		  if @formTheme.update_attributes(params[:theme])
-			if params[:photo_editions] != nil and params[:photo_editions] != []
-				photos_params = params[:photo_editions][:photos]
-				photos_params.each do |x|
-					photo = Photo.find_by_id(x[1][:id])
-					if photo != nil
-						if photo.description != x[1][:description]
-							photo.update_attribute(:description, x[1][:description])
-						end
-					end
-				end
-			end
-			format.html { redirect_to @formTheme, :notice => 'Тема успешно обновлена' }
+			#if params[:photo_editions] != nil and params[:photo_editions] != []
+			#	photos_params = params[:photo_editions][:photos]
+			#	photos_params.each do |x|
+			#		photo = Photo.find_by_id(x[1][:id])
+			#		if photo != nil
+			#			if photo.description != x[1][:description]
+			#				photo.update_attribute(:description, x[1][:description])
+			#			end
+			#		end
+			#	end
+			#end
+			format.html { redirect_to @formTheme, :notice => notice }
 			format.json { head :no_content }
 		  else
 			@topic = @formTheme.topic
@@ -349,5 +356,18 @@ include TopicsHelper
 	else
 		redirect_to '/404'
 	end
+  end
+  def upload_attachment_files
+  	theme = Theme.find_by(id: params[:id]) 
+  	if isEntityOwner?(theme)
+  		@attachmentFile = AttachmentFile.new(:theme_id => theme.id, :user_id => theme.user.id, uploaded_file: params[:theme][:attachment_files], directory: "themes")
+  		if @attachmentFile.save
+  			render :json => {:message => 'success', :attachmentID => @attachmentFile.id }, :status => 200
+  		else
+  			render :json => {:error => @attachmentFile.errors.full_messages.join(',')}, :status => 400
+  		end
+  	else
+  		redirect_to '/404'
+  	end
   end
 end

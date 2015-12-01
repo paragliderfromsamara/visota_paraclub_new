@@ -111,6 +111,13 @@ mount_uploader :photo, UserPhotoUploader
 		end
 	return user_avatar
   end
+  def alter_avatar_square
+	user_avatar = '/files/undefined.png'
+		if avatar?
+			user_avatar = avatar.sq_thumb
+		end
+	return user_avatar
+  end
   def widthAndHeight(link)
 	p = {:width=>0,:height=>0}
     image = Magick::Image.read(Rails.root.join("public#{link}")).first
@@ -242,21 +249,21 @@ mount_uploader :photo, UserPhotoUploader
 	end
 	return draft
   end
-  def album_draft 
-	draft = PhotoAlbum.find_by(user_id: self.id, status_id: 0)
-	if draft == nil
-		draft = PhotoAlbum.new(:user_id => self.id, :status_id => 0)# if draft == nil 
-		draft.save(:validate => false) #отключаем проверку длины названия темы
-	end
-	return draft
+  def article_draft(t) 
+  	draft = Article.find_by(user_id: self.id, status_id: 0, article_type_id: t)
+  	if draft == nil
+  		draft = Article.new(:user_id => self.id, :status_id => 0, article_type_id: t)# if draft == nil 
+  		draft.save(:validate => false) #отключаем проверку длины названия темы
+  	end
+	  return draft
   end
-  def article_draft 
-	draft = Article.find_by(user_id: self.id, status_id: 0)
-	if draft == nil
-		draft = Article.new(:user_id => self.id, :status_id => 0)# if draft == nil 
-		draft.save(:validate => false) #отключаем проверку длины названия темы
-	end
-	return draft
+  def album_draft 
+  	draft = PhotoAlbum.find_by(user_id: self.id, status_id: 0)
+  	if draft == nil
+  		draft =  PhotoAlbum.new(:user_id => self.id, :status_id => 0)# if draft == nil 
+  		draft.save(:validate => false) #отключаем проверку длины названия темы
+  	end
+	  return draft
   end
   def event_draft 
   	draft = Event.find_by(status_id: 0)
@@ -402,7 +409,7 @@ mount_uploader :photo, UserPhotoUploader
   end
   
   def not_current_user_messages #сообщения других юзеров
-	Message.where(theme_id: theme_with_user_ids_for_feed, status_id: 1, user_id: "user_id != #{self.id}")
+	  Message.where(theme_id: theme_with_user_ids_for_feed, status_id: 1, user_id: "user_id != #{self.id}")
   end
   
   def themes_without_current_user(is_not_authorized) #Темы в которых пользователь не принимал участия

@@ -72,7 +72,7 @@ module PhotoAlbumsHelper
 		end
 		if photos != []
 			photos.each do |p|
-				value += "<a href = '#{photo_path(p)}' title = '#{p.description}' alt = '#{photo_path(p)}' ><div class = 'inline-blocks inline-mini'><div class = 'central_field' style = 'width: 150px; margin-top: 7px;'><img src = '#{p.link.thumb}' style = 'display: none;' width = '150px' /></div></div></a>" if pathName == 'index' || pathName == 'visota_life'
+				value += "<a href = '#{photo_path(p)}' da title = '#{p.description}' alt = '#{photo_path(p)}' ><div class = 'inline-blocks inline-mini'><div class = 'central_field' style = 'width: 150px; margin-top: 7px;'><img src = '#{p.link.small_thumb}' style = 'display: none;'/></div></div></a>" if pathName == 'index' || pathName == 'visota_life'
 				value += "<a href = '#{photo_path(p)}' title = '#{p.description}' alt = '#{photo_path(p)}' ><div class = 'inline-blocks inline-thumb'><div class = 'central_field' style = 'width: 250px; margin-top: 15px;'><img src = '#{p.link.thumb}' style = 'display: none;' width = '250px' /></div><div style = 'width: 100px; height: 23px; position: absolute; bottom: 5px; right: 15px;'>#{photoInfo(p)}</div></div></a>" if pathName == 'show'
 			end
 			value = "<div class = 'central_field' style = 'width: #{width}; padding-top: 10px; padding-bottom:10px;'>#{value}</div>"
@@ -144,28 +144,16 @@ module PhotoAlbumsHelper
 			end
     end
 	end
-	def initPhotoAlbumForm
-		if !is_not_authorized?		
-			if @albumToForm != nil
-				draft = @albumToForm
-			else
-				draft =	current_user.album_draft
-				if @albumToCreate == nil
-					@albumToForm = PhotoAlbum.new
-				else
-					@albumToForm = @albumToCreate
-				end
+	def initPhotoAlbumForm	
+			if @albumToForm == nil
+				@albumToForm = current_user.album_draft
 			end
 			if action_name == 'new' || action_name == 'create'
-				formName = '#new_photo_album'
 				@buttName = 'Создать альбом'
 			elsif action_name == 'edit' || action_name == 'update'
-				formName = '.edit_photo_album'
 				@buttName = 'Внести изменения'
 			end
 			album_errors
-			@add_functions = "initAlbumForm(#{draft.id}, '#{formName}');"
-		end
 	end
 	def albums_paths_buttons #buttons => {:name => 'Перейти', :title => "Перейти на страницу пилота", :access => ['all'], :type => 'b_green', :link => user_path(user)}
 		al = PhotoAlbum.new

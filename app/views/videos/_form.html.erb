@@ -8,10 +8,9 @@
         butName = "Добавить"
         v = false
     end
-    @add_functions  = "initVideoForm(\"#{fn}\");"
 %>
 <% video_errors %>
-	<%= form_for(@video) do |f| %>
+	<%= form_for(@video, html:{class: "video_form"}) do |f| %>
 	  <table style = 'width: 100%;'>
 	  	<% if @users != nil %>
             <tr>

@@ -1,49 +1,44 @@
 class VotesController < ApplicationController
   def index
-	@completed_votes = Vote.where("end_date < :time_now", {:time_now => Time.now})
-	@active_votes = Vote.where("end_date > :time_now", {:time_now => Time.now})
-	@path_array = [
-						{:name => 'Общение', :link => '/visota_life'},
-						{:name => 'Опросы'}
-				  ]
-  @title = @header = 'Опросы'
-	respond_to do |format|
-	  format.html # index.html.erb
-      format.json { render :json => @votes }
-	end
+  	@completed_votes = Vote.where("end_date < :time_now", {:time_now => Time.now})
+  	@active_votes = Vote.where("end_date > :time_now", {:time_now => Time.now})
+  	@path_array = [
+  						{:name => 'Общение', :link => '/visota_life'},
+  						{:name => 'Опросы'}
+  				  ]
+    @title = @header = 'Опросы'
+  	respond_to do |format|
+  	  format.html # index.html.erb
+        format.json { render :json => @votes }
+  	end
   end
 
   def show
-	@vote = Vote.find(params[:id])
-  @title = @vote.name
-	@path_array = [
-						{:name => 'Общение', :link => '/visota_life'},
-						{:name => 'Опросы', :link => votes_path},
-						{:name => @vote.name}
-				  ]
-	if user_type != 'guest'
-		user_voice = Voice.find_by_user_id_and_vote_id(current_user, @vote.id)
-		@add_functions = "voteShowPath(#{@vote.id});" if user_voice.nil?
-	end
-	respond_to do |format|
-		format.html # show.html.erb
-	  format.json { render :json => @vote }
-	end
+  	@vote = Vote.find(params[:id])
+    @title = @vote.name
+  	@path_array = [
+  						{:name => 'Общение', :link => '/visota_life'},
+  						{:name => 'Опросы', :link => votes_path},
+  						{:name => @vote.name}
+  				  ]
+  	respond_to do |format|
+  		format.html # show.html.erb
+  	  format.json { render :json => @vote }
+  	end
   end
 
   def new
-	if !is_not_authorized?
-		@vote = Vote.new
-		@title = @header = 'Новый опрос'
-		@add_functions = "initVoteForm('#new_vote');"
-		@path_array = [
-						{:name => 'Клубная жизнь', :link => '/visota_life'},
-						{:name => 'Опросы', :link => votes_path},
-						{:name => 'Новый опрос'}
-					  ]
-	else 
-		redirect_to '/404'
-	end
+  	if !is_not_authorized?
+  		@vote = Vote.new
+  		@title = @header = 'Новый опрос'
+  		@path_array = [
+  						        {:name => 'Клубная жизнь', :link => '/visota_life'},
+  						        {:name => 'Опросы', :link => votes_path},
+  						        {:name => 'Новый опрос'}
+  					        ]
+  	else 
+  		redirect_to '/404'
+  	end
   end
 
   def create

@@ -245,7 +245,7 @@ end
 
   def updater_string #Выводит информацию о последнем обновлении темы
 	updater_text = ""
-	if updater_id != nil
+	if updater_id != nil && self.created_at + 5.hours < self.updated_at 
 		updater = "Автором" if user_id == updater_id
 		updater = "Администратором" if user_id != updater_id
 		updater_text = "<p class = 'istring_m norm medium-opacity' >Тема обновлена #{updater} #{updated_at.to_s(:ru_datetime)}</p>"

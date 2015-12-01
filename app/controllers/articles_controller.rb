@@ -45,8 +45,8 @@ class ArticlesController < ApplicationController
   # GET /articles/new
   # GET /articles/new.json
   def new
-	@formArticle = Article.new
-	@type = @formArticle.get_type_by_id(params[:c])
+	art = Article.new
+	@type = art.get_type_by_id(params[:c])
 	if userCanCreateArticle? and @type != nil
 	  @title = @header = "#{@type[:form_title]}"
     @path_array = [
@@ -54,12 +54,6 @@ class ArticlesController < ApplicationController
 					          {:name => @type[:multiple_name], :link => "/media?t=#{@type[:link]}"},
 					          {:name => "#{@header}"}
 				          ]
-		@draft = current_user.article_draft
-    if @draft.article_type_id != 	params[:c].to_i
-      @draft.clean
-      @draft.update_attribute(:article_type_id, params[:c])
-    end
-		
 		respond_to do |format|
 		  format.html # new.html.erb
 		  format.json { render :json => @formArticle }
@@ -148,30 +142,43 @@ class ArticlesController < ApplicationController
     end
   end
   def upload_photos
-	article = Article.find_by(id: params[:id]) 
-	if isEntityOwner?(article)
-		@photo = Photo.new(:article_id => article.id, :user_id => article.user.id, :link => params[:article][:uploaded_photos], :status_id => 1)
-		if @photo.save
-			render :json => {:message => 'success', :photoID => @photo.id }, :status => 200
-		else
-			render :json => {:error => @photo.errors.full_messages.join(',')}, :status => 400
-		end
-	else
-		redirect_to '/404'
-	end
+  	article = Article.find_by(id: params[:id]) 
+  	if isEntityOwner?(article)
+  		@photo = Photo.new(:article_id => article.id, :user_id => article.user.id, :link => params[:article][:uploaded_photos], :status_id => 1)
+  		if @photo.save
+  			render :json => {:message => 'success', :photoID => @photo.id }, :status => 200
+  		else
+  			render :json => {:error => @photo.errors.full_messages.join(',')}, :status => 400
+  		end
+  	else
+  		redirect_to '/404'
+  	end
+  end
+  def upload_attachment_files
+  	article = Article.find_by(id: params[:id]) 
+  	if isEntityOwner?(article)
+  		@attachmentFile = AttachmentFile.new(:article_id => article.id, :user_id => article.user.id, uploaded_file: params[:article][:attachment_files], directory: "articles")
+  		if @attachmentFile.save
+  			render :json => {:message => 'success', :attachmentID => @attachmentFile.id }, :status => 200
+  		else
+  			render :json => {:error => @attachmentFile.errors.full_messages.join(',')}, :status => 400
+  		end
+  	else
+  		redirect_to '/404'
+  	end
   end
   def bind_videos_and_albums
     article = Article.find_by(id: params[:id])  
-	if isEntityOwner?(article) and params[:format] == 'json'
-		@albums = PhotoAlbum.where(article_id: [nil, article.id], status_id: 1)
-		@videos = Video.where(article_id: [nil, article.id])
-		a = []
-		v = []
-		@albums.each {|al| a[a.length] = {:id => al.id, :name => al.name, :link => photo_album_path(al)}} if @albums != []
-		@videos.each {|vi| v[v.length] = {:id => vi.id, :name => vi.alter_name, :link => video_path(vi)}} if @videos != [] 
-		render :json => {:albums => a, :videos => v}
-	else
-		redirect_to '/404'
-	end
+  	if isEntityOwner?(article) and params[:format] == 'json'
+  		@albums = PhotoAlbum.where(article_id: [nil, article.id], status_id: 1)
+  		@videos = Video.where(article_id: [nil, article.id])
+  		a = []
+  		v = []
+  		@albums.each {|al| a[a.length] = {:id => al.id, :name => al.name, :link => photo_album_path(al)}} if @albums != []
+  		@videos.each {|vi| v[v.length] = {:id => vi.id, :name => vi.alter_name, :link => video_path(vi)}} if @videos != [] 
+  		render :json => {:albums => a, :videos => v}
+  	else
+  		redirect_to '/404'
+  	end
   end
 end

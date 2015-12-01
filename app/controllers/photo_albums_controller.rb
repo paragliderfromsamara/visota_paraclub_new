@@ -140,30 +140,38 @@ include MessagesHelper
   # PUT /photo_albums/1
   # PUT /photo_albums/1.json
   def update
-	@albumToForm = PhotoAlbum.find_by(id: params[:id], status_id: 1) if user_type != 'super_admin' and user_type != 'admin'
-	@albumToForm = PhotoAlbum.find_by(id: params[:id]) if user_type == 'super_admin' || user_type == 'admin'
+	#@albumToForm = PhotoAlbum.find_by(id: params[:id], status_id: 1) if user_type != 'super_admin' and user_type != 'admin'
+	#@albumToForm = PhotoAlbum.find_by(id: params[:id]) if user_type == 'super_admin' || user_type == 'admin'
+  @albumToForm = PhotoAlbum.find_by(id: params[:id])
   if isEntityOwner?(@albumToForm) 
-			if @albumToForm.user_id != (params[:photo_album][:user_id]).to_i
+    curStatusId = @albumToForm.status_id 
+    newStatusId = (params[:photo_album][:status_id] != nil)? params[:photo_album][:status_id].to_i : curStatusId
+    if curStatusId == 0 && newStatusId == 1
+      notice = 'Альбом успешно добавлен'
+    else
+      notice = 'Альбом успешно обновлён'
+    end
+      if @albumToForm.user_id != (params[:photo_album][:user_id]).to_i
 				if @albumToForm.photos != []
 					@albumToForm.photos.each do |photo|
 						photo.update_attributes(:user_id => params[:photo_album][:user_id])
 					end
 				end
 			end
-			if params[:photo_editions] != nil and params[:photo_editions] != []
-				photos_params = params[:photo_editions][:photos]
-				photos_params.each do |x|
-					photo = Photo.find_by_id(x[1][:id])
-					if photo != nil
-						if photo.description != x[1][:description]
-							photo.update_attribute(:description, x[1][:description])
-						end
-					end
-				end
-			end
+			#if params[:photo_editions] != nil and params[:photo_editions] != []
+			#	photos_params = params[:photo_editions][:photos]
+			#	photos_params.each do |x|
+			#		photo = Photo.find_by_id(x[1][:id])
+			#		if photo != nil
+			#			if photo.description != x[1][:description]
+			#				photo.update_attribute(:description, x[1][:description])
+			#			end
+			#		end
+			#	end
+			#end
 			respond_to do |format|
 			  if @albumToForm.update_attributes(params[:photo_album])
-			    format.html { redirect_to @albumToForm, :notice => 'Альбом успешно обновлён' }
+			    format.html { redirect_to @albumToForm, :notice => notice }
 				  format.json { head :no_content}
 			  else
       		@title = @header = 'Изменение фотоальбома'

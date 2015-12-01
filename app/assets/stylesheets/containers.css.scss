@@ -1,0 +1,153 @@
+// Place all the styles related to the Pages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+@import "scaffolds";
+/* block */
+.inline-blocks
+{
+	position: relative;
+	display: inline-block;
+	background-color:#fafafa;
+	@include animation($time_1);
+} 
+
+.inline-thumb
+{
+	margin:10px;
+	width: 280px;
+	height:190px;
+}
+
+.inline-mini
+{
+	margin:3px;
+	width: 164px;
+	height:98px;
+}
+
+.inline-blocks:hover
+{
+	background-color: $fourth_color;
+}
+.c_box
+{
+	position: relative;
+	width: 100%;
+	border-top: 1px solid #e1eaf6;
+	z-index: 10;
+	#b_middle {
+				font-family:$font_family_1;
+				position: relative;
+				margin-top: 20px;
+				padding-bottom: 20px;
+				width: 1000px;		
+				min-height: 120px;
+				margin-left: auto;
+				margin-right: auto;
+			  }		  
+}
+#left_f
+	{
+		float: left;
+	}
+#right_f
+	{
+		float: right;
+	}
+.central_field 
+	{
+		position: relative;
+		margin-left: auto;
+		margin-right: auto;
+		z-index: 11;
+	}
+.cBoxSplitter
+	{
+		position: relative;
+		background-color:$fourth_color;
+		width: 100%;
+		h3, h4 {	
+				padding-top: 5px;
+				padding-bottom: 5px;
+				padding-left: 5px;
+				}
+	}
+.m_1000wh, #m_1000wh
+	{
+		width: 1000px;
+        @extend .central_field;
+	}
+.m_1100wh, #m_1100wh
+	{
+		width: 1100px;
+        @extend .central_field;
+	}
+.m_1600wh, #m_1600wh
+    	{
+		width: 100%;
+		max-width: 1600px;
+		min-width: $min_width;
+        @extend .central_field;
+    }
+#m_90percent, .m_90p
+    {
+    		width: 90%;
+            @extend .central_field;
+    }
+.m_95p
+{
+	width: 95%;
+    @extend .central_field;
+}
+#m_full {
+			width: 100%;
+            
+		}
+
+/* block end */
+.odd
+{
+    background-color: $oddBlockColor;
+    .ch-block 
+    {
+        background-color: $evenBlockColor;
+    }
+} /*нечётный блок*/
+.even, .mForm
+{
+    background-color: $evenBlockColor;
+    .ch-block 
+    {
+        background-color: $oddBlockColor;;
+    }
+} /*чётный блок*/        
+
+/*paralaxes*/
+.pBox {
+		position: relative;
+		@extend .central_field; 
+		width: 100%;
+		max-width: 1600px;
+		min-width: $min_width;
+		font-family:$font_family_1;
+		z-index: 9;
+		overflow: hidden;
+	 }	
+.pB-content {
+			@extend .central_field;
+			width: 100%;
+			height: 100%;
+			z-index: 15;
+		   }
+.pB-wrapper	{
+				width: 100%;
+				z-index: 10;
+				/*@include my_opacity(0.8);*/
+				position: absolute; 
+			} 
+.pB-top-to-bot {
+			   }
+.pB-bot-to-top {
+			   }
+.pB-wr-fix {position: fixed; top:0;}
+/*paralaxes end*/

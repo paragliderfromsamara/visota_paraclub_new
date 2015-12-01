@@ -57,10 +57,13 @@ class Photo < ActiveRecord::Base
 	return type 
   end
   def widthAndHeight
-	p = {:width=>0,:height=>0}
+  	p = {:width=>0,:height=>0,:width_th=>0,:height_th=>0}
     image = Magick::Image.read(Rails.root.join("public#{self.link}")).first
+    image_th = Magick::Image.read(Rails.root.join("public#{self.link.thumb}")).first
     p[:width] = image.columns
-	p[:height] = image.rows
+  	p[:height] = image.rows
+    p[:width_th] = image_th.columns
+    p[:height_th] = image_th.rows
 	return p
   end
   

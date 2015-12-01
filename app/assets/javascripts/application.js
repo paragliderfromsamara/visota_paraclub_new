@@ -16,12 +16,11 @@
 //= require_tree
 
 
-
-
 function my_functions()
 	{
 		var enteredLi, leftLi; //для управления главным меню
-		Dropzone.autoDiscover = false;
+		
+        Dropzone.autoDiscover = false;
         Dropzone.options.myAwesomeDropzone = false;
 		$('#mLogo, .nav_li, #ses_p li, .t_link, .ph-paginate, .ph-big-links,.wide-butt').click(function () {goToLink($(this).attr('link_to'));});
 		$('#split_theme_topic_id').change(function(){var th = new themeObj(); th.topic = $(this).val(); make_themes_list(th);});
@@ -80,7 +79,7 @@ function my_functions()
 function submitMyForm(id, el){
                                 if ($(el).hasClass('disabled') == false)
                                 {
-                                    document.getElementById(id).submit();
+                                    $(el).parents('form').submit();
                                 }    
                              }
 function initSearchForm()
@@ -164,52 +163,7 @@ function waitbar(id)
 	{
 		if (link !== '' && link !== undefined) {document.location.href = link;}
 	};
-//photos part
-function getUploadedPhoto(phID, el, prEl)
-	{
-		$.getJSON("/photos/"+phID+"?format=json", function(t){
-															if (t.id != 'null')
-																{
-																	$(prEl).remove();
-																	$(el).find(".dz-message").show();
-																	renderImgForm(t, el);
-																}
-															 }
-				  ); 
-	}
-function renderImgForm(ph, el) //создаёт форму для фотографии
-{
-	var imgTag, field, curHtml;
-	if (ph.description == null){ph.description='Без описания...';}
-	imgTag='<img src="'+ph.thumb+'">';
-	field='<textarea cols="35" defaultrows="3" id="photo_editions_photos_photo_'+ph.id+'_description" name="photo_editions[photos][photo_'+ph.id+'][description]" onkeyup="changingTextarea(this)" rows="3"></textarea><br /><br /><a onclick="deletePhotoInTable(this)" photo_id="'+ph.id+'" class="b_link pointer">Удалить</a>';
-	if (el.attr('id') != 'photosField')
-	{
-		field+= '| <a onclick="addHashCodeToTextArea(this,\''+$(el).attr('id')+'\')"  class="b_link pointer addHashCode" hashCode="#Photo'+ph.id+'"  title = "Нажмите, чтобы встроить фото в текст...">Встроить в текст</a>';
-	}
-	curHtml = '<tbody class = "tImage" id="img_'+ph.id+'"><tr><td valign="top" ><input id="photo_editions_photos_photo_'+ph.id+'_id" name="photo_editions[photos][photo_'+ph.id+'][id]" type="hidden" value="'+ph.id+'">'+imgTag+'</td><td valign="top" >'+field+'</td></tr></tbody>';
-	$(el).find("#uPhts").prepend(curHtml);
-}
 
-function updUploadedImageButtons(id){$('a.addHashCode').each(function() {$(this).attr('onclick', 'addHashCodeToTextArea(this, "'+id+'")');});}
-function getPhotosToForm(entId, entName, el){var t = $(el).find("#uploadedPhotos"); $(t).load("/edit_photos #update_photos_form", { 'e': entName, 'e_id': entId, "hashToCont": "true", "submitBut": "false"}, function(){updUploadedImageButtons('newMsgForm')}); }
-
-function newPhObj(id, description)
-{
-	var ph = new Object();
-	ph.id = id;
-	ph.description = description;
-	return ph;
-}
-
-
-//photos part end
-
-//message and themes part
-
-
-	function entCounter(text){var c,v;c=text.length;v=0;if(c>0){for(var i=0;i<c;i++){if (text[i]=='\n'){v++;}if(i==(c-1)){return v;};}}else{return 0;}}
-	
 //message and themes part end
 function initCardChecking(flds) //Инициализация
 			{
@@ -481,97 +435,7 @@ function userFieldsChecking()
  
 //Проверка полей заполнения пользователя end
 
-
-//photo_path
-function myPhotoPage()
-{
-	var fVisible=-1,lVisible=-1, maxVBlocks=7, blC, offset;
-	offset = (maxVBlocks-1)/2;
-	blC = $(".ph-paginate").length;
-	if (blC>maxVBlocks){updPhotoPaginate('init');$(".ph-arrows").removeClass('ph-h');}
-	function updPhotoPaginate(f)
-	{
-		var j=0;
-		$(".ph-paginate").each(function(i){
-											if (f == 'init')
-											{
-												
-												if ($(this).hasClass('ph-h') == false){
-																				fVisible=j;
-																				updScrIndexes('right');
-																				return false;
-																				}
-												
-											}else{
-													if ((j<fVisible) || (lVisible < j))
-														{
-														$(this).addClass('ph-h');
-														} else {
-																	$(this).removeClass('ph-h');
-															    }
-												 }
-											j++;
-										  });
-										  
-	}
-	function updScrIndexes(f)
-	{
-		if (f=='left')
-		{
-			if ((lVisible-(maxVBlocks-1)) >= 0)
-			{
-				fVisible = lVisible-(maxVBlocks-1);
-			}else{
-					fVisible = 0;
-					lVisible = maxVBlocks-1;
-				 }
-		}
-		else if (f=='right')
-		{
-			if ((fVisible+(maxVBlocks-1)) < blC)
-			{
-				lVisible = fVisible+(maxVBlocks-1);
-			}else{
-					fVisible = blC - maxVBlocks-1;
-					lVisible = blC-1;
-				 }
-		}
-		if (fVisible==0){$(".ph-arr-left").css("visibility", "hidden");}else{$(".ph-arr-left").css("visibility", "visible")}
-		if (lVisible==(blC-1)){$(".ph-arr-right").css("visibility", "hidden")}else{$(".ph-arr-right").css("visibility", "visible")}
-	}
-	$(".ph-arr-right").click(function(){
-											if ((fVisible+(maxVBlocks-1)) !== (blC-1)){fVisible++;updScrIndexes('right');updPhotoPaginate('upd');}
-									   });
-	$(".ph-arr-left").click(function(){
-											if ((lVisible-(maxVBlocks-1)) !== 0){lVisible--;updScrIndexes('left');updPhotoPaginate('upd');}
-									  });
-	
-	//var
-}
-function setPhotoSizeByScreen(width, height)
-{
-   var wHeight =  $(window).height();
-   var pagHeight = $("#photoPagination").outerHeight(true) + $("#topPhotoPanel").outerHeight(true);
-   var newHeight = wHeight-pagHeight;
-   var iconsTop = 200;
-   $(document).keyup(
-       function(event){
-           if (allowArrows == true)
-           {
-               if (event.keyCode == 37) //previousPhoto
-               {
-                     goToLink($(".ph-big-prev").attr('link_to'));
-               }else if (event.keyCode == 39)  //nextPhoto
-               {
-                     goToLink($(".ph-big-next").attr('link_to'));
-               }
-           }});          
-   if (height > newHeight){$("#bPhoto").height(newHeight); iconsTop = newHeight/2 - $("div#iIcon").height()/2;}else{iconsTop = height/2 - $("div#iIcon").height()/2;}
-   $("div#iIcon").css('top', iconsTop + 'px')   ;
-}
-
-//photo_path end
-//vote_path
+/*/vote_path
 function voteShowPath(id)
 {
 	$("a#giveVoice").click(function(){giveVoteVoice(id, $(this).attr("valId"))});
@@ -586,26 +450,14 @@ function voteShowPath(id)
 	}
 	
 }
-//vote_path end
+*///vote_path end
 
-function switchLikeMark(id, type)
-{
-	$.ajax({
-					type: "POST",
-					url: "/switch_mark.json",
-					data: ({mark:({type: type, id: id})}),
-					success: function(v){
-                                            var el = $('#' + type + '_' + id + '_mark');
-                                            var toRemoveClass = (v.img == "fi-blue")? "fi-grey":"fi-blue";
-                                            var toAddClass = (v.img == "fi-blue")? "fi-blue":"fi-grey"; 
-                                            el.find('#mark_link').text(v.linkName); 
-                                            el.find('#mark_count').text(v.mCount); 
-                                            el.find('#mark_img').removeClass(toRemoveClass);
-                                            el.find('#mark_img').addClass(toAddClass);
-                                        }
-})
-}
+
 //Старые функции, удалять лишнее
+
+
+/*
+
 function wheather_panel(){var time=360;$(".wheather_content").hover(function(){},function(){$("div#wheather_blocks").animate({opacity:0.0},time,function(){$("div#wheather_blocks").css('display','none');});$(".wheather_panel").animate({width:"0"},time);});$(".wheather_link").click(function(){$(".wheather_panel").animate({width:"750px"},time);$("div#wheather_blocks").css('display','inline-block');$("div#wheather_blocks").animate({opacity:1.0},time);});};
 function replace_block(e){var first_block = document.getElementById(e.name+'_first_block');var second_block=document.getElementById(e.name+'_second_block');second_block.style.display="block";first_block.style.display="none";e.style.display = "none";};
 function add_content_to_article(e){var type=$(e).attr("item-type");var h_field_name="#article_assigned_"+type;var item_id=parseFloat($(e).attr("val"));var old_value_str=$(h_field_name).val();var old_value_arr=getIdsArray(old_value_str);var new_arr=update_ids_array(old_value_arr,item_id);changeSelection(e);$(h_field_name).val(addScobes(new_arr));};
@@ -617,6 +469,6 @@ function checkMyDropLists(){var list_types=["albums", "videos"];for(var i = 0;i<
 function setItemsByType(type){var hidden_f=document.getElementById("article_assigned_"+type);var ids=new Array();var val = "";if(hidden_f!=null){val=$(hidden_f).val();if(val!=''){ids=getIdsArray(val);$(".drop_value").each(function(i){var item_type=$(this).attr("item-type");var item_id=parseFloat($(this).attr("val"));if(item_type==type){for(var j=0;j<ids.length;j++){if(item_id==ids[j]){changeSelection(this);}}} else {return true}});}}}
 
 
-	
+*/	
 
 	

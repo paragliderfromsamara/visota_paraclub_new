@@ -1,0 +1,17 @@
+<div id = 'm_full' class = 'even'>
+   <div class = "m_1000wh">
+       <div id = "attachment_files">
+           <% if @files != [] %>
+               <% @files.each do |f| %>
+                   <a class = 'b_link' href = '<%= f.link %>'><%= f.name %></a> <a class = "af-delete" title = "Удалить" href = "<%= attachment_file_path(f) %>" data-method = "DELETE"><i class = "fi-x fi-medium fi-blue"></i></a><br />
+               <% end %>
+           <%else%>
+               <p class = 'istring_m'>
+                   Не добавлено ни одного вложения
+               </p>
+           <%end%>
+       </div>
+   </div>
+</div>
+
+

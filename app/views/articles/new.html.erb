@@ -3,36 +3,7 @@
 </div>
 <div class = 'c_box even'>
 	<div class = 'm_1000wh tb-pad-m'>
-		<% case @type[:value] %>
-		<% when 1 %>
-			<% @add_functions = "initAccidentForm(#{@draft.id}, '.new_article');" %>
-			<%= render 'accident_form' %>
-		<% when 2 %>
-			 <% @add_functions = "initDocumentForm(#{@draft.id}, '.new_article');" %>
-			<%= render 'document_form' %>
-		<% when 3 %>
-			<% @add_functions = "initReportForm(#{@draft.id}, '.new_article');" %>
-			<% @albums = PhotoAlbum.where(article_id: nil) %>
-			<% @videos = Video.where(article_id: nil) %>
-			<%= render 'report_form' %>
-		<% when 4 %>
-			<% @add_functions = "initReportForm(#{@draft.id}, '.new_article');" %>
-			<% @albums = PhotoAlbum.where(article_id: nil) %>
-			<% @videos = Video.where(article_id: nil) %>
-			<%= render 'club_articles_form' %>
-		<% when 5 %>
-			<% @add_functions = "initReportForm(#{@draft.id}, '.new_article');" %>
-			<% @albums = PhotoAlbum.where(article_id: nil) %>
-			<% @videos = Video.where(article_id: nil) %>
-			<%= render 'review_form' %>
-		<% when 6 %>
-			<% @add_functions = "initReportForm(#{@draft.id}, '.new_article');" %>
-			<% @albums = PhotoAlbum.where(article_id: nil) %>
-			<% @videos = Video.where(article_id: nil) %>
-			<%= render 'risen_from_the_ruin_form' %> 
-		<% else %>
-			<%= render 'accident_form' %>
-		<% end %>
+		<%= render 'form' %>
 	</div>
 </div>
 <div class = 'm_1000wh tb-pad-s'>

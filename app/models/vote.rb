@@ -7,6 +7,20 @@ class Vote < ActiveRecord::Base
   has_many :voices, :dependent  => :delete_all
   belongs_to :message
  
+  auto_html_for :content do
+    html_escape
+	  my_youtube_msg(:width => 480, :height => 360, :span => true)
+	  my_vimeo(:width => 480, :height => 360, :span => true)
+	  vk_video_msg(:width => 480, :height => 360, :span => true)
+	  smiles
+    link :target => "_blank", :rel => "nofollow", :class => "b_link"
+	  my_photo_hash
+	  user_hash
+	  theme_hash
+	  my_quotes
+	  fNum
+    simple_format
+  end
   
   validates :content, :presence => {:message => "Поле 'Вопрос' не должно быть пустым"},
 				      :length => { :maximum => 800, :message => "Название не может быть длиннее 500-ти знаков"}
@@ -19,7 +33,7 @@ class Vote < ActiveRecord::Base
 # end
   def name 
 	if title == nil or title == ''
-		content
+		content.escapeBbCode
 	else
 		title
 	end

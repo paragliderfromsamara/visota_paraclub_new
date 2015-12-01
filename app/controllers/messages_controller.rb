@@ -399,4 +399,17 @@ class MessagesController < ApplicationController
   		redirect_to '/404'
   	end
   end
+  def upload_attachment_files
+  	message = Message.find_by(id: params[:id]) 
+  	if isEntityOwner?(message)
+  		@attachmentFile = AttachmentFile.new(:message_id => message.id, :user_id => message.user.id, uploaded_file: params[:message][:attachment_files], directory: "messages")
+  		if @attachmentFile.save
+  			render :json => {:message => 'success', :attachmentID => @attachmentFile.id }, :status => 200
+  		else
+  			render :json => {:error => @attachmentFile.errors.full_messages.join(',')}, :status => 400
+  		end
+  	else
+  		redirect_to '/404'
+  	end
+  end
 end

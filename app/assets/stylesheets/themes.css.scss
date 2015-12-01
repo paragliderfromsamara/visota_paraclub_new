@@ -1,3 +1,63 @@
 // Place all the styles related to the Themes controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import "scaffolds";
+
+.stat span {font-size: 12px;color:$text_color_1;font-family:$font_family_1; padding-left:2px;} /*Информация о теме*/
+table.v_table
+{
+	width: 100%;
+					background-color: $third_color;
+					border-width: 0;
+					th, td {
+							text-align: left;
+							font-family: $font_family_1;
+							padding-left: 5px;
+						   }
+					th {
+						vertical-align: middle; 
+						font-weight: normal;
+						font-size: 14px;
+						height: 40px;
+					  }
+					td {
+						
+						vertical-align: middle; 
+						height: 25px;
+						font-size: 13px;
+						color: $text_color_1;
+						
+					  }
+					td#first, th#first {padding-left: 22px;}
+					tbody.t_link {cursor: pointer;@include animation($time_1);}
+					tbody.t_link:hover {background-color: $second_color;}
+}
+table#themes_list {
+					
+					td.t_name {
+								width: 350px;
+							  }
+					td.date {
+							width: 100px;
+						   }
+					td.usr  {
+							width: 220px;
+						   }
+				}
+				
+table#themes_list_vl {
+					td.t_name, td.usr  {
+								width: 40%;
+							  }
+					td.date {
+								width: 20%;
+						   }
+				}
+table#article_table {
+					td.t_name, td.usr  {
+										width: 300px;
+										}
+					td.date {
+								width: 100px;
+						   }	
+				  }

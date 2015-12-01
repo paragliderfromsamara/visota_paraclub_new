@@ -3,19 +3,255 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 getThemeListLink = "/get_themes_list?format=json"
 getAlbumListLink = "/get_albums_list?format=json"
-themeFormClass = "theme-form"
-themeFormId = "theme_form_"
+themeFormClass = "theme_form"
+messageFormClass = "message_form"
+videoFormClass = "video_form"
+albumFormClass = "photo_album_form"
+voteFormId = "vote_form"
+articleFormClass = "article_form"
+menuIconSizeClass = "fi-large"
+
+initArticleForm = (frm)->
+    aId = frm.id.replace("#{articleFormClass}_", '')
+    aType = $(frm).attr("article_type")
+    f = new myForm('article', aId, "."+frm.className)
+    if aType isnt 'flight_accidents' 
+        f.nameField = f.formElement.find('#article_name')
+        f.nameFieldMaxLength = 100
+        f.nameFieldMinLength = 3
+    f.contentField = f.formElement.find('#article_content')
+    f.contentFieldMaxLength = 150000
+    f.contentFieldMinLength = 100
+    f.submitButt = f.formElement.find("#submit_#{frm.id}_button")
+    if aType is 'reports'
+        f.aButList = [2,3,1]
+        f.shortContentErr = 'Минимально допустимое количество знаков темы ' + f.contentFieldMinLength
+        f.longContentErr = 'Максимально допустимое количество знаков превышено на '
+        f.shortNameErr = 'Название не должно быть пустым'
+        f.longNameErr = 'Максимально допустимое количество знаков превышено на '
+    f.tEditor = new textEditor(f)
+    f.initPanel()
+    if aType isnt 'flight_accidents' then f.getBindingEntities()
+    f.formChecking = ()->
+        cFlag = f.contentLengthCheck()
+        nFlag = f.nameLengthCheck()
+        f.switchSubmitBut(cFlag && nFlag)
+    f.photosUploader()
+    f.getPhsToForm()
+    f.attachmentFilesUploader()
+    f.getAttachmentsToForm()
+    f.formChecking()
+    f.contentField.keyup ()-> f.formChecking()
+    f.nameField.keyup ()-> f.formChecking()
+
+initVoteForm = (frm)->
+    f = new myForm('vote', null, "#"+frm.id)
+    f.contentField = f.formElement.find('#vote_content')
+    f.submitButt = f.formElement.find("#submit_#{voteFormId}_button")
+    f.aButList = [0]
+    f.contentFieldMaxLength = 500
+    f.contentFieldMinLength = 10
+    f.shortContentErr = 'Вопрос не должен быть короче ' + f.contentFieldMinLength + ' символов'
+    f.longContentErr = 'Длина вопроса превышена на '
+    f.updVoteValuesFields()
+    f.tEditor = new textEditor(f)
+    f.initPanel()
+    f.formChecking = ()->
+        cFlag = f.contentLengthCheck()
+        qFlag = f.voteValuesCheck()
+        f.switchSubmitBut(cFlag && qFlag)
+    f.contentField.keyup ()-> f.formChecking()
+    $('#addVoteValue').click ()->
+          if f.voteValuesCheck()
+              e = $("#vote_value_item").clone()
+              e.find(':text').val('')
+              $("#vote_values_table").append(e)
+              f.updVoteValuesFields()
+          else f.formChecking()
+    f.formChecking()
+
+
+initAlbumForm = (frm)->
+    aId = frm.id.replace("#{albumFormClass}_", '')
+    f = new myForm('photo_album', aId, "." + frm.className)
+    f.submitButt = f.formElement.find("#submit_#{albumFormClass}_#{aId}_button")
+    f.nameField = f.formElement.find('#photo_album_name')
+    f.contentField = f.formElement.find('#photo_album_description')
+    f.contentFieldMaxLength = 1000
+    f.nameFieldMaxLength = 100
+    f.nameFieldMinLength = 3
+    f.shortNameErr = 'Название не должно быть короче ' + f.nameFieldMinLength + ' символов'
+    f.longNameErr = 'Длина названия превышена на '
+    f.longContentErr = 'Длина описания превышена на '
+    f.imagesMaxLength = 120
+    f.imagesMinLength = 3
+    f.imagesMaxLengthErr = 'Максимально допустимое количество фотографий альбома превышено на '
+    f.imagesMinLengthErr = 'В альбоме должно быть не менее '+f.imagesMinLength+' фотографий'
+    f.matchNameErr = 'Фотоальбом с таким названием уже существует...'
+    f.initPanel()
+    f.formChecking = ()->
+        iFlag = f.imagesLengthCheck()
+        nFlag = f.nameLengthCheck() & f.nameMatchesCheck()
+        cFlag = f.contentLengthCheck()
+        f.switchSubmitBut(iFlag & cFlag & nFlag)
+    f.formChecking()
+    f.photosUploader()
+    f.getPhsToForm()
+    f.nameField.keyup ()-> 
+        f.formChecking()
+        f.getLikebleNames()
+    f.contentField.keyup ()-> f.formChecking()
+
+        
+initVideoForm = (frm)->
+    wb = new waitbar("wait_video_check");
+    f = new myForm('video', null, "#" + frm.id)
+    nFlag = false
+    dFlag = false
+    f.contentField = f.formElement.find('#video_description')
+    f.nameField = f.formElement.find('#video_name')
+    f.submitButt = f.formElement.find("#"+frm.id+"_button")
+    f.contentFieldMaxLength = 400
+    f.contentFieldMinLength = 0
+    f.nameFieldMaxLength = 70
+    f.nameFieldMinLength = 0
+    f.longContentErr = 'Максимально допустимое количество знаков превышено на '
+    f.longNameErr = 'Максимально допустимое количество знаков превышено на '
+    nFlag = f.nameLengthCheck()
+    cFlag = f.contentLengthCheck()
+    f.nameField.keyup ()->
+        nFlag = f.nameLengthCheck()
+        f.switchSubmitBut(f.videoLinkFlag & nFlag & cFlag)
+    f.contentField.keyup ()->
+        cFlag = f.contentLengthCheck()
+        f.switchSubmitBut(f.videoLinkFlag & nFlag & cFlag)
+    f.videoLinkFlag = if $("#video_preview").html() is "" then false else true
+    f.switchSubmitBut(f.videoLinkFlag & nFlag & cFlag)
+    $("#video_link").change ()->
+        e=this
+        wb.startInterval()
+        $.ajax {
+                url: "/videos/new.json"
+                dataType: "json"
+                type: "GET"
+                data: ({link: $(e).val()})
+                error: (XMLHttpRequest, textStatus, errorThrown)->
+                    console.log(errorThrown)
+                    console.log(textStatus)
+                    wb.stopInterval()
+                    f.videoLinkFlag = false
+                    f.switchSubmitBut(f.videoLinkFlag & nFlag & cFlag)
+                success: (data)->
+                    if data.link_html isnt "" and data.link_html isnt $(e).val()
+                        $("#video_preview").html(data.link_html)
+                        $("#tError").empty()
+                        f.videoLinkFlag = true
+                    else
+                        $("#tError").addClass('err').html("Ccылка должна быть указана в формате \"youtube\", \"vk\", \"vimeo\"...")
+                        $("#video_preview").empty()
+                        f.videoLinkFlag = false
+                        console.log(data.link_html)
+                    wb.stopInterval()
+                    f.switchSubmitBut(f.videoLinkFlag & nFlag & cFlag)
+               }
+
+initMessageForm = (frm)->
+    mId = $(frm).attr('id').replace("#{messageFormClass}_", "")
+    msgType = $(frm).attr('form_type')
+    f = new myForm(msgType,  mId, "."+ messageFormClass)
+    f.nameField = f.formElement.find("#message_name")
+    f.contentField = f.formElement.find("#message_content")
+    f.submitButt = f.formElement.find("#submit_#{messageFormClass}_#{mId}_button")
+    minContentLength = 1
+    if msgType is 'comment'
+        f.aButList = [0]
+        f.contentFieldMaxLength = 10000
+        f.contentFieldMinLength = minContentLength
+        f.shortContentErr = 'Комментарий не должен быть пустым'
+    else
+        f.aButList = [0, 2, 3]
+        f.contentFieldMaxLength = 150000
+        f.shortContentErr = 'Сообщение не должно быть пустым'
+        f.imagesMaxLength = 40
+        f.imagesMaxLengthErr = 'Максимально допустимое количество фотографий для сообщения превышено на '
+        f.attachmentsMaxLengthErr = "Превышено максимально допустимое количество вложений"
+        f.attachmentsMaxLength = 20
+    f.contentFieldMinLength = minContentLength  
+    f.curContentValue = f.contentField.val()
+    f.tEditor = new textEditor(f)
+    f.initPanel()
+    f.formChecking = ()->
+        iFlag = f.imagesLengthCheck()
+        afFlag = f.checkAttachmentLength()
+        f.contentFieldMinLength = if f.imagesLength>0 || f.attachmentFilesLength>0 then 0 else minContentLength
+        cFlag = f.contentLengthCheck()
+        f.switchSubmitBut(iFlag || cFlag || afFlag)
+    f.formChecking()
+    if msgType isnt 'comment'
+        f.photosUploader()
+        f.getPhsToForm()
+        f.attachmentFilesUploader()
+        f.getAttachmentsToForm()
+    f.contentField.keyup ()-> f.formChecking()
+    f.formElement.mouseover ()-> f.formChecking()
+    $('a#answer_but, #newMsgBut').click ()->
+        fTop = $("[name=new_message]").offset().top
+        $(document).scrollTop(fTop)
+        f.contentField.setCurretPosition(f.contentField.val().length)
+        if this.id is 'answer_but'
+            msgToId = $(this).attr('alt')
+            if f.formElement.find('#message_message_id').val() is undefined
+                f.formElement.append('<input type="hidden" name = "message[message_id]" value = "'+msgToId+'"/>')
+            else
+                f.formElement.find('#message_message_id').val(msgToId)
+            f.formElement.find('#answr_to_str').html('<a id = "ans_link" class = "b_link_i" href = "#m_'+msgToId+'">ответ пользователю '+$('#m_'+msgToId).find('#u_name').text()+'</a>').show()
+            f.formElement.find('#ans_link').click ()->
+                $($(this).attr('href')).find('.cWrapper').animate({opacity: 1.0}, 500 ).animate({opacity: 0.0}, 500) 
+        
+
+#tId = $(frm).attr('id').replace(themeFormId, "")
 
 
 initThemeForm = (frm)->
-    tId = $(frm).attr('id').replace(themeFormId, "")
-    console.log $(frm).attr('class')
+    tId = $(frm).attr('id').replace("#{themeFormClass}_", "")
     f = new myForm('theme',  tId, "."+$(frm).attr('class'))
+    f.nameField = f.formElement.find("#theme_name")
     f.contentField = f.formElement.find("#theme_content")
-    f.aButList = [0]
-    f.photosUploader()
+    f.submitButt = f.formElement.find("#submit_"+ $(frm).attr('class') + "_" + tId + "_button")
+    f.aButList = [0, 2, 3]
+    f.imagesMaxLength = 120
+    f.contentFieldMaxLength = 150000
+    f.contentFieldMinLength = 3
+    f.parentElID = '#articleForm'
+    f.shortContentErr = 'Минимально допустимое количество знаков темы ' + f.contentFieldMinLength
+    f.longContentErr = 'Максимально допустимое количество знаков превышено на '
+    f.nameFieldMaxLength = 100
+    f.nameFieldMinLength = 1
+    f.shortNameErr = 'Название не должно быть пустым'
+    f.longNameErr = 'Максимально допустимое количество знаков превышено на '
+    f.matchNameErr = 'Тема с таким названием уже существует...'
+    f.attachmentsMaxLengthErr = "Превышено максимально допустимое количество вложений"
+    f.attachmentsMaxLength = 20
     f.tEditor = new textEditor(f)
     f.initPanel()
+    #f.formElement.mouseover ()->
+    #formChecking()
+    f.formChecking = ()->
+        cFlag = f.contentLengthCheck()
+        afFlag = f.checkAttachmentLength()
+        nFlag = f.nameLengthCheck() && f.nameMatchesCheck()
+        f.switchSubmitBut(nFlag & cFlag & afFlag)
+    f.formChecking()
+    f.photosUploader()
+    f.getPhsToForm()
+    f.attachmentFilesUploader()
+    f.getAttachmentsToForm()
+    f.contentField.keyup ()->
+        f.formChecking()
+    f.nameField.keyup ()->
+        f.getLikebleNames()
+        f.formChecking()
+    f.formElement.mouseover ()-> f.formChecking()
 
 class myForm
     constructor: (@type, 
@@ -26,8 +262,8 @@ class myForm
                   @tEditor = null, 
                   @parentElID = 'none', 
                   @classPrefix = 'fi-', 
-                  @nameList = ['paw', 'link', 'photo'], 
-                  @descList = ['Эмоции', 'Вложить альбомы и видео', 'Добавить фотографии'], 
+                  @nameList = ['paw', 'link', 'photo', 'paperclip'], 
+                  @descList = ['Эмоции', 'Вложить альбомы и видео', 'Добавить фотографии', 'Прикрепить файл'], 
                   @aButList = [],
                   @nameField = null,
                   @nameFieldMaxLength = 0,
@@ -47,18 +283,23 @@ class myForm
                   @curContentValue = '',
                   @imagesField = '',
                   @imagesLength = 0,
-                  @imagesMaxLength = 0,
+                  @imagesMaxLength = 20,
                   @imagesMinLength = 0,
                   @imagesMaxLengthErr = '',
                   @imagesMinLengthErr = '',
-                  @imagesLenghtFlag = false
+                  @imagesLenghtFlag = false,
+                  @attachmentsMaxLengthErr = '',
+                  @attachmentsMaxLength = 20,
+                  @attachmentFilesLength = 0,
+                  @formChecking = null
                   )->
         
     #name part------------------------------------------------------------
 
-    nameLentghCheck: ()->
+    nameLengthCheck: ()->
         f = true
         s = this.formElement.find('p#nLength')
+        err = ''
         if this.nameField.val() isnt undefined
             if this.nameFieldMaxLength isnt 0 && this.nameField.val().length > this.nameFieldMaxLength
                 d = this.nameField.val().length - this.nameFieldMaxLength
@@ -67,7 +308,7 @@ class myForm
             if this.nameFieldMinLength isnt 0 && this.nameField.val().length < this.nameFieldMinLength
                 err = this.shortNameErr
                 f = false
-            s.find('#txtL').text this.nameField.val().length +' из ' + this.nameFieldMaxLength
+            s.find('#txtL').text "#{this.nameField.val().length } из #{this.nameFieldMaxLength}"
             s.find('#txtErr').text err
             switchErr(s, f)
         f
@@ -79,13 +320,14 @@ class myForm
         s = this.formElement.find('p#nLength')
         this.formElement.find('div.likebleName').each (i)->
             if this.id isnt ent_id
-               if _this.curNameValue.toLowerCase() == ($(this).find('a').text()).toLowerCase()
+               if _this.curNameValue.toLowerCase() is ($(this).find('a').text()).toLowerCase()
                    $(this).css('background-color', '#f1c8c8')
                    f=false
-                   err = el.matchNameErr
+                   err = _this.matchNameErr
                else $(this).css('background-color', 'none')
             else $(this).hide()
         s.find('#txtMatchesErr').text(err)
+        console.log this.formElement.attr('class')
         f
     getLikebleNames: ()->
         if this.curNameValue isnt $.trim(this.nameField.val())
@@ -93,7 +335,7 @@ class myForm
                 o = new themeObj()
                 o.topic = this.formElement.find('#theme_topic_id').val()
                 o.name = this.nameField.val()
-                make_themes_list(o)
+                make_themes_list(o, this.formChecking)
             else if this.type is 'article'
                 #to_do
             else if this.type is 'photo_album'
@@ -101,7 +343,7 @@ class myForm
                 a.name = this.nameField.val()
                 a.category = this.formElement.find('#photo_album_category_id').val()
                 a.id = this.entityID
-                a.getAlbumNames()
+                a.getAlbumNames(this.formChecking)
             this.curNameValue = this.nameField.val()
             true
     #name part end--------------------------------------------------------
@@ -130,23 +372,25 @@ class myForm
 
     alterText: ()->
         if this.tEditor isnt null
-            if this.tEditor.tArea isnt undefined then return this.tEditor.escapeBbText()
-        return this.contentField.val()
+            if this.tEditor.tArea isnt undefined then this.tEditor.escapeBbText() else this.contentField.val()
+        else
+            this.contentField.val()
     contentLengthCheck: ()->
         err = ''
         f = true
         s = this.formElement.find('p#cLength')
+        str = this.alterText()
         if str isnt undefined and this.contentField.val() isnt undefined
             maxTxtL = this.contentFieldMaxLength - (this.contentField.val().length - str.length)
             if maxTxtL < 0 then maxTxtL = 0
-            if this.contentFieldMaxLength isnt 0 and this.alterText().length > maxTxtL and maxTxtL > 0
-                d = this.alterText().length - maxTxtL
+            if this.contentFieldMaxLength isnt 0 and str.length > maxTxtL and maxTxtL > 0
+                d = str.length - maxTxtL
                 err = this.longContentErr + d
                 f = false
-            if this.contentFieldMinLength isnt 0 and this.alterText().length < this.contentFieldMinLength
+            if this.contentFieldMinLength isnt 0 and str.length < this.contentFieldMinLength
                 err = this.shortContentErr
                 f = false
-            s.find('#txtL').text(this.alterText().length +' из ' + maxTxtL)
+            s.find('#txtL').text("#{str.length} из #{maxTxtL}")
             s.find('#txtErr').text(err)
             switchErr(s, f)
         f
@@ -158,8 +402,14 @@ class myForm
         eFlag = true
         err = ''
         s = this.formElement.find('p#iLength')
-        l = this.formElement.find('.tImage').length - this.formElement.find('.del-photo').length
-        if l is 0 then lFlag = false else lFlag=true
+        l = this.formElement.find('.ph-list-items').length - this.formElement.find('.del-photo').length
+        
+        if l is 0 
+            lFlag = false
+            if this.type isnt 'photo_album' then s.hide() 
+        else 
+            lFlag=true
+            if this.type isnt 'photo_album' then s.show()
         this.imagesLength = l
         if this.imagesMaxLength isnt 0
             if l>this.imagesMaxLength
@@ -170,46 +420,82 @@ class myForm
             if l<this.imagesMinLength
                 err = this.imagesMinLengthErr
                 eFlag=false
+                
         switchErr(s, eFlag)
         s.find('#txtL').text('Фотографий добавлено: ' + l + ';')
         s.find('#txtErr').text(err)
         this.imagesLenghtFlag = lFlag&eFlag
         lFlag and eFlag
     photosUploader: ()->
+        _this = this
         ent_id = this.entityID
-        el = if this.parentElID is 'none' then this.formElement else $(this.parentElID)
         entity = this.type
         link = '/'+entity+'s/' + ent_id + '/upload_photos?format=json'
-        el.find('#ph_to_frm').empty()
-        el.find('#ph_to_frm').dropzone {
+        this.formElement.find('#ph_to_frm').empty()
+        this.formElement.find('#ph_to_frm').dropzone {
                                         url: link
+                                        init: ()-> 
+                                            if _this.formChecking isnt null
+                                                this.on "addedfile", (file)-> 
+                                                    _this.formChecking()
                                         acceptedFiles: "image/*"
                                         paramName: entity+"[uploaded_photos]"
                                         inputId: entity+"_uploaded_photos"
                                         #forceFallback:true
                                         sending: (file, xhr, formData)->
-                                            formData.append("authenticity_token", el.find("input[name='authenticity_token']").val())
+                                            formData.append("authenticity_token", _this.formElement.find("input[name='authenticity_token']").val())
                                         success: (file, response)->
-                                            ph_id = response.photoID
-                                            getUploadedPh(ph_id, el, file.previewElement, entity)
+                                            _this.getPhsToForm()
+                                            $(file.previewElement).remove()
+                                            #ph_id = response.photoID
+                                            #getUploadedPh(ph_id, el, file.previewElement, entity)
                                         fallback: ()->
                                             v='<div class = "dz-message"><p class = "istring norm">'+this.options.dictFallbackMessage+'</p></div>'
                                             v+= '<p class = "istring norm">'+this.options.dictFallbackText+'</p><br />'
-                                            $(el).find('#ph_to_frm').append(v)
-                                            $(el).find('#ph_to_frm').append($('#'+this.options.inputId).clone()) 
+                                            _this.formElement.find('#ph_to_frm').append(v)
+                                            _this.formElement.find('#ph_to_frm').append($('#'+this.options.inputId).clone()) 
                                        }
-        true
-        
+    attachmentFilesUploader: ()->
+        _this = this
+        ent_id = this.entityID
+        entity = this.type
+        link = '/'+entity+'s/' + ent_id + '/upload_attachment_files?format=json'
+        this.formElement.find('#att_to_frm').empty()
+        this.formElement.find('#att_to_frm').dropzone {
+                                        url: link
+                                        init: ()-> 
+                                            if _this.formChecking isnt null
+                                                this.on "addedfile", (file)-> 
+                                                    _this.formChecking()
+                                        acceptedFiles: "application/pdf, application/msword, application/vnd.ms-excel, application/zip, .psd, .doc, .docx"
+                                        paramName: entity+"[attachment_files]"
+                                        inputId: entity+"_attachment_files"
+                                        #forceFallback:true
+                                        sending: (file, xhr, formData)->
+                                            formData.append("authenticity_token", _this.formElement.find("input[name='authenticity_token']").val())
+                                        success: (file, response)->
+                                            _this.getAttachmentsToForm()
+                                            $(file.previewElement).remove()
+                                            #ph_id = response.photoID
+                                            #getUploadedPh(ph_id, el, file.previewElement, entity)
+                                        fallback: ()->
+                                            v='<div class = "dz-message"><p class = "istring norm">'+this.options.dictFallbackMessage+'</p></div>'
+                                            v+= '<p class = "istring norm">'+this.options.dictFallbackText+'</p><br />'
+                                            _this.formElement.find('#ph_to_frm').append(v)
+                                            _this.formElement.find('#ph_to_frm').append($('#'+this.options.inputId).clone()) 
+                                       }
     getBindingEntities: ()->
         link = "/" + this.type + "s/" + this.entityID + "/bind_videos_and_albums?format=json"
         el = this
         arr_a = getIdsArray(this.formElement.find("#"+this.type+'_assigned_albums').val())
         arr_v = getIdsArray(this.formElement.find("#"+this.type+'_assigned_videos').val())
+        console.log link 
         $.getJSON link, (json)->
             v = ''
             a = ''
             sv = ''
             sa = ''
+            console.log json.albums.length
             $.each json.albums, (r, i)->
                 f = false
                 if arr_a.length>0
@@ -247,7 +533,66 @@ class myForm
         t = $(this.formElement).find("#uploadedPhotos")
         el = this
         $(t).load "/edit_photos #update_photos_form", { 'e': el.type, 'e_id': el.entityID, "hashToCont": "true", "submitBut": "false"}, ()->
-             updUploadedImageButtons(el.formElement.attr('id'))
+             #updUploadedImageButtons(el.formElement.attr('id'))
+             $(".addHashCode").click ()-> updCurFormText(" " + $(this).attr('hashCode'), el)    
+             $(".del-photo-but").click ()-> el.deletePhoto(this)
+             $(".photo_form").on "ajax:success", (e, data, status, xhr) ->
+                 nts = $(this).find("#notice")
+                 nts.fadeIn 300, ()-> 
+                     setTimeout (()-> nts.fadeOut(300)), 3000         
+             $("[name='photo[description]']").change ()-> 
+                 $(this).parents(".photo_form").submit()
+             if el.formChecking isnt null then el.formChecking()
+    getAttachmentsToForm: ()->
+        _this = this
+        t = $(this.formElement).find("#uploadedAttachmentFiles")
+        $.ajax {
+                type: 'get'
+                url: "/attachment_files?e=#{_this.type}&e_id=#{_this.entityID}"
+                dataType: "json"
+                error: (d)-> console.log  
+                success: (json)-> 
+                    v = ""
+                    if json.length > 0
+                        v += "<li af-id=\"#{a.id}\" class = \"af-item\"><a class=\"b_link\" href = \"#{a.link}\">#{a.name} (#{a.size})</a> <a class = \"af-delete pointer\" title = \"Удалить\" attachment_file_id = \"#{a.id}\">#{drawIcon("fi-x","fi-medium","fi-blue")}</a></li>" for a in json
+                    t.html "<ul class = \"af-uploaded-field\">#{v}</ul>"
+                    $(".af-delete").click ()-> _this.deleteAttachmentFile(this)     
+                    _this.formChecking()    
+               }
+    checkAttachmentLength: ()->
+        af_field = this.formElement.find("#afContainer")
+        af_containters = af_field.find(".af-uploaded-field")
+        errField = af_field.find("#afLength")
+        err = ''
+        f = true
+        if af_field != null
+            l = af_field.find(".af-item").length
+        else 
+            l = 0
+        if l>0 then af_field.show() else af_field.hide()
+        if l>this.attachmentsMaxLength
+            err = this.attachmentsMaxLengthErr
+            errField.addClass('err')
+            f = false
+        else
+            errField.removeClass('err')
+            #if l == 0 then f = false   
+        errField.find('#txtL').text "Загружено #{l} из максимально возможных #{this.attachmentsMaxLength}"
+        errField.find('#txtErr').text(err)
+        f    
+        
+    deleteAttachmentFile: (delBut)->
+        _this = this
+        id = $(delBut).attr('attachment_file_id')
+        $.ajax {
+                type: 'DELETE'
+                url: '/attachment_files/' + id
+                dataType: "json"
+                success: (data)-> 
+                    $(delBut).parents('.af-item').fadeOut 300, ()-> 
+                        $(this).remove()
+                        if _this.formChecking isnt null then _this.formChecking()
+               }        
     initPanel: ()->
         menus = ''
         buttons = '<ul>'
@@ -255,7 +600,7 @@ class myForm
             cur_addr=this.classPrefix + this.nameList[i]
             curButClass = ' hItem'
             curMenuClass = ' hMenu'
-            buttons += '<li class = "mItem'+curButClass+'" title = "'+this.descList[i]+'" id = "'+this.nameList[i]+'">'+drawIcon(cur_addr, "fi-largest", "fi-grey")+'</li>'
+            buttons += '<li class = "mItem'+curButClass+'" title = "'+this.descList[i]+'" id = "'+this.nameList[i]+'">'+drawIcon(cur_addr, menuIconSizeClass, "fi-grey")+'</li>'
             menus += '<div class = "mMenus'+curMenuClass+'" id = "'+this.nameList[i]+'Menu">'+menuContent(this.nameList[i], this)+'</div>'
         buttons += '</ul>'
         $('td#formButtons').html(buttons)
@@ -272,9 +617,113 @@ class myForm
             updCurFormText($(this).attr('smilecode'), el)
         this.contentField.keyup ()-> 
             changingTextarea(el.contentField)
+        #if this.contentField isnt null
+            #this.contentField.setCurretPosition(this.contentField.val().length)
+        if this.type is 'theme' or this.type is 'message' or this.type is 'comment' or this.type is 'photo_album' or this.type is 'article'
+            t = if el.type is 'comment' then 'message' else el.type
+            st = this.formElement.find("##{t}_status_id")
+            this.submitButt.mouseup ()-> 
+                if not el.submitButt.hasClass("disabled") 
+                    el.formElement.append("<input id = \"#{el.type}_status_id\" type = \"hidden\" name = \"#{t}[status_id]\" value = 1 />")
     switchSubmitBut: (f)->
-        if f then this.submitButt.removeClass('disabled') else this.submitButt.addClass('disabled') 
-            
+        if f then this.submitButt.removeClass('disabled') else this.submitButt.addClass('disabled')
+        
+    deletePhoto: (delBut)->
+        _this = this
+        id = $(delBut).attr('photo_id')
+        m = '#message_deleted_photos'
+        t = '#theme_deleted_photos'
+        a = '#photo_album_deleted_photos'
+        n = null
+        if $(m).val() isnt undefined then n = m
+        else if $(t).val() isnt undefined then n = t
+        else if $(a).val() isnt undefined then n = a
+        if n isnt null
+            v = $(n).val()
+            $(n).val(addScobes(update_ids_array(getIdsArray(v),id)))
+            $(delBut).unbind('click')
+            $(delBut).bind 'click', ()->
+                _this.recoveryPhoto(this)
+            $(delBut).text('Восстановить')
+            $('#img_'+id).find('.addHashCode').hide()
+            $('#img_'+id).addClass('del-photo')
+            if _this.formChecking isnt null then _this.formChecking()
+        else
+            v = confirm("Вы уверены что хотите удалить фото?")
+            if v
+                $.ajax {
+                        type: 'DELETE'
+                        url: '/photos/' + id
+                        dataType: "json"
+                        success: (data)-> 
+                            $("li#img_"+id).fadeOut 300, ()-> 
+                                $(this).remove()
+                                if _this.formChecking isnt null then _this.formChecking()
+                       }
+    
+    recoveryPhoto: (but)->
+            id = $(but).attr('photo_id')
+            _this = this
+            m = '#message_deleted_photos'
+            t = '#theme_deleted_photos'
+            a = '#photo_album_deleted_photos'
+            n = null
+            if $(m).val() isnt undefined then n = m
+            else if $(t).val() isnt undefined then n = t
+            else if $(a).val() isnt undefined then n = a
+            if n isnt null
+                v = $(n).val()
+                $(but).unbind('click')
+                $(but).bind 'click', ()->
+                    _this.deletePhoto(this)
+                $(but).text('Удалить')
+                $(n).val(addScobes(update_ids_array(getIdsArray(v),id)))
+                $('#img_'+id).find('.addHashCode').show()
+                $('#img_'+id).removeClass('del-photo')
+                if _this.formChecking isnt null then _this.formChecking()
+                
+    updVoteValuesFields: ()->
+        _this = this
+        els = this.formElement.find('.vote_value_items')
+        l = els.length
+        els.each (i)->
+            el = this
+            $(this).find(":text").keyup ()-> if _this.formChecking isnt null then _this.formChecking()
+            $(this).find(":text").attr('name', 'vote[added_vote_values]['+i+']').focus()
+            if l>2
+               $(this).find("#voteValDelBut").html("<a id = 'delItem' class = 'b_link pointer'>Удалить</a>")
+               $(this).find("#delItem").click ()->
+                   $(el).remove()
+                   _this.updVoteValuesFields()
+            else
+                $(this).find("#voteValDelBut").empty()
+                
+                   
+    voteValuesCheck: ()->
+        variants = []
+        uFlag = true
+        notEmptyCounter = 0
+        text1 = ''
+        text2 = ''
+        fail = ''
+        this.formElement.find('.vote_value_items').each (i)-> 
+            variants[variants.length] = $(this).find(":text").val()
+        for idx in [0.. variants.length-1]
+            text1 = $.trim(variants[idx].toLowerCase())
+            if text1 isnt '' then notEmptyCounter++
+            if (idx < variants.length-1) and (uFlag is true) and (text1 isnt '')
+                for j in [idx+1.. variants.length-1]
+                    text2 = $.trim(variants[j].toLowerCase())
+                    if text2 isnt ''
+                        if text1 is text2
+                            uFlag = false
+                            break
+        if not uFlag then fail+='Варианты ответа должны быть уникальные...; '
+        if notEmptyCounter < 2
+            fail+='Должно быть как минимум два варианта ответа...;'
+            uFlag = false
+        $("#qLength").find("#txtErr").html(fail)        
+        uFlag
 
 addItem = (item, el)->
         item = $(item)
@@ -322,43 +771,34 @@ unbindEntityOnclick = (fe, el)->
         val = removeItem(el, fe)
         t = $(el).attr('b-type')
         fe.formElement.find("#"+fe.type+'_assigned_'+t).val(val)
-getUploadedPh = (phID, el, prEl, type)->
-        $.getJSON "/photos/"+phID+"?format=json", (t)->
-            if t.id isnt 'null'
-                $(prEl).remove()
-                $(el).find(".dz-message").show()
-                renderImgFrm(t, el, type)
+
     
-renderImgFrm = (ph, el, type)->
-        if ph.description is null then ph.description = 'Без описания...'
-        imgTag='<img src="#{ph.thumb}">'
-        field='<textarea cols="35" defaultrows="3" id="photo_editions_photos_photo_#{ph.id}_description" name="photo_editions[photos][photo_#{ph.id}][description]" onkeyup="changingTextarea(this)" rows="3"></textarea><br /><br /><a onclick="deletePhotoInTable(this)" photo_id="#{ph.id}" class="b_link pointer">Удалить</a>'
-        if el.attr('id') isnt 'photosField' and type isnt 'photo_album'
-            field += ' <a onclick="addHashCodeToTextArea(this,\'#{el.attr("id")}\')"  class="b_link pointer addHashCode" hashCode="#Photo#{ph.id}"  title = "Нажмите, чтобы встроить фото в текст...">Встроить в текст</a>'
-        curHtml = '<tbody class = "tImage" id="img_#{ph.id}"><tr><td valign="top" align = "center"><input id="photo_editions_photos_photo_#{ph.id}_id" name="photo_editions[photos][photo_#{ph.id}][id]" type="hidden" value="#{ph.id}">#{imgTag}</td><td valign="top" >#{field}</td></tr></tbody>'
-        $(el).find("#uPhts").prepend(curHtml)
 menuContent = (n, el)->
         if n is 'paw'
             val='<div class = "central_field" style = "width: 90%;">'+drawSmiles()+'</div>'
-        else if n is 'binding'
+        else if n is 'link'
             val = '<table style = "width: 100%;"><tr><td><label>Вложенные альбомы</label><div class = "art-binding-ent-list" id = "ab_albums"></div></td><td><label>Вложенное видео</label><div class = "art-binding-ent-list" id = "ab_videos"></div></td></tr><tr><td style = "width: 50%; " ><br /><label>Доступные альбомы</label><br /><div class = "art-binding-ent-list" id = "b_albums"></div></td><td style = "width: 50%; "><br /><label>Доступные видео</label><br /><div class = "art-binding-ent-list" id = "b_videos"></div></td></tr></table>'
         else if n is 'photo'
             val = '<div class = "dropzone" id = "ph_to_frm"></div>'
+        else if n is 'paperclip'
+            val = "<div class = \"section group\"><div class = \"dropzone\" id = \"att_to_frm\"></div>"
         val
 updMenusList = (n, el)->
-        for j in [0..el.aButList.length-1]
-            i = el.aButList[j]
+        for i in el.aButList
             if n is el.nameList[i]
                 if $('li#'+el.nameList[i]).hasClass('sItem')
                     $('li#'+el.nameList[i]).find('i').addClass('fi-grey').removeClass('fi-blue')
                 else
-                    $('li#'+el.nameList[i]).find('i').addClass('fi-blue').removeClass('fi-grey')
-                $('li#'+el.nameList[i]).addClass('hItem').removeClass('sItem')
+                    $('li#'+el.nameList[i]).find('i').addClass('fi-blue').removeClass('fi-grey')   
+                $('li#'+el.nameList[i]).toggleClass('sItem').toggleClass('hItem')
                 $('div#' + el.nameList[i] + 'Menu').toggleClass('sMenu').toggleClass('hMenu')
             else
                 $('li#'+el.nameList[i]).addClass('hItem').removeClass('sItem')
                 $('li#'+el.nameList[i]).find('i').addClass('fi-grey').removeClass('fi-blue')
                 $('div#'+el.nameList[i]+'Menu').addClass('hMenu').removeClass('sMenu')
+            
+        true
+
 drawSmiles = ()->
         smilesCount=34
         smilesPath='/smiles/'
@@ -371,14 +811,17 @@ updCurFormText = (txt, el)->
         el.contentField.replaceSelection(txt)
         el.contentField.keyup()
         el.contentField.setCurretPosition(i)
-        console.log i
 switchErr = (el, sw)->
         el.toggleClass('norm', sw).toggleClass('err', !sw)
-        
 
-
-
-
+entCounter = (text)->
+    c = text.length
+    v = 0
+    if c>0
+        for i in [0.. c-1]
+            if text[i] is '\n' then v++
+        v
+    else 0
 
 changingTextarea = (e)->
     r = $(e).attr('rows')
@@ -389,14 +832,6 @@ changingTextarea = (e)->
     v = entCounter(txt)
     nr = dr*1 + v + ((txt.length - v) / $(e).attr('cols')*0.9)
     $(e).attr('rows', nr)
-    
-addHashCodeToTextArea = (e, id)->
-    t = ''
-    ta = $('#'+id).find('#message_content, #theme_content, #article_content, #event_content')
-    t= $.trim(ta.val())
-    if t isnt '' then t = t+'\n'
-    ta.val(t+$(e).attr('hashCode'))
-    ta.focus()
 
 getTargetTheme = ()->
     selectTheme = $('#split_theme_theme_id')
@@ -411,9 +846,10 @@ getTargetTheme = ()->
     getTargetTheme = (id)->
         $("#target_theme").load("/themes/"+id+"?but=false #thBody")
 
-make_themes_list = (th)->
+make_themes_list = (th, func)->
     $.getJSON th.getThemeQuery(), (json)-> 
         build_themes_list(json)
+        func()
     
 build_themes_list = (themes)->
     $("div#likebleNames, select#split_theme_theme_id").empty()
@@ -424,82 +860,34 @@ build_themes_list = (themes)->
 
 addScobes = (a)->
     v = ""
-    for i in [0..a.length-1]
-        v+="["+a[i]+"]" 
-    return v
+    v+="["+i+"]" for i in a
+    v
 
 getIdsArray = (val)->
-    a = new Array()
+    a = []
     j = 0
     v = ""
     if val isnt ''
         for i in [0..val.length-1]
             if val[i] is ']'
-                a[j]=v
+                a[j]= parseFloat(v)
                 v=""
                 j++
             else if val[i] isnt ']' and val[i] isnt '['
                 v += val[i]
     a
-
+    
 update_ids_array = (id_array,id)->
     id_int = parseFloat(id)
-    $.grep id_array, (n)-> 
-        return n == id_int
+    val = $.grep id_array, (n)-> n is id_int
     array_size = id_array.length
     new_arr = new Array()
     if val.length > 0
-        new_arr = $.grep id_array, (n)-> 
-            return n != id_int
+        new_arr = $.grep id_array, (n)-> n isnt id_int
     else
         id_array[array_size] = id_int
         new_arr = id_array
-        return new_arr
-
-deletePhotoInTable = (delBut)->
-    id = $(delBut).attr('photo_id')
-    m = '#message_deleted_photos'
-    t = '#theme_deleted_photos'
-    a = '#photo_album_deleted_photos'
-    n = null
-    if $(m).val() isnt undefined then n = m
-    else if $(t).val() isnt undefined then n = t
-    else if $(a).val() isnt undefined then n = a
-    if n isnt null
-        v = $(n).val()
-        $(n).val(addScobes(update_ids_array(getIdsArray(v),id)))
-        $(delBut).attr('onclick', 'recoveryPhotoInTable(this)')
-        $(delBut).text('Восстановить')
-        $('#img_'+id).find('.addHashCode').hide()
-        $('#img_'+id).addClass('del-photo')
-    else
-        v = confirm("Вы уверены что хотите удалить фото?")
-        if v
-            $.ajax {
-                    type: 'DELETE'
-                    url: '/photos/' + id
-                    success: (data)-> 
-                        alert data.message
-                   }
-            $("tbody#img_"+id).remove()
-            
-
-recoveryPhotoInTable = (but)->
-    id = $(but).attr('photo_id')
-    m = '#message_deleted_photos'
-    t = '#theme_deleted_photos'
-    a = '#photo_album_deleted_photos'
-    n = null
-    if $(m).val() isnt undefined then n = m
-    else if $(t).val() isnt undefined then n = t
-    else if $(a).val() isnt undefined then n = a
-    if n isnt null
-        v = $(n).val()
-        $(but).attr('onclick', 'deletePhotoInTable(this)')
-        $(but).text('Удалить')
-        $(n).val(addScobes(update_ids_array(getIdsArray(v),id)))
-        $('#img_'+id).find('.addHashCode').show()
-        $('#img_'+id).removeClass('del-photo')
+    new_arr
 
 
 #theme request Class
@@ -534,7 +922,7 @@ class albumObj
             if this.category isnt 'none' then link=link+'&category_id='+this.category
             if this.limit isnt 'none' then link=link+'&limit='+this.limit
         link
-    getAlbumNames: ()->
+    getAlbumNames: (func)->
         _this = this
         $.getJSON this.getAlbumQuery(), (albums)->
             f = true
@@ -542,8 +930,8 @@ class albumObj
             $.each albums, (i, album)->
                 if album.id isnt _this.id
                     #if album.name.toLowerCase() is _this.name then f = false
-                    $('div#likebleNames').append('<div class = "likebleName" id = "ent_'+album.id+'" style = "width: 100%;position:relative;"><a title = "Открыть в новой вкладке" target = "_blank" href = "/photo_albums/'+album.id+'" class="b_link" style = "padding-left: 5px;">'+ album.name + '</a></div>')         
-            
+                    $('div#likebleNames').append('<div class = "likebleName" id = "ent_'+album.id+'" style = "width: 100%;position:relative;"><a title = "Открыть в новой вкладке" target = "_blank" href = "/photo_albums/'+album.id+'" class="b_link" style = "padding-left: 5px;">'+ album.name + '</a></div>')
+            func()
         true  
 
 class bbCodeObj
@@ -644,7 +1032,6 @@ class bbCodeObj
         return {start: -1, end: -1}
 
 
-
 class textEditor
     constructor: (@el, 
                   @formElement = @el.formElement, 
@@ -653,10 +1040,11 @@ class textEditor
                   @tAlignMenus = ['align-left', 'align-center', 'align-right', 'quote', 'list-number'],
                   @tAlignMenusDescription = ['Выравнивание по левому краю', 'Выравнивание по центру', 'Выравнивание по правому краю', 'Цитирование', 'Нумерованный список'],
                   @curFormat = 'none',
-                  @editorPreview = document.getElementById('editorPreview'))->
+                  @editorPreview = document.getElementById('editorPreview')
+                  )->
     init: ()->
         t = this.initAPanel()
-        t = if this.editorPreview is null then t else t+'<li id = "updTextPrewiew" title = "Обновить поле предварительного просмотра">'+drawIcon("fi-refresh", "fi-largest", "fi-grey")+'</li>'
+        t = if this.editorPreview is null then t else t+'<li id = "updTextPrewiew" title = "Обновить поле предварительного просмотра">'+drawIcon("fi-refresh", menuIconSizeClass, "fi-grey")+'</li>'
         t
     initListeners: ()->
         el = this
@@ -688,7 +1076,6 @@ class textEditor
         j=0
         if $.trim(s).length > 0
             v = s.match(re)
-            console.log v
             if v.length>0
                 for i in [0.. v.length-1]
                     j = i+1
@@ -755,7 +1142,7 @@ class textEditor
             cBCl = if curBbAlign.name is this.tAlignMenus[i] then "sItem" else "hItem"
             cImg = if curBbAlign.name is this.tAlignMenus[i] then 'fi-blue' else 'fi-grey'
             nImg = this.imgAddr+this.tAlignMenus[i]
-            sImg = "fi-largest"
+            sImg = menuIconSizeClass
             v += '<li class = "alItem '+cBCl+'" title = "'+this.tAlignMenusDescription[i]+'" id = "'+this.tAlignMenus[i]+'">'+drawIcon(nImg, sImg, cImg)+'</li>'
         v
     updateAlignMenu: ()->
@@ -769,8 +1156,7 @@ class textEditor
                $('li#'+this.tAlignMenus[i]).addClass('hItem').removeClass('sItem')
                switchClasses("fi-grey", "fi-blue", $('li#'+this.tAlignMenus[i]).find('i'))
        c
-
-
+     
 drawIcon = (n,s,c)->
     "<i class = \""+n+" "+s+" "+c+"\"></i>"
 
@@ -850,7 +1236,17 @@ r = ()->
     Dropzone.autoDiscover = false
     bindCoordetecter()
     tForm = document.getElementsByClassName(themeFormClass)
+    mForm = document.getElementsByClassName(messageFormClass)
+    vForm = document.getElementsByClassName(videoFormClass)
+    paForm = document.getElementsByClassName(albumFormClass)
+    vtForm = document.getElementById(voteFormId)
+    aForm = document.getElementsByClassName(articleFormClass) 
     if tForm.length > 0 then initThemeForm(tForm[0])
+    if mForm.length > 0 then initMessageForm(mForm[0])
+    if vForm.length > 0 then initVideoForm(vForm[0])
+    if paForm.length > 0 then initAlbumForm(paForm[0]) 
+    if vtForm isnt null then initVoteForm(vtForm)
+    if aForm.length > 0 then initArticleForm(aForm[0])
 
 $(document).ready r
 $(document).on "page:load", r

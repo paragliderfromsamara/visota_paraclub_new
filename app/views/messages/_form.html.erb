@@ -47,21 +47,11 @@ end
 <div class = "c-box mForm">
     <a name = 'new_message'></a>
         <div id = 'newMsgForm' class = 'm_1000wh tb-pad-s'>
-
 <%
-if @video != nil || @theme != nil || @photo != nil || @album != nil
-    formClass = "edit_message" 
-    jsInit = "initMessageForm(#{tmpMessage.id.to_s}, '.#{formClass}', '#{mType}');"
-else
-    formClass = "new_message"
-    tmpMessage = nil
-end
-if jsInit != nil
-    @add_functions = (@add_functions == nil)? jsInit:@add_functions+jsInit
-end
+    formClass = "message_form" 
 %>
 <% if tmpMessage != nil %>
-        <%= form_for(tmpMessage, :multipart => 'true') do |f| %>
+        <%= form_for(tmpMessage, :multipart => 'true', html:{class: formClass, id: "#{formClass}_#{tmpMessage.id}",form_type: mType}) do |f| %>
                 <div style = "display: none;"><%= f.file_field :uploaded_photos, :multiple => 'true' if mType != 'comment' %></div>
 				<%= hidden_field :info, :return_to_link, :value => returnAfterSaveTo %>
 				<%= f.hidden_field :message_id, :value => @message_to.id if @message_to != nil %>
@@ -70,7 +60,6 @@ end
 				<%= f.hidden_field :video_id, :value => @video.id if @video != nil%>
 				<%= f.hidden_field :photo_album_id, :value => @album.id if @album != nil%>
 				<%= f.hidden_field :deleted_photos, :value => '' if controller.action_name == 'edit' || controller.action_name == 'update'%>
-					<br />
 					<table id = 'msg_table' style = 'width: 100%;'>
 						<tr>
 							<td id = 'frm' valign = 'top'>
@@ -91,11 +80,16 @@ end
 									</table>
 									<div id = 'answr_to_str' style = 'display:<%=(tmpMessage.message != nil)? "block":"none"%>;'><a id = 'ans_link' class = 'b_link_i' href = '#m_<%= tmpMessage.message.id if tmpMessage.message != nil%>'>ответ пользователю <%=tmpMessage.message.user.name if tmpMessage.message != nil%></a></div>
                   <div><p class = 'istring <%=@content_f_color if @content_f_color != nil%>' id = 'cLength'><span id = 'txtL'></span> <span id = 'txtErr'><%=@content_error if @content_error != nil%></span><span id = 'txtErrSrv'><%=@content_error if @content_error != nil%></span></p></div>
-								<div class='actions tb-pad-s'>           
-									<%= mySubmitButton("Отправить", "#{formClass}_#{tmpMessage.id}").html_safe %>
+								<div class='actions tb-pad-m'>           
+									<%= mySubmitButton("Отправить", "submit_#{formClass}_#{tmpMessage.id}").html_safe %>
 								</div>
 							</td>
 							<% if mType != "comment" %>
+                                <tr>
+                                    <td>
+                                        <div id = 'afContainer' class = 'c-box ch-block'><div class = 'm_95p tb-pad-s'> <p class = 'istring'>Вложения:</p><div id = "uploadedAttachmentFiles"></div></div><div class = 'm_95p tb-pad-s'><p class="istring" id="afLength"><span id="txtL"></span> <span id="txtErr"></span><span id="txtErrSrv"></span></p></div></div></div>
+                                    </td>
+                                </tr>
     							<tr>
     							<td id = 'formPhotos'>
     								<div id = 'uploadedPhotos'>

@@ -1,0 +1,101 @@
+// Place all the styles related to the ThemeNotifications controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+@import "scaffolds";
+@import "containers";
+/* form elements */
+	label {
+		font-family: $font_family_1; 
+		font-size: 11pt;
+		}
+	INPUT.t_field, select.c_select {
+									border-radius: 4px; 
+									border-width: 1px; 
+									font-size:13px;		
+								}
+	INPUT.check_box {
+						width: 18px;
+						height: 18px;
+			        }
+	INPUT.butt{
+				font-size:13pt; 
+				font-family: $font_family_1;
+			  }
+	textarea.t_area
+			   {
+				font-size:13px; 
+				font-family: $font_family_1;
+				resize: none;
+			  }
+	
+	.field {
+			position: relative; 
+			width: 98%; 
+			margin-left: auto; 
+			margin-right: auto; 
+			margin-bottom: 5px;
+			.check {
+						font-family: $font_family_6; 
+						font-size:15px;
+				   }
+		    }
+	.notice, .alert
+            {
+    			font-family: $font_family_6; 
+    			font-size:13pt; 
+    			color: $text_color_1;
+            }
+    .notice {
+
+            background-color: #e7ffca;
+			}
+    .alert {
+             background-color: #ffcaca;
+           }
+	.err {
+			color: $error_color;
+		 }
+	.descDiv{
+				position: relative;
+				width: 90%;
+				min-height: 14px;
+				border-style: solid;
+				border-width: 1px;
+				cursor: pointer;
+			}
+/* form elements */
+/* formTable */
+table#formMenuTable {
+					width: 100%;
+					td#formButtons,td#alButtons{
+									height: 45px;
+									background-color: #dce5f2;
+									ul {display: inline-block;}
+									li 
+                                    {
+                                        padding: 3px 5px 0 5px;
+                                        //padding-left: 5px;
+                                        //padding-right: 5px;
+                                        //padding-top:5px;
+                                        display: inline-block;
+                                        cursor:pointer;
+                                        margin-left: 2px;
+                                    }
+									.sItem
+                                    {
+                                        background-color: white;
+                                    }
+									#format_number:hover, #updTextPrewiew:hover, .hItem:hover{background-color: white; @include animation($time_1);}
+								   }
+					td#formMenus {
+                                    min-height: 150px;
+									.hMenu {display: none;}
+									.sMenu {display: block;}
+								}
+			      }
+.mForm
+{
+    @extend .c_box;
+    background-color:#e1e9f0;
+}
+/* formTable end */

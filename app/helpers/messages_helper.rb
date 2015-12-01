@@ -144,7 +144,7 @@ module MessagesHelper
 	end
 	def msg_block_buttons_bottom_in_theme(message, treadCount)
 		buttons = []
-		buttons += [{:name => 'Ответить', :access => userCanCreateMsgInTheme?(message.theme), :type => 'comments', :alt => message.id, :id => 'answer_but', :link => '#new_message'}] if (user_type != 'bunned' and user_type != 'guest' || (user_type == 'new_user' and @theme.topic_id == 6)) if @theme.status == 'open'
+		buttons += [{:name => 'Ответить', :access => userCanCreateMsgInTheme?(message.theme), :type => 'comments', :alt => message.id, :id => 'answer_but'}] if (user_type != 'bunned' and user_type != 'guest' || (user_type == 'new_user' and @theme.topic_id == 6)) if @theme.status == 'open'
 		#buttons += [{:name => 'Смотреть ответы', :access => true, :type => 'arrow-right', :link => "#{message_path(message.id)}"}] if treadCount != 0 and @message != message
 		buttons += [{:name => 'Изменить', :access => userCanEditMsg?(message), :type => 'pencil', :link => "#{edit_message_path(message)}"}]
 		buttons += [{:name => 'Удалить', :access => userCanDeleteMessage?(message), :type => 'trash', :link => message_path(message), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить сообщение?', :data_method => 'delete'}] if @theme.status == 'open'
@@ -152,7 +152,7 @@ module MessagesHelper
 		return buttons
 	end
 	def msg_block_buttons_bottom_in_video(message, treadCount)
-		buttons = [{:name => 'Ответить', :access => !is_not_authorized?, :type => 'comments', :alt => message.id, :id => 'answer_but', :link => '#new_message'}]
+		buttons = [{:name => 'Ответить', :access => !is_not_authorized?, :type => 'comments', :alt => message.id, :id => 'answer_but'}]
 		#buttons += [{:name => 'Смотреть ответы', :access => true, :type => 'arrow-right', :link => "#{message_path(message)}"}] if treadCount != 0 and @message != message
 		buttons += [
 					      {:name => 'Изменить', :access => userCanEditMsg?(message), :type => 'pencil', :link => "#{edit_message_path(message)}"}, 
@@ -161,7 +161,7 @@ module MessagesHelper
 		return buttons
 	end
 	def msg_block_buttons_bottom_in_album(message, treadCount)
-	    buttons = [{:name => 'Ответить', :access => !is_not_authorized?, :type => 'comments', :alt => message.id, :id => 'answer_but', :link => '#new_message'}]
+	    buttons = [{:name => 'Ответить', :access => !is_not_authorized?, :type => 'comments', :alt => message.id, :id => 'answer_but'}]
 		#buttons += [{:name => 'Смотреть ответы', :access => true, :type => 'arrow-right', :link => "#{message_path(message)}"}] if treadCount != 0 and @message != message
 		buttons += [
 					        {:name => 'Изменить', :access => userCanEditMsg?(message), :type => 'pencil', :link => "#{edit_message_path(message)}"}, 

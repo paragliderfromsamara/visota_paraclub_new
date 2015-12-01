@@ -13,9 +13,9 @@ module VotesHelper
 				<tr>
 				<td  colspan = '2'>
 					<div class = 'm_1000wh'>
-						<span id = 'content' class = 'mText'><p>#{vote.content}</p></span>
+						<span id = 'content' class = 'mText'><p>#{vote.content_html}</p></span>
 						<div id = 'vtValues'>
-						#{vote_values_table(vote)}
+					    #{vote_values_table(vote)}
 						</div>
 					</div>
 				</td>
@@ -51,28 +51,29 @@ module VotesHelper
 		vv = vote.vote_values.order("created_at DESC")
 		if vv != []
 			v = ''
+      i = 0
 			vv.each do |val|
-				
-				v += "<tr>
-						  <td valign = 'middle' class = 'vt-variant'>
-							#{val.value}
-						  </td>
-						  <td'>
-						  </td>
-					 </tr>
-					 <tr id = 'voteVal#{val.id}'>
-						  #{vote_result_row(val)}
-					 </tr>
+				i += 1
+        oddity = (i.odd?)? 'vt-odd' : "vt-even"
+				v += "
+             <div class = 'm_1000wh #{oddity}'>
+               <div class = 'tb-pad-s m_95p'>
+                 #{val.value}
+      					 <div class = 'section group' id = 'voteVal#{val.id}'>
+      						  #{vote_result_row(val)}
+      					 </div>
+               </div>
+             </div>					
 					 "
 			end
-			v = "<table class = 'vt-table'>#{v}</table>"
+			v = "<br/><b>Варианты:</b>#{v}"
 		end
 		return v
 	end
 	def percent_voices(val)
 		vote_voices = val.vote.voices.count.to_f
 		voices = val.voices.count.to_f
-		p = 0.1
+		p = 0.5
 		if vote_voices > 0.0 and voices > 0.0
 			p = voices*100/vote_voices
 		end
@@ -91,29 +92,31 @@ module VotesHelper
 		p = percent_voices(val)
 		if user_could_see_vote_result?(val.vote)
 			v =	"
-				 <td class = 'vt-voice-line'>
+				 <div class = 'col span_9_of_12 vt-voice-line'>
 						<div style = 'width: #{p}%;'>
-							
 						</div>
-				  </td>
-				  <td class = 'vt-voice-count'>
+				 </div>
+				 <div class = 'col span_3_of_12 vt-voice-count'>
 						#{val.voices.count} (#{p.to_i}%)
-				  </td>
+				 </div>
 				"
-			
 		else
 			if user_type == 'guest'
-				v = "<td colspan = 2 ><p class = 'istring norm medium-opacity'>Чтобы проголосовать, необходимо войти на сайт</p></td>"
+				v = "<div class = 'col span_12_of_12'><p class = 'istring norm medium-opacity'>Чтобы проголосовать, необходимо войти на сайт</p></div>"
 			else
 				if val.vote.user == current_user
 					v = "
-						<td><a style = 'cursor: pointer;' class = 'b_link' id = 'giveVoice' valId = #{val.id}>Голосовать</a></td>
-						<td class = 'vt-voice-count'>
+						<div class = 'col span_10_of_12'>
+              <a style = 'cursor: pointer;' class = 'b_link' id = 'giveVoice' vote-id = \"#{val.vote.id}\" vote-value-id = \"#{val.id}\">
+                Голосовать
+              </a>
+            </div>
+						<div class = 'col span_10_of_12 vt-voice-count'>
 							#{val.voices.count} (#{p.to_i}%)
-						</td>
+						</div>
 						"
 				else
-					v = "<td colspan = 2 ><a style = 'cursor: pointer;' class = 'b_link' id = 'giveVoice' valId = #{val.id}>Голосовать</a></td>"
+					v = "<div class = 'col span_12_of_12'><a style = 'cursor: pointer;' class = 'b_link' id = 'giveVoice' vote-id = \"#{val.vote.id}\" vote-value-id = \"#{val.id}\">Голосовать</a></div>"
 				end
 			end
 		end

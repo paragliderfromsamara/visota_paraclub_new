@@ -1,7 +1,7 @@
 <% theme_errors %>
 <div class = 'central_field' style = 'width: 90%;'>
-	<%= form_for(@formTheme, :multipart => 'true', html: {id: "theme_form_#{@formTheme.id}", class: "theme-form"}) do |f| %>
-        <%= f.hidden_field :id, :value => @formTheme.id %>
+	<%= form_for(@formTheme, :multipart => 'true', html: {id: "theme_form_#{@formTheme.id}", class: "theme_form"}) do |f| %>
+                <%= f.hidden_field :deleted_photos, :value => '' if controller.action_name == 'edit' || controller.action_name == 'update'%>
 				<div style = 'display: none;'><%=  f.file_field :uploaded_photos, :multiple => 'true' %></div>
 					<table id = 'msg_table'>
 						<tr>
@@ -36,24 +36,28 @@
 						<tr>
 							<td>
 						      <div class='actions tb-pad-s'>           
-							      <%=  mySubmitButton("Отправить", "edit_theme_#{ @formTheme.id}").html_safe %>
+							      <%=  mySubmitButton("Отправить", "submit_theme_form_#{ @formTheme.id}").html_safe %>
 							    </div>
 								<br /><br />
 							</td>
 						</tr>
+                        <tr>
+                            <td>
+                                <div id = 'afContainer' class = 'c-box ch-block'><div class = 'm_95p tb-pad-s'> <p class = 'istring'>Вложения:</p><div id = "uploadedAttachmentFiles"></div></div><div class = 'm_95p tb-pad-s'><p class="istring" id="afLength"><span id="txtL"></span> <span id="txtErr"></span><span id="txtErrSrv"></span></p></div></div></div>
+                            </td>
+                        </tr>
 						<tr>
 							<td id = 'formPhotos'>
-								<%= f.label :uploaded_photos, 'Фотографии темы' %><br />
-								<div class = 'dropzone' id = 'ph_to_frm'>
-								</div>
 								<div id = 'uploadedPhotos'>
 								</div>
 								<div><p class = 'istring <%= @photos_f_color if @photos_f_color != nil %>' id = 'iLength'><span id = 'txtL'></span> <span id = 'txtErr'><%= @photos_error if @photos_error != nil %></span><span id = 'txtErrSrv'><%= @photos_error if @photos_error != nil %></span></p></div>
 							</td>
 						</tr>
 					</table>
+                    <% if controller.action_name != 'edit' && controller.action_name != 'update' %>
   				<div id = 'editorPreview' class = 'mText' style = 'position: relative; width: 100%; margin-top: 20px; margin-bottom: 20px; '>
 				
   				</div>
+                <% end %>
 	<% end %>
 </div>

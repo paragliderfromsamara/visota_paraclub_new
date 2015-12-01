@@ -187,7 +187,7 @@ class Article < ActiveRecord::Base
    end
    
    def attachment_files=(attrs)
-	attrs.each {|attr| self.attachment_files.build(:link => attr, :user_id => self.user_id, :directory => "articles/#{self.article_type_id}")}
+	   attrs.each {|attr| self.attachment_files.build(:link => attr, :user_id => self.user_id, :directory => "articles/#{self.article_type_id}")}
    end
    
   def uploaded_photos=(attrs)

@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get  '/switch_mark', :to => 'like_marks#switch_mark'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
-resources :voices, :only => [:create, :destroy]	
+  resources :voices, :only => [:create, :destroy]	
   resources :votes
   #topicNotifications
 	resources :topic_notifications, :only => [:create, :destroy]
@@ -14,7 +14,7 @@ resources :voices, :only => [:create, :destroy]
 	resources :theme_notifications, :only => [:create, :destroy]
 	get 'theme_notifications/get_list'
   #themeNotifications end
-
+  resources :attachment_files, :only => [:index, :destroy]
   #events 
   resources :events
   post "events/upload_photos"
@@ -37,12 +37,15 @@ resources :voices, :only => [:create, :destroy]
 	get "admin_tools/entities_recovery"	#Восстановление удалённых объектов
 	get "admin_tools/disabled_events" #Скрытые новости
 	get "admin_tools/adaptation_to_new"     #Создать темы
+  get "admin_tools/recreate_photo_versions" #создание новых копий
   get "/functions_test", :to => 'admin_tools#functions_test'     #Тест
   #admin_tools_end
   
   #articles
   resources :articles
   post '/articles/:id/upload_photos', :to => 'articles#upload_photos'
+  post '/articles/:id/upload_attachment_files', :to => 'articles#upload_attachment_files'
+  get '/articles/:id/upload_attachment_files', :to => 'articles#upload_attachment_files'
   get '/articles/:id/bind_videos_and_albums', :to => 'articles#bind_videos_and_albums'
   #articles_end
 
@@ -61,6 +64,10 @@ resources :voices, :only => [:create, :destroy]
   get '/messages/:id/upload_photos', :to => 'messages#upload_photos'
 
   post '/messages/:id/upload_photos', :to => 'messages#upload_photos' #загрузка с помощью dropzone.js и собственную функцию photosUploader() в application.js
+  
+  post '/messages/:id/upload_attachment_files', :to => 'messages#upload_attachment_files'
+  get '/messages/:id/upload_attachment_files', :to => 'messages#upload_attachment_files'
+  
   post '/do_replace_message', :to => 'messages#do_replace_message'
   #messages_controller end
   
@@ -80,6 +87,8 @@ resources :voices, :only => [:create, :destroy]
   get '/themes/:id/add_files', :to => 'themes#add_files' #Загрузка файлов
   post '/do_merge_themes', :to => 'themes#do_merge_themes'
   post '/themes/:id/upload_photos', :to => 'themes#upload_photos' #загрузка с помощью dropzone.js и собственную функцию photosUploader() в application.js
+  post '/themes/:id/upload_attachment_files', :to => 'themes#upload_attachment_files'
+  get '/themes/:id/upload_attachment_files', :to => 'themes#upload_attachment_files'
   #themes_controller end
 
   #topics controller

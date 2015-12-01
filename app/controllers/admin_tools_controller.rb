@@ -136,6 +136,17 @@ include AdminToolsHelper
 		redirect_to '/404'
 	end
   end
+  def recreate_photo_versions
+    if user_type == 'super_admin'
+      #photos = Photo.all
+     # photos.each {|p| p.link.recreate_versions!(:small_thumb, :in_content)}
+      users = User.all
+      users.each {|u| u.avatar.recreate_versions!(:sq_thumb) if u.avatar?} 
+      redirect_to photo_albums_path
+    else
+    		redirect_to '/404'    
+    end
+  end
    
   def adaptation_to_new #Создание тем из базы данных первой версии сайта.
 	if user_type == 'super_admin'

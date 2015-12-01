@@ -1,0 +1,16 @@
+// Place all the styles related to the new controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+ul.af-uploaded-field
+{
+    list-style:none;
+    .af-item, .af-item_list
+    {
+        display: inline-block;
+        padding: 5px 10px 5px 10px;
+    }
+    .af-item_list
+    {
+        display: block;
+    }
+}

@@ -80,7 +80,7 @@ module LikeMarksHelper
   def makeLikeBut(f, e, c)
     t = (f)? (disLikeBut(c)):(likeBut(c))
     v = (is_not_authorized?)? (""):("<span id = 'mark_link'>#{t[:linkName]}</span>")
-    return "<div onclick = \"switchLikeMark(#{e.id}, '#{e.class.name.downcase}')\" id = '#{e.class.name.downcase}_#{e.id}_mark' class='stat fi-float-right like_marks'>#{v}<i id = 'mark_img' class = 'fi-heart fi-large #{t[:img]}'></i><span id = 'mark_count'>#{t[:mCount]}</span></div>"
+    return "<div lm-entity-id = \"#{e.id}\" lm-entity-type = \"#{e.class.name.downcase}\" class='stat fi-float-right like_marks'>#{v} <i id = 'mark_img' class = 'fi-heart fi-small #{t[:img]}'></i><span id = 'mark_count'>#{t[:mCount]}</span></div>"
   end
   def likeBut(c)
     {:linkName => "Мне нравится", :mCount => c, :img => 'fi-grey'}

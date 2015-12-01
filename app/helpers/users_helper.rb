@@ -51,7 +51,7 @@ def user_index_list(user, i)
       			<table style = 'width: 100%;'>
       				<tr>
       					<td style = 'width: 100px;' align = 'center' valign = 'top'>
-      							#{image_tag(user.alter_avatar, :class => 'ava')}
+      							#{image_tag(user.alter_avatar_square, :class => 'ava')}
       					</td>
       					<td align = 'left' valign = 'top'>
       						<div style = 'padding-left: 15px;'>
