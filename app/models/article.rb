@@ -7,6 +7,7 @@ class Article < ActiveRecord::Base
   has_many :photos, :dependent  => :delete_all
   has_many :photo_albums
   has_many :videos
+  has_one :entity_view, :as => :v_entity, :dependent => :delete #просмотры
   require 'will_paginate'
   auto_html_for :content do
 	html_escape
@@ -116,7 +117,12 @@ class Article < ActiveRecord::Base
     		{:value => 2, :form_title => 'Новый документ', :add_but_name => 'документ', :name => 'Документ', :multiple_name => 'Документы', :link => 'documents', :media_name => 'Документы'}
     	]
    end
-   
+   def views
+ 	  #Step.where(part_id: 3, page_id: 1, entity_id: self.id)
+     (self.entity_view == nil)? 0 : self.entity_view.counter 
+     #view.save
+     #return view
+   end
   def type
 	types.each do |t|
 		return t if self.article_type_id == t[:value]
@@ -138,7 +144,7 @@ class Article < ActiveRecord::Base
    
    def alter_name
 	if article_type_id == 1
-		"Лётное происшествие от #{alter_date.to_s(:ru_datetime)}"
+		"Лётное происшествие от #{alter_date.strftime("%d-%m-%Y")}"
 	else
 		name
 	end

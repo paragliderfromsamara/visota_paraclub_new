@@ -12,18 +12,18 @@
 	<%= f.hidden_field :article_type_id, :value => @type[:value] %>
 	<%= f.hidden_field :assigned_albums, :value => @formArticle.already_assigned_albums %>
 	<%= f.hidden_field :assigned_videos, :value => @formArticle.already_assigned_videos %>
-    <div class = 'field' >
-		<%= f.label :attachment_files, 'Загрузить вложения ' %> 
-		<%= f.file_field :attachment_files %>
-    </div>
+
 		<div class = 'field'>
 			<table style = 'width: 100%;'>
+                
                 <tr>
                     <td>
+                        
                         <%= f.label :accident_date, 'Дата описываемого события' %><br />
                         <%= f.date_select :accident_date, :start_year => 2000, :end_year => Date.today.year, :order => [:day, :month, :year], :use_month_names => ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'] %><br /><br />
                     </td>
                 </tr>
+                <% if @type[:link] != 'flight_accidents' %>
 				<tr>
 					<td>
 						<%= f.text_field :name, :size => 100, :class => 't_field', :style => 'width: 99%;padding:5px;', placeholder: "Заголовок", value: @formArticle.alter_name %>	<br />
@@ -41,6 +41,7 @@
                         <br />
 					</td>
 				</tr>
+                <%end%>
 				<tr>
 					<td align = 'left'>
 						<table id = 'formMenuTable'>
@@ -63,11 +64,30 @@
 						</div>
 					</td>
 				</tr>
+                <% if @type[:link] != 'flight_accidents' %>
+                    <tr>
+                        <td>
+                            <div id = 'afContainer' class = 'c-box ch-block'>
+                                <div class = 'm_95p tb-pad-s'> 
+                                    <p class = 'istring'>Вложения:</p>
+                                    <div id = "uploadedAttachmentFiles"></div>
+                                </div>
+                                <div class = 'm_95p tb-pad-s'>
+                                    <p class="istring" id="afLength">
+                                        <span id="txtL"></span>
+                                        <span id="txtErr"></span>
+                                        <span id="txtErrSrv"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                <%end%>
 				<tr>
 					<td id = 'formPhotos'>
 						<div id = 'uploadedPhotos'>
 						</div>
-						<div><p class = 'istring <%= @photos_f_color if @photos_f_color != nil %>' id = 'iLength'><span id = 'txtL'></span> <span id = 'txtErr'><%= @photos_error.html_safe if @photos_error != nil %></span><span id = 'txtErrSrv'><%= @photos_error if @photos_error != nil %></span></p></div>
+						<div><p class = 'istring <%=@photos_f_color if @photos_f_color != nil%>' id = 'iLength'><span id = 'txtL'></span> <span id = 'txtErr'><%=@photos_error if @photos_error != nil %></span><span id = 'txtErrSrv'><%= @photos_error if @photos_error != nil %></span></p></div>
 					</td>
 				</tr>
 			</table>			

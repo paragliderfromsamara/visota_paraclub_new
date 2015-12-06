@@ -18,7 +18,7 @@ module StepsHelper
 			end
 			
 		elsif controller.controller_name == 'topics' #@page_params[:part_id] == 1 #topics
-			@curMenuItem = 'Клубная жизнь'
+			@curMenuItem = 'Общение'
 			make_signed_step
 		elsif controller.controller_name == 'users' #@page_params[:part_id] == 2 #users
       @curTopImage = topImages[5]
@@ -26,24 +26,24 @@ module StepsHelper
 			@curMenuItem = 'Фото'
 			make_step
 		elsif controller.controller_name == 'photos' #@page_params[:part_id] == 4 #photos (внести изменения в контроллер)
-			@curMenuItem = 'Фото'
+			@curMenuItem = 'Медиа'
 			make_step
 		elsif controller.controller_name == 'videos' #@page_params[:part_id] == 5 #videos
-			@curMenuItem = 'Видео'
+			@curMenuItem = 'Медиа'
 			make_step
 		elsif controller.controller_name == 'messages' #@page_params[:part_id] == 6 #messages
 		elsif controller.controller_name == 'articles'#@page_params[:part_id] == 7 #articles
-			@curMenuItem = 'Материалы'
+			@curMenuItem = 'Медиа'
 			make_step
 		elsif controller.controller_name == 'events' #@page_params[:part_id] == 8 #events
       @curMenuItem = 'Новости'
 		elsif controller.controller_name == 'themes' #@page_params[:part_id] == 9 #themes
-			@curMenuItem = 'Клубная жизнь'
+			@curMenuItem = 'Общение'
 			make_signed_step
 		elsif controller.controller_name == 'old_messages' #@page_params[:part_id] == 9 #themes
-			@curMenuItem = 'Клубная жизнь'
+			@curMenuItem = 'Общение'
 		elsif controller.controller_name == 'votes' #@page_params[:part_id] == 9 #themes
-			@curMenuItem = 'Клубная жизнь'
+			@curMenuItem = 'Общение'
 		end
 	end
 	
@@ -143,8 +143,8 @@ module StepsHelper
 	
 	def unsigned_step_update(step)
 		step.update_attributes(
-								:visit_time => Time.now
-							   )
+								            :visit_time => Time.now
+							            )
 	end
 	
 	def guest_host_validation

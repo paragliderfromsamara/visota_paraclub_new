@@ -216,7 +216,7 @@ mount_uploader :photo, UserPhotoUploader
     draft = Message.find_by(user_id: self.id, status_id: 0, photo_album_id: !nil)
     if draft != nil
       draft.clean
-      draft.update_attribute(:photo_id, photo.id)
+      draft.update_attribute(:photo_id, album.id)
     end
 	  draft = self.messages.create(:status_id => 0, photo_album_id: album.id) if draft == nil 
 	  return draft
@@ -244,7 +244,7 @@ mount_uploader :photo, UserPhotoUploader
   def theme_draft(topic) #выдает, а если необходимо создает черновик темы
 	draft = Theme.find_by(user_id: self.id, status_id: 0, topic_id: topic.id)
 	if draft == nil
-		draft = Theme.new(:user_id => self.id, :status_id => 0, topic_id: topic.id)# if draft == nil 
+		draft = Theme.new(:user_id => self.id, :status_id => 0, topic_id: topic.id, content: '')# if draft == nil 
 		draft.save(:validate => false) #отключаем проверку длины названия темы
 	end
 	return draft
@@ -252,7 +252,7 @@ mount_uploader :photo, UserPhotoUploader
   def article_draft(t) 
   	draft = Article.find_by(user_id: self.id, status_id: 0, article_type_id: t)
   	if draft == nil
-  		draft = Article.new(:user_id => self.id, :status_id => 0, article_type_id: t)# if draft == nil 
+  		draft = Article.new(:user_id => self.id, :status_id => 0, article_type_id: t, content: '')# if draft == nil 
   		draft.save(:validate => false) #отключаем проверку длины названия темы
   	end
 	  return draft
@@ -268,9 +268,15 @@ mount_uploader :photo, UserPhotoUploader
   def event_draft 
   	draft = Event.find_by(status_id: 0)
   	if draft == nil
-  		draft = Event.new(:status_id => 0)# if draft == nil 
+  		draft = Event.new(:status_id => 0, content: '', title: '')# if draft == nil 
   		draft.save(:validate => false) #отключаем проверку
-  	end
+    else
+      if draft.updated_at + 3.day < Time.now 
+        draft.clean 
+        draft.update_attribute(:updated_at, Time.now)
+      end
+    end
+    
   	return draft
   end
   #управление черновиками тем и сообщений end

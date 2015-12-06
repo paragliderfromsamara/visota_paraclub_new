@@ -1,26 +1,36 @@
 <div class = 'c_box odd'>
     <div class = 'm_1000wh tb-pad-m'>
-        <%= form_for(@event) do |f| %>
+        <%= form_for(@event, html: {class: 'event_form', id: "event_form_#{@event.id}"}) do |f| %>
          <% if user_type == 'manager' %>
              <%= f.hidden_field :post_date, :value => Time.now %>
              <%= f.hidden_field :status_id, :value => 2 %>
          <%elsif is_admin?%>
-             <div class="field">
-               <%= f.label :post_date, 'Дата размещения' %><br />
-               <%= f.datetime_select :post_date, :start_year => 2000, :end_year => Date.today.year, :order => [:day, :month, :year], :use_month_names => ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'] %>
+             <div class="section group">
+                 <div class = 'col span_2_of_12'>
+                     <%= f.label :status_id, 'Статус новости' %><br />
+                     <%= my_collection_select(@event.statuses_list, 'status_id', 'event', @event.get_status_item, '') %> 
+                 </div>
+                 <div class = 'col span_4_of_12'>
+                     <%= f.label :display_area_id, 'Зоны видимости' %><br />
+                     <%= my_collection_select(@event.display_area_list, 'display_area_id', 'event', @event.get_display_area_list_item, '') %>
+                 </div>
+                 <div class = 'col span_5_of_12'>
+                       <%= f.label :post_date, 'Дата размещения' %><br />
+                       <%= f.datetime_select :post_date, :start_year => 2000, :end_year => Date.today.year, :order => [:day, :month, :year], :use_month_names => ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'] %>
+                 </div>
              </div>
-             <div class="field">
-               <%= f.label :status_id, 'Статус новости' %><br />
-               <%= my_collection_select(@event.statuses_list, 'status_id', 'event', @event.get_status_item, '') %>
-             </div>
+             <br />
          <%end%>
-
-          
           <div class="field">
-            <%= f.label :title, 'Заголовок новости' %><br />
-            <%= f.text_field :title, :size => '118', :class => 't_field', :autocomplete => 'off'%>
-			<div><p class = 'istring #{@name_f_color if @name_f_color != nil}' id = 'nLength'><span id = 'txtL'></span> <span class = 'err' id = 'txtMatchesErr'></span> <span id = 'txtErr'>#{@name_error if @name_error != nil}</span><span id = 'txtErrSrv'><%= @name_error if @name_error != nil %></span></p></div><br />									
-			<div style = 'position: relative; z-index: 1000; width: 100%;' id = 'likebleNames'></div><br />
+            <%= f.text_field :title, :size => '118', :class => 't_field', :autocomplete => 'off', placeholder: 'Заголовок новости', :style => 'width: 99%; padding: 5px;' %>
+			<div>
+                <p class = 'istring <%= @name_f_color if @name_f_color != nil%>' id = 'nLength'>
+                    <span id = 'txtL'></span>
+                    <span class = 'err' id = 'txtMatchesErr'></span>
+                    <span id = 'txtErr'><%= @name_error if @name_error != nil%></span>
+                    <span id = 'txtErrSrv'><%= @name_error if @name_error != nil %></span>
+                </p>
+            </div>							
           </div>
 
 		<table id = 'msg_table' style = 'width: 100%;'>
@@ -37,30 +47,19 @@
 							</tr>
 						</table>
                         <div class="field">
-                          <%= f.label :content, 'Текст новости' %><br />
-                          <%= f.text_area :content, :cols => '120', :rows => '20', :defaultRows => '20', :class => 't_area' %>
+                          <%= f.text_area :content, :cols => '120', :rows => '7', :defaultRows => '7', :class => 't_area', placeholder: 'Текст новости', :style => 'width: 99%;padding:5px;' %>
                         </div>
 						<div><p class = 'istring <%= @content_f_color if @content_f_color != nil %>' id = 'cLength'><span id = 'txtL'></span> <span id = 'txtErr'><%= @content_error if @content_error != nil %></span><span id = 'txtErrSrv'><%= @content_error if @content_error != nil %></span></p></div>
-                        <div class="field">
-                          <%= f.label :short_content, 'Краткое изложение новости' %><br />
-                          <%= f.text_area :short_content, :cols => '120', :rows => '5', :class => 't_area' %>
-                        </div>
-                        <div class="field">
-                          <%= f.label :display_area_id, 'Зоны видимости' %><br />
-                          <%= my_collection_select(@event.display_area_list, 'display_area_id', 'event', @event.get_display_area_list_item, '') %>
-                        </div>
-          <div class="actions">
-            <%= f.submit 'Сохранить новость', :class => 'butt' %>
-          </div>
+                        
+         
+			<div class='actions tb-pad-s'>           
+				<%= mySubmitButton((controller.action_name == 'new')? "Добавить новость" : "Сохранить изменения", "submit_event_form_#{@event.id}").html_safe %>
+			</div>
 					<div id = 'editorPreview' class = 'mText' style = 'position: relative; width: 100%; margin-top: 20px; margin-bottom: 20px; '>
-					
 					</div>
 				</td>
 				<tr>
 				<td id = 'formPhotos'>
-					<%= f.label :uploaded_photos, 'Фотографии новости' %><br />
-					<div class = 'dropzone' id = 'ph_to_frm'>
-					</div>
 					<div id = 'uploadedPhotos'>
 					</div>
 					<div><p class = 'istring <%= @photos_f_color if @photos_f_color != nil %>' id = 'iLength'><span id = 'txtL'></span> <span id = 'txtErr'><%= @photos_error if @photos_error != nil %></span><span id = 'txtErrSrv'><%= @photos_error if @photos_error != nil %></span></p></div>

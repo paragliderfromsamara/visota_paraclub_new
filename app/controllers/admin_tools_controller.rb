@@ -229,19 +229,28 @@ include AdminToolsHelper
 		if albums != []
 			albums.each do |album|
 				album.update_attributes(:status_id => 1, :visibility_status_id => 1)
+        steps = Step.where(part_id: 3, page_id: 1, entity_id: album.id)
+        v = album.build_entity_view(counter: steps.count)
+        v.save
 			end
 		end
 		photos = Photo.all
 		if photos != []
 			photos.each do |photo|
 				photo.update_attributes(:status_id => 1, :visibility_status_id => 1)
+        steps = Step.where(part_id: 4, page_id: 1, entity_id: photo.id)
+        v = photo.build_entity_view(counter: steps.count)
+        v.save
 			end
 		end
 		articles = Article.all
 		if articles != []
 			articles.each do |article|
 				article.update_attributes(:status_id => 1, :visibility_status_id => 1, :accident_date => article.created_at)
-			end
+        steps = Step.where(part_id: 7, page_id: 1, entity_id: article.id)
+        v = article.build_entity_view(counter: steps.count)
+        v.save
+      end
 		end
 	else
 		redirect_to '/404'

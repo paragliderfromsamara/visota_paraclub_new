@@ -33,15 +33,12 @@ class EventsController < ApplicationController
   # GET /events/new.json
   def new
 	if user_type == 'admin' || user_type == 'super_admin' || user_type == 'manager'
-		@event = Event.new
+		@event = current_user.event_draft
 		@title = @header = 'Добавление новости'
 		@path_array = [
-						{:name => 'Новости', :link => '/events'},
-						{:name => @title}
-					  ]
-		@draft = current_user.event_draft
-		@draft.clean
-    @add_functions = "initEventForm(#{@draft.id}, '#new_event');"
+					          {:name => 'Новости', :link => '/events'},
+					          {:name => @title}
+					        ]
     respond_to do |format|
 		  format.html # new.html.erb
 		  format.json { render :json => @event }
@@ -123,18 +120,31 @@ class EventsController < ApplicationController
 		redirect_to '/404'
 	end
   end
-  
+
   def upload_photos
-	event = Event.find_by_id(params[:id]) 
-	if userCanEditEvent?(event)
-		@photo = Photo.new(:event_id => event.id, :user_id => current_user.id, :link => params[:event][:uploaded_photos])
-		if @photo.save
-			render :json => {:message => 'success', :photoID => @photo.id }, :status => 200
-		else
-			render :json => {:error => @photo.errors.full_messages.join(',')}, :status => 400
-		end
-	else
-		redirect_to '/404'
-	end
+  	event = Event.find_by_id(params[:id]) 
+    	if userCanEditEvent?(event)
+    		@photo = Photo.new(:event_id => event.id, :user_id => current_user.id, :link => params[:event][:uploaded_photos])
+    		if @photo.save
+    			render :json => {:message => 'success', :photoID => @photo.id }, :status => 200
+    		else
+    			render :json => {:error => @photo.errors.full_messages.join(',')}, :status => 400
+    		end
+    	else
+    		redirect_to '/404'
+    	end
+    end
+  def upload_attachment_files
+  	event = Event.find_by_id(params[:id]) 
+  	if userCanEditEvent?(event)
+  		@attachmentFile = AttachmentFile.new(:user_id => current_user.id, uploaded_file: params[:event][:attachment_files], directory: "events")
+  		if @attachmentFile.save
+  			render :json => {:message => 'success', :attachmentID => @attachmentFile.id }, :status => 200
+  		else
+  			render :json => {:error => @attachmentFile.errors.full_messages.join(',')}, :status => 400
+  		end
+  	else
+  		redirect_to '/404'
+  	end
   end
 end

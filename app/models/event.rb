@@ -1,4 +1,5 @@
 class Event < ActiveRecord::Base
+   attr_accessible :title, :content, :updated_at, :status_id, :post_date, :uploaded_photos, :attachment_files
   has_many :photos, :dependent  => :delete_all
   belongs_to :photo_album
   belongs_to :video

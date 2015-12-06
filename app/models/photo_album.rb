@@ -8,6 +8,7 @@ class PhotoAlbum < ActiveRecord::Base
   has_many :photos, :dependent  => :delete_all
   has_many :messages, :dependent  => :delete_all
   has_many :photo_album_like_marks, :dependent  => :delete_all
+  has_one :entity_view, :as => :v_entity, :dependent => :delete
   #belongs_to :category 
   #has_many :events, :dependent  => :delete_all
   belongs_to :article
@@ -26,7 +27,7 @@ class PhotoAlbum < ActiveRecord::Base
 	
 	validate :photos_check, :on => :create
   validate :deleted_photos_check, :on => :update
-  
+
   def deleted_photos_check
     if self.deleted_photos != nil and self.deleted_photos != ''
       arr = getIds(self.deleted_photos)
@@ -117,7 +118,8 @@ class PhotoAlbum < ActiveRecord::Base
   end
   
   def views
-	Step.where(part_id: 3, page_id: 1, entity_id: self.id)
+	  #Step.where(part_id: 3, page_id: 1, entity_id: self.id)
+    (self.entity_view == nil)? 0 : self.entity_view.counter 
   end
   #статусы...  
   def statuses 
@@ -183,7 +185,7 @@ class PhotoAlbum < ActiveRecord::Base
 	end
   end
 #Управление отображением альбома end 
-
+  
   def getIds(str)
   	ids = []
   	id = ''
@@ -197,4 +199,5 @@ class PhotoAlbum < ActiveRecord::Base
   	end
   	return ids
   end
+
 end

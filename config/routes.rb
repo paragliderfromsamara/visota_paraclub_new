@@ -17,8 +17,9 @@ Rails.application.routes.draw do
   resources :attachment_files, :only => [:index, :destroy]
   #events 
   resources :events
-  post "events/upload_photos"
-  get '/events/:id/upload_photos', :to => 'events#upload_photos' #загрузка с помощью dropzone.js и собственную функцию
+  post '/events/:id/upload_photos', :to => 'events#upload_photos'
+  post '/events/:id/upload_attachment_files', :to => 'events#upload_attachment_files'
+  get '/events/:id/upload_attachment_files', :to => 'events#upload_attachment_files'
   #events end
   #admin_tools
 	get "admin_tools/deleted_albums"   #удалённые альбомы

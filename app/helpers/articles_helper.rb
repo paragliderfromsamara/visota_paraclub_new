@@ -1,5 +1,4 @@
 module ArticlesHelper
-	
 	def article_show_block
 			html = "   
            <table style = 'width: 100%;'>
@@ -34,6 +33,7 @@ module ArticlesHelper
 						<tr>
 							<td colspan = '2'>
 								#{article_list_photos(@article)}
+                #{"<br />#{list_attachments(@article.attachment_files)}" if @article.attachment_files != []}
 							</td>
 						</tr>
 				   </table>
@@ -207,7 +207,6 @@ module ArticlesHelper
 		if article.attachment_files != []
 			links = list_attachments(article.attachment_files)
 			body = "
-
 						<p>#{article.name}</p>
 			"
 		end

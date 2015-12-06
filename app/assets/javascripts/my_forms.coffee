@@ -8,34 +8,69 @@ messageFormClass = "message_form"
 videoFormClass = "video_form"
 albumFormClass = "photo_album_form"
 voteFormId = "vote_form"
+eventFormClass = 'event_form'
 articleFormClass = "article_form"
 menuIconSizeClass = "fi-large"
 
-initArticleForm = (frm)->
-    aId = frm.id.replace("#{articleFormClass}_", '')
-    aType = $(frm).attr("article_type")
-    f = new myForm('article', aId, "."+frm.className)
-    if aType isnt 'flight_accidents' 
-        f.nameField = f.formElement.find('#article_name')
-        f.nameFieldMaxLength = 100
-        f.nameFieldMinLength = 3
-    f.contentField = f.formElement.find('#article_content')
-    f.contentFieldMaxLength = 150000
-    f.contentFieldMinLength = 100
-    f.submitButt = f.formElement.find("#submit_#{frm.id}_button")
-    if aType is 'reports'
-        f.aButList = [2,3,1]
-        f.shortContentErr = 'Минимально допустимое количество знаков темы ' + f.contentFieldMinLength
-        f.longContentErr = 'Максимально допустимое количество знаков превышено на '
-        f.shortNameErr = 'Название не должно быть пустым'
-        f.longNameErr = 'Максимально допустимое количество знаков превышено на '
+initArticleAsFlightAccidents = (f)->
+    f.aButList = [2]
+    f.imagesMaxLength = 30
+    f.imagesMaxLengthErr = 'Максимально допустимое количество фотографий альбома превышено на '
     f.tEditor = new textEditor(f)
     f.initPanel()
-    if aType isnt 'flight_accidents' then f.getBindingEntities()
     f.formChecking = ()->
         cFlag = f.contentLengthCheck()
-        nFlag = f.nameLengthCheck()
-        f.switchSubmitBut(cFlag && nFlag)
+        iFlag = f.imagesLengthCheck()
+        f.switchSubmitBut(cFlag & iFlag)
+    f.photosUploader()
+    f.getPhsToForm()
+    f.formChecking()
+    f.contentField.keyup ()-> f.formChecking()
+    
+initArticleAsDocuments = (f)->
+    f.aButList = [3]
+    f.nameField = f.formElement.find('#article_name')
+    f.nameFieldMaxLength = 100
+    f.nameFieldMinLength = 3
+    f.shortNameErr = 'Название не должно быть пустым'
+    f.longNameErr = 'Максимально допустимое количество знаков превышено на '
+    f.attachmentsMaxLength = 20
+    f.attachmentsMinLength = 1
+    f.attachmentsMinLengthErr = "Должно быть добавлено как минимум 1-но вложение"
+    f.attachmentsMaxLengthErr = "Превышено максимально допустимое количество вложений"
+    f.hideAttachmentField = false
+    f.contentFieldMinLength = 0
+    f.tEditor = new textEditor(f)
+    f.initPanel()
+    f.formChecking = ()->
+        cFlag = f.contentLengthCheck()
+        nFlag = f.nameLengthCheck() 
+        afFlag = f.checkAttachmentLength()
+        f.switchSubmitBut(cFlag & nFlag & afFlag)
+    f.attachmentFilesUploader()
+    f.getAttachmentsToForm()
+    f.formChecking()
+    f.contentField.keyup ()-> f.formChecking()
+    f.nameField.keyup ()-> f.formChecking()
+    
+initArticleAsDefault = (f)->
+    f.aButList = [2,3,1]
+    f.nameField = f.formElement.find('#article_name')
+    f.nameFieldMaxLength = 100
+    f.nameFieldMinLength = 3
+    f.shortNameErr = 'Название не должно быть пустым'
+    f.longNameErr = 'Максимально допустимое количество знаков превышено на '
+    f.imagesMaxLength = 30
+    f.imagesMaxLengthErr = 'Максимально допустимое количество фотографий альбома превышено на '
+    f.tEditor = new textEditor(f)
+    f.initPanel()
+    f.formChecking = ()->
+        cFlag = f.contentLengthCheck()
+        nFlag = f.nameLengthCheck() 
+        iFlag = f.imagesLengthCheck()
+        afFlag = f.checkAttachmentLength()
+        f.switchSubmitBut(cFlag & nFlag & iFlag & afFlag)
+    f.getBindingEntities()
     f.photosUploader()
     f.getPhsToForm()
     f.attachmentFilesUploader()
@@ -44,6 +79,50 @@ initArticleForm = (frm)->
     f.contentField.keyup ()-> f.formChecking()
     f.nameField.keyup ()-> f.formChecking()
 
+initArticleForm = (frm)->
+    aId = frm.id.replace("#{articleFormClass}_", '')
+    aType = $(frm).attr("article_type")
+    f = new myForm('article', aId, "."+frm.className)
+    f.contentField = f.formElement.find('#article_content')
+    f.contentFieldMaxLength = 150000
+    f.contentFieldMinLength = 100
+    f.shortContentErr = 'Минимально допустимое количество знаков темы ' + f.contentFieldMinLength
+    f.longContentErr = 'Максимально допустимое количество знаков превышено на '
+    f.submitButt = f.formElement.find("#submit_#{frm.id}_button")
+    switch aType
+      when "flight_accidents" then initArticleAsFlightAccidents(f)
+      when "documents" then initArticleAsDocuments(f)
+      else initArticleAsDefault(f)
+          
+initEventForm = (frm)->
+    eId = frm.id.replace("#{eventFormClass}_", '')
+    f = new myForm('event', eId, "."+frm.className)
+    f.contentField = f.formElement.find('#event_content')
+    f.nameField = f.formElement.find('#event_title')
+    f.aButList = [2]
+    f.contentFieldMaxLength = 1500
+    f.contentFieldMinLength = 10
+    f.nameFieldMaxLength = 150
+    f.nameFieldMinLength = 3
+    f.shortContentErr = 'Новость не должна быть короче ' + f.contentFieldMinLength + ' символов'
+    f.longContentErr = 'Длина новости превышена на '
+    f.shortNameErr = 'Заголовок новости не должен быть короче ' + f.contentFieldMinLength + ' символов'
+    f.longNameErr = 'Длина заголовка новости превышена на '
+    f.submitButt = f.formElement.find("#submit_#{frm.id}_button")
+    f.tEditor = new textEditor(f)
+    f.initPanel()
+    f.formChecking = ()->
+        cFlag = f.contentLengthCheck()
+        nFlag = f.nameLengthCheck() 
+        iFlag = f.imagesLengthCheck()
+        afFlag = f.checkAttachmentLength()
+        f.switchSubmitBut(cFlag & nFlag & iFlag & afFlag)
+    f.photosUploader()
+    f.getPhsToForm()
+    f.formChecking()
+    f.contentField.keyup ()-> f.formChecking()
+    f.nameField.keyup ()-> f.formChecking()
+          
 initVoteForm = (frm)->
     f = new myForm('vote', null, "#"+frm.id)
     f.contentField = f.formElement.find('#vote_content')
@@ -185,7 +264,8 @@ initMessageForm = (frm)->
         afFlag = f.checkAttachmentLength()
         f.contentFieldMinLength = if f.imagesLength>0 || f.attachmentFilesLength>0 then 0 else minContentLength
         cFlag = f.contentLengthCheck()
-        f.switchSubmitBut(iFlag || cFlag || afFlag)
+        f.switchSubmitBut((iFlag && f.imagesLength>0) || cFlag || (afFlag && f.attachmentFilesLength>0))
+        console.log f.imagesLength, f.attachmentFilesLength
     f.formChecking()
     if msgType isnt 'comment'
         f.photosUploader()
@@ -287,10 +367,12 @@ class myForm
                   @imagesMinLength = 0,
                   @imagesMaxLengthErr = '',
                   @imagesMinLengthErr = '',
-                  @imagesLenghtFlag = false,
-                  @attachmentsMaxLengthErr = '',
+                  @attachmentsMaxLengthErr = 'Количество вложение превышено на ',
                   @attachmentsMaxLength = 20,
+                  @attachmentsMinLength = 0,
+                  @attachmentsMinLengthErr = "Минимальное количество вложений " ,
                   @attachmentFilesLength = 0,
+                  @hideAttachmentField = true,
                   @formChecking = null
                   )->
         
@@ -403,12 +485,11 @@ class myForm
         err = ''
         s = this.formElement.find('p#iLength')
         l = this.formElement.find('.ph-list-items').length - this.formElement.find('.del-photo').length
-        
         if l is 0 
-            lFlag = false
+            #lFlag = false
             if this.type isnt 'photo_album' then s.hide() 
         else 
-            lFlag=true
+            #lFlag=true
             if this.type isnt 'photo_album' then s.show()
         this.imagesLength = l
         if this.imagesMaxLength isnt 0
@@ -420,12 +501,11 @@ class myForm
             if l<this.imagesMinLength
                 err = this.imagesMinLengthErr
                 eFlag=false
-                
         switchErr(s, eFlag)
         s.find('#txtL').text('Фотографий добавлено: ' + l + ';')
         s.find('#txtErr').text(err)
-        this.imagesLenghtFlag = lFlag&eFlag
-        lFlag and eFlag
+        eFlag
+        
     photosUploader: ()->
         _this = this
         ent_id = this.entityID
@@ -489,7 +569,6 @@ class myForm
         el = this
         arr_a = getIdsArray(this.formElement.find("#"+this.type+'_assigned_albums').val())
         arr_v = getIdsArray(this.formElement.find("#"+this.type+'_assigned_videos').val())
-        console.log link 
         $.getJSON link, (json)->
             v = ''
             a = ''
@@ -559,28 +638,35 @@ class myForm
                     $(".af-delete").click ()-> _this.deleteAttachmentFile(this)     
                     _this.formChecking()    
                }
+    
     checkAttachmentLength: ()->
-        af_field = this.formElement.find("#afContainer")
-        af_containters = af_field.find(".af-uploaded-field")
-        errField = af_field.find("#afLength")
+        eFlag = true
         err = ''
-        f = true
-        if af_field != null
-            l = af_field.find(".af-item").length
+        af_field = this.formElement.find("#afContainer")
+        s = af_field.find("#afLength")
+        l = af_field.find(".af-item").length
+        if l is 0 
+            #lFlag = false
+            if this.hideAttachmentField then af_field.hide() 
         else 
-            l = 0
-        if l>0 then af_field.show() else af_field.hide()
-        if l>this.attachmentsMaxLength
-            err = this.attachmentsMaxLengthErr
-            errField.addClass('err')
-            f = false
-        else
-            errField.removeClass('err')
-            #if l == 0 then f = false   
-        errField.find('#txtL').text "Загружено #{l} из максимально возможных #{this.attachmentsMaxLength}"
-        errField.find('#txtErr').text(err)
-        f    
-        
+            #lFlag=true
+            if this.hideAttachmentField then af_field.show()
+        this.attachmentFilesLength = l
+        if this.attachmentsMaxLength isnt 0
+            if l>this.attachmentsMaxLength
+                d = l-this.attachmentsMaxLength
+                err = this.attachmentsMaxLengthErr + d
+                eFlag=false
+        if this.attachmentsMinLength isnt 0
+            if l<this.attachmentsMinLength
+                err = this.attachmentsMinLengthErr
+                eFlag=false
+        switchErr(s, eFlag)
+        s.find('#txtL').text('Вложений добавлено: ' + l + ';')
+        s.find('#txtErr').text(err)
+        #this.imagesLenghtFlag = lFlag&eFlag
+        eFlag# and lFlag
+              
     deleteAttachmentFile: (delBut)->
         _this = this
         id = $(delBut).attr('attachment_file_id')
@@ -625,6 +711,12 @@ class myForm
             this.submitButt.mouseup ()-> 
                 if not el.submitButt.hasClass("disabled") 
                     el.formElement.append("<input id = \"#{el.type}_status_id\" type = \"hidden\" name = \"#{t}[status_id]\" value = 1 />")
+        if @nameField isnt null
+            this.nameField.bind "keypress", (e)->
+                code = e.keyCode || e.which
+                if e.keyCode is 13
+                    e.preventDefault()
+                    false
     switchSubmitBut: (f)->
         if f then this.submitButt.removeClass('disabled') else this.submitButt.addClass('disabled')
         
@@ -781,7 +873,7 @@ menuContent = (n, el)->
         else if n is 'photo'
             val = '<div class = "dropzone" id = "ph_to_frm"></div>'
         else if n is 'paperclip'
-            val = "<div class = \"section group\"><div class = \"dropzone\" id = \"att_to_frm\"></div>"
+            val = "<div class = \"section group\"><div class = \"dropzone\" id = \"att_to_frm\"></div></div>"
         val
 updMenusList = (n, el)->
         for i in el.aButList
@@ -1240,13 +1332,15 @@ r = ()->
     vForm = document.getElementsByClassName(videoFormClass)
     paForm = document.getElementsByClassName(albumFormClass)
     vtForm = document.getElementById(voteFormId)
-    aForm = document.getElementsByClassName(articleFormClass) 
+    aForm = document.getElementsByClassName(articleFormClass)
+    eForm = document.getElementsByClassName(eventFormClass) 
     if tForm.length > 0 then initThemeForm(tForm[0])
     if mForm.length > 0 then initMessageForm(mForm[0])
     if vForm.length > 0 then initVideoForm(vForm[0])
     if paForm.length > 0 then initAlbumForm(paForm[0]) 
     if vtForm isnt null then initVoteForm(vtForm)
     if aForm.length > 0 then initArticleForm(aForm[0])
+    if eForm.length > 0 then initEventForm(eForm[0])
 
 $(document).ready r
 $(document).on "page:load", r

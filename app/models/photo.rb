@@ -14,6 +14,7 @@ class Photo < ActiveRecord::Base
   belongs_to :message #Фото как вложение в сообщение
   has_many :messages, :dependent  => :delete_all #Комментарии к фото
   has_many :photo_like_marks, :dependent  => :delete_all #Комментарии к фото
+  has_one :entity_view, :as => :v_entity, :dependent => :delete #просмотры
   mount_uploader :link, PhotoUploader
   before_destroy :delPhoto
   #photo_relations
@@ -24,11 +25,11 @@ class Photo < ActiveRecord::Base
   #photo_relations end
   
   def comments
-	self.messages.where(:status_id=>1).order('created_at ASC')
+	  self.messages.where(:status_id=>1).order('created_at ASC')
   end
   
   def views 
-	[]
+	  (self.entity_view == nil)? 0 : self.entity_view.counter 
   end
   
   def delPhoto

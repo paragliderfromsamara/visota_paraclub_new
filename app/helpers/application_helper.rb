@@ -218,21 +218,21 @@ require 'open-uri' #для парсера
 			    ]
 		v = ''
 		b.each do |i|
-			v += (current_page?(i[:link]))? "<li id = 'c_nav_li' link_to = '#{i[:link]}'>#{i[:name]}</li>":"<li link_to = '#{i[:link]}'>#{i[:name]}</li>"
+			v += (current_page?(i[:link]))? "<li id = 'c_nav_li' link_to = '#{i[:link]}'>#{i[:name]}</li>" : "<li link_to = '#{i[:link]}'>#{i[:name]}</li>"
 		end
 		return "<ul id = 'userMenu'>#{v}</ul>"
 	end
 	def topMainMenu #меню в шапке сайта
 		value = ""
 		primaryMenuItems.each do |item|
-			value += "<li id = '#{is_selected(item)}'><a href = '#{item[:link]}'><span>#{item[:name]}</span></a></li>"
+			value += "<a href = '#{item[:link]}'><li id = '#{is_selected(item)}'><span>#{item[:name]}</span></li></a>"
 		end
 		return "<ul>#{value}</ul>"
 	end
 	def bottomMainMenu
 		value = ""
 		primaryMenuItems.each do |item|
-			value += "<li><a href = '#{item[:link]}'><span>#{item[:name]}</span></a></li>"
+			value += "<a href = '#{item[:link]}'><li><span>#{item[:name]}</span></li></a>"
 		end
 		
 		return "<ul>#{value}</ul>"

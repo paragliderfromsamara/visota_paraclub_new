@@ -10,6 +10,7 @@ sumPagWidth = 0
 blC = 0
 height = 0
 width = 0
+photo = null
 
 goToLink = (link)->
     if link isnt '' && link isnt undefined then document.location.href = link
@@ -66,15 +67,19 @@ setPhotoSizeByScreen = ()->
         if height > newHeight 
             $("#bPhoto").height(newHeight)
             iconsTop = newHeight / 2 - $("div#iIcon").height() / 2
-        else iconsTop = height / 2 - $("div#iIcon").height() / 2
+            photo.parent('div.central_field').height(newHeight)
+        else 
+            iconsTop = height / 2 - $("div#iIcon").height() / 2
+            photo.parent('div.central_field').height(height)
         $("div#iIcon").css('top', iconsTop + 'px')
     
     
 r = ()->
     phPathEl = document.getElementById(photoPathFieldId)
     if phPathEl isnt null
-        height = parseInt $("[photo-height]").attr('photo-height')
-        width = parseInt $("[photo-width]").attr('photo-width')
+        photo = $("img[photo-height]")
+        height = parseInt photo.attr('photo-height')
+        width = parseInt photo.attr('photo-width')
         setPhotoSizeByScreen()
         initPhotoPage()
         $(".ph-big-links, .ph-paginate").click ()->

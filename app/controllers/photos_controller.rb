@@ -30,12 +30,12 @@ include MessagesHelper
   def show
     @photo = Photo.find_by(id: params[:id])
 	if userCanSeePhoto?(@photo)
+    @page_params = {:part_id => 3,:page_id => 1,:entity_id => @photo.id}
 		@photos = []
 		@j_photo = {:id => @photo.id, :link => @photo.link.to_s, :thumb => @photo.link.thumb.to_s, :description => @photo.description}
 		@prev_photo = nil
 		@next_photo = nil
 		@return_to = photo_path(@photo)
-    #@add_functions = "setPhotoSizeByScreen(#{@photo.widthAndHeight[:width]}, #{@photo.widthAndHeight[:height]}); $(window).resize(function(){setPhotoSizeByScreen(#{@photo.widthAndHeight[:width]}, #{@photo.widthAndHeight[:height]})});"
 		if @photo.photo_album != nil
 			@photos = @photo.photo_album.photos
 			@album = @photo.photo_album

@@ -98,13 +98,13 @@ end
 				msg_flag = false if (!userCanEditMsg?(photo.message) || (photo.message.content.strip == '' and photo.message.photos.count == 1)) and photo.message.status != 'draft'
 			end
 			if photo.photo_album != nil
-				alb_flag = false if !userCanEditAlbum?(photo.photo_album) || photo.photo_album.photos.count == 1
+				alb_flag = false if !userCanEditAlbum?(photo.photo_album) || (photo.photo_album.photos.count == 1 && photo.photo_album.status_id != 0)
 			end
 			if photo.article != nil
 				art_flag = false if !userCanEditArtilcle?(photo.article) || (photo.article.photos.count == 1 and photo.article.content.strip == '')
 			end
 			if photo.event != nil
-				evnt_flag = false if !userCanEditEvent?(photo.event) || (photo.event.photos.count == 1 and photo.event.content.strip == '')
+				evnt_flag = false if (!userCanEditEvent?(photo.event) || (photo.event.photos.count == 1 and photo.event.content.strip == '')) and photo.event.status_id != 0
 			end
 			return th_flag & alb_flag & msg_flag & art_flag & evnt_flag
 		end

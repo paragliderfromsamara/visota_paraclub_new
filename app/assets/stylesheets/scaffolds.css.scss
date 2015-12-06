@@ -53,8 +53,7 @@ $dz_preview_width: 100px;
 		cursor:pointer; 
 		z-index: 500;
 	}
-
-	
+h1, h2, h3, h4 {font-weight: normal;}	
 body {
 	background-color: #ffffff;
     /* min-width:1000px;*/
@@ -77,9 +76,10 @@ h3 {
 	color: $text_color_1;
   }
 h4 {
-  	font-family: $font_family_1; 
-  	font-size: 9pt; 
+  	font-family: $font_family_2; 
+  	font-size: 9pt;
   	color: $main_color;
+    .black {color: $text_color_1;}
     }
 b  {
 	font-family: $font_family_6;

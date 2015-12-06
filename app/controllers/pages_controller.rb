@@ -85,8 +85,9 @@ include PagesHelper
       end
     elsif @mediaPartHash[:typeName] == 'articles'
       article = Article.new
+      v_status = (is_not_authorized?)? 1 : [2,1]
       @articleType = article.getTypeIdByLink(session[:media_type]) 
-      @entities = Article.paginate(:page => params[:page], :per_page => 12).where(status_id: 1, article_type_id: @articleType[:value]).order('created_at DESC')
+      @entities = Article.paginate(:page => params[:page], :per_page => 12).where(status_id: 1, :visibility_status_id => v_status, article_type_id: @articleType[:value]).order('created_at DESC')
     end
   end
   

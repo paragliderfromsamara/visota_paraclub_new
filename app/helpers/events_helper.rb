@@ -1,12 +1,12 @@
 module EventsHelper
 	def event_index_item(event, i) #Миниатюра в списке новостей  
-    html = "<h4>#{event.title}</h4>
+    html = "<h4><span class = 'black'>#{event.post_date.strftime('%d-%m-%Y')} |</span> #{event.title}</h4>
 							<table style = 'width: 99%;'>
 								<tr>
 									#{"<td>#{event.alter_photo('thumb')}</td>" if event.alter_photo('thumb') != nil}
 									<td valign = 'top' align = 'left' style = 'min-width: 700px;'>
                     <span class = 'mText' id = 'content'>
-                      <p>#{truncate(event.alter_content, :length => 500)}</p>
+                      <p>#{truncate(event.content.escapeBbCode, :length => 500)}</p>
                     </span>
                   </td>
 								</tr>
