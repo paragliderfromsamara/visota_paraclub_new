@@ -18,6 +18,8 @@ class Theme < ActiveRecord::Base
   has_many :attachment_files, :dependent  => :delete_all
   has_many :photos, :dependent  => :delete_all
   has_many :theme_notifications, :dependent => :delete_all
+  has_one :entity_view, :as => :v_entity, :dependent => :delete
+  
   auto_html_for :content do
     html_escape
 	my_youtube_msg(:width => 480, :height => 360, :span => true)
@@ -341,9 +343,9 @@ end
 
 
 #счётчик просмотров
-	def views
-		Step.where(part_id: 9, page_id: 1, entity_id: self.id)
-	end
+def views
+  (self.entity_view == nil)? 0 : self.entity_view.counter 
+end
 #счётчик просмотров end
 private
 	def openThemeMessage

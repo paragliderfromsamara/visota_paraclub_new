@@ -135,7 +135,7 @@
 </div>
 
 <div id = 'bottom'>
-	<div id = 'test'></div>
+	<div id = 'test'><%= User.first.guest_token %> | <%= guestToken %></div>
 	<% if controller.controller_name == 'pages' and controller.action_name != 'visota_life' and controller.action_name != 'feed' and controller.action_name != 'search' %>
 		<div id="m_full" class="even">
 			<div class="m_1000wh">

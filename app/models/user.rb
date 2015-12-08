@@ -11,7 +11,7 @@
 require 'digest'
 class User < ActiveRecord::Base
   attr_accessor :password, :old_password, :current_password
-  attr_accessible :password, :avatar, :cell_phone, :email, :email_status, :encrypted_password, :full_name, :icq, :inform, :name, :photo, :salt, :skype, :user_group_id, :password_confirmation, :avatar_cache, :photo_cache, :old_password, :current_password
+  attr_accessible :password, :avatar, :cell_phone, :email, :email_status, :encrypted_password, :full_name, :icq, :inform, :name, :photo, :salt, :skype, :user_group_id, :password_confirmation, :avatar_cache, :photo_cache, :old_password, :current_password, :guest_token
   require 'will_paginate'
   
 #--------Old_messages---------------------------------------------
@@ -371,8 +371,8 @@ mount_uploader :photo, UserPhotoUploader
   
 	def self.authenticate_with_salt(id, cookie_salt)
     user = find_by(id: id)
-	(user && user.salt == cookie_salt) ? user : nil
-    end  
+	  (user && user.salt == cookie_salt) ? user : nil
+  end  
  #feed functions for current_user--------------------------------------------------------------------------------
   def theme_with_user_ids_for_feed(is_not_authorized) 
 	ids_arr = []
@@ -431,20 +431,21 @@ mount_uploader :photo, UserPhotoUploader
   private
   
   def encrypt_password
-	self.salt = make_salt if new_record?
-	self.encrypted_password = encrypt(password) if password != nil and password != '' or password_confirmation != password
+    self.salt = make_salt if new_record?
+	  self.encrypted_password = encrypt(password) if password != nil and password != '' or password_confirmation != password
   end	
   
   def encrypt(string)
-	secure_hash("#{salt}--#{string}")
+	  secure_hash("#{salt}--#{string}")
   end
   
   def make_salt 
-	secure_hash("#{Time.now.utc}--#{password}")
+	  secure_hash("#{Time.now.utc}--#{password}")
   end
   
   def secure_hash(string)
-	Digest::SHA2.hexdigest(string)
+	  Digest::SHA2.hexdigest(string)
   end
+
   #Логирование пользователя end
 end

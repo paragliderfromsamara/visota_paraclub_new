@@ -70,4 +70,23 @@ module AdminToolsHelper
 			end
 		end
 	end
+  
+  def stepsAdaption
+    users = User.all
+    if users != []
+      users.each do |u|
+        t = Digest::SHA2.hexdigest(u.created_at.to_s)
+        u.update_attribute(:guest_token, t)
+        steps = u.steps 
+        if steps != []
+          steps.each {|s| s.update_attribute(:guest_token, t)}
+        end
+      end
+    end
+    guestSteps = Step.where(user_id: 0)
+    if guestSteps != []
+      guestSteps.delete_all
+    end
+  end
+  
 end

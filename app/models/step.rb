@@ -1,5 +1,5 @@
 class Step < ActiveRecord::Base
-  attr_accessible :entity_id, :host_name, :ip_addr, :page_id, :part_id, :user_id, :visit_time
+  attr_accessible :entity_id, :host_name, :ip_addr, :page_id, :part_id, :user_id, :visit_time, :guest_token
   belongs_to :user
   @page_params = {:part_id => 0, :page_id => 0, :entity_id => 0} if @page_params == nil
 		if @page_params[:part_id] == 0 #pages

@@ -2,8 +2,9 @@ class AdminToolsController < ApplicationController
 include AdminToolsHelper  
   def functions_test
     @title = @header = 'Тест функций'
-    theme = current_user.themes.last
-    ThemesMailer.new_theme_notification(theme, current_user).deliver
+    #theme = current_user.themes.last
+    #ThemesMailer.new_theme_notification(theme, current_user).deliver
+    #stepsAdaption
   end
    
   def hidden_entities #скрытые объекты
@@ -252,6 +253,7 @@ include AdminToolsHelper
         v.save
       end
 		end
+    stepsAdaption
 	else
 		redirect_to '/404'
 	end

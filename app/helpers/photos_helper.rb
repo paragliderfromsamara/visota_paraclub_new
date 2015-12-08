@@ -87,7 +87,7 @@ module PhotosHelper
 	end
 	def photoInfo(photo)
 		v = "<div title = 'Комментарии' class='stat fi-float-left'><i class = 'fi-comments fi-medium fi-grey'></i><span>#{photo.comments.count.to_s}</span></div>"
-    v += "<div title = 'Просмотры' class='stat fi-float-left'><i class = 'fi-eye fi-medium fi-grey'></i><span>0</span></div>"#{album.views.count}
+    v += "<div title = 'Просмотры' class='stat fi-float-left'><i class = 'fi-eye fi-medium fi-grey'></i><span>#{photo.views}</span></div>"
 		return "<div class = 'medium-opacity' id = 'right_f'>#{v}</div>"
 	end
 	def photo_comment_button

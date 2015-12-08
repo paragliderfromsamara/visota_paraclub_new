@@ -31,7 +31,7 @@ include TopicsHelper
   						        {:name => @theme.name, :link => theme_path(@theme)}
   					        ]
   		#выборка выдаваемых сообщений
-  			@messages = @theme.visible_messages
+  		@messages = @theme.visible_messages
   		#выборка выдаваемых сообщений end
   		respond_to do |format|
   		  format.html# show.html.erb

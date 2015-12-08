@@ -18,7 +18,6 @@ class SessionsController < ApplicationController
 	    end
     else
       sign_in user
-	    clear_steps user
 	    redirect_to user
     end
   end

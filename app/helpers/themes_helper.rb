@@ -59,7 +59,7 @@ module ThemesHelper
 		v += "<div class='stat fi-float-left' title = '#{vh[:ru]}'>#{drawIcon(vh[:img], 'medium', 'grey')}</div>" if vh[:value] == 'hidden'
 		v += "<div class='stat fi-float-left' title = '#{h[:ru]}'>#{drawIcon(h[:img], 'medium', 'grey')}</div>"
 		v += "<div class='stat fi-float-left'>#{drawIcon('comments', 'medium', 'grey')}<span>#{mCount}</span></div>"
-		v += "<div class='stat fi-float-left'>#{drawIcon('eye', 'medium', 'grey')}<span>11119</span></div>"
+		v += "<div class='stat fi-float-left'>#{drawIcon('eye', 'medium', 'grey')}<span>#{theme.views}</span></div>"
 		return v
 	end
 	def theme_show_block(showBut)
