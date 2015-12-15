@@ -161,14 +161,14 @@ mount_uploader :photo, UserPhotoUploader
 
   def user_groups #в старой версии была отдельная таблица в базе
 		[
-			{:value => 7, :name => 'Удалённый'},#deleted
-			{:value => 6, :name => 'Руководитель клуба'},#manager
-			{:value => 2, :name => 'Клубный пилот'},	 #club_pilot
-			{:value => 3, :name => 'Друг клуба'},		 #friend
-			{:value => 5, :name => 'Вновь прибывший'},   #new_user
-			{:value => 4, :name => 'Бан лист'},		 #bunned
-			{:value => 1, :name => 'Site Admin'},		 #admin
-			{:value => 0, :name => 'Super Admin'}    #super_admin
+			{:value => 7, :name => 'Удалённый', en_name: 'deleted'},#deleted
+			{:value => 6, :name => 'Руководитель клуба', en_name: 'manager'},#manager
+			{:value => 2, :name => 'Клубный пилот', en_name: 'club_pilot'},	 #club_pilot
+			{:value => 3, :name => 'Друг клуба', en_name: 'friend'},		 #friend
+			{:value => 5, :name => 'Вновь прибывший', en_name: 'new_user'},   #new_user
+			{:value => 4, :name => 'Бан лист', en_name: 'bunned'},		 #bunned
+			{:value => 1, :name => 'Site Admin', en_name: 'admin'},		 #admin
+			{:value => 0, :name => 'Super Admin', en_name: 'super_admin'}    #super_admin
 		]
   end
   
@@ -195,6 +195,9 @@ mount_uploader :photo, UserPhotoUploader
     User.where(user_group_id: 4)
   end
 
+  def group
+    user_group[:en_name]
+  end
   def group_name
 	user_group[:name]
   end

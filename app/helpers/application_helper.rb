@@ -475,11 +475,11 @@ end
 		if time.year == date.year and time.month == date.month
 			days_difference = time.day - date.day
 			if days_difference == 0
-				value = date.strftime("Сегодня в %H:%M")
+				value = date.strftime("в %H:%M")
 			elsif days_difference == 1 
-				value = date.strftime("Вчера в %H:%M")
+				value = date.strftime("Вчера")
 			elsif days_difference == -1 
-				value = date.strftime("Завтра в %H:%M")
+				value = date.strftime("Завтра")
 			elsif days_difference < -1 
 				value = "#{date.strftime("%d #{ru_month(date.month.to_i, 'rod_padej')}")}"
 			elsif days_difference > 1 

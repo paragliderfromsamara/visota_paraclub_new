@@ -36,23 +36,7 @@ module SessionsHelper
   
   def user_type
   	if current_user != nil
-  		if @current_user.user_group_id == 1  
-  			user_type = "admin"
-  		elsif @current_user.user_group_id == 2 
-  			user_type = "club_pilot"
-  		elsif @current_user.user_group_id == 3
-  			user_type = "friend"
-  		elsif @current_user.user_group_id == 4
-  			user_type = "bunned"
-  		elsif @current_user.user_group_id == 5
-  			user_type = "new_user"
-  		elsif @current_user.user_group_id == 6
-  			user_type = "manager"
-  		elsif @current_user.user_group_id == 7
-  			user_type = "deleted"
-  		elsif @current_user.user_group_id == 0
-  			user_type = "super_admin"
-  		end
+  		@current_user.group 
   	else
   		user_type = "guest"
   	end

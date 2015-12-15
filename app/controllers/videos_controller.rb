@@ -102,6 +102,7 @@ include ApplicationHelper
 		@video = Video.new(params[:video])
 		respond_to do |format|
 		  if @video.save
+      sendNewVideoMail(@video)
 			format.html { redirect_to @video, :notice => 'Видео успешно добавлено' }
 			format.json { render :json => @video, :status => :created, :location => @video }
 		  else

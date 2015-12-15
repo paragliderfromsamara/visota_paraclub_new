@@ -30,7 +30,7 @@ include MessagesHelper
   def show
     @photo = Photo.find_by(id: params[:id])
 	if userCanSeePhoto?(@photo)
-    @page_params = {:part_id => 3,:page_id => 1,:entity_id => @photo.id}
+    @page_params = {:part_id => 4,:page_id => 1,:entity_id => @photo.id}
 		@photos = []
 		@j_photo = {:id => @photo.id, :link => @photo.link.to_s, :thumb => @photo.link.thumb.to_s, :description => @photo.description}
 		@prev_photo = nil

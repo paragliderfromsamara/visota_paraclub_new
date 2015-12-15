@@ -2,9 +2,10 @@ class AdminToolsController < ApplicationController
 include AdminToolsHelper  
   def functions_test
     @title = @header = 'Тест функций'
-    #article = Article.find(56)
-   # UserMailer.mail_check(current_user).deliver_now
-    #stepsAdaption
+    #album = PhotoAlbum.find(53)
+    #sendNewAlbumMail(album)
+    video = Video.find(36)
+    sendNewVideoMail(video)
   end
    
   def hidden_entities #скрытые объекты
