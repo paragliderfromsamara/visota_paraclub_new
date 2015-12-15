@@ -172,24 +172,29 @@ mount_uploader :photo, UserPhotoUploader
 		]
   end
   
-  def club_pilots
-	User.where(user_group_id: [0,1,2,6])
+  #tracked_themes
+  def tracked_themes(flag)
+    v_status = (flag)? 1 : [1,2]
+    return Theme.where(id: self.steps.select(:entity_id).where(part_id: 9, page_id: 1).order("visit_time DESC"), status_id: [1, 3], :visibility_status_id => v_status).order('last_message_date ASC')
+  end
+  #tracked_themes end
+  
+  def self.club_pilots
+	  User.where(user_group_id: [0,1,2,6])
   end
   
-  def club_friends
-	User.where(user_group_id: 3)
+  def self.club_friends
+	  User.where(user_group_id: 3)
   end
   
-  def new_users
-	User.where(user_group_id: 5)
+  def self.new_users
+    User.where(user_group_id: 5)
   end
   
-  def bunned
-	User.where(user_group_id: 4)
+  def self.bunned
+    User.where(user_group_id: 4)
   end
-  
-  
-  
+
   def group_name
 	user_group[:name]
   end
@@ -276,7 +281,6 @@ mount_uploader :photo, UserPhotoUploader
         draft.update_attribute(:updated_at, Time.now)
       end
     end
-    
   	return draft
   end
   #управление черновиками тем и сообщений end

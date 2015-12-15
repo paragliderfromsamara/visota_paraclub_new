@@ -2,15 +2,16 @@
 <div class = 'cBoxSplitter'>
      <div class = 'm_1000wh'><h3>Основные данные</h3></div>
 </div>
+<%= form_for(@user, html: {class: 'new_user_form'}) do |f| %>
 <div class = 'c_box odd'>
     <div class = 'm_1000wh tb-pad-m'>
-        <%= form_for(@user) do |f| %>
+        
         <% @antibot = @user.get_default_antibot_image %>
         <input type = 'hidden' name = abi[name] value = '<%= @antibot[:name] %>' >
         <%= f.hidden_field :guest_token, value: guestToken %>
         <% user_errors %>
 	   
-	    <% if user_type == 'admin' or user_type == 'super_admin' %>
+	        <% if user_type == 'admin' or user_type == 'super_admin' %>
 	        <div class = 'field'>
 	            <%= f.label :user_group_id, 'Группа' %>
 	            <%= my_collection_select(@user.user_groups, 'user_group_id', 'user', {}, '' ) %>
@@ -18,19 +19,19 @@
 	        <% end %>
 	        <div class = 'field'>
 	            <%= f.label :name, 'Ник' %><span title = "Поля обязательные для заполнения" style = "color: red;">*</span><br />
-                <%= f.text_field :name, :class => 't_field' %>
+                <%= f.text_field :name, :class => 't_field' %><span id = "user_name_check">  <span id = "length"></span><span class = 'istring' id = "errDesc"></span></span>
             </div>
 	        <div class = 'field'>
 	            <%= f.label "Пароль" %><span title = "Поля обязательные для заполнения" style = "color: red;">*</span><br />
-	            <%= f.password_field :password, :title => "От 6 до 40 знаков", :class => 't_field' %> 
+	            <%= f.password_field :password, :title => "От 6 до 40 знаков", :class => 't_field' %> <span id = "user_password_check">  <span id = "length"></span><span class = 'istring' id = "errDesc"></span></span>
 	        </div>
 	        <div class = 'field'>
-	            <%= f.label "Подтверждение пароля" %><span title = "Поля обязательные для заполнения" style = "color: red;">*</span><br />
-	            <%= f.password_field :password_confirmation, :title => "От 6 до 40 знаков", :class => 't_field' %>
+	            <%= f.label "Подтверждение пароля" %><span title = "Поля обязательные для заполнения" style = "color: red;">*</span><br /> 
+	            <%= f.password_field :password_confirmation, :title => "От 6 до 40 знаков", :class => 't_field' %> <span id = "user_password_confirmation_check">  <span id = "length"></span><span class = 'istring' id = "errDesc"></span></span>
 	        </div>
 	        <div class = 'field'>
 		        <img src="/files/mail.png" valign = 'middle' > <%= f.label "E-mail" %><span title = "Поля обязательные для заполнения" style = "color: red;">*</span><br />
-	            <%= f.text_field :email, :class => 't_field' %>
+	            <%= f.text_field :email, :class => 't_field' %> <span id = "user_email_check">  <span id = "length"></span><span class = 'istring' id = "errDesc"></span></span>
 	        </div>
       </div>
 </div>
@@ -66,11 +67,10 @@
         <p class = 'istring'>Введите текст отображенный на картинке</p>
         <br />
         <img src = '/antibot_images/<%= @antibot[:name] %>.png' width = '150px'><br />
-        <input type = 'text' name = abi[value] class = "t_field"  >
-<br /><br />
-        <%= mySubmitButton('Подтвердить регистрацию', 'new_user').html_safe %>
-       
-        <br />
+        <input type = 'text' name = abi[value] class = "t_field"> 
+		<div class='actions tb-pad-m'>           
+			<%= mySubmitButton("Подтвердить регистрацию", "submit_new_user_form").html_safe %>
+		</div>
     </div>
 </div>
 <% end %>

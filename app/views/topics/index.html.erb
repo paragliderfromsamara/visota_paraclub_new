@@ -7,28 +7,53 @@
             <div class = 'col span_3_of_12'>
             </div>
             <form id='searchForm'>
-
-            <div class = 'col span_4_of_12' style = 'padding-top: 5px;'>
+                <div class = 'col span_4_of_12' style = 'padding-top: 5px;'>
                         
-                            <input type = 'hidden' name = 'in_themes_and_messages' value = 'on'/>
-                            <% topics = Topic.all %>
-                            <% topics.each do |topic| %>
-                                <% h = "t_#{topic.id}".to_sym %>
-                                <input type = 'hidden' name = 't_<%= topic.id.to_s %>' value = 'on'/>
-                            <% end %>
-                            <input type = 'hidden' value = 'on' name = 'o_gb' />
-                                    <input id = 'search_query' type='text' name = 'search_query' placeholder = 'Что ищете?' class = 'sQuery' />      
-            </div>
-            <div class = 'col span_1_of_12' style = 'padding-top: 5px;'> 
-                <%= myLinkButton('искать', '/search').html_safe %>
-            </div>
+                                <input type = 'hidden' name = 'in_themes_and_messages' value = 'on'/>
+                                <% topics = Topic.all %>
+                                <% topics.each do |topic| %>
+                                    <% h = "t_#{topic.id}".to_sym %>
+                                    <input type = 'hidden' name = 't_<%= topic.id.to_s %>' value = 'on'/>
+                                <% end %>
+                                <input type = 'hidden' value = 'on' name = 'o_gb' />
+                                        <input id = 'search_query' type='text' name = 'search_query' placeholder = 'Что ищете?' class = 'sQuery' />      
+                </div>
+                <div class = 'col span_1_of_12' style = 'padding-top: 5px;'> 
+                    <%= myLinkButton('искать', '/search').html_safe %>
+                </div>
             </form>
         </div>
     </div>
 </div>
 <div class = 'c_box odd'>
 	<div class = 'm_1000wh tb-pad-m' >
-		<%= topics_list_in_vl.html_safe %>
+		<% 
+            topics = Topic.all 
+    		i = 0
+        %>
+        <% if topics != [] %>
+            <% topics.each do |t| %>
+                <% i += 1 %>
+                <% if i == 1 %>
+                    <div class = 'section group'>
+                <% end %>
+                    <div class = 'col span_6_of_12'>
+                        <%= topic_mini_block_content(t).html_safe %>
+                    </div>
+                <% if i == 2 %>
+                    </div>
+                    <% i = 0 %>
+				<% end %>
+            <% end %>
+             <% i += 1 %>
+            <% if i == 1 %>
+                </div><div class = 'section group'>
+            <% end %>
+                <div class = 'col span_6_of_12'><%= guest_book_vl_block.html_safe %></div>
+
+                </div>
+        <% else %>
+        <% end %>
 	</div>
 </div>
 

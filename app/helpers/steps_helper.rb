@@ -58,6 +58,8 @@ module StepsHelper
         return (@photo.entity_view.nil?)? @photo.build_entity_view(counter: 0) : @photo.entity_view if @photo != nil && @page_params[:page_id] == 1  
     elsif @page_params[:part_id] == 9 #themes
         return (@theme.entity_view.nil?)? @theme.build_entity_view(counter: 0) : @theme.entity_view if @theme != nil && @page_params[:page_id] == 1     
+    elsif @page_params[:part_id] == 5 #videos
+        return (@video.entity_view.nil?)? @video.build_entity_view(counter: 0) : @video.entity_view if @video != nil && @page_params[:page_id] == 1     
     else
       return nil
     end
@@ -131,12 +133,6 @@ module StepsHelper
     end
 	end
   
-  
-  
-	def make_signed_step
-		signed_step if signed_in? 		
-	end
-	
 	def clear_steps(user, oldToken)
     steps = Step.where(guest_token: oldToken)
     if steps != []
@@ -155,109 +151,7 @@ module StepsHelper
         end
       end
     end
-		#steps = Step.where(user_id: 0, ip_addr: request.env['REMOTE_ADDR'], host_name: request.env['REMOTE_HOST'])
-		#steps.each do |step|
-		#	signed_step = Step.find_by(user_id: user.id, part_id: step.part_id, entity_id: step.entity_id, page_id: step.page_id, ip_addr: request.env['REMOTE_ADDR'], host_name: request.env['REMOTE_HOST'])
-		#	if signed_step != nil
-		#		signed_step.update_attributes(:visit_time => step.visit_time)
-		#		step.destroy
-		#	else
-		#		step.update_attributes(:user_id => user.id)
-		#	end
-		#end
 	end
 	
-	def signed_step
-		s = signed_step_check
-    if s == nil
-			signed_step_create
-		else
-			signed_step_update(s)
-		end
-	end
-	
-	def unsigned_step
-		if guest_host_validation == nil
-			u = unsigned_step_check
-      if u != nil
-				unsigned_step_update(u)
-			else
-				unsigned_step_create
-			end
-		end 
-	end
-	
-	def signed_step_check
-		Step.find_by(user_id: current_user.id, part_id: @page_params[:part_id], page_id: @page_params[:page_id], entity_id: @page_params[:entity_id])
-	end
-	
-	def unsigned_step_check
-		Step.find_by(user_id: 0, part_id: @page_params[:part_id], page_id: @page_params[:page_id], entity_id: @page_params[:entity_id], ip_addr: request.env['REMOTE_ADDR'], host_name: request.env['REMOTE_HOST'])
-	end
-	
-
-	
-	def signed_step_update(step)
-    if (step.visit_time + minlUpdViewElTime) < Time.now
-      v = getViewElement
-      v.increment_counter if v != nil
-    end
-		step.update_attributes(
-								          :visit_time => Time.now,
-								          :ip_addr => request.env['REMOTE_ADDR'],
-							            :host_name => request.env['REMOTE_HOST']
-							            )
-	end
-	
-	def	signed_step_create
-    v = getViewElement
-    v.increment_counter if v != nil
-		step = Step.new(
-						:user_id => current_user.id, 
-						:part_id => @page_params[:part_id],
-						:page_id => @page_params[:page_id],
-						:entity_id => @page_params[:entity_id],
-						:host_name => request.env['REMOTE_HOST'],
-						:ip_addr => request.env['REMOTE_ADDR'],
-						:visit_time => Time.now
-						)
-		step.save
-	end
-
-	def unsigned_step_create
-    v = getViewElement
-    v.increment_counter if v != nil
-		step = Step.new(
-						:user_id => 0, 
-						:part_id => @page_params[:part_id],
-						:page_id => @page_params[:page_id],
-						:entity_id => @page_params[:entity_id],
-						:host_name => request.env['REMOTE_HOST'],
-						:ip_addr => request.env['REMOTE_ADDR'],
-						:visit_time => Time.now
-						)
-		step.save
-	end
-	
-	def unsigned_step_update(step)
-    if (step.visit_time + minlUpdViewElTime) < Time.now
-      v = getViewElement
-      v.increment_counter if v != nil
-    end
-		step.update_attribute(:visit_time, Time.now)
-	end
-	
-	def guest_host_validation
-		Step.find_by(part_id: @page_params[:part_id], page_id: @page_params[:page_id], entity_id: @page_params[:entity_id], ip_addr: request.env['REMOTE_ADDR'], host_name: request.env['REMOTE_HOST'], user_id: "!=0")
-	end
-	
-	#отрисовка переходов
-	def entity_link(e)
-		if e.entity_name[:link] == nil
-			'(Пусто)'
-		else
-			return link_to(truncate(e.entity_name[:name], :length=> 50), e.entity_name[:link], :class=> 'b_link')
-		end
-	end
 end
 

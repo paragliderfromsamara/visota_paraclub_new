@@ -1,0 +1,13 @@
+<h2>Новый комментарий к фотографии</h2>
+<p>
+    <img src = "http://visota-paraclub.ru<%= @message.photo.link %>" width = "300px" />
+</p>
+<p>
+     <b><%= @message.user.name %></b> добавил комментарий: 
+</p>
+<p>
+    <%= @message.content.escapeBbCode %>
+</p>
+<p>
+    <%= @target_link.html_safe %>
+</p>

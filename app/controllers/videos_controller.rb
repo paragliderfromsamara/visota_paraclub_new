@@ -42,7 +42,7 @@ include ApplicationHelper
   	if @video != nil
   		@title = @header = @video.alter_name
   		@return_to = video_path(@video)
-  		@page_params = {:part_id => 5,:page_id => 1,:entity_id => @video.id}
+  		@page_params = {:part_id => 5, :page_id => 1, :entity_id => @video.id}
   		@path_array = [
                       {:name => 'Медиа', :link => '/media'},
   						        {:name => 'Видео', :link => '/media?t=videos&c=all'},

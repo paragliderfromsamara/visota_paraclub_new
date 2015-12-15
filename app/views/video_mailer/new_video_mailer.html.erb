@@ -1,0 +1,10 @@
+<h2>Новое видео в разделе "<%= @video.category_name %>"</h2>
+<p>
+     <b><%= @video.user.name %></b> добавил видео <%= @video.alter_name %>: 
+</p>
+<p>
+    <%= @video.link  %>
+</p>
+<p>
+    <%= @target_link.html_safe %>
+</p>

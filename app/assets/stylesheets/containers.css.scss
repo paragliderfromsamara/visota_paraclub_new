@@ -18,6 +18,12 @@
 	height:190px;
 }
 
+.inline-thumb-no-info
+{
+    @extend .inline-thumb;
+    height:170px;
+}
+
 .inline-mini
 {
 	margin:3px;

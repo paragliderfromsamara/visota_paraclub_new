@@ -87,19 +87,19 @@ include MessagesHelper
 
   # GET /photo_albums/1/edit
   def edit
-	@albumToForm = PhotoAlbum.find_by(id: params[:id])
-	if isEntityOwner?(@albumToForm) 
-		@title = @header = 'Изменение фотоальбома'
-		@path_array = [
-                    {:name => 'Медиа', :link => '/media'},
-						        {:name => 'Фотоальбомы', :link => '/media?t=albums&c=all'},
-						        {:name => @albumToForm.category_name, :link => "/media?t=albums&c=#{@albumToForm.category_id}"},
-						        {:name => @albumToForm.name, :link => photo_album_path(@albumToForm)},
-                    {:name => @title},
-					  ]
-	else
-		redirect_to '/404'
-	end
+  	@albumToForm = PhotoAlbum.find_by(id: params[:id])
+  	if isEntityOwner?(@albumToForm) 
+  		@title = @header = 'Изменение фотоальбома'
+  		@path_array = [
+                      {:name => 'Медиа', :link => '/media'},
+  						        {:name => 'Фотоальбомы', :link => '/media?t=albums&c=all'},
+  						        {:name => @albumToForm.category_name, :link => "/media?t=albums&c=#{@albumToForm.category_id}"},
+  						        {:name => @albumToForm.name, :link => photo_album_path(@albumToForm)},
+                      {:name => @title},
+  					  ]
+  	else
+  		redirect_to '/404'
+  	end
   end
 
   # POST /photo_albums
@@ -146,11 +146,7 @@ include MessagesHelper
   if isEntityOwner?(@albumToForm) 
     curStatusId = @albumToForm.status_id 
     newStatusId = (params[:photo_album][:status_id] != nil)? params[:photo_album][:status_id].to_i : curStatusId
-    if curStatusId == 0 && newStatusId == 1
-      notice = 'Альбом успешно добавлен'
-    else
-      notice = 'Альбом успешно обновлён'
-    end
+    
       if @albumToForm.user_id != (params[:photo_album][:user_id]).to_i
 				if @albumToForm.photos != []
 					@albumToForm.photos.each do |photo|
@@ -158,19 +154,14 @@ include MessagesHelper
 					end
 				end
 			end
-			#if params[:photo_editions] != nil and params[:photo_editions] != []
-			#	photos_params = params[:photo_editions][:photos]
-			#	photos_params.each do |x|
-			#		photo = Photo.find_by_id(x[1][:id])
-			#		if photo != nil
-			#			if photo.description != x[1][:description]
-			#				photo.update_attribute(:description, x[1][:description])
-			#			end
-			#		end
-			#	end
-			#end
 			respond_to do |format|
 			  if @albumToForm.update_attributes(params[:photo_album])
+          if curStatusId == 0 && newStatusId == 1
+            notice = 'Альбом успешно добавлен'
+            sendNewAlbumMail(@albumToForm)
+          else
+            notice = 'Альбом успешно обновлён'
+          end
 			    format.html { redirect_to @albumToForm, :notice => notice }
 				  format.json { head :no_content}
 			  else

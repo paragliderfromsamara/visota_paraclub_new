@@ -5,6 +5,7 @@ module SessionsHelper
     cookies.permanent.signed[:remember_token] = [user.id, user.salt]
     self.current_user = user
     checkGuestTokenAfterLogin(user)
+    return true
   end
   
   def guestToken

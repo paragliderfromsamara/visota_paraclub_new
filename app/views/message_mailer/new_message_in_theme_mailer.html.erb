@@ -1,0 +1,15 @@
+<h2>Новое сообщение в теме <%= @message.theme.name %></h2>
+<p>
+    <b><%= @message.user.name %></b> добавил тему "<%= @message.theme.name %>"
+</p>
+<p>
+    <%= @message.content.escapeBbCode %>
+</p>
+<% if @message.photos != [] %>
+    <% @message.photos.each do |p| %>
+        <img src = "http://visota-paraclub.ru<%= p.link.thumb %>" />
+    <% end %>
+<% end %>
+<p>
+    <%= @target_link.html_safe %>
+</p>

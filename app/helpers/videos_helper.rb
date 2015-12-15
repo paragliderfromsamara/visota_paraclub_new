@@ -22,7 +22,7 @@ module VideosHelper
 		#h = theme.statusHash
 		#v = "#{image_tag h[:img], :height => '20px', :style => 'float: left;', :title => h[:ru] } "
 		v = "<div class='stat fi-float-left'>#{drawIcon('comments', 'medium', 'grey')}<span>#{video.visible_messages.count.to_s}</span></div>"
-		v += "<div class='stat fi-float-left'>#{drawIcon('eye', 'medium', 'grey')}<span>0</span></div>"
+		v += "<div class='stat fi-float-left'>#{drawIcon('eye', 'medium', 'grey')}<span>#{@video.views}</span></div>"
 		return v
 	end
 	def video_show_block

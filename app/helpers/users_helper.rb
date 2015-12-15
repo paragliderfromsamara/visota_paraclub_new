@@ -131,12 +131,12 @@ def data_container(data)
 end
 
 def users_paths_buttons #buttons => {:name => 'Перейти', :title => "Перейти на страницу пилота", :access => ['all'], :type => 'b_green', :link => user_path(user)}
-	user = User.new
+	#user = User.new
 	buttons_array = [
-					 {:name => "Клубные пилоты [#{user.club_pilots.count}]", :access => true, :type => 'b_grey', :link => '/pilots'}, 
-					 {:name => "Друзья клуба [#{user.club_friends.count}]", :access => true, :type => 'b_grey', :link => '/pilots?g=club_friends'}, 
-					 {:name => "Вновь прибывшие [#{user.new_users.count}]", :access => true, :type => 'b_grey', :link => '/pilots?g=just_came'}, 
-					 {:name => "Бан лист [#{user.bunned.count}]", :access => is_admin?, :type => 'b_grey', :link => '/pilots?g=bun_list'}
+					 {:name => "Клубные пилоты [#{User.club_pilots.count}]", :access => true, :type => 'b_grey', :link => '/pilots'}, 
+					 {:name => "Друзья клуба [#{User.club_friends.count}]", :access => true, :type => 'b_grey', :link => '/pilots?g=club_friends'}, 
+					 {:name => "Вновь прибывшие [#{User.new_users.count}]", :access => true, :type => 'b_grey', :link => '/pilots?g=just_came'}, 
+					 {:name => "Бан лист [#{User.bunned.count}]", :access => is_admin?, :type => 'b_grey', :link => '/pilots?g=bun_list'}
 					 ]
 	buttons_array[@active_button][:selected] = true if @active_button != nil
 	buttons_in_line(buttons_array)

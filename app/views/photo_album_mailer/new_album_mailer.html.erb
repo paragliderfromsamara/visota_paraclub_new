@@ -1,0 +1,12 @@
+<h2>Новый фотоальбом в разделе "<%= @album.category_name %>"</h2>
+<p>
+    <b><%= @album.user.name %></b> добавил фотоальбом <b><%= @album.name %></b>: 
+</p>
+<p>
+    <% @album.photos.each do |p| %>
+        <img src = "http://visota-paraclub.ru<%= p.link.thumb %>" />
+    <% end %>
+</p>
+<p>
+    <%= @target_link.html_safe %>
+</p>

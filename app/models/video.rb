@@ -5,6 +5,7 @@ class Video < ActiveRecord::Base
   has_many :messages, :dependent  => :delete_all
   has_many :video_like_marks, :dependent  => :delete_all
   has_one :theme, :dependent  => :destroy
+  has_one :entity_view, :as => :v_entity, :dependent => :delete
   require 'will_paginate'
   #has_many :events, :dependent  => :delete_all
 	auto_html_for :link do 
@@ -81,8 +82,9 @@ class Video < ActiveRecord::Base
 	  
   #categories end---
   #Просмотры--------
-  	def views
-		Step.where(part_id: 5, page_id: 1, entity_id: self.id)
-	end
+  def views
+	  #Step.where(part_id: 3, page_id: 1, entity_id: self.id)
+    (self.entity_view == nil)? 0 : self.entity_view.counter 
+  end
   #Просмотры end
 end

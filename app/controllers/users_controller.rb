@@ -161,7 +161,6 @@ include UsersHelper
   		@user = User.new
   		@action_type = 'new'
   		@title = @header = "Регистрация на сайте"
-  		@add_functions = "userFieldsChecking();"
   		respond_to do |format|
   		  format.html # new.html.erb
   		  format.json { render :json => @user }
@@ -195,7 +194,7 @@ include UsersHelper
 			if @user.image_valid?(params[:abi][:value], params[:abi][:name])
 				respond_to do |format|
 				  if @user.save
-					UserMailer.user_check(@user, params[:password]).deliver
+					UserMailer.user_check(@user).deliver_now
 					user = User.authenticate(params[:user][:name],
 											params[:user][:password])
 					sign_in user
@@ -230,8 +229,7 @@ include UsersHelper
     		my_notice = 'Профиль успешно обновлён'
     		case params[:tab]
     		when 'email_upd' 
-    			my_notice = 'E-mail адрес обновлён. На новый адрес отправлено проверочное сообщение.' if UserMailer.mail_check(@user).deliver
-    			
+    			my_notice = 'E-mail адрес обновлён. На новый адрес отправлено проверочное сообщение.' if sendCheckUserData(@user)
     		when 'password_upd'
     			my_notice = 'Пароль успешно обновлён.'
     		end
@@ -263,11 +261,11 @@ include UsersHelper
   end
   
   def welcome
-	@title = @header = 'Приветствуем в нашей крылатой компании!!!'
-	@photo_albums
-	@videos
-	@articles
-	#redirect_to '/404' if user_type != 'new_user'
+	  @title = @header = 'Приветствуем в нашей крылатой компании!!!'
+	  @photo_albums
+	  @videos
+	  @articles
+	  #redirect_to root_path if user_type != 'new_user'
   end
   
   def thanks
@@ -358,17 +356,16 @@ include UsersHelper
 		current_user = user
 		case action
 		when 'mail_check'
-			user.mailer.update_attributes(:email => user.email)
-			redirect_to edit_user_path(:id => user.id, :tab => 'notification_upd'), :notice => "Ваш E-mail: #{user.email} успешно активирован" if user.update_attributes(:email_status => 'Активен')
-		when 'remember_password'
+			user.mailer.update_attribute(:email, user.email)
+			redirect_to edit_user_path(:id => user.id, :tab => 'notification_upd'), :notice => "Ваш E-mail: #{user.email} успешно активирован" if user.update_attribute(:email_status, 'Активен')
+    when 'remember_password'
 			redirect_to edit_user_path(:id => user.id, :tab => 'password_upd', :value_s => user.salt) if sign_in user
 		when 'user_check'
-			new_user_group = 3 if user.user_group_id == 5
-			new_user_group = user.user_group_id if user.user_group_id != 5
-			user.update_attributes(:email_status => 'Активен', :user_group_id => 3) #активирует E-mail и переводит пользователя в группу Друг Клуба
+			new_user_group = (user.user_group_id == 5)? 3 : user.user_group_id 
+			user.update_attributes(:email_status => 'Активен', :user_group_id => new_user_group) #активирует E-mail и переводит пользователя в группу Друг Клуба
 			redirect_to edit_user_path(:id => user.id, :tab => 'notification_upd'), :notice => 'Ваш аккаунт успешно подтверждён'
 		else
-			redirect_to '/404'
+			redirect_to root_path
 		end
 	else
 		redirect_to root_path #redirect_to '/404'
@@ -404,15 +401,15 @@ include UsersHelper
 	#UserMailer.mail_check(current_user).deliver
   end
   def send_email_check_message
-    user = User.find_by(id: params[:id])
-    if (current_user == user and user != nil) || is_admin? 
-      UserMailer.user_check(user).deliver if user.user_group_id == 3
-      UserMailer.mail_check(user).deliver if user.user_group_id != 3
+    user = User.find(params[:id])
+    if (current_user == user and user != nil) || is_admin?
+      sendCheckUserData(user)
+      #UserMailer.user_check(user).deliver if user.user_group_id == 5
+      #UserMailer.mail_check(user).deliver if user.user_group_id != 5
       respond_to do |format|
   	    format.json {render :json => 'good'}
       end
     end
-
   end
   def steps
 	  if is_super_admin?

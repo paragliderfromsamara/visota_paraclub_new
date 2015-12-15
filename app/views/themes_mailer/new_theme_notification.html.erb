@@ -1,7 +1,15 @@
 <h2>Новая тема в разделе <%= @theme.topic.name %></h2>
 <p>
-    <%= @theme.user.name %> добавил тему "<%= @theme.name %>"
+    <b><%= @message.user.name %></b> добавил тему "<%= @theme.name %>"
 </p>
+<p>
+    <%= @theme.content.escapeBbCode %>
+</p>
+<% if @theme.photos != [] %>
+    <% @theme.photos.each do |p| %>
+        <img src = "http://visota-paraclub.ru<%= p.link.thumb %>" />
+    <% end %>
+<% end %>
 <p>
     <%= @target_link.html_safe %>
 </p>

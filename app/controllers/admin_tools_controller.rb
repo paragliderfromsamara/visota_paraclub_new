@@ -2,8 +2,8 @@ class AdminToolsController < ApplicationController
 include AdminToolsHelper  
   def functions_test
     @title = @header = 'Тест функций'
-    #theme = current_user.themes.last
-    #ThemesMailer.new_theme_notification(theme, current_user).deliver
+    #article = Article.find(56)
+   # UserMailer.mail_check(current_user).deliver_now
     #stepsAdaption
   end
    
@@ -242,6 +242,11 @@ include AdminToolsHelper
         steps = Step.where(part_id: 4, page_id: 1, entity_id: photo.id)
         v = photo.build_entity_view(counter: steps.count)
         v.save
+        if photo.messages != []
+          photo.messages.each do |m|
+            m.update_attributes(status_id: 1, visibility_status_id: 1)
+          end
+        end
 			end
 		end
 		articles = Article.all
@@ -253,6 +258,18 @@ include AdminToolsHelper
         v.save
       end
 		end
+    videos = Video.all
+    if videos != []
+      videos.each do |v|
+        if v.messages != []
+          v.messages.each do |m|
+            m.update_attributes(status_id: 1, visibility_status_id: 1)
+          end
+        end
+      end
+    end
+    
+    
     stepsAdaption
 	else
 		redirect_to '/404'
