@@ -16,6 +16,8 @@ module MailerHelper
     mailers.each {|m| VideoMailer.new_video_mailer(video, m.user).deliver_later if m.user_id == 1} if mailers != []
   end
   def sendNewThemeMail(theme)
-    #to_do
+    users = User.select(:id).where(email_status: 'Активен').where.not(id: theme.user_id)
+    mailers = TopicNotification.where(topic_id:theme.topic_id, user_id: users)
+    mailers.each {|m| ThemesMailer.new_theme_notification(theme, m.user).deliver_later if m.user_id == 1} if mailers != []
   end
 end

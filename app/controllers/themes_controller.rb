@@ -134,12 +134,15 @@ include TopicsHelper
     if curStatusId == 0 && newStatusId == 1
       notice = 'Тема успешно добавлена' 
       params[:theme][:created_at] = params[:theme][:updated_at] = Time.now
+      sMail = true
     else
       notice = 'Тема успешно обновлена' 
       params[:theme][:updater_id] = current_user.id
+      sMail = false
     end
 		respond_to do |format|
 		  if @formTheme.update_attributes(params[:theme])
+      sendNewThemeMail(@formTheme) if sMail
 			#if params[:photo_editions] != nil and params[:photo_editions] != []
 			#	photos_params = params[:photo_editions][:photos]
 			#	photos_params.each do |x|
