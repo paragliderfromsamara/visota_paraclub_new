@@ -228,9 +228,16 @@ class MessagesController < ApplicationController
       old_status_id = @message.status_id
       new_status_id = 0
       new_status_id = params[:message][:status_id].to_i if params[:message][:status_id] != nil
-      noticeText = (new_status_id > old_status_id)? ("Сообщение успешно добавлено."):("Сообщение успешно обновлено.")
+      if new_status_id > old_status_id
+        sMail = true
+        noticeText = "Сообщение успешно добавлено."
+      else
+        sMail = false
+        noticeText = "Сообщение успешно обновлено."
+      end
   		respond_to do |format|
   		  if @message.update_attributes(params[:message])
+          sendNewMessageMail(@message) if sMail
           newTime = Time.now
           @message.update_attributes(created_at: newTime, updated_at: newTime) if new_status_id > old_status_id
     			link = "#{theme_path(@message.theme_id)}#msg_#{@message.id}" if @message.theme != nil

@@ -142,7 +142,10 @@ include TopicsHelper
     end
 		respond_to do |format|
 		  if @formTheme.update_attributes(params[:theme])
-      sendNewThemeMail(@formTheme) if sMail
+        if sMail
+          sendNewThemeMail(@formTheme)
+          @formTheme.theme_notifications.create(:user_id =>  @formTheme.user_id)
+        end
 			#if params[:photo_editions] != nil and params[:photo_editions] != []
 			#	photos_params = params[:photo_editions][:photos]
 			#	photos_params.each do |x|

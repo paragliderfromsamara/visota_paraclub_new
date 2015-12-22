@@ -4,7 +4,17 @@ class MessageMailer < ApplicationMailer
     @message = message
     @link = "localhost:3000/themes/#{message.theme.id}#msg_#{message.id}" #'http://visota-paraclub.ru'
     @target_link = "<a href = 'http://#{@link}'>Перейти к теме</a>"
-    mail(to: user.email, :subject => "Новое сообщение в теме #{message.theme.name}") do |format|
+    mail(to: user.email, :subject => "Новое сообщение в теме \"#{message.theme.name}\"") do |format|
+      format.text
+      format.html
+    end
+  end
+  def new_answer_in_theme_mailer(message, user)
+    @user = user
+    @message = message
+    @link = "localhost:3000/themes/#{message.theme.id}#msg_#{message.id}" #'http://visota-paraclub.ru'
+    @target_link = "<a href = 'http://#{@link}'>Перейти к теме</a>"
+    mail(to: user.email, :subject => "Ответ в теме \"#{message.theme.name}\" от пользователя #{message.user.name}") do |format|
       format.text
       format.html
     end

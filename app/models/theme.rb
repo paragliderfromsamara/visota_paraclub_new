@@ -127,6 +127,10 @@ class Theme < ActiveRecord::Base
 	{:id => 2, :value => 'hidden', :img => 'shield', :ru => 'Только для авторизванных пользователей'}
 	]
   end
+  def users_who_can_see
+    [0,1,2,3,4,6] if self.v_status == 'visible'
+    [0,1,2,3,6] if self.v_status == 'hidden'
+  end
   def v_status #статус отображения
 	stat = 'visible'
 	v_statuses.each do |s|

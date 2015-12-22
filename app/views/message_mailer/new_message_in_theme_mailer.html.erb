@@ -1,6 +1,15 @@
 <h2>Новое сообщение в теме <%= @message.theme.name %></h2>
 <p>
-    <b><%= @message.user.name %></b> добавил тему "<%= @message.theme.name %>"
+    <% if @message.message.nil? %>
+        <b><%= @message.user.name %></b> добавил сообщение в теме <b>"<%= @message.theme.name %>"</b>
+    <% else %>
+        <% if @message.message.user == @message.user %>
+             <b><%= @message.user.name %></b> добавил сообщение в теме <b>"<%= @message.theme.name %>"</b>
+        <%else%>
+            <b><%= @message.user.name %></b> ответил пользователю <b><%= @message.message.user.name %></b> в теме <b>"<%= @message.theme.name %>"</b>
+        <%end%>
+
+    <% end %>
 </p>
 <p>
     <%= @message.content.escapeBbCode %>
