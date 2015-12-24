@@ -59,6 +59,21 @@ module MailerHelper
     end
   end
   def sendNewArticleMail(article)
-    
+    users = User.select(:id).where(email_status: 'Активен').where.not(id: article.user_id)
+    mailers = Mailer.where(article:'yes', user_id: users)
+    if mailers != []
+			case article.type[:link]
+				when "reports"
+				  mailers.each {|m| ArticlesMailer.new_report_mailer(article, m.user).deliver_later if m.user_id == 1} 
+				when "reviews"
+			    mailers.each {|m| ArticlesMailer.new_review_mailer(article, m.user).deliver_later if m.user_id == 1} 
+				when "club_articles"
+				  mailers.each {|m| ArticlesMailer.new_article_mailer(article, m.user).deliver_later if m.user_id == 1} 
+				when "flight_accidents"
+				  mailers.each {|m| ArticlesMailer.new_flight_accident_mailer(article, m.user).deliver_later if m.user_id == 1} 
+				when "documents"
+				  mailers.each {|m| ArticlesMailer.new_document_mailer(article, m.user).deliver_later if m.user_id == 1} 
+			end
+    end
   end
 end

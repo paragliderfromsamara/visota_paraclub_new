@@ -48,4 +48,16 @@ class ArticlesMailer < ApplicationMailer
       format.html {render 'new_article_mailer'}
     end
   end
+  def new_article_mailer(article, user)
+    @user = user
+    @article = article
+    @header = "Новая статья"
+    @user_add_message = "<b>#{@article.user.name}</b> добавил статью <b>#{@article.alter_name}</b>"
+    @link = "http://#{default_url_options[:host]}/articles/#{article.id}" #'http://visota-paraclub.ru'
+    @target_link = "<a href = '#{@link}'>Перейти к статье</a>"
+    mail(to: user.email, :subject => @header) do |format|
+      format.text {render 'new_article_mailer'}
+      format.html {render 'new_article_mailer'}
+    end
+  end
 end
