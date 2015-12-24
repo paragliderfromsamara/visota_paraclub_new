@@ -7,8 +7,8 @@ module ApplicationHelper
 require 'open-uri' #для парсера
 def vk_like_vidget
   {
-    script: '<script type="text/javascript" src="//vk.com/js/api/openapi.js?121"></script>
-             <script type="text/javascript">
+    script: '<script data-turbolinks-track="true" type="text/javascript" src="//vk.com/js/api/openapi.js?121"></script>
+             <script data-turbolinks-track="true" type="text/javascript">
                 VK.init({apiId: API_ID, onlyWidgets: true});
              </script>',
     button: '<div id="vk_like"></div>
