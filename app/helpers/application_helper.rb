@@ -17,6 +17,9 @@ def vk_like_vidget
              </script>' 
   }
 end
+def meta_content
+  (@meta_content == nil)? "Круглогодичное обучение полетам на параплане, мотопараплане и кайтах. Помощь в выборе и приобретении снаряжения" : @meta_content
+end
   def waitline(id)
     "
 		<div style = 'display:none;' id = '#{id}' class = 'wl'>
