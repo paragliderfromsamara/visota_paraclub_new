@@ -9,11 +9,11 @@ def vk_like_vidget
   {
     script: '<script data-turbolinks-track="true" type="text/javascript" src="//vk.com/js/api/openapi.js?121"></script>
              <script data-turbolinks-track="true" type="text/javascript">
-                VK.init({apiId: API_ID, onlyWidgets: true});
+                VK.init({apiId: 5201088, onlyWidgets: true});
              </script>',
     button: '<div id="vk_like"></div>
              <script type="text/javascript">
-               VK.Widgets.Like("vk_like", {type: "mini", verb: 1, height: 20});
+               VK.Widgets.Like("vk_like", {type: "mini", verb: 1, height: 18});
              </script>' 
   }
 end
