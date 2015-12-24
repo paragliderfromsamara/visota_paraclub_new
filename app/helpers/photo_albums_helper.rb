@@ -109,7 +109,6 @@ module PhotoAlbumsHelper
 		v = "<div title = 'Фотографий в альбоме' class='stat fi-float-left'><i class = 'fi-camera fi-medium fi-grey'></i><span>#{album.photos.count}</span></div>"
     v += "<div title = 'Комментарии' class='stat fi-float-left'><i class = 'fi-comments fi-medium fi-grey'></i><span>#{album.comments.count.to_s}</span></div>"
 		v += "<div class='stat fi-float-left'><i class = 'fi-eye fi-medium fi-grey'></i><span>#{album.views}</span></div>" #{album.views.count}
-    v += "<div class='stat fi-float-left'>#{vk_like_vidget[:button]}</div>" if @vkBut == true
     return "#{v}"
 	end
 #album block end
