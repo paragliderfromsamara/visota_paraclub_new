@@ -7,7 +7,7 @@ module ArticlesHelper
 								#{articleInformation(@article)}
 							</td>
 							<td align = 'right' valign='middle'>
-								<p class = 'istring_m norm medium-opacity'>Размещён #{my_time(@article.alter_date)}</p>
+								<p class = 'istring_m norm medium-opacity'>Размещён #{@article.alter_date.strftime("%d.%m.%Y")}</p>
 							</td>
 						</tr>
 						<tr>
@@ -105,7 +105,7 @@ module ArticlesHelper
 													#{article.user.name}
 												</td>
 												<td class = 'date'> 
-													#{my_time(article.created_at)}
+													#{article.created_at.strftime("%d.%m.%Y")}
 												</td>
 											</tr>
 										</tbody>
@@ -140,7 +140,7 @@ module ArticlesHelper
 													#{article.attachment_files.first.alter_size}
 												</td>
 												<td class = 'date'> 
-													#{my_time(article.created_at)}
+													#{article.created_at.strftime("%d.%m.%Y")}
 												</td>
 											</tr>
 										</tbody>
@@ -186,7 +186,7 @@ module ArticlesHelper
 								#{article.user.name}
 							</td>
 							<td class = 'date'> 
-								#{my_time(article.created_at)}
+								#{article.created_at.strftime("%d.%m.%Y")}
 							</td>
 						</tr>
 					</tbody>

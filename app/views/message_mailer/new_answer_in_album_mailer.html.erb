@@ -1,0 +1,10 @@
+<h2>Ответ на комментарий к фотоальбому "<%= @message.photo_album.name %>"</h2>
+<p>
+     <b><%= @message.user.name %></b> ответил на комментарий: 
+</p>
+<p>
+    <%= @message.content.escapeBbCode %>
+</p>
+<p>
+    <%= @target_link.html_safe %>
+</p>

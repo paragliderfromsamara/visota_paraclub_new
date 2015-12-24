@@ -1,6 +1,6 @@
 class Article < ActiveRecord::Base
   attr_accessor :assigned_albums, :assigned_videos
-  attr_accessible :article_type_id, :content, :event_id, :name, :user_id, :accident_date, :attachment_files, :photos, :uploaded_photos,:assigned_albums, :assigned_videos, :status_id, :visibility_status_id
+  attr_accessible :article_type_id, :content, :event_id, :name, :user_id, :accident_date, :attachment_files, :photos, :uploaded_photos,:assigned_albums, :assigned_videos, :status_id, :visibility_status_id, :created_at, :updated_at
   belongs_to :user
   #belongs_to :article_type
   has_many :attachment_files, :dependent  => :destroy

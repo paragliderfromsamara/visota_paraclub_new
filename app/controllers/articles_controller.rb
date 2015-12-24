@@ -110,19 +110,30 @@ class ArticlesController < ApplicationController
   # PUT /articles/1.json
   def update
     @article = Article.find(params[:id])
-	if userCanEditArtilcle?(@article)
-		respond_to do |format|
-		  if @article.update_attributes(params[:article])
-			format.html { redirect_to @article, :notice => 'Статья успешно добавлена' }
-			format.json { head :no_content }
-		  else
-			format.html { render :action => "edit" }
-			format.json { render :json => @article.errors, :status => :unprocessable_entity }
-		  end
-		end
-	else
-		redirect_to '/404'
-	end
+  	if userCanEditArtilcle?(@article)
+      curStatusId = @article.status_id
+      newStatusId = (params[:article][:status_id] == nil)? curStatusId : params[:article][:status_id].to_i 
+      if curStatusId != newStatusId
+        noticeMessage = 'Статья успешно добавлена'
+        params[:article][:created_at] = params[:article][:updated_at] = Time.now
+        sMail = true
+      else
+        noticeMessage = 'Статья успешно обновлена'
+        sMail = false
+      end
+  		respond_to do |format|
+  		  if @article.update_attributes(params[:article])
+          sendNewArticleMail(@article) if sMail
+    			format.html { redirect_to @article, :notice => noticeMessage }
+    			format.json { head :no_content }
+  		  else
+    			format.html { render :action => "edit" }
+    			format.json { render :json => @article.errors, :status => :unprocessable_entity }
+  		  end
+  		end
+  	else
+  		redirect_to '/404'
+  	end
   end
 
   # DELETE /articles/1
