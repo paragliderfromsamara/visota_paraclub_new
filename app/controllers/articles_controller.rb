@@ -24,9 +24,10 @@ class ArticlesController < ApplicationController
   # GET /articles/1
   # GET /articles/1.json
   def show
-    @article = Article.find_by(id: params[:id])
+    @article = Article.find(params[:id])
     if userCanSeeArticle(@article)
-  	  @photos = Photo.select(:id)
+      @meta_content = (@article.content.escapeBbCode.blank?)? nil : @article.content.escapeBbCode
+  	 # @photos = Photo.select(:id)
   	  @path_array = [
                       {:name => 'Медиа', :link => '/media'},
   					          {:name => @article.type_name_multiple, :link => "/media?t=#{@article.type[:link]}"},

@@ -9,14 +9,14 @@
   <% define_action %>
   
   <%= vk_like_vidget[:script].html_safe %>
-
-</head>
-<body>
     <script type = 'text/javascript'>
         var ready = function(){$('img, style').load(function(){$(this).fadeIn(1000);}); my_functions(); <%= js_functions %> };
         $(document).ready(ready);
         $(document).on('page:load', ready);
     </script>
+</head>
+<body>
+
 <!--
 <div class = 'right_menu'>
 	<div id = 'wh_cont' style = 'width: 580px;'>
@@ -48,6 +48,7 @@
 	<div class = 'arrow fi-arrow-down' id = 'aDwn' style = 'display: none;'></div>
 </div>
 <% if @hideSesPanel != true %>
+<div class = 'turbolinks-progress-bar'></div>
     <div id = 'ses_p' class = 'm_1000wh' >
         <% if user_type == 'guest' %>
             <%= form_for(:session, :url => sessions_path(:redirect_to => 'index'), :html => {:id => 'sesForm'}) do |f|  %>
@@ -202,7 +203,6 @@
 			</div>
 		</div>
 	<% end %>
-    
 	<div id = 'footer'>
 		<div class = 'm_1000wh'  style = 'top: 30%;'>
 			<div class = 'section group'>

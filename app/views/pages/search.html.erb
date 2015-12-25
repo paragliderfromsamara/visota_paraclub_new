@@ -6,7 +6,7 @@
                 <div class = 'col span_4_of_12'>
                     <input id = 'search_query' type='text' name = 'search_query' placeholder = 'Что ищете?' class = 'sQuery' value = "<%= @searchHashParams[:search_query] %>" />
                 </div>
-                <div class = 'col span_1_of_12'> 
+                <div class = 'col span_1_of_12' data-no-turbolink> 
                     <%= myLinkButton('искать', '/search').html_safe %>
                 </div>
                 <div class = 'col span_7_of_12'>

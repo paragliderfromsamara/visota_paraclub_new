@@ -22,6 +22,7 @@ include TopicsHelper
   def show
     @theme = Theme.find_by_id(params[:id])
   	if userCanSeeTheme?(@theme)
+      @meta_content = (@theme.content.escapeBbCode.blank?)? nil : @theme.content.escapeBbCode
   		@page_params = {:part_id => 9, :page_id => 1, :entity_id => @theme.id}
   		@jsonTheme = {:author => @theme.user.role_card("Автор темы: "), :content => @theme.content_html}
   		@title = @header = @theme.name
