@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  
+
   post '/switch_mark', :to => 'like_marks#switch_mark'
   get  '/switch_mark', :to => 'like_marks#switch_mark'
   # The priority is based upon order of creation: first created -> highest priority.
@@ -78,14 +80,17 @@ Rails.application.routes.draw do
   get "themes/get_themes_list"
   post "themes/do_merge_themes"
   post "themes/theme_switcher"
-  post "themes/add_photos"
-  post "themes/add_files"
+  #создание статьи из темы
+  get '/themes/:id/make_article', :to => 'themes#make_article'
+  post '/themes/:id/make_article', :to => 'themes#make_article'
+  #создание статьи из темы end
+  #создание альбома из темы
+  get '/themes/:id/make_album', :to => 'themes#make_album'
+  #создание альбома из темы end
   get '/themes/:id/theme_switcher', :to => 'themes#theme_switcher'
   get '/get_themes_list', :to => 'themes#get_themes_list'
   get '/themes/:id/merge_themes', :to => 'themes#merge_themes'
   get '/themes/:id/new_message', :to => 'themes#new_message' #Новое сообщение в теме
-  get '/themes/:id/add_photos', :to => 'themes#add_photos' #Загрузка фото
-  get '/themes/:id/add_files', :to => 'themes#add_files' #Загрузка файлов
   post '/do_merge_themes', :to => 'themes#do_merge_themes'
   post '/themes/:id/upload_photos', :to => 'themes#upload_photos' #загрузка с помощью dropzone.js и собственную функцию photosUploader() в application.js
   post '/themes/:id/upload_attachment_files', :to => 'themes#upload_attachment_files'
@@ -106,6 +111,7 @@ Rails.application.routes.draw do
   #videos_controller end
 
   #photos_controller
+  resources :entity_photos, :only => [:destroy]
   resources :photos
   get "photos/recovery"
   post "photos/update_photos"

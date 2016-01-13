@@ -257,10 +257,10 @@ mount_uploader :photo, UserPhotoUploader
 	end
 	return draft
   end
-  def article_draft(t) 
+  def article_draft(t=1) 
   	draft = Article.find_by(user_id: self.id, status_id: 0, article_type_id: t)
   	if draft == nil
-  		draft = Article.new(:user_id => self.id, :status_id => 0, article_type_id: t, content: '')# if draft == nil 
+  		draft = Article.new(:user_id => self.id, :status_id => 0, article_type_id: t, content: '', theme_id: nil)# if draft == nil 
   		draft.save(:validate => false) #отключаем проверку длины названия темы
   	end
 	  return draft
@@ -268,7 +268,7 @@ mount_uploader :photo, UserPhotoUploader
   def album_draft 
   	draft = PhotoAlbum.find_by(user_id: self.id, status_id: 0)
   	if draft == nil
-  		draft =  PhotoAlbum.new(:user_id => self.id, :status_id => 0)# if draft == nil 
+  		draft = PhotoAlbum.new(:user_id => self.id, :status_id => 0, :theme_id => nil)# if draft == nil 
   		draft.save(:validate => false) #отключаем проверку длины названия темы
   	end
 	  return draft

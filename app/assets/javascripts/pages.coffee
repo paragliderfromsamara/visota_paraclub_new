@@ -65,11 +65,20 @@ wheatherPanel = ()->
         h_wr.hide(300)
         h_wr.html('')
 
+initSearchForm = (sForm)->
+    sForm = $(sForm)
+    sBut = sForm.find('.myBut')
+    sBut.click ()->
+        sBut.find('a').attr('href', "/search?" + sForm.serialize())
+        #alert sForm.serialize() #sBut.find('a').attr('href', "/search?" + sForm.serialize())
+        
 r = ()->
     initScrollControl()
     $(document).click ()-> bottomControl()
     $(document).mouseover ()-> bottomControl()
     $(window).resize ()-> bottomControl()
+    sForm = document.getElementById("searchForm")
+    if sForm isnt null then initSearchForm(sForm)
 $(document).ready r
 $(document).on "page:load", r
     

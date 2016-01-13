@@ -33,6 +33,20 @@
 				</p>
 			</div>
 			<br />
+            <div class = 'm_1000wh'>
+                <div class = 'section group'>
+                    <div class = 'col span_4_of_12'>
+                        <%= f.check_box :private_flag, {:class=>'check_box'}, '2', '1' %>
+                        <span title = 'Ну будет известно имён голосующих'><%= f.label :private_flag, "Анонимный опрос" %></span> 
+                    </div>
+                    <div class = 'col span_8_of_12'>
+                        <%= f.label :make_theme_flag, "Создать обсуждение" %>   
+                        <%= f.check_box :make_theme_flag, {:class=>'check_box'}, '2', '1' %>
+                        <%= f.label :topic_id, "Раздел", :title => 'Раздел в котором будет размещено обсуждение' %>
+                        <%= f.collection_select :topic_id, Topic.order("name ASC"), :id, :name %>
+                    </div>
+                </div>
+            </div>
 			<%= f.fields_for :added_vote_values do |v| %>
 				<%= v.label :value, 'Варианты' %><br />
 				<table id = 'vote_values_table'>

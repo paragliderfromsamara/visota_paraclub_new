@@ -1,11 +1,11 @@
 class VotesController < ApplicationController
   def index
-  	@completed_votes = Vote.where("end_date < :time_now", {:time_now => Time.now})
-  	@active_votes = Vote.where("end_date > :time_now", {:time_now => Time.now})
+  	@completed_votes = Vote.completed_votes
+  	@active_votes = Vote.active_votes
   	@path_array = [
-  						{:name => 'Общение', :link => '/visota_life'},
-  						{:name => 'Опросы'}
-  				  ]
+  						    {:name => 'Общение', :link => '/visota_life'},
+  						    {:name => 'Опросы'}
+  				        ]
     @title = @header = 'Опросы'
   	respond_to do |format|
   	  format.html # index.html.erb

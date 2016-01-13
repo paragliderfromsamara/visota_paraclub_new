@@ -59,10 +59,11 @@ module EventsHelper
 	
 	def event_show_photos
 		photos = ''
-		if @event.photos != []
+    phs = @event.visible_photos 
+		if phs != []
 			photos += '<br /><br />'
-			@event.photos.each do |photo|
-				photos += "#{light_box_event_photo_block(photo, photo.link.thumb, '')}" if photo.visibility_status_id == 1
+			phs.each do |photo|
+				photos += "#{light_box_event_photo_block(photo, photo.link.thumb, '')}"
 			end
 		end
 		return photos

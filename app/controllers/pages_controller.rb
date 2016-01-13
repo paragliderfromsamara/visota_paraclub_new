@@ -35,34 +35,35 @@ include PagesHelper
   end
   
   def new_template
-	render :layout => 'new_layout' 
+	  render :layout => 'new_layout' 
   end 
   
   def feed
-	if user_type != 'guest'
-		@title = "Лента событий"
-		@title_2 = feed_part_name
-		@entity_array = feed_blocks
-		@photos = Photo.select(:id)
-		@events = Event.where(display_area_id: [2, 3]).order('post_date DESC').limit(3)
-		if current_feed_part[:en_name] == 'answers'
-			@entity_on_page = 15
-		elsif current_feed_part[:en_name] == 'themes' # or current_feed_part[:en_name] == 'comments'
-			@entity_on_page = 15
-		elsif current_feed_part[:en_name] == 'messages' # or current_feed_part[:en_name] == 'comments'
-			@entity_on_page = 15
-		elsif current_feed_part[:en_name] == 'albums'
-			@entity_on_page = 10
-		elsif current_feed_part[:en_name] == 'videos'
-			@entity_on_page = 10
-		elsif current_feed_part[:en_name] == 'articles' 
-			@entity_on_page = 5
-		elsif current_feed_part[:en_name] == 'comments' 
-			@entity_on_page = 10
-		end
-	else
-		redirect_to '/404'
-	end
+  	if user_type != 'guest'
+      redirect_to '/404' if user_type != 'super_admin'
+  		@title = @header = "Лента событий"
+  		@title_2 = feed_part_name
+  		@entity_array = feed_blocks
+  		@photos = Photo.select(:id)
+  		@events = Event.where(display_area_id: [2, 3]).order('post_date DESC').limit(3)
+  		if current_feed_part[:en_name] == 'answers'
+  			@entity_on_page = 15
+  		elsif current_feed_part[:en_name] == 'themes' # or current_feed_part[:en_name] == 'comments'
+  			@entity_on_page = 15
+  		elsif current_feed_part[:en_name] == 'messages' # or current_feed_part[:en_name] == 'comments'
+  			@entity_on_page = 15
+  		elsif current_feed_part[:en_name] == 'albums'
+  			@entity_on_page = 10
+  		elsif current_feed_part[:en_name] == 'videos'
+  			@entity_on_page = 10
+  		elsif current_feed_part[:en_name] == 'articles' 
+  			@entity_on_page = 5
+  		elsif current_feed_part[:en_name] == 'comments' 
+  			@entity_on_page = 10
+  		end
+  	else
+  		redirect_to '/404'
+  	end
   end
   
   def media
@@ -92,30 +93,22 @@ include PagesHelper
   end
   
   def search
-    @header = @title = "Поиск по сайту"
+    redirect_to '/404' if user_type != 'super_admin'
+    @header = @title = "Поиск по темам"
     @themes = []
     @messages = []
-    @articles = []
-    @events = []
-    @entity_array = []
-    @add_functions = "initSearchForm();"
     @entity_on_page = 15
-    makeSearchParameters
-    if @searchHashParams[:search_query].strip != "" and searchParamsIsNotEmpty?
-      @header = @title = "Результат поиска по запросу: \"#{@searchHashParams[:search_query]}\""
-      @searchHashParams[:search_query] = @searchHashParams[:search_query].mb_chars.downcase
-      @paginationLink = build_search_pagination_link
-      if isSearchInTopics?
-        searchResult = search_in_themes
-        @messages = searchResult[:messages]
-        @messages += search_in_old_messages if @searchHashParams[:o_gb]
-        @themes = searchResult[:themes]
-      end
-      @entity_array = @messages + @themes + @articles + @events
-      
+    @search_string = params[:search_query] == nil ? "" : params[:search_query]
+    if !@search_string.blank? != ""
+      @header = @title = "Результат поиска по запросу: \"#{@search_string}\""
+      searchResult = search_in_themes
+      @messages = searchResult[:messages]
+      @messages += search_in_old_messages
+      @themes = searchResult[:themes]
+      @entity_array = @themes
     else
-      flash.now[:alert] = "Введите поисковую фразу" if searchParamsIsNotEmpty? and params[:search_query] == ""
-      flash.now[:alert] = "Не выбраны разделы для поиска" if !searchParamsIsNotEmpty? and params[:search_query] != nil
+      flash.now[:alert] = "Введите поисковую фразу" if params[:search_query] == ""
+      flash.now[:alert] = "Не выбраны разделы для поиска" if params[:search_query] != nil
     end
   end
 end

@@ -4,7 +4,10 @@ class Message < ActiveRecord::Base
  
   belongs_to :user
   belongs_to :video
-  has_many :photos, :dependent  => :delete_all
+  
+  has_many :entity_photos, :as => :p_entity, :dependent => :destroy #has_many :photos, :dependent  => :delete_all
+  has_many :photos, through: :entity_photos
+  
   has_many :attachment_files, :dependent => :delete_all
   belongs_to :photo
   belongs_to :topic
@@ -95,9 +98,9 @@ class Message < ActiveRecord::Base
   end  
   def check_photo_in_content(ph) #делаем фотографию невидимой в основном списке фотографий сообщения и делаем видимой, если её там нет
 		if content.index("#Photo#{ph.id}") != nil and content.index("#Photo#{ph.id}") != -1
-			ph.set_as_hidden
+			self.entity_photos.where(photo_id: ph.id).first.set_as_hidden
 		else
-			ph.set_as_visible
+			self.entity_photos.where(photo_id: ph.id).first.set_as_visible
 		end  
   end
   #-Валидации end----------------------------------------------
@@ -178,7 +181,7 @@ class Message < ActiveRecord::Base
   end 
   
   def visible_photos #только видимые фотографии
-	photos.where(:visibility_status_id => 1)
+	  photos.where(id: entity_photos.select(:photo_id).where(visibility_status_id: [1, nil]))
   end
 #функции связанные с отображением сообщений end
 
@@ -229,17 +232,12 @@ class Message < ActiveRecord::Base
 	new_theme.save(:validate => false)				
 	if self.get_tread != []
 		self.get_tread.each do |msg|
-			msg.update_attributes(:theme_id => new_theme.id, :topic_id => new_theme.topic_id, :visibility_status_id => new_theme.visibility_status_id)
+			msg.update_attributes(:theme_id => new_theme.id, :topic_id => new_theme.topic_id)
 		end	
 	end	
-	if self.photos != []
-		self.photos.each do |ph|
-			ph.update_attributes(:message_id => nil, :theme_id => new_theme.id)
-			if ph.status == 'normal' and new_theme.v_status == 'hidden' 
-				ph.update_attribute(:status_id, 4) #on_hidden_entity
-			elsif ph.status == 'normal' and new_theme.v_status == 'visible'
-				ph.update_attribute(:status_id, 1) #normal
-			end
+	if self.entity_photos != []
+		self.entity_photos.each do |ph|
+			 new_theme.entity_photos.create(photo_id: ph.photo_id, visibility_status_id: ph.visibility_status_id)
 		end
 	end
 	if self.attachment_files != []

@@ -1,11 +1,5 @@
 module PhotosHelper
-	def light_box_photo_block(photo)
-		"
-			<a href = '#{photo_path(photo)}' title = '#{photo.description}' >#{image_tag photo.link.thumb, :style => "display: none;", :class => 'album_thumb_photo'}</a>
-			
-		"#<span id = 'album_#{ photo.photo_album.id.to_s }_#{i}' style = 'display: none;'><a class = 'b_link' href = '#{photo_path(photo)}'>Комментарии</a></span>
-	end
-	
+
 	def photo_pagination 
 		cur_index = @photos.index(@photo) #Текущий элемент
 		phsCount = @photos.count #Номер последнего элемента
@@ -21,7 +15,7 @@ module PhotosHelper
 				if i == cur_index
 					val += "<div class = 'ph-paginate ph-cur' style = 'background-image:url(\"#{p.link.thumb}\");' ></div>"
 				else
-					val += "<div class='ph-paginate' link_to='#{photo_path(p)}' style = 'background-image:url(\"#{p.link.thumb}\");'></div>"
+					val += "<div class='ph-paginate' link_to='#{photo_path(id: p.id, e: params[:e], e_id: params[:e_id])}' style = 'background-image:url(\"#{p.link.thumb}\");'></div>"
 				end
 				i += 1	
 			end
@@ -46,9 +40,9 @@ module PhotosHelper
 				if i == cur_index
 					val += "<div class = 'ph-paginate ph-cur' style = 'background-image:url(\"#{p.link.thumb}\");' ></div>"
 				elsif !(i<fVisible) and !(i>lVisible) 
-					val += "<div class='ph-paginate' link_to='#{photo_path(p)}' style = 'background-image:url(\"#{p.link.thumb}\");'></div>"
+					val += "<div class='ph-paginate' link_to='#{photo_path(id: p.id, e: params[:e], e_id: params[:e_id])}' style = 'background-image:url(\"#{p.link.thumb}\");'></div>"
 				else
-					val += "<div class='ph-paginate ph-h' link_to='#{photo_path(p)}' style = 'background-image:url(\"#{p.link.thumb}\");'></div>"
+					val += "<div class='ph-paginate ph-h' link_to='#{photo_path(id: p.id, e: params[:e], e_id: params[:e_id])}' style = 'background-image:url(\"#{p.link.thumb}\");'></div>"
 				end
 				i+=1
 			end
@@ -63,9 +57,9 @@ module PhotosHelper
 			if i == cur_index
 				value += "#{image_tag(@photos[i].link.thumb, :class => 'ph-paginate ph-cur')}"
 			elsif !(i<start_index) and !(i>end_index) and i != cur_index
-				value += "<a href = '#{photo_path(p)}'>#{image_tag(p.link.thumb, :class => 'ph-paginate ph-cur')}</a>"
+				value += "<a href = '#{photo_path(id: p.id, e: params[:e], e_id: params[:e_id])}'>#{image_tag(p.link.thumb, :class => 'ph-paginate ph-cur')}</a>"
 			elsif (i<start_index) or (i>end_index)	
-				value += "<a href = '#{photo_path(p)}'>#{image_tag(p.link.thumb, :class => 'ph-paginate ph-cur ph-h')}</a>"
+				value += "<a href = '#{photo_path(id: p.id, e: params[:e], e_id: params[:e_id])}'>#{image_tag(p.link.thumb, :class => 'ph-paginate ph-cur ph-h')}</a>"
 			end
 			i += 1
 		end
@@ -82,7 +76,7 @@ module PhotosHelper
 	def photo_info
 		value = ''
 		value += "<tr><td align = 'left' valign = 'middle'><span class = 'istring_m norm'>Фото разместил</span> #{link_to @photo.user.name, @photo.user, :class=>'b_link_i'}</td></tr>" if @photo.user != nil
-		value += "<tr><td align = 'left' valign = 'middle'><span class = 'istring_m norm'>Размещено #{@photo.parent[:published_in]}</span> #{link_to(@photo.parent[:parent_name], @photo.parent[:parent_link], :class => 'b_link_i')}</td></tr>" 
+	#	value += "<tr><td align = 'left' valign = 'middle'><span class = 'istring_m norm'>Размещено #{@photo.parent[:published_in]}</span> #{link_to(@photo.parent[:parent_name], @photo.parent[:parent_link], :class => 'b_link_i')}</td></tr>" 
     return "<table style = 'width: 98%; font-size: 14pt;'>#{value}</table>"
 	end
 	def photoInfo(photo)
@@ -99,7 +93,7 @@ module PhotosHelper
 		phts = msg.visible_photos
 		if phts != []
 			phts.each do |photo|
-				value += "<a href = '#{photo_path(photo)}'  title = '#{photo.description}' alt = '#{photo_path(photo)}' ><div class = 'inline-blocks inline-thumb-no-info'><div class = 'central_field' style = 'width: 250px; margin-top: 15px;'><img #{"style = 'display: none;'" if params[:preview_mode] != 'true'} width = '250px' src = '#{photo.link.thumb}' /></div></div></a>"
+				value += "<a href = '#{photo.link}' data-lightbox = 'msg_#{msg.id}' title = '#{photo.description}' alt = '#{photo_path(photo)}' ><div class = 'inline-blocks inline-thumb-no-info'><div class = 'central_field' style = 'width: 250px; margin-top: 15px;'><img #{"style = 'display: none;'" if params[:preview_mode] != 'true'} width = '250px' src = '#{photo.link.thumb}' /></div></div></a>"
 			end
 		end
 		return value
@@ -120,7 +114,7 @@ module PhotosHelper
 		phts = ar.visible_photos
 		if phts != []
 			phts.each do |photo|
-				value += "<a href = '#{photo_path(photo)}' title = '#{photo.description}' alt = '#{photo_path(photo)}' ><div class = 'inline-blocks inline-thumb'><div class = 'central_field' style = 'width: 250px; margin-top: 15px;'><img style = 'display: none;' width = '250px' src = '#{photo.link.thumb}' /></div><div style = 'width: 100px; height: 23px; position: absolute; bottom: 5px; right: 15px;'>#{photoInfo(photo)}</div></div></a>"
+				value += "<a href = '#{photo.link}' data-lightbox = 'ar_#{ar.id}' title = '#{photo.description}' alt = '#{photo_path(photo)}' ><div class = 'inline-blocks inline-thumb-no-info'><div class = 'central_field' style = 'width: 250px; margin-top: 15px;'><img #{"style = 'display: none;'" if params[:preview_mode] != 'true'} style = 'display: none;' width = '250px' src = '#{photo.link.thumb}' /></div></div></a>"
 			end
 		end
 		return value

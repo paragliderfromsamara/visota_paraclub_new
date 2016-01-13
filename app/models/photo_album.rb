@@ -1,11 +1,11 @@
 class PhotoAlbum < ActiveRecord::Base
   attr_accessor :deleted_photos
-  attr_accessible :article_id, :category_id, :description, :name, :photo_id, :user_id, :uploaded_photos, :status_id, :visibility_status_id, :deleted_photos
-  
+  attr_accessible :article_id, :category_id, :description, :name, :photo_id, :user_id, :uploaded_photos, :status_id, :visibility_status_id, :deleted_photos, :theme_id
   belongs_to :user
   belongs_to :photo
-  has_one :theme, :dependent  => :destroy
-  has_many :photos, :dependent  => :delete_all
+  belongs_to :theme
+  has_many :entity_photos, :as => :p_entity, :dependent => :destroy #has_many :photos, :dependent  => :delete_all
+  has_many :photos, through: :entity_photos
   has_many :messages, :dependent  => :delete_all
   has_many :photo_album_like_marks, :dependent  => :delete_all
   has_one :entity_view, :as => :v_entity, :dependent => :delete
@@ -35,9 +35,11 @@ class PhotoAlbum < ActiveRecord::Base
         errors.add(:deleted_photos, "В альбоме должно быть как минимум 3 фотографии...") 
       else
         if arr.length > 0
-          arr.each do |p_id|
-            ph = Photo.find_by(:id => p_id, :photo_album_id => self.id)
-            ph.destroy if ph != nil
+          ePhs = self.entity_photos.where(id: arr)
+          if ePhs != []
+            ePhs.each do |ePh|
+              ePh.destroy
+            end
           end
         end
       end

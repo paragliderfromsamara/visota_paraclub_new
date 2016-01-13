@@ -1,6 +1,9 @@
 class Event < ActiveRecord::Base
-   attr_accessible :title, :content, :updated_at, :status_id, :post_date, :uploaded_photos, :attachment_files
-  has_many :photos, :dependent  => :delete_all
+  attr_accessible :title, :content, :updated_at, :status_id, :post_date, :uploaded_photos, :attachment_files
+ 
+  has_many :entity_photos, :as => :p_entity, :dependent => :destroy #has_many :photos, :dependent  => :delete_all
+  has_many :photos, through: :entity_photos
+  
   belongs_to :photo_album
   belongs_to :video
   belongs_to :article
@@ -106,13 +109,18 @@ class Event < ActiveRecord::Base
 	def uploaded_photos=(attrs)
 		attrs.each {|attr| self.photos.build(:link => attr)}
 	end
+  
+ 	def visible_photos #Видимые фотографии
+     photos.where(id: entity_photos.select(:photo_id).where(visibility_status_id: [1, nil]))
+ 	end  
+  
 	def check_photos_in_content
 		if photos != []
 			photos.each do |ph|
 				if content.index("#Photo#{ph.id}") != nil and content.index("#Photo#{ph.id}") != -1
-					ph.set_as_hidden
+					self.entity_photos.where(photo_id: ph.id).first.set_as_hidden
 				else
-					ph.set_as_visible
+					self.entity_photos.where(photo_id: ph.id).first.set_as_visible
 				end
 			end
 		end
@@ -141,4 +149,5 @@ class Event < ActiveRecord::Base
       end
     end
   end
+  
 end

@@ -194,14 +194,34 @@ end
 
 AutoHtml.add_filter(:user_hash) do |text|
   text.gsub(/#User(\d+)(\[(.+)\])?/) do
-    user = User.find_by(:id => $1)
+    user = User.find($1)
 	if user != nil
 		name = $3 if $3 != nil and $3 != ''
 		name = user.name if $3 == nil or $3 == ''
-		"<a class = 'b_link' title = 'Перейти к теме' href = '/users/#{user.id.to_s}' target = '_blank'>#{name}</a>"
+		"<a class = 'b_link ' title = 'Перейти к профилю' href = '/users/#{user.id.to_s}' target = '_blank'>#{name}</a>"
   else
-    "Пользователь не найден"
+    ""
   end
   end
 end
 
+
+#module AutoHtml
+#  class MySimpleFormat
+#      def call(text)
+#        paragraphs = split_paragraphs(text)
+#        paragraphs.map! do |paragraph|
+#          TagHelper.tag(:p) { paragraph }
+#        end.join("\n\n")
+#      end
+#
+#      private
+#
+#      def split_paragraphs(text)
+#        return [] if text.nil? || text.empty?
+#        text.to_s.gsub(/\r\n?/, "\n").split(/\n\n+/).map! do |t|
+#          t.gsub!(/([^\n]\n)(?=[^\n])/, '\1<br />') || t
+#        end
+#      end
+#  end
+#end

@@ -240,10 +240,11 @@ class MessagesController < ApplicationController
           sendNewMessageMail(@message) if sMail
           newTime = Time.now
           @message.update_attributes(created_at: newTime, updated_at: newTime) if new_status_id > old_status_id
-    			link = "#{theme_path(@message.theme_id)}#msg_#{@message.id}" if @message.theme != nil
-    			link = "#{video_path(@message.video_id)}#msg_#{@message.id}" if @message.video != nil
-          link = "#{photo_album_path(@message.photo_album_id)}#msg_#{@message.id}" if @message.photo_album != nil
-          link = "#{photo_path(@message.photo_id)}#msg_#{@message.id}" if @message.photo != nil
+          link = session[:link_after_message_save] + "#msg_#{@message.id}"
+    			#link = "#{theme_path(@message.theme_id)}#msg_#{@message.id}" if @message.theme != nil
+    			#link = "#{video_path(@message.video_id)}#msg_#{@message.id}" if @message.video != nil
+          #link = "#{photo_album_path(@message.photo_album_id)}#msg_#{@message.id}" if @message.photo_album != nil
+          #link = "#{photo_path(@message.photo_id)}#msg_#{@message.id}" if @message.photo != nil
     			if params[:photo_editions]!= nil and params[:photo_editions] != []
     				photos_params = params[:photo_editions][:photos]
     				photos_params.each do |x|
@@ -340,32 +341,31 @@ class MessagesController < ApplicationController
   end
   
   def replace_message
-	@message = Message.find_by(id: params[:id])
-	if user_type != 'admin' || user_type != 'super_admin' and @message != nil
-		@collection = []
-		@themes_collection = []
-		@default = {:value => @message.theme.topic_id, :name => @message.theme.topic.name}
-		@add_functions = "getTargetTheme();" #Включаем функцию вытаскивания темы
-		topics = Topic.all.order('name ASC')
-		topics.each do |topic|
-			@collection[@collection.length] = {:value => topic.id, :name => topic.name}
-		end
-		base_themes_list = @message.theme.topic.themes.where(:status_id => 1)
-		if base_themes_list != []
-			base_themes_list.each do |thm|
-				@themes_collection[@themes_collection.length] = {:value => thm.id, :name => thm.name}
-			end
-		end
-	else
-		redirect_to '/404'
-	end
+  	@message = Message.find(params[:id])
+  	if user_type != 'admin' || user_type != 'super_admin' and @message != nil
+  		@collection = []
+  		@themes_collection = []
+  		@default = {:value => @message.theme.topic_id, :name => @message.theme.topic.name}
+  		topics = Topic.all.order('name ASC')
+  		topics.each do |topic|
+  			@collection[@collection.length] = {:value => topic.id, :name => topic.name}
+  		end
+  		base_themes_list = @message.theme.topic.themes.where(:status_id => 1)
+  		if base_themes_list != []
+  			base_themes_list.each do |thm|
+  				@themes_collection[@themes_collection.length] = {:value => thm.id, :name => thm.name}
+  			end
+  		end
+  	else
+  		redirect_to '/404'
+  	end
   end
   
   def do_replace_message
 	if is_admin?
 		message = Message.find_by(id: params[:replace_message][:current_message])
-		new_topic = Topic.find_by(id: params[:split_theme][:topic_id])
-		target_theme = Theme.find_by(id: params[:split_theme][:theme_id])
+		new_topic = Topic.find_by(id: params[:merge_theme][:topic_id])
+		target_theme = Theme.find_by(id: params[:merge_theme][:theme_id])
 		new_theme_flag = (params[:replace_message][:make_new_as_theme]).to_i
 		new_theme_name = (params[:replace_message][:new_theme_name]).strip
 		if message != nil and new_topic != nil
@@ -396,8 +396,9 @@ class MessagesController < ApplicationController
   def upload_photos
 	  message = Message.find(params[:id]) 
   	if isEntityOwner?(message)
-  		@photo = Photo.new(message_id: message.id, user_id: message.user.id, link: params[:message][:uploaded_photos])
+  		@photo = Photo.new(user_id: message.user.id, link: params[:message][:uploaded_photos])
   		if @photo.save
+        message.entity_photos.create(photo_id: @photo.id, visibility_status_id: 1)
   			render :json => {message: 'success', photoID: @photo.id }
   		else
   			render :json => {:error => @photo.errors.full_messages.join(',')}

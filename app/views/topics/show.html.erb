@@ -8,12 +8,39 @@
             </div>
         </div>
 </div>
-<%= "<div class = 'c_box even'><div class = 'm_1000wh'>#{control_buttons(show_topic_buttons(@topic))}</div></div>".html_safe if control_buttons(show_topic_buttons(@topic)) != '' %>
 <div class = 'c_box even'>
-	<div class = 'm_1000wh'>
-		<%= themes_table(@themes).html_safe %>
-	</div>
+    <div class = 'm_1000wh'>
+    	<div class = 'section group' style = 'padding: 0; margin: 0;'>
+            <div class = 'col span_11_of_12' style = 'padding: 0; margin: 0;'>
+                <%= control_buttons(show_topic_buttons(@topic)).html_safe if control_buttons(show_topic_buttons(@topic)) != '' %>
+            </div>
+            <div class = 'col span_1_of_12'  style = 'padding: 0; margin: 0;'>
+                <%= view_mode_themes_list.html_safe %>
+            </div>
+        </div>
+    </div>
 </div>
+<% if @themes != [] %>
+            <% if session[:themes_list_type] == 'list' %>
+                <%i=0%>
+                <% @themes.each do |th| %>
+                    <%= themes_list_item(th,i).html_safe %>
+                    <%i+=1%>
+                <% end %>
+            <% else %>
+                <div class = 'c_box even'>
+                	<div class = 'm_1000wh'>
+                        <%= themes_table(@themes).html_safe %>
+                	</div>
+                </div>
+            <% end %>
+<% else %>
+    <div class = 'c_box even'>
+    	<div class = 'm_1000wh'>
+            <p class = 'istring norm'>В данном разделе нет ни одной темы...</p>
+    	</div>
+    </div>
+<% end %>
 <div class = 'm_1000wh'>
     	<div class = 'section group'>
             <div class = 'col span_7_of_12'>

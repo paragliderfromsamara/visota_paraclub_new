@@ -26,7 +26,6 @@ module PhotoAlbumsHelper
 				<tr>
 					<td align = 'left' valign='middle' style = 'height:30px;'>
 						<span class = 'istring_m norm medium-opacity'>Автор </span>#{link_to album.user.name, album.user, :class => 'b_link_i'}
-						
 					</td>
 					<td align = 'right' valign='middle'>
 						
@@ -40,7 +39,8 @@ module PhotoAlbumsHelper
 						
 					</td>
 				</tr>
-				#{"<tr><td colspan = '2' align = 'left' valign='top'><p class = 'istring_m norm' style = 'padding-top:10px; padding-bottom:10px;'>#{album.description}</p></td></tr>" if album.description != nil and album.description != ''}
+        #{"<tr><td align = 'left' valign='middle' ><span class = 'istring_m norm medium-opacity'>Создан из темы </span>#{link_to album.theme.name, theme_path(album.theme), :class => 'b_link_i'}</td><td></td></tr>" if !album.theme.nil?}
+				#{"<tr><td colspan = '2' align = 'left' valign='top'><p class = 'istring_m norm tb-pad-s'>#{album.description}</p></td></tr>" if album.description != nil and album.description != ''}
 				<tr>
 					<td colspan = '2'>
 						#{album_photos_field(album, pathName)}
@@ -72,8 +72,8 @@ module PhotoAlbumsHelper
 		end
 		if photos != []
 			photos.each do |p|
-				value += "<a href = '#{photo_path(p)}' da title = '#{p.description}' alt = '#{photo_path(p)}' ><div class = 'inline-blocks inline-mini'><div class = 'central_field' style = 'width: 150px; margin-top: 7px;'><img src = '#{p.link.small_thumb}' style = 'display: none;'/></div></div></a>" if pathName == 'index' || pathName == 'visota_life'
-				value += "<a href = '#{photo_path(p)}' title = '#{p.description}' alt = '#{photo_path(p)}' ><div class = 'inline-blocks inline-thumb'><div class = 'central_field' style = 'width: 250px; margin-top: 15px;'><img src = '#{p.link.thumb}' style = 'display: none;' width = '250px' /></div><div style = 'width: 100px; height: 23px; position: absolute; bottom: 5px; right: 15px;'>#{photoInfo(p)}</div></div></a>" if pathName == 'show'
+				value += "<a href = '#{photo_path(id: p.id, e:'photo_album', e_id:album.id)}' da title = '#{p.description}' alt = '#{photo_path(id: p.id, e:'photo_album', e_id:album.id)}' ><div class = 'inline-blocks inline-mini'><div class = 'central_field' style = 'width: 150px; margin-top: 7px;'><img src = '#{p.link.small_thumb}' style = 'display: none;'/></div></div></a>" if pathName == 'index' || pathName == 'visota_life'
+				value += "<a href = '#{photo_path(id: p.id, e:'photo_album', e_id:album.id)}' title = '#{p.description}' alt = '#{photo_path(id: p.id, e:'photo_album', e_id:album.id)}' ><div class = 'inline-blocks inline-thumb'><div class = 'central_field' style = 'width: 250px; margin-top: 15px;'><img src = '#{p.link.thumb}' style = 'display: none;' width = '250px' /></div><div style = 'width: 100px; height: 23px; position: absolute; bottom: 5px; right: 15px;'>#{photoInfo(p)}</div></div></a>" if pathName == 'show'
 			end
 			value = "<div class = 'central_field' style = 'width: #{width}; padding-top: 10px; padding-bottom:10px;'>#{value}</div>"
       value += "<br /><p class = 'istring_m medium-opacity'>показано #{photos.count} из #{allPhotosCount}</p>" if allPhotosCount > photos.count
@@ -144,11 +144,9 @@ module PhotoAlbumsHelper
 			end
     end
 	end
-	def initPhotoAlbumForm	
-			if @albumToForm == nil
-				@albumToForm = current_user.album_draft
-			end
-			if action_name == 'new' || action_name == 'create'
+	def initPhotoAlbumForm
+			@albumToForm = current_user.album_draft if @albumToForm == nil
+			if action_name == 'new' || action_name == 'create' || action_name == 'make_album'
 				@buttName = 'Создать альбом'
 			elsif action_name == 'edit' || action_name == 'update'
 				@buttName = 'Внести изменения'

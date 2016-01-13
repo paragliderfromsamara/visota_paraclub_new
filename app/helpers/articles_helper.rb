@@ -25,9 +25,7 @@ module ArticlesHelper
 						</tr>
 						<tr>
 							<td colspan = '2' align = 'left' valign='top'>
-								<p class = 'istring_m norm' style = 'padding-top:10px; padding-bottom:10px;'>
-									#{@article.content_html}
-								</p>
+									<span id = 'content' class = 'mText'>#{@article.content_html}</span>
 							</td>
 						</tr>
 						<tr>
@@ -302,4 +300,8 @@ module ArticlesHelper
 		"#<span id = 'album_#{ photo.photo_album.id.to_s }_#{i}' style = 'display: none;'><a class = 'b_link' href = '#{photo_path(photo)}'>Комментарии</a></span>
 	end
 	
+  def article_types_list(form_name = 'article', t = {} , el_name = 'article_type_id')
+    art = Article.new
+    return my_collection_select(art.types, el_name, form_name, t, 'Выберите тип статьи из списка').html_safe
+  end
 end

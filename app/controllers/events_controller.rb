@@ -126,14 +126,16 @@ class EventsController < ApplicationController
     	if userCanEditEvent?(event)
     		@photo = Photo.new(:event_id => event.id, :user_id => current_user.id, :link => params[:event][:uploaded_photos])
     		if @photo.save
-    			render :json => {:message => 'success', :photoID => @photo.id }, :status => 200
+          event.entity_photos.create(photo_id: @photo.id, visibility_status_id: 1)
+    			render :json => {:message => 'success', :photoID => @photo.id}, :status => 200
     		else
     			render :json => {:error => @photo.errors.full_messages.join(',')}, :status => 400
     		end
     	else
     		redirect_to '/404'
     	end
-    end
+  end
+  
   def upload_attachment_files
   	event = Event.find_by_id(params[:id]) 
   	if userCanEditEvent?(event)

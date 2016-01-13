@@ -114,7 +114,7 @@ module MessagesHelper
 		if message.user_id == nil or message.user_id == 0 and message.user_name != nil and message.user_name != ''
 			return "<span id = 'u_name' class = 'istring_m norm'>#{message.user_name}</span><br />#{image_tag('/files/undefined.png', :width => '90px')}"
 		elsif message.user_id != nil and message.user_id != 0
-			return "#{link_to message.user.name, message.user, :class => 'b_link_i', :id => 'u_name'}<br />#{image_tag(message.user.alter_avatar, :width => '90px')}"
+			return "#{link_to message.user.name, message.user, :class => 'b_link_i', :id => 'u_name'}<br />#{image_tag(message.user.alter_avatar_square, :width => '90px')}"
 		elsif message.user_name == nil and message.user_name == '' and message.user_id == nil or message.user_id == 0 	
 			return "<span class = 'istring_m norm'>Гость</span><br />#{image_tag('/files/undefined.png', :width => '90px')}"
 		end

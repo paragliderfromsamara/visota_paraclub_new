@@ -32,7 +32,7 @@ include TopicsHelper
   						        {:name => @theme.name, :link => theme_path(@theme)}
   					        ]
   		#выборка выдаваемых сообщений
-  		@messages = @theme.visible_messages
+  		@messages = @theme.messages
   		#выборка выдаваемых сообщений end
   		respond_to do |format|
   		  format.html# show.html.erb
@@ -177,50 +177,26 @@ include TopicsHelper
 
   # DELETE /themes/1
   # DELETE /themes/1.json
-  def destroy
+  def destroy 
     @theme = Theme.find(params[:id])
-	link = topic_path(@theme.topic)
-	if userCanDeleteTheme?(@theme) || ((@theme.status == 'open_to_delete' || @theme.status == 'close_to_delete') and is_super_admin?)
-		if @theme.status == 'open_to_delete' || @theme.status == 'closed_to_delete'
-				@theme.destroy
-		else
-			if !is_admin?
-				@theme.destroy
-			else
-				if @theme.user == current_user
-					@theme.destroy
-				else
-					@theme.set_as_delete
-				end
-			end 
-		end
+  	link = topic_path(@theme.topic)
+    redirect_to '/404' if !userCanDeleteTheme?(@theme)
+    @theme.destroy
 		respond_to do |format|
 			format.html { redirect_to link }
 			format.json { head :no_content }
 		end
-	else
-		redirect_to '/404'
-	end
-   end
-  def recovery
-	theme = Theme.find(params[:id])
-	if theme != nil and is_super_admin?
-		theme.recovery
-		redirect_to theme_path(theme)
-	else
-		redirect_to '/404'
-	end
   end
+  
 #Работа с темами----------------------------  
   def merge_themes
 	@theme = Theme.find_by(id: params[:id])
 	if @theme != nil and is_admin?
-		@title = 'Объединение тем'
+		@title = @header = 'Объединение тем'
 		@collection = []
 		@themes_collection = []
 		@default = {:value => @theme.topic.id, :name => @theme.topic.name}
 		topics = Topic.all.order('name ASC')
-		@add_functions = "getTargetTheme();" #Включаем функцию вытаскивания темы
 		topics.each do |topic|
 			@collection[@collection.length] = {:value => topic.id, :name => topic.name}
 		end
@@ -246,9 +222,9 @@ include TopicsHelper
   end
   
   def do_merge_themes
-	current_theme = Theme.find_by(id: params[:split_theme][:current_theme])
-	new_topic = Topic.find_by(id: params[:split_theme][:topic_id])
-	new_theme = Theme.find_by(id: params[:split_theme][:theme_id])
+	current_theme = Theme.find_by(id: params[:merge_theme][:current_theme])
+	new_topic = Topic.find_by(id: params[:merge_theme][:topic_id])
+	new_theme = Theme.find_by(id: params[:merge_theme][:theme_id])
 	if is_admin? and current_theme != nil and new_topic != nil and new_theme != nil
 		if current_theme.merge(new_topic, new_theme)
 			redirect_to new_theme
@@ -311,51 +287,39 @@ include TopicsHelper
 		end
   end
 #Работа с темами end------------------------ 
-  def add_photos
-	@theme = Theme.find_by_id_and_status_id(params[:id])
-	if userCanEditTheme?
-	else
-		redirect_to '/404'
-	end
-  end
-  def add_files
-	@theme = Theme.find_by_id_and_status_id(params[:id])
-	if userCanEditTheme?
-	
-	else
-		redirect_to '/404'
-	end
-  end
+  
   def new_message
-	@theme = Theme.find_by_id_and_status_id(params[:id], 1)
-	if user_type != 'bunned' and user_type != 'guest' and @theme != nil
-		@path_array = [
-						{:name => 'Клубная жизнь', :link => '/visota_life'},
-						{:name => @theme.topic.name, :link => topic_path(@theme.topic)},
-						{:name => @theme.name, :link => theme_path(@theme)}, 
-						{:name => 'Новое сообщение', :link => '/'}
-					  ]
-		@message_to = Message.find_by_id_and_status_id_and_theme_id(params[:m], 1, @theme.id)
-		@message = Message.new
-		@tmpMessage = current_user.message_draft
-				if @tmpMessage.theme_id != @theme.id and @tmpMessage.topic_id != @theme.topic_id
-					@tmpMessage.clean
-					@tmpMessage.update_attributes(:theme_id => @theme.id, :topic_id => @topic_id, :message_id => nil, :content => '')
-				end
-		@add_functions = "initMessageForm(#{@tmpMessage.id.to_s})"
-		respond_to do |format|
-		  format.html # new_message.html.erb
-		  format.json { render :json => @message }
-		end
-	else
-		redirect_to '/404'
-	end	
+	@theme = Theme.find(params[:id])
+  redirect_to @theme
+	#if user_type != 'bunned' and user_type != 'guest' and @theme != nil
+	#	@path_array = [
+	#					{:name => 'Клубная жизнь', :link => '/visota_life'},
+	#					{:name => @theme.topic.name, :link => topic_path(@theme.topic)},
+	#					{:name => @theme.name, :link => theme_path(@theme)}, 
+	#					{:name => 'Новое сообщение', :link => '/'}
+	#				  ]
+	#	@message_to = Message.find_by_id_and_status_id_and_theme_id(params[:m], 1, @theme.id)
+	#	@message = Message.new
+	#	@tmpMessage = current_user.message_draft
+	#			if @tmpMessage.theme_id != @theme.id and @tmpMessage.topic_id != @theme.topic_id
+	#				@tmpMessage.clean
+	#				@tmpMessage.update_attributes(:theme_id => @theme.id, :topic_id => @topic_id, :message_id => nil, :content => '')
+	#			end
+	#	@add_functions = "initMessageForm(#{@tmpMessage.id.to_s})"
+	#	respond_to do |format|
+	#	  format.html # new_message.html.erb
+	#	  format.json { render :json => @message }
+	#	end
+	#else
+	#	redirect_to '/404'
+	#end	
   end
   def upload_photos
 	theme = Theme.find_by_id(params[:id]) 
 	if isThemeOwner?(theme)
-		@photo = Photo.new(:theme_id => theme.id, :user_id => theme.user.id, :link => params[:theme][:uploaded_photos])
+		@photo = Photo.new(:user_id => theme.user.id, :link => params[:theme][:uploaded_photos])
 		if @photo.save
+      theme.entity_photos.create(photo_id: @photo.id, visibility_status_id: 1)
 			render :json => {:message => 'success', :photoID => @photo.id }, :status => 200
 		else
 			render :json => {:error => @photo.errors.full_messages.join(',')}, :status => 400
@@ -376,5 +340,46 @@ include TopicsHelper
   	else
   		redirect_to '/404'
   	end
+  end
+  def make_article
+    @theme = Theme.find(params[:id])
+    @title = @header = 'Создание статьи из темы'
+    if @theme != nil and is_admin?
+      art = Article.new
+      tId = (params[:article_type] == nil)? 0 : params[:article_type][:article_type_id].to_i
+      @type = (art.get_type_by_id(tId) == nil)? {} : art.get_type_by_id(tId)
+  		@path_array = [
+  						        {:name => 'Клубная жизнь', :link => '/visota_life'},
+  						        {:name => @theme.topic.name, :link => topic_path(@theme.topic)},
+  						        {:name => @theme.name, :link => theme_path(@theme)},
+  						        {:name => 'Создание статьи из темы'}
+  					        ]
+      @formArticle = @theme.update_article_draft(current_user.article_draft(@type[:value]))
+  		respond_to do |format|
+  		  format.html # make_article.html.erb
+  		end
+    else 
+      redirect_to @theme if !@theme.nil?
+      redirect_to '/404'
+    end
+  end
+  def make_album
+    @theme = Theme.find(params[:id])
+    @title = @header = 'Создание фотоальбома из темы'
+    if @theme != nil and is_admin?
+  		@path_array = [
+  						        {:name => 'Клубная жизнь', :link => '/visota_life'},
+  						        {:name => @theme.topic.name, :link => topic_path(@theme.topic)},
+  						        {:name => @theme.name, :link => theme_path(@theme)},
+  						        {:name => 'Создание статьи из темы'}
+  					        ]
+      @albumToForm = @theme.update_album_draft(current_user.album_draft)
+  		respond_to do |format|
+  		  format.html # make_article.html.erb
+  		end
+    else 
+      redirect_to @theme if !@theme.nil?
+      redirect_to '/404'
+    end
   end
 end

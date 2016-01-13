@@ -5,6 +5,12 @@
 
 module ApplicationHelper
 require 'open-uri' #для парсера
+def current_path
+  request.env['PATH_INFO']
+end
+def oldMessagesPerPage
+  25
+end
 def vk_like_vidget
   {
     script: '<script data-turbolinks-track="true" type="text/javascript" src="//vk.com/js/api/openapi.js?121"></script>
@@ -226,7 +232,7 @@ end
 	end
 	def user_session_menu
 			b = [
-					{:name => 'Лента событий', :link => '/feed'},
+					#{:name => 'Лента событий', :link => '/feed'},
           {:name => 'Пилоты', :link => '/pilots'},
 					{:name => 'Профиль', :link => user_path(current_user)}
 			    ]
@@ -349,7 +355,7 @@ end
 	def my_collection_select(collection, list_name, form_name, base_item, prompt) #структура collection [{:value => integer, :name => string}]
 		if collection != {} and collection != nil and list_name != nil and list_name != '' and form_name != nil and form_name != ''
 			options = ""
-			options += "<option value = ''>#{prompt}</option>" if prompt != ''
+			options += "<option value = ''>#{prompt}</option>" if prompt != '' and base_item == {}
 			options += "<option value = '#{base_item[:value]}'>#{base_item[:name]}</option>" if base_item != {}
 			collection.each do |item|
 				options += "<option value = '#{item[:value]}'>#{item[:name]}</option>" if item != base_item
@@ -596,7 +602,7 @@ end
   def navigation_string #Навигационная строка 
 	value = ''
 	@path_array.each do |path|
-		value += " <span id = 'splitter'>&raquo;</span> " if @path_array.first != path
+		value += " <span id = 'splitter'><i class = 'fi-arrow-right'></i></span> " if @path_array.first != path
 		value += "#{link_to truncate(path[:name], :length => 50), path[:link], :title => path[:name], :class => 'b_link', :id => 'first'}" if @path_array.first == path
 		value += "#{link_to truncate(path[:name], :length => 50), path[:link], :title => path[:name], :class => 'b_link'}" if path != @path_array.last and @path_array.first != path
 		value += "<span id = 'cur_path'>#{truncate(path[:name], :length => 50)}</span>" if path == @path_array.last

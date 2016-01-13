@@ -15,7 +15,7 @@ initVoiceGiver = (el)->
 
 r = ()->
     voteValues = $("[vote-id]")
-    if  voteValues.length > 0 then voteValues.click ()-> initVoiceGiver(this)
+    if voteValues.length > 0 then voteValues.click ()-> initVoiceGiver(this)
 
 $(document).ready r
 $(document).on "page:load", r

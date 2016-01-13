@@ -1,6 +1,3 @@
-<div class = 'm_1000wh'>
-	<h1 class = 'tb-pad-s'>Перемещение сообщения</h1>
-</div>
 <div class = 'c_box even'>
 	<div class = 'm_1000wh tb-pad-m'>
 			<p class = 'istring norm'>Выберите целевую тему (либо поставьте флажок "Вынести в отдельную тему", введите название новой темы) и нажмите "Произвести изменение"</p>
@@ -9,11 +6,11 @@
 			<%= f.hidden_field :current_message, :value => @message.id %>
 			<div class = 'field tb-pad-s'>
 				<%= f.label :topic_id, "Раздел:" %><br /> 
-				<%= my_collection_select(@collection, "topic_id", "split_theme", @default, "") %> 
+				<%= my_collection_select(@collection, "topic_id", "merge_theme", @default, "") %> 
 			</div>
 			<div class = 'field tb-pad-s'>
 				<%= f.label :new_theme_id, "Целевая тема:" %><br /> 
-				<%= my_collection_select(@themes_collection, "theme_id", "split_theme", {}, "Выберите тему из списка") %> <br />
+				<%= my_collection_select(@themes_collection, "theme_id", "merge_theme", {}, "Выберите тему из списка") %> <br />
 			</div>			
 			<div class = 'field tb-pad-s'>
 				<%= f.label :make_new_as_theme, "Вынести в отдельную тему" %><%= f.check_box :make_new_as_theme, :class => 'check_box' %>

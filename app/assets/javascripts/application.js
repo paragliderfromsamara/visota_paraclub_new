@@ -15,7 +15,6 @@
 //= require turbolinks
 //= require_tree
 
-
 function my_functions()
 	{
 		var enteredLi, leftLi; //для управления главным меню
@@ -23,7 +22,7 @@ function my_functions()
         Dropzone.autoDiscover = false;
         Dropzone.options.myAwesomeDropzone = false;
 		$('#mLogo, .nav_li, #ses_p li, .t_link, .ph-paginate, .ph-big-links,.wide-butt').click(function () {goToLink($(this).attr('link_to'));});
-		$('#split_theme_topic_id').change(function(){var th = new themeObj(); th.topic = $(this).val(); make_themes_list(th);});
+		//$('#split_theme_topic_id').change(function(){var th = new themeObj(); th.topic = $(this).val(); make_themes_list(th);});
 		$('#add_attachments').click(function(){$('div#toggle_add_attachments').toggle(150);});
 		$('div#show_cmts').click(
 									function(){
@@ -70,51 +69,6 @@ function submitMyForm(id, el){
                                     console.log("Yeah!!!")
                                 }    
                              }
-function initSearchForm()
-        {
-            
-            //alert(curTopicListDispAttr);
-            var but = $("#searchForm").find(".myBut");
-            if ($("#in_themes_and_messages").attr('checked') !== 'checked')
-            {
-                $('#topicsList').find(":checkbox").each(function(i){$(this).attr('disabled','false');});
-            }
-            $("#searchFormContainer").mouseleave(function(){
-                                                            var curTopicListDispAttr = $("#topicsList").css("display");
-                                                            if (curTopicListDispAttr != 'none') $("#topicsList").hide(100);
-                                                });
-        
-                                                $("#t_and_msg_s").mousemove(function(){ var curTopicListDispAttr = $("#topicsList").css("display");
-                                                            if (curTopicListDispAttr == 'none') $("#topicsList").show(100);});
-            but.click(function(){
-                                    //alert($("#searchForm").serialize());
-
-                                        but.find('a').attr('href', "/search?" + $("#searchForm").serialize());
-                                        //goToLink($("#searchForm").serialize());
-                                        //else alert('Введите поисковую фразу.');
-                                });
-            $("#in_themes_and_messages").change(
-                                                        function(){
-                                                                    var curTopicListDispAttr = $("#topicsList").css("display");
-                                                                    
-                                                                    
-                                                                    if ($(this).attr('checked') !== 'checked')
-                                                                    {
-                                                                        $(this).attr('checked', 'checked');
-                                                                        $('#topicsList').find(":checkbox").each(function(i){
-                                                                                                                                $(this).attr('checked', 'checked');
-                                                                                                                                $(this).removeAttr('disabled');
-                                                                                                                           });
-                                                                    }else {
-                                                                        $(this).removeAttr('checked');
-                                                                        $('#topicsList').find(":checkbox").each(function(i){if ($(this).attr('checked') == 'checked') $(this).attr('disabled','false');});
-                                                                    }
-                                                                    //$('#topicsList').toggle(200);
-
-                                                                  });
-        }
-
-
 function waitbar(id)
     {
         var wl = $("#" + id);

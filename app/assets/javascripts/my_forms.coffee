@@ -736,7 +736,7 @@ class myForm
             $(delBut).unbind('click')
             $(delBut).bind 'click', ()->
                 _this.recoveryPhoto(this)
-            $(delBut).text('Восстановить')
+            $(delBut).find('p').text('Восстановить')
             $('#img_'+id).find('.addHashCode').hide()
             $('#img_'+id).addClass('del-photo')
             if _this.formChecking isnt null then _this.formChecking()
@@ -745,10 +745,10 @@ class myForm
             if v
                 $.ajax {
                         type: 'DELETE'
-                        url: '/photos/' + id
+                        url: '/entity_photos/' + id
                         dataType: "json"
                         success: (data)-> 
-                            $("li#img_"+id).fadeOut 300, ()-> 
+                            $("li#img_"+data.id).fadeOut 300, ()-> 
                                 $(this).remove()
                                 if _this.formChecking isnt null then _this.formChecking()
                        }
@@ -768,7 +768,7 @@ class myForm
                 $(but).unbind('click')
                 $(but).bind 'click', ()->
                     _this.deletePhoto(this)
-                $(but).text('Удалить')
+                $(but).find('p').text('Удалить')
                 $(n).val(addScobes(update_ids_array(getIdsArray(v),id)))
                 $('#img_'+id).find('.addHashCode').show()
                 $('#img_'+id).removeClass('del-photo')
@@ -925,29 +925,25 @@ changingTextarea = (e)->
     nr = dr*1 + v + ((txt.length - v) / $(e).attr('cols')*0.9)
     $(e).attr('rows', nr)
 
-getTargetTheme = ()->
-    selectTheme = $('#split_theme_theme_id')
+getTargetTheme = (el)->
+    selectTheme = $(el)
     targetPlace = $('#target_theme')
     e_text = '<p class = "istring norm">Тема не выбрана</p>'
-    initTargetTheme()
-    selectTheme.change ()-> 
-        getTargetTheme($(this).val())
-    initTargetTheme = ()->
-        d_val = selectTheme.val()
-        if d_val is '' then targetPlace.html(e_text)
-    getTargetTheme = (id)->
-        $("#target_theme").load("/themes/"+id+"?but=false #thBody")
+    d_val = selectTheme.val()
+    if d_val is '' then targetPlace.html(e_text)
+    targetPlace.load("/themes/"+d_val+"?but=false #thBody")
 
 make_themes_list = (th, func)->
     $.getJSON th.getThemeQuery(), (json)-> 
         build_themes_list(json)
-        func()
+        if typeof func is "function" then func()
+        true
     
 build_themes_list = (themes)->
-    $("div#likebleNames, select#split_theme_theme_id").empty()
-    $("div#split_theme_theme_id").html("<option value>Выберите тему из списка</option>")
+    $("div#likebleNames, select#merge_theme_theme_id").empty()
+    $("select#merge_theme_theme_id").html("<option value>Выберите тему из списка</option>")
     $.each themes, (i, theme)-> 
-        $("#split_theme_theme_id").append("<option value='" + theme.id + "'>" + theme.name + "</option>")
+        $("#merge_theme_theme_id").append("<option value='" + theme.id + "'>" + theme.name + "</option>")
         $('div#likebleNames').append('<div class = "likebleName" id = "ent_'+theme.id+'" style = "width: 100%;position:relative;"><a title = "Открыть в новой вкладке" target = "_blank" href = "/themes/'+theme.id+'" class="b_link" style = "padding-left: 5px;">'+theme.name + '</a></div>')
 
 addScobes = (a)->
@@ -984,10 +980,12 @@ update_ids_array = (id_array,id)->
 
 #theme request Class
 class themeObj
-    constructor: ()->
-    @name: 'none'
-    @topic: 'none'
-    @limit: 'none'
+    constructor: (
+                 @name = 'none',
+                 @topic = 'none',
+                 @limit = 'none'
+                 )->
+    
     getThemeQuery: ()->
         getThemesList = getThemeListLink
         link='none'
@@ -997,7 +995,7 @@ class themeObj
             if this.topic isnt 'none' then link=link+'&topic='+this.topic
             if this.limit isnt 'none' then link=link+'&limit='+this.limit
         link
-        
+
 class albumObj
     constructor: ()->
     @name: 'none'
@@ -1341,6 +1339,12 @@ r = ()->
     if vtForm isnt null then initVoteForm(vtForm)
     if aForm.length > 0 then initArticleForm(aForm[0])
     if eForm.length > 0 then initEventForm(eForm[0])
+    $('#merge_theme_topic_id').change ()->
+        th = new themeObj()
+        th.topic = $(this).val()
+        make_themes_list(th)
+    $('#merge_theme_theme_id').change ()->
+        getTargetTheme this
 
 $(document).ready r
 $(document).on "page:load", r

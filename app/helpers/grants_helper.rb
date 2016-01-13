@@ -68,47 +68,35 @@ end
 #events end
 #photos_part
 	def userCanSeePhoto?(photo)
-		f = false
-		if photo != nil
-			if photo.theme != nil
-				f = userCanSeeTheme?(photo.theme)
-			elsif photo.message != nil
-				f = userCanSeeMessage?(photo.message)
-			elsif photo.photo_album != nil
-				f = userCanSeeAlbum?(photo.photo_album) || (photo.photo_album.status_id == 0 && photo.photo_album.user == current_user)
-			elsif photo.article != nil
-				f = isEntityOwner?(photo.article)
-			elsif photo.event != nil
-				f = userCanSeeEvent?(photo.event)
-			end
-		end
-		return f
+		#f = false
+		#if photo != nil
+		#	if @theme != nil
+		#		f = userCanSeeTheme?(@theme)
+		#	elsif @photo_msg != nil
+		#		f = userCanSeeMessage?(@photo_msg)
+		#	elsif @album != nil
+		#		f = userCanSeeAlbum?(@album) || (@album.status_id == 0 && @album.user == current_user)
+		#	elsif @article != nil
+		#		f = isEntityOwner?(@article)
+		#	elsif @event != nil
+		#		f = userCanSeeEvent?(@event)
+		#	end
+		#end
+		return true
 	end
 	def userCanDeletePhoto?(photo) #может ли пользователь удалить фотографию?
 		if isEntityOwner?(photo)
-			th_flag = true
-			alb_flag = true
-			msg_flag = true
-			art_flag = true
-			evnt_flag = true
-			if photo.theme != nil
-				th_flag = false if (!userCanEditTheme?(photo.theme) || photo.theme.content.strip == '') and photo.theme.status != 'draft'
-			end
-			if photo.message != nil
-				msg_flag = false if (!userCanEditMsg?(photo.message) || (photo.message.content.strip == '' and photo.message.photos.count == 1)) and photo.message.status != 'draft'
-			end
-			if photo.photo_album != nil
-				alb_flag = false if !userCanEditAlbum?(photo.photo_album) || (photo.photo_album.photos.count == 1 && photo.photo_album.status_id != 0)
-			end
-			if photo.article != nil
-				art_flag = false if !userCanEditArtilcle?(photo.article) || (photo.article.photos.count == 1 and photo.article.content.strip == '')
-			end
-			if photo.event != nil
-				evnt_flag = false if (!userCanEditEvent?(photo.event) || (photo.event.photos.count == 1 and photo.event.content.strip == '')) and photo.event.status_id != 0
-			end
-			return th_flag & alb_flag & msg_flag & art_flag & evnt_flag
-		end
-		return false
+			true
+    else 
+      false
+    end
+	end
+	def userCanDeleteEntityPhoto?(ePhoto) #может ли пользователь удалить фотографию?
+		if ePhoto.p_entity_type != 'Event'
+      return isEntityOwner?(ePhoto.p_entity)
+    else
+      return userCanEditEvent?(ePhoto.p_entity)
+    end
 	end
 	#photos_part_end
 	#articles_part

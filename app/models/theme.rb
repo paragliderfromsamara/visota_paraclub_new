@@ -7,19 +7,23 @@ class Theme < ActiveRecord::Base
   #---------при объединении тем все лайки от сливаемой темы привязывать к создаваемому сообщению
   #---------при полном удалении темы удалять и лайки
   
-  
- attr_accessible :last_message_date, :name, :status_id, :topic_id, :user_id, :content, :photos, :uploaded_photos, :video_id, :photo_album_id, :updater_id, :attachment_files, :created_at, :updated_at, :merge_with, :visibility_status_id
+ attr_accessor :deleted_photos
+ attr_accessible :last_message_date, :name, :status_id, :topic_id, :user_id, :content, :photos, :uploaded_photos, :updater_id, :attachment_files, :created_at, :updated_at, :visibility_status_id, :deleted_photos, :vote_id
  
-  has_many :messages, :dependent  => :delete_all
+  has_many :messages, -> { where(status_id: 1).order("created_at ASC")}, :dependent  => :delete_all
   belongs_to :user
   belongs_to :topic
   belongs_to :video
   belongs_to :photo_album
+  belongs_to :vote
   has_many :attachment_files, :dependent  => :delete_all
-  has_many :photos, :dependent  => :delete_all
+  
+  has_many :entity_photos, :as => :p_entity, :dependent => :destroy #has_many :photos, :dependent  => :delete_all
+  has_many :photos, through: :entity_photos 
+    
   has_many :theme_notifications, :dependent => :delete_all
   has_one :entity_view, :as => :v_entity, :dependent => :delete
-  
+  has_one :article
   auto_html_for :content do
     html_escape
 	my_youtube_msg(:width => 480, :height => 360, :span => true)
@@ -39,12 +43,41 @@ class Theme < ActiveRecord::Base
   after_save :check_photos_in_content
   after_create :last_msg_upd_after_create
   before_save :check_visibility_status
-  def uploaded_photos=(attrs)
-	attrs.each {|attr| self.photos.build(:link => attr, :user_id => self.user_id)}
+  
+  validate :deleted_photos_check, :on => :update
+
+  def deleted_photos_check
+    if self.deleted_photos != nil and self.deleted_photos != ''
+      arr = self.deleted_photos.getIdsArray
+      if arr.length > 0
+        ePhs = self.entity_photos.where(id: arr)
+        if ePhs != []
+          ePhs.each do |ePh|
+            ePh.destroy
+          end
+        end
+      end
+    end
   end
   
-  def list_photos#не используется
-	"Заменить на theme_list_photos(th) а list_photos в theme.rb удалить"
+  #searchable do
+  #    text :name, :content
+  #    text :messages do
+  #      messages.map { |message| message.content }
+  #    end
+ #     
+ #     integer :user_id
+ #    integer :topic_id
+ #     integer :status_id
+ #     integer :visibility_status_id
+ #     time    :created_at
+ #     time    :updated_at
+ #
+ # end
+  
+  
+  def uploaded_photos=(attrs)
+	attrs.each {|attr| self.photos.build(:link => attr, :user_id => self.user_id)}
   end
 
   def attachment_files=(attrs)
@@ -149,66 +182,61 @@ class Theme < ActiveRecord::Base
 	end
   end
 #статусы end...  
-def visible_messages
-  self.messages.where(status_id: 1).order("created_at ASC")
-end
-  def merge(new_topic, new_theme) #объединение тем 
-	message_in_target_theme = Message.new(
-												:user_id => self.user_id, 
-												:updater_id => self.updater_id, 
-												:content => self.content, 
-												:theme_id => new_theme.id, 
-												:topic_id => new_topic.id, 
-												:status_id => 1, 
-												:created_at => self.created_at, 
-												:updated_at => self.updated_at, 
-												:visibility_status_id => new_theme.visibility_status_id
-											) #1. Создаём в целевой теме сообщение с содержимым сливаемой темы
-	message_in_target_theme.save(:validate => false)
-	if self.photos != []
-		 self.photos.each do |ph|
-			ph.update_attributes(:message_id => message_in_target_theme.id, :theme_id => nil) #3. Переносим фотографии в message_in_target_theme
-			if ph.status == 'normal' and new_theme.v_status == 'hidden' 
-				ph.update_attribute(:status_id, 4) #on_hidden_entity
-			elsif ph.status == 'normal' and new_theme.v_status == 'visible'
-				ph.update_attribute(:status_id, 1) #normal
-			end
-		end
-	end
-	if self.attachment_files != []
-		self.attachment_files.each do |af|
-			af.update_attributes(:message_id => message_in_target_theme.id, :theme_id => nil) #4. Переносим вложения в message_in_target_theme
-		end
-	end 
-	if self.messages != []
-		self.messages.each do |msg|
-			mes_id = message_in_target_theme.id if msg.message_id == nil #сообщение как ответ на message_in_target_theme если оно не является ответом на какое-либо сообщение
-			mes_id = msg.message_id if msg.message_id != nil #не изменяем если является
-			msg.update_attributes(
-									:theme_id => new_theme.id, 
-									:topic_id => new_topic.id, 
-									:message_id => mes_id
-								  )# Переносим в целевую тему все сообщения из текущей в :base_theme_id записываем id сливаемой (базовой) темы (При условии сохранения сливаемой темы)
-			msg.updatePhotosStatusesAfterSave
-		end
-	end
-	old_theme_notifications = self.theme_notifications
-	if old_theme_notifications != []
-		old_theme_notifications.each do |ntf|
-      usr_id = ntf.user_id
-			newNtf = ThemeNotification.find_by(theme_id: new_theme.id, user_id: usr_id)
-      newNtf = ThemeNotification.create(theme_id: new_theme.id, user_id: usr_id) if newNtf == nil
-		end
-	end
+#  def visible_messages
+#    self.messages
+#  end
+  
+  def merge(new_topic=nil, new_theme=nil) #объединение тем 
+  	message_in_target_theme = Message.new(
+  											  :user_id => self.user_id, 
+  												:updater_id => self.updater_id, 
+  												:content => self.content, 
+  												:theme_id => new_theme.id, 
+  												:topic_id => new_topic.id, 
+  												:status_id => 1, 
+  												:created_at => self.created_at, 
+  												:updated_at => self.updated_at
+  											) #1. Создаём в целевой теме сообщение с содержимым сливаемой темы
+  	message_in_target_theme.save(:validate => false)
+  	if self.entity_photos != []
+  		self.entity_photos.each do |ph|
+         message_in_target_theme.entity_photos.create(photo_id: ph.photo_id, visibility_status_id: ph.visibility_status_id)
+  		end
+  	end
+  	if self.attachment_files != []
+  		self.attachment_files.each do |af|
+  			af.update_attributes(:message_id => message_in_target_theme.id, :theme_id => nil) #4. Переносим вложения в message_in_target_theme
+  		end
+  	end 
+  	if self.messages != []
+  		self.messages.each do |msg|
+  			mes_id = message_in_target_theme.id if msg.message_id == nil #сообщение как ответ на message_in_target_theme если оно не является ответом на какое-либо сообщение
+  			mes_id = msg.message_id if msg.message_id != nil #не изменяем если является
+  			msg.update_attributes(
+  									:theme_id => new_theme.id, 
+  									:topic_id => new_topic.id, 
+  									:message_id => mes_id
+  								  )# Переносим в целевую тему все сообщения из текущей в :base_theme_id записываем id сливаемой (базовой) темы (При условии сохранения сливаемой темы)
+  			#msg.updatePhotosStatusesAfterSave
+  		end
+  	end
+  	old_theme_notifications = self.theme_notifications
+  	if old_theme_notifications != []
+  		old_theme_notifications.each do |ntf|
+        usr_id = ntf.user_id
+  			newNtf = ThemeNotification.find_by(theme_id: new_theme.id, user_id: usr_id)
+        newNtf = ThemeNotification.create(theme_id: new_theme.id, user_id: usr_id) if newNtf == nil
+  		end
+  	end
 	
-	self.destroy
- #Объединение тем
-  #1. Создаём в целевой теме сообщение с содержимым сливаемой темы
-  #2. Переносим в целевую тему все сообщения из текущей в :base_theme_id записываем id сливаемой (базовой) темы
-  #3. Переносим фотографии в message_in_target_theme
-  #4. Переносим вложения в message_in_target_theme
-  #5. Обновление текущей темы
-  #6. Создание информационного сообщения
+  	self.destroy
+   #Объединение тем
+    #1. Создаём в целевой теме сообщение с содержимым сливаемой темы
+    #2. Переносим в целевую тему все сообщения из текущей в :base_theme_id записываем id сливаемой (базовой) темы
+    #3. Переносим фотографии в message_in_target_theme
+    #4. Переносим вложения в message_in_target_theme
+    #5. Обновление текущей темы
+    #6. Создание информационного сообщения
   end
   
   def delete_merged_theme
@@ -243,9 +271,9 @@ end
 
   def check_photo_in_content(ph) #делаем фотографию невидимой в основном списке фотографий сообщения и делаем видимой, если её там нет
 		if content.index("#Photo#{ph.id}") != nil and content.index("#Photo#{ph.id}") != -1
-			ph.set_as_hidden
+			self.entity_photos.where(photo_id: ph.id).first.set_as_hidden
 		else
-			ph.set_as_visible
+			self.entity_photos.where(photo_id: ph.id).first.set_as_visible
 		end  
   end
 
@@ -278,34 +306,15 @@ end
 		self.update_attributes(:content => '',:name => '')
 		self.remove_attachments_and_photos
   end
-  def assign_entities_from_draft(draft) #привязка сущностей с черновика
-	if draft.photos != []
-		draft.photos.each do |ph|
-			ph.update_attributes(:theme_id => self.id)
-			check_photo_in_content(ph)
-		end
-	end
+  
+  def unbind_photos
+  	if self.photos != []
+  		 self.photos.each do |pht|
+  		   pht.update_attribute(:theme_id, nil)
+  		 end
+  	end
   end
   
-  def remove_attachments_and_photos #полное удаление 
-	if self.photos != []
-		self.photos.each do |ph|
-			ph.destroy
-		end
-	end
-	if self.attachment_files != []
-		self.attachment_files.each do |af|
-			af.destroy
-		end
-	end
-  end
-  def unbind_photos
-	if self.photos != []
-		 self.photos.each do |pht|
-			pht.update_attribute(:theme_id, nil)
-		 end
-	end
-  end
 	def unbind_attachment_files
 		if self.attachment_files != []
 			 self.attachment_files.each do |af|
@@ -315,7 +324,7 @@ end
 	end
 	
 	def visible_photos #Видимые фотографии
-		photos.where(:visibility_status_id => 1)
+    photos.where(id: entity_photos.select(:photo_id).where(visibility_status_id: [1, nil]))
 	end
 #управление статусами	
 	def do_close(current_user) #Закрываем тему
@@ -333,24 +342,72 @@ end
 	def set_as_hidden #перевод в статус visible тему с текущим статусом hidden
 		self.update_attribute(:visibility_status_id, 2) if self.visibility_status_id != 2
 	end
-	def set_as_delete
-		self.update_attribute(:status_id, 2) if self.status_id == 1 
-		self.update_attribute(:status_id, 4) if self.status_id == 3
-	end
-	def visible_messages
-		Message.where(theme_id: self.id, status_id: 1).order('created_at ASC')
-	end
-	def recovery
-		self.update_attribute(:status_id, 1) if self.status_id == 2 
-		self.update_attribute(:status_id, 3) if self.status_id == 4
-	end
-
-
+  
 #счётчик просмотров
 def views
   (self.entity_view == nil)? 0 : self.entity_view.counter 
 end
 #счётчик просмотров end
+
+def all_photos_in_theme
+  phs = self.photos
+  if self.messages.size > 0
+    self.messages.each do |m|
+      if m.photos.size > 0
+        phs += m.photos
+      end
+    end
+  end
+  return phs
+end
+
+
+def update_article_draft(article)
+  text = self.content
+  phs = (self.photos != [])? self.photos : []
+  msgs = self.messages
+  article.clean
+  if msgs != []
+    msgs.each do |m|
+      text += "\n #User#{m.user.id}[#{m.user.name}] \n #{m.content} \n" if m.content.strip != ''
+      phs += m.photos if m.photos != []
+    end
+  end
+  article.update_attributes(content: text, name: self.name)
+  if phs != []
+    phs.each do |p|
+      article.entity_photos.create(photo_id: p.id, visibility_status_id: 1)
+    end
+  end
+  return article
+end
+def update_album_draft(album)
+  text = self.content.escapeBbCode
+  phs = self.all_photos_in_theme
+  phs_to_del = album.photos - phs
+  phs_to_add = phs - (album.photos - phs_to_del)
+  msgs = self.messages
+  if msgs != []
+    msgs.each do |m|
+      text += "\n #{m.user.name} \n #{m.content.escapeBbCode} \n" if m.content.strip != ''
+    end
+  end
+  album.update_attributes(description: text, name: self.name)
+  if phs_to_del != []
+    del_entity_photos = album.entity_photos.where(photo_id: phs_to_del)
+    del_entity_photos.each do |p|
+      p.destroy
+    end
+  end
+  if phs_to_add != []
+    phs_to_add.each do |p|
+      album.entity_photos.create(photo_id: p.id, visibility_status_id: 1)
+    end
+  end
+  return album
+end
+
+
 private
 	def openThemeMessage
 		'Тема возобновлена'

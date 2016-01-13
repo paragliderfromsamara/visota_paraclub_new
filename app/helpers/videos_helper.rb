@@ -22,45 +22,11 @@ module VideosHelper
 		#h = theme.statusHash
 		#v = "#{image_tag h[:img], :height => '20px', :style => 'float: left;', :title => h[:ru] } "
 		v = "<div class='stat fi-float-left'>#{drawIcon('comments', 'medium', 'grey')}<span>#{video.visible_messages.count.to_s}</span></div>"
-		v += "<div class='stat fi-float-left'>#{drawIcon('eye', 'medium', 'grey')}<span>#{@video.views}</span></div>"
+		v += "<div class='stat fi-float-left'>#{drawIcon('eye', 'medium', 'grey')}<span>#{video.views}</span></div>"
 		return v
 	end
 	def video_show_block
-		html = "
-				<table style = 'width: 100%'>
-					<tr>
-						<td valign = 'middle' align = 'left'  style='height: 30px;'>
-							#{ videoInformation(@video) }
-						</td>
-						<td valign = 'middle' align = 'right' style='height: 30px;'>
-								<span class = 'istring_m norm medium-opacity'>Видео опубликовано #{ my_time(@video.created_at) }</span>
-						</td>
-					</tr>
-					<tr>
-						<td align = 'left' valign = 'middle' colspan = '2'>
-							<span class = 'istring_m norm'>Категория</span> #{ link_to @video.category_name, videos_path(:c => @video.category[:path_name]), :class => 'b_link_i' }
-						</td>
-					</tr>
-					<tr>
-						<td valign = 'middle' align = 'left' colspan = '2'>
-							<span class = 'istring_m norm'>Опубликовал</span> #{ link_to @video.user.name, @video.user, :class => 'b_link_i' }
-						</td>
-					</tr>			
-					<tr>
-						<td valign = 'middle' colspan = '2' style = 'height: 550px;'>
-							<div  class = 'central_field' style = 'width: 640px;'>
-								#{ @video.link_html }
-							</div>
-						</td>	
-					</tr>
-					<tr>
-						<td valign = 'middle' align = 'left'  style = 'height: 40px;'>
-						</td>	
-            <td valign = 'middle' align = 'right'>
-              #{user_video_like_link(@video)}
-            </td>
-					</tr>
-				</table>"
+		html = video_show_body
 		p = {
 				:tContent => html, 
         :classLvl_2 => 'tb-pad-m',
@@ -69,6 +35,45 @@ module VideosHelper
 		return "<div class = 'c_box even'><div class = 'm_1000wh'>#{control_buttons(top_video_buttons).html_safe}</div>#{my_notice}</div>#{c_box_block(p)}"
 	end
 	
+  def video_show_body(video = @video, show_link_button = false)
+    "
+				<table style = 'width: 100%'>
+					<tr>
+						<td valign = 'middle' align = 'left'  style='height: 30px;'>
+							#{ videoInformation(video) }
+						</td>
+						<td valign = 'middle' align = 'right' style='height: 30px;'>
+								<span class = 'istring_m norm medium-opacity'>Видео опубликовано #{ my_time(video.created_at) }</span>
+						</td>
+					</tr>
+					<tr>
+						<td align = 'left' valign = 'middle' colspan = '2'>
+							<span class = 'istring_m norm'>Категория</span> #{ link_to video.category_name, videos_path(:c => video.category[:path_name]), :class => 'b_link_i' }
+						</td>
+					</tr>
+					<tr>
+						<td valign = 'middle' align = 'left' colspan = '2'>
+							<span class = 'istring_m norm'>Опубликовал</span> #{ link_to video.user.name, video.user, :class => 'b_link_i' }
+						</td>
+					</tr>			
+					<tr>
+						<td valign = 'middle' colspan = '2' style = 'height: 550px;'>
+							<div  class = 'central_field' style = 'width: 640px;'>
+								#{ video.link_html }
+							</div>
+						</td>	
+					</tr>
+					<tr>
+						<td valign = 'middle' align = 'left'  style = 'height: 40px;'>
+              #{control_buttons([{:name => 'Перейти к видео', :access => true, :type => 'arrow-right',  :link => video_path(video)}]) if show_link_button}
+						</td>	
+            <td valign = 'middle' align = 'right'>
+              #{user_video_like_link(video)}
+            </td>
+					</tr>
+				</table>"
+  end
+  
 	def video_index_block(video)
 		"
 			<div class = 'video_thumb' style = 'margin-top: 10px;'>
@@ -96,10 +101,10 @@ module VideosHelper
 									</tr>
 									<tr>
 										<td align = 'right' valign = 'middle'  style = 'height: 20px;'>
-												#{link_to "Перейти", video, :class => 'b_link'}
+												#{link_to "<i class = 'fi-arrow-right fi-small fi-blue'></i> Перейти".html_safe, video, :class => 'b_link'}
 										</td>
 										<td align = 'right'>
-											<div class='stat fi-float-left'><i class = 'fi-comments fi-large fi-grey'></i><span>#{video.messages.where(:status_id => 1).count.to_s}</span></div>
+											<div class='stat fi-float-left'><i class = 'fi-comments fi-medium fi-grey'></i><span>#{video.messages.where(:status_id => 1).count.to_s}</span></div><div class='stat fi-float-left'>#{drawIcon('eye', 'medium', 'grey')}<span>#{video.views}</span></div>
 										</td>
 									</tr>
 								</table>

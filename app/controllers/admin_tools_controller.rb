@@ -1,115 +1,68 @@
 class AdminToolsController < ApplicationController
-include AdminToolsHelper  
+  include AdminToolsHelper  
+  before_action :check_admin
+  def check_admin
+    redirect_to '/404' if user_type != 'super_admin'
+  end
   def functions_test
     @title = @header = 'Тест функций'
+    photosRebinding
     #album = PhotoAlbum.find(53)
     #sendNewAlbumMail(album)
-    video = Video.find(36)
-    sendNewVideoMail(video)
+    #video = Video.find(36)
+    #sendNewVideoMail(video)
   end
    
   def hidden_entities #скрытые объекты
-  	  if user_type == 'admin' or user_type == 'super_admin'
 		@title = 'Скрытые объекты'
-	  else
-		redirect_to '/404'
-	  end
   end
   
   def deleted_entities #удалённые объекты
-  	  if user_type == 'admin' or user_type == 'super_admin'
 		@title = 'Удалённые объекты'
-	  else
-		redirect_to '/404'
-	  end
   end
   
   def deleted_albums #удалённые альбомы
-	  if user_type == 'admin' or user_type == 'super_admin'
 		@title = 'Удалённые альбомы'
-	  else
-		redirect_to '/404'
-	  end
   end
   
   def deleted_photos #удалённые фотографии
-  	  if user_type == 'admin' or user_type == 'super_admin'
 		@title = 'Удалённые фотографии'
-	  else
-		redirect_to '/404'
-	  end
   end
   
   def deleted_themes #удалённые темы
-    if user_type == 'admin' or user_type == 'super_admin'
 		@title = 'Удалённые темы'
-	else
-		redirect_to '/404'
-	end
   end
 
   def deleted_messages #удалённые сообщения
-  	  if user_type == 'admin' or user_type == 'super_admin'
 		@title = 'Удалённые сообщения'
-	  else
-		redirect_to '/404'
-	  end
   end
   
   def deleted_articles #удалённые статьи
-  	  if user_type == 'admin' or user_type == 'super_admin'
 		@title = 'Удалённые статьи'
-	  else
-		redirect_to '/404'
-	  end
   end
   
   def hidden_messages #скрытые сообщения
-  	  if user_type == 'admin' or user_type == 'super_admin'
 		@title = 'Скрытые сообщения'
-	  else
-		redirect_to '/404'
-	  end
   end
   
   def hidden_themes #скрытые темы
-    if user_type == 'admin' or user_type == 'super_admin'
 		@title = 'Скрытые темы'
-	else
-		redirect_to '/404'
-	end
   end
   
   def hidden_albums #скрытые альбомы
-	  if user_type == 'admin' or user_type == 'super_admin'
 		@title = 'Скрытые альбомы'
-	  else
-		redirect_to '/404'
-	  end
   end
   
   def hidden_photos #скрытые фотографии
-	  if user_type == 'admin' or user_type == 'super_admin'
 		@title = 'Скрытые фотографии'
-	  else
-		redirect_to '/404'
-	  end
   end
   
   def hidden_articles #скрытые статьи
-	  if user_type == 'admin' or user_type == 'super_admin'
 		@title = 'Скрытые статьи'
-	  else
-		redirect_to '/404'
-	  end
   end
   
   def site_images #изображения оформления сайта
-  	  if user_type == 'admin' or user_type == 'super_admin'
 		@title = 'Изображения оформления сайта'
-	  else
-		redirect_to '/404'
-	  end
   end
   
   def entities_recovery
@@ -130,28 +83,19 @@ include AdminToolsHelper
   end
   
   def disabled_events
-	if user_type == 'admin' || user_type == 'super_admin'
 		@title = 'Неактивные новости'
 		@events = Event.find_all_by_status_id(1)
 		render "events/index.html.erb"
-	else
-		redirect_to '/404'
-	end
   end
   def recreate_photo_versions
-    if user_type == 'super_admin'
       photos = Photo.all
       photos.each {|p| p.link.recreate_versions!(:small_thumb, :in_content)}
       users = User.all
       users.each {|u| u.avatar.recreate_versions!(:sq_thumb) if u.avatar?} 
       redirect_to photo_albums_path
-    else
-    		redirect_to '/404'    
-    end
   end
    
   def adaptation_to_new #Создание тем из базы данных первой версии сайта.
-	if user_type == 'super_admin'
 		i = 0
 		@fuck = []
 		fuck = []
@@ -272,9 +216,6 @@ include AdminToolsHelper
     
     
     stepsAdaption
-	else
-		redirect_to '/404'
-	end
   end
   
 end

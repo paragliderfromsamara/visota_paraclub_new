@@ -18,7 +18,7 @@ elsif @album != nil
     if !is_not_authorized?
         mType = "comment"
         returnAfterSaveTo = photo_album_path(@album) if @photo == nil
-        returnAfterSaveTo = photo_path(@photo) if @photo != nil
+        returnAfterSaveTo = photo_path(id: @photo.id, e: params[:e], e_id: params[:e_id]) if @photo != nil
         tmpMessage = current_user.album_message_draft(@album) if tmpMessage == nil
     else
        vFlag = false 
@@ -26,7 +26,7 @@ elsif @album != nil
 elsif @photo != nil
     if !is_not_authorized?
         mType = "comment"
-        returnAfterSaveTo = photo_path(@photo)
+        returnAfterSaveTo = photo_path(id: @photo.id, e: params[:e], e_id: params[:e_id])
     else
         vFlag = false 
     end
@@ -42,6 +42,8 @@ else
     vFlag = false 
 end
 
+session[:link_after_message_save] = request.env['ORIGINAL_FULLPATH'] if controller.action_name != 'edit' and controller.action_name != 'update'
+    
 %>
 <% if vFlag %>
 <div class = "c-box mForm">
@@ -53,7 +55,6 @@ end
 <% if tmpMessage != nil %>
         <%= form_for(tmpMessage, :multipart => 'true', html:{class: formClass, id: "#{formClass}_#{tmpMessage.id}",form_type: mType}) do |f| %>
                 <div style = "display: none;"><%= f.file_field :uploaded_photos, :multiple => 'true' if mType != 'comment' %></div>
-				<%= hidden_field :info, :return_to_link, :value => returnAfterSaveTo %>
 				<%= f.hidden_field :message_id, :value => @message_to.id if @message_to != nil %>
 				<%= f.hidden_field :theme_id, :value => @theme.id if @theme != nil%>
 				<%= f.hidden_field :photo_id, :value => @photo.id if @photo != nil%>

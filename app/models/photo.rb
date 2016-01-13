@@ -6,27 +6,29 @@ class Photo < ActiveRecord::Base
   attr_accessor :delete_flag
   attr_accessible :article_id, :category_id, :description, :event_id, :link, :message_id, :name, :photo_album_id, :user_id, :theme_id, :status_id, :delete_flag, :visibility_status_id
   belongs_to :user
-  belongs_to :theme #Фото как вложение в тему
-  belongs_to :photo_album
+  #belongs_to :theme #Фото как вложение в тему
+  #belongs_to :photo_album
   #belongs_to :category
-  belongs_to :article
-  belongs_to :event #Фото как фото в новости
-  belongs_to :message #Фото как вложение в сообщение
-  has_many :messages, :dependent  => :delete_all #Комментарии к фото
-  has_many :photo_like_marks, :dependent  => :delete_all #Комментарии к фото
+  #belongs_to :article
+  #belongs_to :event #Фото как фото в новости
+  #belongs_to :message #Фото как вложение в сообщение
+  has_many  :comments, -> {where(status_id: 1).order('created_at ASC')}, class_name: "Message", :dependent  => :delete_all #Комментарии к фото
+  has_many :photo_like_marks, :dependent => :delete_all #Мне нравится к фото
   has_one :entity_view, :as => :v_entity, :dependent => :delete #просмотры
   mount_uploader :link, PhotoUploader
   before_destroy :delPhoto
   #photo_relations
-  has_many :message_photos
-  has_many :theme_photos
-  has_many :article_photos
-  has_many :event_photos
+  has_many :entity_photos, dependent: :delete_all
+  has_many :themes, through: :entity_photos, as: :p_entity
+  has_many :parent_messages, as: :messages, through: :entity_photos, as: :p_entity
+  has_many :photo_albums, through: :entity_photos, as: :p_entity
+  #has_many :article_photos
+  #has_many :event_photos
   #photo_relations end
   
-  def comments
-	  self.messages.where(:status_id=>1).order('created_at ASC')
-  end
+  #def comments
+	#  self.messages.where(:status_id=>1).order('created_at ASC')
+  #end
   
   def views 
 	  (self.entity_view == nil)? 0 : self.entity_view.counter 
@@ -179,53 +181,5 @@ end
 #  def set_as_on_visible_entity #сделать прикреплённый к видимой сущности
 #	self.update_attribute(:status_id, 1) if self.status_id != 1 #Пометить как видимый
 #  end
-  
-  def set_as_visible
-	  self.update_attribute(:visibility_status_id, 1) if self.visibility_status_id != 1 #Пометить как видимый
-  end
-  
-  def set_as_hidden
-    self.update_attribute(:visibility_status_id, 2) if self.visibility_status_id != 2 #Пометить как скрытый
-  end
-  
-# def isNotFullDelete?
-#	v = false
-#	if self.status == 'normal'
-#		if self.photo_album != nil
-#			if self.photo_album.status == 'normal'
-#				v = true
-#			end
-#		end
-#	end
-#	return v
-#  end
-  
-#  def set_as_delete
-#	self.update_attribute(:status_id, 2)
-#	if messages != []
-#		messages.each do |msg|
-#			msg.update_attribute(:status_id, 3)
-#		end
-#	end #Пометить на удаление
-#	
-#  
-#  end
-  
- # def set_as_on_deleted_entity #Пометить как прикреплённый к удалённому объекту
-#	self.update_attribute(:status_id, 3)
-#	if messages != []
-#		messages.each do |msg|
-#			msg.update_attributes(:status_id=> 3)
-#		end
-#	end
-#  end
-  
-#  def statusIsValid? #проверка статуса сообщения
-#	if self.status_id == 0 || self.status_id == 2 || self.status_id == 3
-#		return false #нет если удалён, черновик, или на удалённой сущности
-#	else
-#		return true  #да во всех остальных случаях
-#	end
-#  end
-#Управление статусами end...
+
 end

@@ -8,7 +8,8 @@ module TopicsHelper
 		]
 	end
 	def top_index_topic_buttons
-		"#{control_buttons([{:name => "Опросы", :access => true, :type => 'graph-bar', :link => votes_path}, {:name => 'Новый раздел', :access => is_super_admin?, :type => 'plus', :link => "#{new_topic_path}", :id => 'newTopic'}])}"
+    activeVotes = Vote.active_votes.count
+		return "#{control_buttons([{:name => "Опросы#{" (активных: #{activeVotes})"if activeVotes > 0}", :access => true, :type => 'graph-bar', :link => votes_path}, {:name => 'Новый раздел', :access => is_super_admin?, :type => 'plus', :link => "#{new_topic_path}", :id => 'newTopic'}])}"
 	end
 	def show_topic_buttons(topic)
 		[
@@ -16,8 +17,8 @@ module TopicsHelper
 		]
 	end
 	def visota_life_panel
-
-		v = {:name => "Опросы", :access => true, :type => 'grey', :link => votes_path}
+    activeVotes = Vote.active_votes.count
+		v = {:name => "Опросы#{" (активных: #{activeVotes})"if activeVotes > 0}", :access => true, :type => 'grey', :link => votes_path}
 	#	m = {:name => "Архив сообщений с para.saminfo.ru", :access => true, :type => 'grey', :link => old_messages_path}
 	#	m[:selected] = true if controller.controller_name == 'old_messages'
 		b = [v]
@@ -52,9 +53,10 @@ module TopicsHelper
 	end
 	def topic_mini_block_content(topic)
 		v = ''
-		v += "#{link_to(topic.name, topic, :class => 'b_link_bold', :style => 'font-size: 1em;')} <br />"
+		v += "#{link_to(topic.name, topic, :class => 'b_link_bold', :style => 'font-size: 16px;')} <br />"
 		themes = topic.last_active_themes(is_not_authorized?)
 		entities_count = topic.entities_count(is_not_authorized?)
+    v += topic_description(topic)
 		v += topic_themes_table(themes)
 		v += "<div class = 'central_field' style = 'width: 100%;'>
 						<table style = 'width: 100%;'>
@@ -154,7 +156,9 @@ module TopicsHelper
 		return v
   end
   
-  def viewed_themes
-    
+  
+  def topic_description(topic=@topic)
+   return "" if topic.description.blank?
+   return "<p class = 'istring_m norm tb-pad-s'>#{topic.description}</p>"
   end
 end

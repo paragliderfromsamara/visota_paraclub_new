@@ -1,0 +1,21 @@
+<div class = 'm_1000wh'>
+    <%= navigation_string.html_safe %>
+</div>
+<div class = 'c-box'>
+    <div class = 'm_1000wh tb-pad-s'>
+        <%= form_for(:article_type, url: current_path) do |f| %><%= article_types_list("article_type", @type) %> 
+            <%= f.submit 'Выбрать тип статьи' %>
+        <%end%>
+    </div>
+</div>
+<% if @type != {} %>
+<div class = 'c-box even'>  
+    <div class = 'm_1000wh tb-pad-s'>  
+        <%= render 'articles/form' %>
+    </div>
+</div>
+<%end%>
+
+<div class = 'm_1000wh' >
+    <%= navigation_string.html_safe %>
+</div>

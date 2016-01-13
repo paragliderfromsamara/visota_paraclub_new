@@ -1,0 +1,2 @@
+module EntityPhotosHelper
+end

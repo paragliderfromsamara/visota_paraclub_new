@@ -88,5 +88,16 @@ module AdminToolsHelper
       guestSteps.delete_all
     end
   end
-  
+  def photosRebinding
+    photos = Photo.all
+    if photos != []
+      photos.each do |p|
+          p.theme.entity_photos.create(photo_id: p.id, visibility_status_id: 1) if p.theme != nil
+          p.message.entity_photos.create(photo_id: p.id, visibility_status_id: 1) if p.message != nil
+          p.article.entity_photos.create(photo_id: p.id, visibility_status_id: 1) if p.article != nil
+          p.event.entity_photos.create(photo_id: p.id, visibility_status_id: 1) if p.event != nil
+          p.photo_album.entity_photos.create(photo_id: p.id, visibility_status_id: 1) if p.photo_album != nil
+      end
+    end
+  end
 end

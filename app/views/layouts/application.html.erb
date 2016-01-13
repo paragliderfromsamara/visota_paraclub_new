@@ -10,7 +10,8 @@
   
   <%= vk_like_vidget[:script].html_safe %>
     <script type = 'text/javascript'>
-        var ready = function(){$('img, style').load(function(){$(this).fadeIn(1000);}); my_functions(); <%= js_functions %> };
+        var ready = function(){
+            $('img, style').load(function(){$(this).fadeIn(1000);}); my_functions();  <%= js_functions %> };
         $(document).ready(ready);
         $(document).on('page:load', ready);
     </script>

@@ -52,7 +52,12 @@ include EventsHelper
   def edit
 	if user_type == 'super_admin'
 		@topic = Topic.find(params[:id])
-		@title = "Изменение раздела '#{@topic.name}'"
+		@title = @header = "Изменение раздела '#{@topic.name}'"
+		@path_array = [
+						{:name => 'Клубная жизнь', :link => '/visota_life'},
+						{:name => @topic.name, :link => topic_path(@topic)},
+						{:name => 'Изменение раздела'}
+					  ]
 		respond_to do |format|
 		  format.html# new.html.erb
 		  format.json { render :json => @topic }

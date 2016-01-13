@@ -39,11 +39,13 @@ gem 'will_paginate'
 gem 'exifr'
 gem 'nokogiri', '~> 1.6.0'
 gem 'protected_attributes'
+gem 'lightbox2-rails'
+#gem 'sunspot_rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-
+  #gem 'sunspot_solr' # optional pre-packaged Solr distribution for use in development
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
   

@@ -1,13 +1,16 @@
 class Article < ActiveRecord::Base
   attr_accessor :assigned_albums, :assigned_videos
-  attr_accessible :article_type_id, :content, :event_id, :name, :user_id, :accident_date, :attachment_files, :photos, :uploaded_photos,:assigned_albums, :assigned_videos, :status_id, :visibility_status_id, :created_at, :updated_at
+  attr_accessible :article_type_id, :content, :event_id, :name, :user_id, :accident_date, :attachment_files, :photos, :uploaded_photos,:assigned_albums, :assigned_videos, :status_id, :visibility_status_id, :created_at, :updated_at, :theme_id
   belongs_to :user
+  belongs_to :theme
   #belongs_to :article_type
   has_many :attachment_files, :dependent  => :destroy
-  has_many :photos, :dependent  => :delete_all
+  has_many :entity_photos, :as => :p_entity, :dependent => :destroy #has_many :photos, :dependent  => :delete_all
+  has_many :photos, through: :entity_photos
   has_many :photo_albums
   has_many :videos
   has_one :entity_view, :as => :v_entity, :dependent => :delete #просмотры
+  has_one :article
   require 'will_paginate'
   auto_html_for :content do
 	html_escape
@@ -149,9 +152,9 @@ class Article < ActiveRecord::Base
 		name
 	end
    end
-   def visible_photos
-		photos.where(:visibility_status_id => 1)
-   end   
+ 	def visible_photos #Видимые фотографии
+     photos.where(id: entity_photos.select(:photo_id).where(visibility_status_id: [1, nil]))
+ 	end  
    def alter_photo
 	if photos != []
 		return photos.first.link.thumb
@@ -165,11 +168,11 @@ class Article < ActiveRecord::Base
    end
    
    def get_type_by_id(id)
-	value = nil
-	types.each do |type|
-		value = type if type[:value] == id.to_i
-	end
-	return value
+    	value = nil
+    	types.each do |type|
+    		value = type if type[:value] == id.to_i
+    	end
+    	return value
    end
    
    def getTypeIdByLink(link) 
@@ -223,12 +226,12 @@ class Article < ActiveRecord::Base
   def get_albums #Привязывает к статье фотоальбомы
 	if getBindedAlbumsIdsArray == []
 		if assigned_albums != nil and assigned_albums != ''
-			ids = getIds(assigned_albums)
+      ids = self.assigned_albums.getIdsArray
 			bindAlbumsById(ids, self.id)
 		end
 	else
 		if assigned_albums != nil and assigned_albums != ''
-			ids = getIds(assigned_albums)
+			ids = self.assigned_albums.getIdsArray
 			bindArr = ids - getBindedAlbumsIdsArray
 			unbindArr = getBindedAlbumsIdsArray - ids
 			bindAlbumsById(unbindArr, nil) if unbindArr != []
@@ -277,12 +280,12 @@ class Article < ActiveRecord::Base
   def get_videos #Привязывает к статье фотоальбомы
 	if getBindedVideosIdsArray == []
 		if assigned_videos != nil and assigned_videos != ''
-			ids = getIds(assigned_videos)
+			ids = self.assigned_videos.getIdsArray
 			bindVideosById(ids, self.id)
 		end
 	else
 		if assigned_videos != nil and assigned_videos != ''
-			ids = getIds(assigned_videos)
+			ids = self.assigned_videos.getIdsArray
 			bindArr = ids - getBindedVideosIdsArray 
 			unbindArr = getBindedVideosIdsArray  - ids
 			bindVideosById(unbindArr, nil) if unbindArr != []
@@ -293,19 +296,19 @@ class Article < ActiveRecord::Base
 	end
   end
   
-  def getIds(str)
-  	ids = []
-  	id = ''
-  	str.chars do |ch|
-  		if ch != '[' and ch != ']'
-  			id += ch
-  		elsif ch == ']'
-  			ids[ids.length] = id
-  			id = ''
-  		end
-  	end
-  	return ids
-  end
+  #def getIds(str) в string_functions
+  #	ids = []
+  #	id = ''
+  #	str.chars do |ch|
+  #		if ch != '[' and ch != ']'
+  #			id += ch
+  #		elsif ch == ']'
+  #			ids[ids.length] = id
+  #			id = ''
+  #		end
+  #	end
+  #	return ids
+  #end
   
   def unbind_albums
 	if photo_albums != []
@@ -324,25 +327,25 @@ class Article < ActiveRecord::Base
   end
   
   def check_photos_in_content 
-	if self.photos != [] and self.photos != nil
-		self.photos.each do |ph|
-			self.check_photo_in_content(ph)
-      ph.update_attribute(:status_id, 1) if ph.status == 'draft'
-		end
-	end
+  	if self.photos != [] and self.photos != nil
+  		self.photos.each do |ph|
+  			self.check_photo_in_content(ph)
+  		end
+  	end
   end
 
  def check_photo_in_content(ph) #делаем фотографию невидимой в основном списке фотографий сообщения и делаем видимой, если её там нет
 		if self.content.index("#Photo#{ph.id}") != nil and self.content.index("#Photo#{ph.id}") != -1
-			ph.set_as_hidden
+			self.entity_photos.where(photo_id: ph.id).first.set_as_hidden
 		else
-			ph.set_as_visible
+			self.entity_photos.where(photo_id: ph.id).first.set_as_visible
 		end  
   end 
  
   def clean
-  	if self.photos != []
-  		self.photos.each do |ph|
+    self.update_attributes(name: '', content: '', theme_id: nil)
+  	if self.entity_photos != []
+  		self.entity_photos.each do |ph|
   			ph.destroy
   		end
   	end

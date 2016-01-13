@@ -97,13 +97,14 @@ end
 #feed functions-----------------------------------------------------------------------------------------------------
 	def feed_parts
 		[
-			{:en_name => 'answers', :ru_name => 'Ответы', :description => 'Ответы на сообщения и комментарии', :path => '/feed?part=answers'},
+		#	{:en_name => 'answers', :ru_name => 'Ответы', :description => 'Ответы на сообщения и комментарии', :path => '/feed?part=answers'},
+      {:en_name => 'themes', :ru_name => 'Темы', :description => 'Новые темы в интересующих разделах', :path => '/feed?part=themes'},
+      {:en_name => 'messages', :ru_name => 'Сообщения', :description => 'Новые сообщения в отслеживаемых разделах', :path => '/feed?part=messages'},
 			{:en_name => 'comments', :ru_name => 'Комментарии', :description => 'Комментарии к фото и видео', :path => '/feed?part=comments'},
-			{:en_name => 'themes', :ru_name => 'Темы', :description => 'Новые темы в интересующих разделах', :path => '/feed?part=themes'},
-			{:en_name => 'messages', :ru_name => 'Сообщения', :description => 'Новые сообщения в отслеживаемых разделах', :path => '/feed?part=messages'},
-			{:en_name => 'articles', :ru_name => 'Материалы', :description => 'Новые статьи', :path => '/feed?part=articles'},
 			{:en_name => 'videos', :ru_name => 'Видео', :description => 'Новые видео', :path => '/feed?part=videos'},
-			{:en_name => 'albums', :ru_name => 'Фотоальбомы', :description => 'Новые альбомы и обновления в альбомах', :path => '/feed?part=albums'}
+			{:en_name => 'albums', :ru_name => 'Фотоальбомы', :description => 'Новые альбомы и обновления в альбомах', :path => '/feed?part=albums'},
+			{:en_name => 'articles', :ru_name => 'Материалы', :description => 'Новые статьи', :path => '/feed?part=articles'}
+			
 		]
 	end
 	def default_part
@@ -124,7 +125,7 @@ end
 			s = false if part != current_feed_part
 			buttons[buttons.length] = {:name => part[:ru_name], :access => true, :selected => s, :link => part[:path]} 
 		end
-		return buttons_in_line(buttons).html_safe
+		return buttons_in_line_b(buttons).html_safe
 	end
 	
 	def feed_part_name
@@ -154,7 +155,7 @@ end
 		if topicsNtfs != []
 			v_status_id = 1 if is_not_authorized?
 			v_status_id = [1,2] if !is_not_authorized?
-			themes = Theme.where(status_id: [1,3], visibility_status_id: v_status_id, topic_id: topicsNtfs).order('created_at DESC')
+			themes = Theme.where(status_id: [1,3], visibility_status_id: v_status_id, topic_id: topicsNtfs).order('created_at DESC').where.not(user_id: current_user.id).limit(30)
 			if themes != []
 				themes.each do |theme|
 					last_message = theme.last_message
@@ -167,7 +168,15 @@ end
 		return result_arr
 	end
 	def make_entities_for_message_part
-		[]
+		result_arr = []
+    messages = Message.where(theme_id: current_user.theme_notifications.select(:theme_id), status_id: 1).order('created_at DESC').where.not(user_id: current_user.id).limit(50)
+    if messages != []
+			messages.each do |message|
+				result_arr[result_arr.length] = [message.created_at, message]
+			end
+      result_arr.sort!{|a,b|b<=>a}
+    end
+    return result_arr
 	end
 	def make_entities_for_answer_part
 		result_arr = []
@@ -475,9 +484,9 @@ end
 		date = v[0]
 		theme = v[1]
 
-		head_info = "#{theme.user.name} разместил тему в разделе #{theme.topic.name}" if theme.user != current_user
-		head_info = "Вы разместили тему в разделе #{theme.topic.name}" if theme.user == current_user
-		bottom_links = control_buttons([{:name => 'Перейти к теме', :access => userCanSeeTheme?(theme), :type => 'follow',  :link => "/themes/#{theme.id}"}])
+		head_info = "#{theme.user.name} разместил тему в разделе <span class = 'bi-string'>#{theme.topic.name}</span>" # if theme.user != current_user
+		#head_info = "Вы разместили тему в разделе #{theme.topic.name}" if theme.user == current_user
+		bottom_links = control_buttons([{:name => 'Перейти к теме', :access => userCanSeeTheme?(theme), :type => 'arrow-right',  :link => "/themes/#{theme.id}"}])
 		p = {
 				:tContent => "<p class = 'istring medium-opacity'>#{head_info}</p><h3 class = 'tb-pad-s'>#{theme.name}</h3>" + theme_body(theme, false) + bottom_links, 
 				:classLvl_1 => 'mainEntity', 
@@ -487,7 +496,17 @@ end
 		return c_box_block(p)
 	end
 	def build_as_message_block(v, i)
-		return '#to_do'
+		#date = v[0]
+		message = v[1]
+		head_info = "Сообщение в теме <span class = 'bi-string'>#{message.theme.name}</span>"
+		bottom_links = control_buttons([{:name => 'Перейти к теме', :access => userCanSeeTheme?(message.theme), :type => 'arrow-right',  :link => "/themes/#{message.theme.id}##{message.id}"}])
+		p = {
+				:tContent => "<p class = 'istring medium-opacity'>#{head_info}</p>" + message_body(message, false) + bottom_links, 
+				:classLvl_1 => 'msgs', 
+				:classLvl_2 => 'tb-pad-m',
+				:parity => i
+			}
+		return c_box_block(p)
 	end
 	def build_as_album_block(v, i)
 		date = v[0]
@@ -515,15 +534,14 @@ end
 	end
 	
 	def build_as_video_block(v, i)
-		content = {
-			:event_date => v.created_at,
-			:head_link => link_to("#{v.user.name} разместил новое видео в категории #{v.category_name}", v, :class => 'b_link'),
-			:header => "#{v.name}",
-			:user_image_link => v.user.alter_avatar,
-			:main_content => v.link_html,
-			:bottom_links => link_to("Перейти к видео", v, :class => 'b_link')
-				  }
-		return feed_html_block(content, i)
+		head_info = "Видео в категории <span class = 'bi-string'>#{v.category_name}</span>"
+		p = {
+				:tContent => "<p class = 'istring medium-opacity'>#{head_info}</p>" + video_show_body(v, true), 
+				:classLvl_1 => 'msgs', 
+				:classLvl_2 => 'tb-pad-m',
+				:parity => i
+			}
+		return c_box_block(p)
 	end
 	
 	def build_as_article_block(article, i)
@@ -692,7 +710,7 @@ def search_in_old_messages
   if old_messages != []
     old_messages.each do |msg|
       dwnCaseMsgText = msg.content.mb_chars.downcase
-      oldMsgsResult[oldMsgsResult.length] = [msg.created_when, msg] if isLikebleText?(dwnCaseMsgText, @searchHashParams[:search_query])
+      oldMsgsResult[oldMsgsResult.length] = [msg.created_when, msg] if isLikebleText?(dwnCaseMsgText, @search_string)
     end
   end
   return oldMsgsResult
@@ -705,104 +723,31 @@ def search_in_themes
   else
     vsId = [1,2]
   end 
-  themes = Theme.where(:status_id => [1,3], :visibility_status_id => vsId, :topic_id => getTopicIdsFromSearchHash).order('created_at ASC')
-  downcaseQueryText = @searchHashParams[:search_query] 
+
   resultThemes = []
   resultMessages = []
-  if themes != [] 
-    themes.each do |th| #ищем в темах
-      dwnCaseThText = th.name.mb_chars.downcase
-      if isLikebleText?(dwnCaseThText, @searchHashParams[:search_query])
-        resultThemes[resultThemes.length] = [th.created_at, th]
-      else
-        dwnCaseThText = th.content.mb_chars.downcase
-        if isLikebleText?(dwnCaseThText, @searchHashParams[:search_query])
-          resultThemes[resultThemes.length] = [th.created_at, th]
-        else #если не находим в темах листаем сообщения и ищем в них
-          msgs = th.visible_messages
-          if msgs != []
-            msgs.each do |msg|
-              dwnCaseThText = msg.content.mb_chars.downcase
-              resultMessages[resultMessages.length] = [msg.created_at, msg] if isLikebleText?(dwnCaseThText, @searchHashParams[:search_query])
-            end
-          end
-        end
-      end
-    end
-  end
+  #if themes != []
+  #  themes.each do |th| #ищем в темах
+  #    dwnCaseThText = th.name.mb_chars.downcase
+  #    if isLikebleText?(dwnCaseThText, @search_string)
+  #      resultThemes[resultThemes.length] = [th.created_at, th]
+  #    else
+  #      dwnCaseThText = th.content.mb_chars.downcase
+  #      if isLikebleText?(dwnCaseThText, @search_string)
+  #        resultThemes[resultThemes.length] = [th.created_at, th]
+  #      else #если не находим в темах листаем сообщения и ищем в них
+  #        msgs = th.visible_messages
+  #        if msgs != []
+  #          msgs.each do |msg|
+  #            dwnCaseThText = msg.content.mb_chars.downcase
+  #            resultMessages[resultMessages.length] = [msg.created_at, msg] if isLikebleText?(dwnCaseThText, @search_string)
+  #          end
+  #        end
+  #      end
+  #    end
+  #  end
+  #end
 	return {:themes => resultThemes, :messages => resultMessages}
-end
-
-def makeSearchParameters
-  @searchHashParams = {}
-  @searchHashParams[:search_query] = (params[:search_query] != nil)? params[:search_query]:""
-  @searchHashParams[:in_themes_and_messages] = (params[:in_themes_and_messages] == 'on')? true:false
-  @searchHashParams[:in_articles] = (params[:in_articles] == 'on')? true:false
-  @searchHashParams[:in_events] = (params[:in_events] == 'on')? true:false
-  topics = Topic.all
-  if topics != []
-    topics.each do |t|
-      h = "t_#{t.id}".to_sym
-      @searchHashParams[h] = (params[h] == 'on' && @searchHashParams[:in_themes_and_messages])? true:false
-    end  
-  end
-  @searchHashParams[:o_gb] = (params[:o_gb] == 'on' && @searchHashParams[:in_themes_and_messages])? true:false
-end
-
-def getTopicIdsFromSearchHash
-  val = []
-  if @searchHashParams[:in_themes_and_messages]
-    topics = Topic.all
-    if topics != []
-      topics.each do |t|
-        h = "t_#{t.id}".to_sym
-        val[val.length] = t.id if @searchHashParams[h]
-      end  
-    end
-  end
-  return val
-end
-
-def isSearchInTopics?
-  val = false
-  if @searchHashParams[:in_themes_and_messages]
-    topics = Topic.all
-    if topics != []
-      topics.each do |t|
-        h = "t_#{t.id}".to_sym
-        val |= @searchHashParams[h]
-      end  
-    end
-    val |= @searchHashParams[:o_gb]
-  end
-  return val  
-end
-
-def build_search_pagination_link
-  val = "/search"
-  val += (@searchHashParams[:search_query] != nil)? "?search_query=#{@searchHashParams[:search_query]}":""
-  if searchParamsIsNotEmpty? 
-    val += (@searchHashParams[:in_articles])? "&in_articles=on":""
-    val += (@searchHashParams[:in_events])? "&in_events=on":""
-    if isSearchInTopics?
-      val += (@searchHashParams[:in_themes_and_messages])? "&in_themes_and_messages=on":""
-      tpcs = Topic.all
-      tpcs.each do |t|
-        h = "t_#{t.id}".to_sym
-        val += (@searchHashParams[h])? "&t_#{t.id}=on":""
-      end
-      val += (@searchHashParams[:o_gb])? "&o_gb=on":""
-    end
-    return val
-  end
-  
-  
-end
-
-def searchParamsIsNotEmpty?
-  result = false
-  result = @searchHashParams[:in_articles] | @searchHashParams[:in_events] | isSearchInTopics?
-  return result
 end
 
 def theme_block_for_search_result(theme, i)
@@ -841,7 +786,7 @@ def theme_block_for_search_result(theme, i)
 		<tr>
 			<td colspan = '2'>
 				<div>
-					 #{control_buttons([{:name => "Перейти", :access => true, :type => 'follow', :link => theme_path(theme)}])}
+					 #{control_buttons([{:name => "Перейти", :access => true, :type => 'arrow-right', :link => theme_path(theme)}])}
 				</div>
 			</td>
 		</tr>

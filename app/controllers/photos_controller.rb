@@ -29,36 +29,55 @@ include MessagesHelper
   # GET /photos/1.json
   def show
     @photo = Photo.find_by(id: params[:id])
-	if userCanSeePhoto?(@photo)
+	if userCanSeePhoto?(@photo) and params[:e] != nil and params[:e_id] != nil
     @page_params = {:part_id => 4,:page_id => 1,:entity_id => @photo.id}
 		@photos = []
 		@j_photo = {:id => @photo.id, :link => @photo.link.to_s, :thumb => @photo.link.thumb.to_s, :description => @photo.description}
 		@prev_photo = nil
 		@next_photo = nil
-		@return_to = photo_path(@photo)
-		if @photo.photo_album != nil
-			@photos = @photo.photo_album.photos
-			@album = @photo.photo_album
-		end
-		if @photo.message != nil
-			@message_to = @photo.message
-			@photos = @photo.message.photos
-			@theme = @message_to.theme if @message_to.theme != nil
-		end
-		if @photo.theme != nil
-			@theme = @photo.theme
-			@photos = @photo.theme.photos
-		end
-		if @photos == []
-			@photos = @photo.article.visible_photos if @photo.article != nil
-		end
+		@return_to = photo_path(id: @photo.id, e: params[:e], e_id: params[:e_id])
+    @link = ""
+		case params[:e]
+    when 'photo_album'
+      @album = PhotoAlbum.find(params[:e_id])
+      if !@album.nil?
+        @photos = @album.photos
+        @link = "<a href = '#{photo_album_path(@album)}'><li>К альбому</li></a>"
+      end
+    when 'theme'
+      @theme = Theme.find(params[:e_id])
+      if !@theme.nil?
+        @photos = @theme.photos
+        @link = "<a href = '#{photo_album_path(@theme)}'><li>К теме</li></a>"
+      end
+    when 'message'
+      @photo_msg = Message.find(params[:e_id])
+      if !message.nil?
+        @photos = message.photos
+        @message_to = message
+        if !@message_to.theme.nil?
+          @theme = @message_to.theme 
+          @link = "<a href = '#{photo_album_path(@theme)}'><li>К теме</li></a>"
+        end
+      end
+    when 'article'
+      @article = Article.find(params[:e_id])
+      if !@article.nil?
+        @photos = @article.photos
+        @link = "<a href = '#{photo_album_path(@album)}'><li>К материалу</li></a>"
+      end
+    end
 		if @photos != []
-			@prev_photo = photo_path(@photos[@photos.index(@photo) - 1]) if @photos.index(@photo) > 0
-			@next_photo = photo_path(@photos[@photos.index(@photo) + 1]) if @photos.index(@photo) < (@photos.length - 1)
-		end
+			@prev_photo = photo_path(id: @photos[@photos.index(@photo) - 1].id, e: params[:e], e_id: params[:e_id]) if @photos.index(@photo) > 0
+			@next_photo = photo_path(id: @photos[@photos.index(@photo) + 1].id, e: params[:e], e_id: params[:e_id]) if @photos.index(@photo) < (@photos.length - 1)
+    end
 		respond_to do |format|
-		  format.html {render :layout => 'photo_show'}# show.html.erb
-		  format.json { render :json => @j_photo }
+      if @photos != []
+		    format.html {render :layout => 'photo_show'}# show.html.erb
+		    format.json { render :json => @j_photo }
+      else
+        format.html {redirect_to '/404'}# show.html.erb
+      end
 		end
 	else
 		@j_photo = {:id => 'null', :link => 'null', :thumb => 'null'}
@@ -100,17 +119,17 @@ include MessagesHelper
 	when "theme" #Фотографии в теме...
 		@theme = Theme.find_by(id: params[:e_id])
 		redirect_to '/404' if !isEntityOwner?(@theme)
-		@photos = @theme.photos
+		@photos = @theme.entity_photos
 		@link_to = theme_path(@theme.id)
 	when "photo_album" #Фотографии в альбоме...
 		@album = PhotoAlbum.find_by(id: params[:e_id])
 		redirect_to '/404' if !isEntityOwner?(@album)
-		@photos = @album.photos
+		@photos = @album.entity_photos
 		@link_to = photo_album_path(@album.id)
 	when "message" #Фотографии в теме...
 		@message = Message.find_by(id: params[:e_id])
 		redirect_to '/404' if !isEntityOwner?(@message)
-		@photos = @message.photos
+		@photos = @message.entity_photos
 		@link_to = theme_path(@message.theme_id) if @message.theme != nil
     @link_to = photo_album_path(@message.photo_album_id) if @message.photo_album != nil
     @link_to = photo_path(@message.photo) if @message.photo != nil
@@ -118,12 +137,12 @@ include MessagesHelper
 	when "article" #Фотографии в статье...
 		@article = Article.find_by(id: params[:e_id])
 		redirect_to '/404' if !isEntityOwner?(@article)
-		@photos = @article.photos
+		@photos = @article.entity_photos
 		@link_to = article_path(@article)
 	when "event" #Фотографии в Новостях...
 		@event = Event.find_by(id: params[:e_id])
 		redirect_to '/404' if !is_admin? and user_type != 'manager'
-		@photos = @event.photos
+		@photos = @event.entity_photos
 		@link_to = event_path(@event)
 	end
 	redirect_to '/404' if @theme == nil && @album == nil && @event == nil && @message == nil && @article == nil
@@ -189,7 +208,7 @@ include MessagesHelper
   # DELETE /photos/1
   # DELETE /photos/1.json
   def destroy
-    @photo = Photo.find(params[:id])
+    @photo = EntityPhoto.find(params[:id])
     if userCanDeletePhoto?(@photo)
 			if @photo.destroy
 				respond_to do |format|

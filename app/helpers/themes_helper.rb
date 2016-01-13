@@ -4,7 +4,6 @@ module ThemesHelper
 		"<br />#{ f.label :visibility_status_id, ('<i class = "fi-shield fi-grey fi-medium"></i> Скрыть от не авторизованных пользователей').html_safe} #{ f.check_box :visibility_status_id, {:class=>'check_box'}, '2', '1'}<br />" if !is_not_authorized?
 	end
 	def themes_table(themes)
-		if themes != []
 			"
 				<table class = 'v_table' id = 'themes_list'>
 					<tr>
@@ -27,11 +26,20 @@ module ThemesHelper
 					#{build_rows(themes)}
 				</table>
 			"
-		else
-			"<p class = 'istring norm'>В данном разделе нет ни одной темы...</p>"
-		end
 	end
-	
+  def view_mode_themes_list
+    if session[:themes_list_type] == nil
+      session[:themes_list_type] = (params[:themes_list_type] == nil)? "thumbs" : params[:themes_list_type]
+    else
+      session[:themes_list_type] = (params[:themes_list_type] == nil)? session[:themes_list_type] : params[:themes_list_type]
+    end
+    if controller.controller_name == 'topics' && controller.action_name == 'show'
+      link = [topic_path(id: @topic.id, themes_list_type: 'list'), topic_path(id: @topic.id, themes_list_type: 'thumbs')]
+    else
+      link = [themes_path(themes_list_type: 'list'), themes_path(themes_list_type: 'thumbs')]
+    end
+	  "<a href = '#{link[0]}' id = 'th-as-list'><i class = 'fi-list fi-large#{session[:themes_list_type] == 'list' ? ' fi-blue' : ' fi-grey'}'></i></a>  <a href = '#{link[1]}' id = 'th-as-thumbnails'><i class = 'fi-list-thumbnails fi-large#{session[:themes_list_type] == 'thumbs' ? ' fi-blue' : ' fi-grey' }'></i></a>"
+  end
 	def build_rows(themes)
 		rows = ''
 		themes.each do |th|
@@ -52,7 +60,7 @@ module ThemesHelper
 	end
 
 	def themeInformation(theme)
-		mCount = (@messages == nil)? theme.visible_messages.count : @messages.count 
+		mCount = (@messages == nil)? theme.messages.count : @messages.count 
     h = theme.statusHash
 		vh = theme.vStatusHash
 		v = ''
@@ -60,6 +68,7 @@ module ThemesHelper
 		v += "<div class='stat fi-float-left' title = '#{h[:ru]}'>#{drawIcon(h[:img], 'medium', 'grey')}</div>"
 		v += "<div class='stat fi-float-left'>#{drawIcon('comments', 'medium', 'grey')}<span>#{mCount}</span></div>"
 		v += "<div class='stat fi-float-left'>#{drawIcon('eye', 'medium', 'grey')}<span>#{theme.views}</span></div>"
+    v += "<div class='stat fi-float-left'>#{drawIcon('graph-bar', 'medium', 'grey')}</div>" if !theme.vote.nil?
 		return v
 	end
 	def theme_show_block(showBut)
@@ -74,6 +83,17 @@ module ThemesHelper
 			}
 		return c_box_block(p)
 	end
+  def themes_list_item(theme, i)
+    v = ''
+    bottom_links = control_buttons([{:name => 'Перейти к теме', :access => userCanSeeTheme?(theme), :type => 'arrow-right',  :link => "/themes/#{theme.id}"}])
+		p = {
+				:tContent => "<h3 class = 'tb-pad-s'>#{theme.name}</h3>" + theme_body(theme, false) + bottom_links, 
+				:classLvl_1 => 'mainEntity', 
+				:classLvl_2 => 'tb-pad-m',
+				:parity => i
+			}
+		return c_box_block(p)  
+  end
 	def theme_body(theme, showBut)
 		"<table style = 'width: 100%;'>
 			<tr>
@@ -94,6 +114,7 @@ module ThemesHelper
 				<td  colspan = '2'>
 						<span id = 'content' class = 'mText'>#{theme.content_html}</span>
 						#{theme.updater_string}
+            #{"<div id = 'vtValues'>#{vote_values_table(theme.vote)}</div>" if !theme.vote.nil?}
 						#{"<br /><div class = 'central_field' style = 'width: 1000px;' id ='thPhotosField'>#{theme_list_photos(theme)}</div>" if theme.photos != []}
 						#{"<br />#{list_attachments(theme.attachment_files)}" if theme.attachment_files != []}
 				</td>
@@ -117,12 +138,13 @@ module ThemesHelper
 		buttons_array += [
 							        {:name => "Редактировать", :access => userCanEditTheme?(@theme), :type => 'pencil', :link => "#{edit_theme_path(@theme)}", :id => 'editTheme'}
 						         ]
-		buttons_array[buttons_array.length] = {:name => 'Объединить с...', :access => is_super_admin?, :type => 'shuffle', :link => theme_path(@theme) + "/merge_themes", :title => "Объединить с другой темой", :id => 'mergeTheme'} if @theme.merge_with == nil 
+		buttons_array[buttons_array.length] = {:name => 'Объединить с...', :access => is_super_admin?, :type => 'shuffle', :link => theme_path(@theme) + "/merge_themes", :title => "Объединить с другой темой", :id => 'mergeTheme'}
 		buttons_array[buttons_array.length] = {:name => 'Закрыть тему', :access => userCanSwitchTheme?(@theme), :type => 'lock',  :link => "/themes/#{@theme.id}/theme_switcher?to_do=close", :rel => 'nofollow', :id => 'themeClose'}  if @theme.status != 'closed'
 		buttons_array[buttons_array.length] = {:name => 'Открыть тему', :access => userCanSwitchTheme?(@theme), :type => 'unlock',  :link => "/themes/#{@theme.id}/theme_switcher?to_do=open", :rel => 'nofollow', :id=> 'themeOpen'} if @theme.status != 'open'
 		buttons_array[buttons_array.length] = {:name => 'Удалить тему', :access => userCanSwitchTheme?(@theme), :type => 'trash', :link => theme_path(@theme), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить тему?', :data_method => 'delete', :id=> 'deleteTheme'}
-		
-		return control_buttons(buttons_array).html_safe
+		buttons_array[buttons_array.length] = {:name => 'Создать статью из темы', :access => is_admin?, :type => 'book-bookmark', :link => theme_path(@theme) + '/make_article'}
+		buttons_array[buttons_array.length] = {:name => 'Создать фотоальбом из темы', :access => @theme.all_photos_in_theme.size > 3, :type => 'photo', :link => theme_path(@theme) + '/make_album'} if is_admin?
+    return control_buttons(buttons_array).html_safe
 	end
 	
 	def theme_errors

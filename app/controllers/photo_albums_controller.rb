@@ -245,8 +245,9 @@ include MessagesHelper
   def upload_photos #загрузка фотографий
 	album = PhotoAlbum.find_by(id: params[:id]) 
 	if isEntityOwner?(album)
-		@photo = Photo.new(:photo_album_id => album.id, :user_id => current_user.id, :link => params[:photo_album][:uploaded_photos])
+		@photo = Photo.new(:user_id => current_user.id, :link => params[:photo_album][:uploaded_photos])
 		if @photo.save
+      album.entity_photos.create(photo_id: @photo.id, visibility_status_id: 1)
 			render :json => {:message => 'success', :photoID => @photo.id }, :status => 200
 		else
 			render :json => {:error => @photo.errors.full_messages.join(',')}, :status => 400

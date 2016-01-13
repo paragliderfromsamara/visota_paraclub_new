@@ -4,5 +4,6 @@ class VoteValue < ActiveRecord::Base
  belongs_to :vote
  belongs_to :photo
  belongs_to :article
+ has_many :users, through: :voices
  
 end

@@ -19,11 +19,7 @@
                 </div>
                 <div id = "mmPhPath" style = "margin:0; padding:0;" class = "col span_2_of_12">
                     <ul>
-                        <a href = "<%= @photo.parent[:parent_link] %>">
-                            <li>
-                                <%= @photo.parent[:link_name] %>
-                            </li>
-                        </a>
+                        <%= @link.html_safe %>
                     </ul>
                 </div>
             </div>

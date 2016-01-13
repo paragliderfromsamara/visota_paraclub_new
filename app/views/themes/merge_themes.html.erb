@@ -1,23 +1,28 @@
-<div class = 'm_1000wh'>
-	<h1>Объединение темы</h1>
+<div class = 'm_1000wh tb-pad-s'>
 	<%= navigation_string.html_safe %>
 </div>
 <div class = 'c_box even'>
-	<div class = 'm_1000wh tb-pad-s'>
-			<p class = 'istring norm'>Выберите целевую тему и нажмите "Объединить"</p>
-			<%= form_for(:split_theme, :url => '/do_merge_themes') do |f| %>
-				<div class = 'field tb-pad-s'>
-					<%= f.hidden_field :current_theme, :value => @theme.id %><br />
-					<%= f.label :topic_id, "Раздел:" %><br /> <%= my_collection_select(@collection, "topic_id", "split_theme", @default, "") %> 
-				</div>
-				<div class = 'field tb-pad-s'>
-					<%= f.label :new_theme_id, "Целевая тема:" %><br />
-					<%= my_collection_select(@themes_collection, "theme_id", "split_theme", {}, "Выберите тему из списка") %> <br />
-				</div>
-				<div class = 'field tb-pad-s'>
-					<%= f.submit "Объединить", :class => 'butt' %>
-				</div>
-			<% end %>	
+	<div class = 'm_1000wh tb-pad-m'>
+        <%= form_for(:merge_theme, :url => '/do_merge_themes', html: {id: 'merge_themes_form'}) do |f| %>
+            <p class = 'istring norm'>Выберите целевую тему и нажмите "Объединить"</p>
+            <div class = 'section group'>
+    			    <div class = 'col span_5_of_12'>
+        				<div class = 'field tb-pad-s'>
+        					<%= f.hidden_field :current_theme, :value => @theme.id %>
+        					<%= f.label :topic_id, "Раздел:" %><br /> <%= my_collection_select(@collection, "topic_id", "merge_theme", @default, "") %> 
+        				</div>
+                    </div>
+    			    <div class = 'col span_5_of_12'>
+        				<div class = 'field tb-pad-s'>
+        					<%= f.label :new_theme_id, "Целевая тема:" %><br />
+        					<%= my_collection_select(@themes_collection, "theme_id", "merge_theme", {}, "Выберите тему из списка") %> <br />
+        				</div>
+                    </div>
+            </div>
+			<div class = 'field tb-pad-s'>
+				<%= f.submit "Объединить", :class => 'butt' %>
+			</div>
+        <% end %>
 	</div>
 </div>
 <div class = 'cBoxSplitter'>
@@ -36,7 +41,10 @@
         <h3>Совмещаемая тема</h3>
     </div>
 </div>
+<div class = 'm_1000wh tb-pad-s'>
+    <h3><%= @theme.name %></h3>
+</div>
 <%= theme_show_block(false).html_safe %>
-<div class = 'm_1000wh'>
+<div class = 'm_1000wh tb-pad-s'>
 	<%= navigation_string.html_safe %>
 </div>
