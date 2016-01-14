@@ -187,7 +187,8 @@ class Theme < ActiveRecord::Base
 #  end
   
   def merge(new_topic=nil, new_theme=nil) #объединение тем 
-  	message_in_target_theme = Message.new(
+  	if !new_theme.nil?
+    message_in_target_theme = Message.new(
   											  :user_id => self.user_id, 
   												:updater_id => self.updater_id, 
   												:content => self.content, 
@@ -230,6 +231,13 @@ class Theme < ActiveRecord::Base
   	end
 	
   	self.destroy
+    return new_theme
+  else
+    self.update_attribute(:topic_id, new_topic.id)
+    msgs = Message.where(theme_id: self.id)
+    msgs.each {|m| m.update_attribute(:topic_id, new_topic.id)}
+    return self
+  end
    #Объединение тем
     #1. Создаём в целевой теме сообщение с содержимым сливаемой темы
     #2. Переносим в целевую тему все сообщения из текущей в :base_theme_id записываем id сливаемой (базовой) темы

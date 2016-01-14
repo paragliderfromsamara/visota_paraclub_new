@@ -34,11 +34,12 @@
     		i = 0
         %>
         <% if topics != [] %>
+            
             <% topics.each do |t| %>
-                <% i += 1 %>
-                <% if i == 1 %>
+                <% if i == 0 %>
                     <div class = 'section group'>
                 <% end %>
+                <% i += 1 %>
                     <div class = 'col span_6_of_12'>
                         <%= topic_mini_block_content(t).html_safe %>
                     </div>
@@ -47,14 +48,12 @@
                     <% i = 0 %>
 				<% end %>
             <% end %>
-             <% i += 1 %>
-            <% if i == 1 %>
-                </div><div class = 'section group'>
+            <% if i == 0 %>
+                <div class = 'section group'>
             <% end %>
                 <div class = 'col span_6_of_12'><%= guest_book_vl_block.html_safe %></div>
 
                 </div>
-        <% else %>
         <% end %>
 	</div>
 </div>

@@ -252,12 +252,13 @@ class Message < ActiveRecord::Base
  
 
   def bind_photos_to_theme(theme) #Привязывает фото к теме и отвязывает от сообщения
-	if photos != []
-		photos.each do |ph|
-			ph.update_attributes(:theme_id => theme.id, :message_id => nil)
-			theme.check_photo_in_content(ph)
-		end
-	end
+    phs = Photo.where(message_id: self.id)
+    if phs != []
+  		phs.each do |ph|
+  			ph.update_attributes(:theme_id => theme.id, :message_id => nil)
+  			#theme.check_photo_in_content(ph)
+  		end
+  	end
   end
   
   def bind_attachments_to_theme(theme) #Привязывает вложения к теме и отвязывает от сообщения
@@ -281,7 +282,7 @@ class Message < ActiveRecord::Base
 	msgs = Message.where(:first_message_id => self.id)
 	if msgs != []
 		msgs.each do |msg|
-			msg.update_attributes(:theme_id => theme.id, :first_message_id => nil, :topic_id => theme.topic_id, :status_id => 1, :visibility_status_id => 1)
+			msg.update_attributes(:theme_id => theme.id, :first_message_id => nil, :topic_id => theme.topic_id, :status_id => 1)
 		end
 	end
   end

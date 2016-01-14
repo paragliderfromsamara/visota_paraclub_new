@@ -6,7 +6,7 @@ class AdminToolsController < ApplicationController
   end
   def functions_test
     @title = @header = 'Тест функций'
-    photosRebinding
+    #photosRebinding
     #album = PhotoAlbum.find(53)
     #sendNewAlbumMail(album)
     #video = Video.find(36)
@@ -88,10 +88,7 @@ class AdminToolsController < ApplicationController
 		render "events/index.html.erb"
   end
   def recreate_photo_versions
-      photos = Photo.all
-      photos.each {|p| p.link.recreate_versions!(:small_thumb, :in_content)}
-      users = User.all
-      users.each {|u| u.avatar.recreate_versions!(:sq_thumb) if u.avatar?} 
+      photosUpdate
       redirect_to photo_albums_path
   end
    
@@ -106,9 +103,9 @@ class AdminToolsController < ApplicationController
 			frstMsgsWithoutName = topic.firstMessagesWithoutName
 			if frstMsgsWithName != []
 				frstMsgsWithName.each do |msg|
-					theme = Theme.find_by_name(msg.name)
+					theme = Theme.find_by(name: msg.name)
 					if theme == nil
-						theme = Theme.create(
+            theme = Theme.new(
 										:name => msg.name, 
 										:content => msg.content, 
 										:status_id => 1, 
@@ -120,12 +117,14 @@ class AdminToolsController < ApplicationController
 										:visibility_status_id => 1,
 										:last_message_date => msg.created_at
 									) #Создаём новую тему на базе текущего первого сообщения
-						msg.bind_child_messages_to_theme_from_first_message(theme)
-						msg.bind_photos_to_theme(theme)
-						msg.bind_attachments_to_theme(theme)
-						msg.destroy
+						if theme.save
+						  msg.bind_child_messages_to_theme_from_first_message(theme)
+						  msg.bind_photos_to_theme(theme)
+						  msg.bind_attachments_to_theme(theme)
+						  msg.destroy
+            end
 					else	
-						msg.update_attributes(:theme_id => theme.id, :visibility_status_id => 1, :status_id => 1)
+						msg.update_attributes(:theme_id => theme.id, :status_id => 1)
 						msg.bind_child_messages_to_theme_from_first_message(theme)
 					end
 					theme.last_msg_upd
@@ -135,7 +134,7 @@ class AdminToolsController < ApplicationController
 				frstMsgsWithoutName.each do |msg|
 					if msg.get_tread != []
 						i+=1
-						theme = Theme.create(
+            theme = Theme.new(
 										:name => "Обсуждение без имени #{i}", 
 										:content => msg.content, 
 										:status_id => 1, 
@@ -147,24 +146,29 @@ class AdminToolsController < ApplicationController
 										:visibility_status_id => 1,
 										:last_message_date => msg.created_at
 									)  #Создаём новую тему на базе текущего первого сообщения
-						msg.bind_child_messages_to_theme_from_first_message(theme)
-						msg.bind_photos_to_theme(theme)
-						msg.bind_attachments_to_theme(theme)
-						theme.last_msg_upd
-						msg.destroy
+            if theme.save
+						  msg.bind_child_messages_to_theme_from_first_message(theme)
+						  msg.bind_photos_to_theme(theme)
+						  msg.bind_attachments_to_theme(theme)
+						  theme.last_msg_upd
+						  msg.destroy
+            end
 					else
-						theme = Theme.find_by_name_and_topic_id('Сообщения без темы', topic.id)
-						theme = Theme.create(
-												:user_id => 1, 
-												:name => 'Сообщения без темы', 
-												:content => "Здесь собраны сообщения без темы для раздела '#{topic.name}'", 
-												:topic_id => topic.id, 
-												:created_at => msg.created_at, 
-												:updated_at => msg.updated_at, 
-												:status_id => 1,
-												:visibility_status_id => 1,
-												:last_message_date => msg.created_at
-											 )  if theme == nil
+						theme = Theme.find_by(name: 'Сообщения без темы', topic_id: topic.id)
+						if theme == nil
+              theme = Theme.new(
+  												:user_id => 1, 
+  												:name => 'Сообщения без темы', 
+  												:content => "Здесь собраны сообщения без темы для раздела '#{topic.name}'", 
+  												:topic_id => topic.id, 
+  												:created_at => msg.created_at, 
+  												:updated_at => msg.updated_at, 
+  												:status_id => 1,
+  												:visibility_status_id => 1,
+  												:last_message_date => msg.created_at
+  											 ) 
+              theme.save
+            end
 						msg.update_attributes(:theme_id => theme.id, :visibility_status_id => 1, :status_id => 1)
 						theme.last_msg_upd
 					end
@@ -183,13 +187,13 @@ class AdminToolsController < ApplicationController
 		photos = Photo.all
 		if photos != []
 			photos.each do |photo|
-				photo.update_attributes(:status_id => 1, :visibility_status_id => 1)
+				#photo.update_attributes(:visibility_status_id => 1)
         steps = Step.where(part_id: 4, page_id: 1, entity_id: photo.id)
         v = photo.build_entity_view(counter: steps.count)
         v.save
         if photo.messages != []
           photo.messages.each do |m|
-            m.update_attributes(status_id: 1, visibility_status_id: 1)
+            m.update_attributes(status_id: 1)
           end
         end
 			end
@@ -208,14 +212,14 @@ class AdminToolsController < ApplicationController
       videos.each do |v|
         if v.messages != []
           v.messages.each do |m|
-            m.update_attributes(status_id: 1, visibility_status_id: 1)
+            m.update_attributes(status_id: 1)
           end
         end
       end
     end
-    
-    
+
     stepsAdaption
+    photosUpdate
   end
   
 end

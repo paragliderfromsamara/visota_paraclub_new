@@ -6,12 +6,13 @@ class Photo < ActiveRecord::Base
   attr_accessor :delete_flag
   attr_accessible :article_id, :category_id, :description, :event_id, :link, :message_id, :name, :photo_album_id, :user_id, :theme_id, :status_id, :delete_flag, :visibility_status_id
   belongs_to :user
-  #belongs_to :theme #Фото как вложение в тему
-  #belongs_to :photo_album
+  belongs_to :theme #Фото как вложение в тему
+  belongs_to :photo_album
   #belongs_to :category
-  #belongs_to :article
-  #belongs_to :event #Фото как фото в новости
-  #belongs_to :message #Фото как вложение в сообщение
+  belongs_to :article
+  belongs_to :event #Фото как фото в новости
+  belongs_to :message #Фото как вложение в сообщение
+  has_many  :messages
   has_many  :comments, -> {where(status_id: 1).order('created_at ASC')}, class_name: "Message", :dependent  => :delete_all #Комментарии к фото
   has_many :photo_like_marks, :dependent => :delete_all #Мне нравится к фото
   has_one :entity_view, :as => :v_entity, :dependent => :delete #просмотры
