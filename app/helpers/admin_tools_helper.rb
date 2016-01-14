@@ -98,12 +98,12 @@ module AdminToolsHelper
           p.event.entity_photos.create(photo_id: p.id, visibility_status_id: 1) if p.event != nil
           p.photo_album.entity_photos.create(photo_id: p.id, visibility_status_id: 1) if p.photo_album != nil
           p.update_attributes(theme_id: nil, message_id: nil, event_id: nil, article_id: nil, photo_album_id: nil)
-          #p.link.recreate_versions!(:small_thumb, :in_content)
+          p.link.recreate_versions!(:small_thumb, :in_content)
          
       end
     end
-    #users = User.all
-    #users.each {|u| u.avatar.recreate_versions!(:sq_thumb) if u.avatar?} 
+    users = User.all
+    users.each {|u| u.avatar.recreate_versions!(:sq_thumb) if u.avatar?} 
   end
 
    
