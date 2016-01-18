@@ -113,7 +113,7 @@ include PagesHelper
   end
   
   def wheather
-    @header = @title = "Прогноз погоды"
+    @header = @title = "Прогноз погоды в Самаре и окрестностях"
     
   end
 end

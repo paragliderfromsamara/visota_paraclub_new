@@ -49,7 +49,7 @@
 	<div class = 'arrow fi-arrow-down' id = 'aDwn' style = 'display: none;'></div>
 </div>
 <% if @hideSesPanel != true %>
-<div class = 'turbolinks-progress-bar'></div>
+
     <div id = 'ses_p' class = 'm_1000wh' >
         <% if user_type == 'guest' %>
             <%= form_for(:session, :url => sessions_path(:redirect_to => 'index'), :html => {:id => 'sesForm'}) do |f|  %>
