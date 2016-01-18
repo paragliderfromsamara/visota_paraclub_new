@@ -175,6 +175,7 @@ Rails.application.routes.draw do
   get '/search', :to => 'pages#search'
   get '/equipment', :to => 'pages#equipment'
   get '/media', :to => 'pages#media'
+  get '/wheather', to: 'pages#wheather'
   #pages_controller end
   # You can have the root of your site routed with "root"
   root 'pages#index'

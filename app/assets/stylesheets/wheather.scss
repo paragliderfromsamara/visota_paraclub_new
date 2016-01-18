@@ -1,0 +1,115 @@
+// Place all the styles related to the LikeMarks controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+@import "scaffolds";
+@import "containers";
+
+table#forecast, table#forecast th, table#forecast td
+{
+  padding: 0;
+
+  text-align: left;
+  vertical-align: middle;
+
+  empty-cells: show;
+  border-spacing: 0;
+  border-collapse: collapse;
+  border: 0;
+}
+
+table#forecast {
+	font-family: Arial, Geneva CY, Sans-Serif;
+	margin: 15px 0;
+    color:black;
+    @extend .even
+}
+
+table#forecast th{
+	font-weight: normal;
+	color: #999;
+	text-align: right;
+	vertical-align: top;
+	font-size: 95%;
+	height: 17px;
+	padding-left: 15px;
+	padding-right: 5px;
+}
+
+table#forecast td{
+	font-weight: normal;
+	text-align: right;
+	/* border: #ebebeb 1px solid;
+	border-width: 1px 0; */
+	height: 25px;
+	padding-left: 15px;
+	padding-right: 5px;
+}
+
+table#forecast td.odd{
+ background: #f0f0f0;
+}
+table#forecast td.even{
+ background: #fff;
+}
+
+
+table#forecast td.date{
+	vertical-align: top;
+}
+
+table#forecast td.wind_dir_pic, th.wind_dir_pic{
+	padding-left: 25px !important;
+	padding-right: 3px;
+}
+
+table#forecast td.wind_dir, th.wind_dir{
+	padding-left: 0 !important;
+}
+
+table#forecast td.date, th.date{
+	padding-right: 25px;
+}
+
+table#forecast span.weekend {
+	color: #f30 !important;
+}
+
+table#forecast td.spacer{
+	border: 0;
+	height: 35px;
+}
+
+table#forecast td.top_spacer{
+	border: 0;
+	height: 15px;
+}
+
+table#forecast span.day{
+	font-weight: normal;
+	text-align: right;
+	font-size: 280%;
+	position: relative;
+	top: -3px;
+}
+
+table#forecast span.weekday{
+	font-weight: normal;
+	text-align: right;
+	font-size: 150%;
+	position: relative;
+	top: -3px;
+	margin-right: 10px;
+}
+
+table#forecast td.hour{
+	font-weight: bold;
+	font-size: 110%;
+}
+
+table#forecast td.wind{
+	font-weight: bold;
+	font-size: 130%;
+}
+.help {
+    cursor: help;
+}

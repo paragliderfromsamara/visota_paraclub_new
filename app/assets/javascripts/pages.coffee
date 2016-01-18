@@ -71,14 +71,23 @@ initSearchForm = (sForm)->
     sBut.click ()->
         sBut.find('a').attr('href', "/search?" + sForm.serialize())
         #alert sForm.serialize() #sBut.find('a').attr('href', "/search?" + sForm.serialize())
-        
+adaptWheatherTable = (whTable)->
+    whTable = $(whTable)
+    whTable.find("img").each ()->
+        $(this).attr('src', "http://meteo.paraplan.net" + $(this).attr('src'))
+    
+
 r = ()->
     initScrollControl()
+    whTable = document.getElementById('forecast')
+    if whTable isnt null then adaptWheatherTable(whTable)
     $(document).click ()-> bottomControl()
     $(document).mouseover ()-> bottomControl()
     $(window).resize ()-> bottomControl()
     sForm = document.getElementById("searchForm")
     if sForm isnt null then initSearchForm(sForm)
+    
+    
 $(document).ready r
 $(document).on "page:load", r
     

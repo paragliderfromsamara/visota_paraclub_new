@@ -178,7 +178,7 @@ class AdminToolsController < ApplicationController
 		albums = PhotoAlbum.all
 		if albums != []
 			albums.each do |album|
-				album.update_attributes(:status_id => 1, :visibility_status_id => 1)
+				album.update_attributes(:status_id => 1)
         steps = Step.where(part_id: 3, page_id: 1, entity_id: album.id)
         v = album.build_entity_view(counter: steps.count)
         v.save
@@ -219,7 +219,7 @@ class AdminToolsController < ApplicationController
     end
 
     stepsAdaption
-    photosUpdate
+    #photosUpdate
   end
   
 end

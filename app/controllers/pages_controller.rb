@@ -111,4 +111,9 @@ include PagesHelper
       flash.now[:alert] = "Не выбраны разделы для поиска" if params[:search_query] != nil
     end
   end
+  
+  def wheather
+    @header = @title = "Прогноз погоды"
+    
+  end
 end

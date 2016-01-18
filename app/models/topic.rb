@@ -1,7 +1,7 @@
 class Topic < ActiveRecord::Base
   attr_accessible :description, :image, :name, :image_cache
-  has_many :messages, -> {where(status_id: 1)}
-  has_many :themes, -> {where :status_id => [1,3]}
+  has_many :messages#, -> {where(status_id: 1)}
+  has_many :themes#, -> {where :status_id => [1,3]}
   #has_many :old_messages
   mount_uploader :image, ImageUploader
   

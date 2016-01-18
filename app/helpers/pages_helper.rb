@@ -1,5 +1,9 @@
+
 module PagesHelper
+  require 'nokogiri'
+  require 'open-uri'
 #parallaxFunctions
+
 
 def parallaxItems
 	[
@@ -938,5 +942,15 @@ end
       v = "<div class = 'c_box'><div class = 'm_1000wh'>#{control_buttons(p)}</div></div>"
       return v.html_safe 
     end 
+  end
+  
+  def parseWheather #meteo.paraplan.net изображения прикрепляются в pages.coffee.js 
+    link = "http://meteo.paraplan.net/forecast/summary.html?place=4954"
+    doc = Nokogiri::HTML(open(link), nil, 'utf-8')
+    v = ''
+    doc.css('table#forecast').each do |table|
+        v += table.to_html
+    end
+    return "#{v}"
   end
 end

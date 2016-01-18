@@ -617,6 +617,11 @@ text = get_html('http://meteo.paraplan.net/forecast/summary.html?place=4954', 'f
 val = tag_keeper(text, 'table', 'id', 'forecast')[0][:tag_body]
 return val
 end
+
+def converter(text)
+	converter = Iconv.new('utf-8', 'windows-1251')
+	return converter.iconv(text)
+end
 #Parser----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -633,6 +638,8 @@ end
 			page.save
 	end
 	
+  
+  
 	def get_html(link, convert)
 		if convert == 'true'
 			converter = Iconv.new('utf-8', 'windows-1251')
