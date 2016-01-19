@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   #topicNotifications
 	resources :topic_notifications, :only => [:create, :destroy]
 	get 'topic_notifications/get_list'
+  
   #topicNotifications end	
   #themeNotifications  
 	resources :theme_notifications, :only => [:create, :destroy]

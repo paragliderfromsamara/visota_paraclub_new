@@ -1,6 +1,7 @@
 class Step < ActiveRecord::Base
-  attr_accessible :entity_id, :host_name, :ip_addr, :page_id, :part_id, :user_id, :visit_time, :guest_token
+  attr_accessible :entity_id, :host_name, :ip_addr, :page_id, :part_id, :user_id, :visit_time, :guest_token, :online_flag
   belongs_to :user
+  
   @page_params = {:part_id => 0, :page_id => 0, :entity_id => 0} if @page_params == nil
 		if @page_params[:part_id] == 0 #pages
 		elsif @page_params[:part_id] == 1 #topics
@@ -74,4 +75,16 @@ class Step < ActiveRecord::Base
 	end
 	return entity
   end
+  
+  def self.users_online
+    users_on_site = {signed: [], unsigned: 0}
+    users_on_site[:signed] = User.where(id: Step.select(:user_id).where("visit_time > :time_now AND online_flag = :online_flag", {:time_now => Time.now-5.minutes, :online_flag => true}).where.not(user_id: [0,nil])).distinct
+    users_on_site[:unsigned] = Step.select(:guest_token).where("visit_time > :time_now AND online_flag = :online_flag", {:time_now => Time.now-5.minutes, :online_flag => false}).distinct.count
+    return users_on_site
+  end
+  
+  #def self.do_offline(user)
+  #  stps = Step.where("visit_time > :time_now AND user_id = :user_id", {:time_now => Time.now-5.minute, :user_id => user.id})
+  #  stps.each {|s| s.update_attribute(:online_flag, false)}
+  #end
 end

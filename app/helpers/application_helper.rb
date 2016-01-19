@@ -322,6 +322,39 @@ end
       ''
     end
   end
+  def whoIsOnlineMenu    
+    if signed_in?
+      signedTxt = ""
+      stps = Step.users_online
+      stps[:signed] -= [current_user]
+      signedTxt = "<span class = 'istring_m'>Сейчас на сайте#{' только' if stps[:signed].size == 0 && stps[:unsigned] == 0}</span> <span style = 'font-size: 12px;' class = 'bi-string'>Вы</span>"
+      if stps[:signed].size > 0
+        stps[:signed].each do |u|
+          signedTxt += (stps[:signed].last == u)? " <span class = 'istring_m'>и</span> " : "<span class = 'istring_m'>,</span> "
+          signedTxt += link_to u.name, u, class: 'b_link_i'
+        end
+      end
+      if stps[:unsigned] > 0
+        signedTxt += (stps[:signed].size == 0)? " <span class = 'istring_m'>и</span> " : " <span class = 'istring_m'>, а также</span> "
+        signedTxt += (stps[:unsigned] == 1)? "<span style = 'font-size: 12px;' class = 'bi-string'>Гость</span>" : "<span style = 'font-size: 12px;' class = 'istring_m'>#{stps[:unsigned]}</span> <span style = 'font-size: 12px;' class = 'bi-string'>Гостей</span>" 
+      end
+      return "<div class = 'c_box even'><div class = 'm_1000wh tb-pad-s'>#{signedTxt}</div></div>".html_safe
+    else
+      return ""
+    end
+    
+    #if signed.size > 0
+    #  if signed.size == 1 
+   # end
+    #<% stps = Step.users_online %>
+    # 
+    #    <div class = 'm_1000wh tb-pad-s'>
+    #        <% stps[:signed].each do |u| %>
+    #            <%=link_to u.name, u, class: "b_link_i"%>
+    #        <% end %> | <span class = 'istring_m'>Гостей:(<%= stps[:unsigned] %>)</span>
+    #    </div>
+    #</div>
+  end
 	def wheather_panel
 	"
 		<div id = 'wheather_panel' class = 'wheather_panel'>

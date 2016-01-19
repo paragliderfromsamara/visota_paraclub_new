@@ -7,7 +7,12 @@
     </div>
 </div>
 <%= my_notice %>
-<%= vote_show_block.html_safe %>
+<% if @theme.nil? %>
+    <%= vote_show_block.html_safe %>
+<%else%>
+    <%= theme_show_block(true).html_safe %>
+    <%= render "themes/messages" %>
+<%end%>
 <div class = 'm_1000wh tb-pad-s'>
     <%= navigation_string.html_safe %>
 </div>

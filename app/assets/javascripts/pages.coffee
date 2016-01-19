@@ -84,6 +84,7 @@ r = ()->
     $(document).click ()-> bottomControl()
     $(document).mouseover ()-> bottomControl()
     $(window).resize ()-> bottomControl()
+    if $("#notice").text.length > 0 then setTimeout (()-> $("#notice").fadeOut(500)), 6000
     sForm = document.getElementById("searchForm")
     if sForm isnt null then initSearchForm(sForm)
     

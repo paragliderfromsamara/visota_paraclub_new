@@ -34,9 +34,9 @@ module ThemesHelper
       session[:themes_list_type] = (params[:themes_list_type] == nil)? session[:themes_list_type] : params[:themes_list_type]
     end
     if controller.controller_name == 'topics' && controller.action_name == 'show'
-      link = [topic_path(id: @topic.id, themes_list_type: 'list'), topic_path(id: @topic.id, themes_list_type: 'thumbs')]
+      link = ["#{topic_path(id: @topic.id, themes_list_type: 'list')}#{"&page=#{params[:page]}" if !params[:page].nil?}#{"&th_filter=#{params[:th_filter]}" if !params[:th_filter].nil?}", "#{topic_path(id: @topic.id, themes_list_type: 'thumbs')}#{"&page=#{params[:page]}" if !params[:page].nil?}#{"&th_filter=#{params[:th_filter]}" if !params[:th_filter].nil?}"]
     else
-      link = [themes_path(themes_list_type: 'list'), themes_path(themes_list_type: 'thumbs')]
+      link = ["#{themes_path(themes_list_type: 'list')}#{"&page=#{params[:page]}" if !params[:page].nil?}#{"&th_filter=#{params[:th_filter]}" if !params[:th_filter].nil?}", "#{themes_path(themes_list_type: 'thumbs')}#{"&page=#{params[:page]}" if !params[:page].nil?}#{"&th_filter=#{params[:th_filter]}" if !params[:th_filter].nil?}"]
     end
 	  "<a href = '#{link[0]}' id = 'th-as-list'><i class = 'fi-list fi-large#{session[:themes_list_type] == 'list' ? ' fi-blue' : ' fi-grey'}'></i></a>  <a href = '#{link[1]}' id = 'th-as-thumbnails'><i class = 'fi-list-thumbnails fi-large#{session[:themes_list_type] == 'thumbs' ? ' fi-blue' : ' fi-grey' }'></i></a>"
   end
@@ -112,7 +112,7 @@ module ThemesHelper
 			<tbody id = 'middle'>
 				<tr>
 				<td  colspan = '2'>
-						<span id = 'content' class = 'mText'>#{theme.content_html}</span>
+						<div id = 'content' class = 'mText'>#{theme.content_html}</div>
 						#{theme.updater_string}
             #{"<div id = 'vtValues'>#{vote_values_table(theme.vote)}</div>" if !theme.vote.nil?}
 						#{"<br /><div class = 'central_field' style = 'width: 1000px;' id ='thPhotosField'>#{theme_list_photos(theme)}</div>" if theme.photos != []}

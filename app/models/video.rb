@@ -3,7 +3,7 @@ class Video < ActiveRecord::Base
   belongs_to :user
   belongs_to :article
   has_many :messages, :dependent  => :delete_all
-  has_many :video_like_marks, :dependent  => :delete_all
+  has_many :like_marks, :as => :likeble_entity, :dependent  => :delete_all
   has_one :theme, :dependent  => :destroy
   has_one :entity_view, :as => :v_entity, :dependent => :delete
   require 'will_paginate'

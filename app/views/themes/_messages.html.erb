@@ -1,0 +1,12 @@
+<% if @theme.messages != [] %>
+	<% i=0 %>
+	<% @theme.messages.each do |message| %>
+		<% i+=1 %>
+		<%= message_theme_box(message, true, i).html_safe %>
+	<% end %>
+<% else %>
+	<div class = 'm_1000wh'>
+		<p class = 'istring norm tb-pad-m'>В теме нет ни одного сообщения...</p>
+	</div>
+<% end %>
+<%= render "messages/form" %>

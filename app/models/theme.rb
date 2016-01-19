@@ -13,10 +13,8 @@ class Theme < ActiveRecord::Base
   has_many :messages, -> { where(status_id: 1).order("created_at ASC")}, :dependent  => :delete_all
   belongs_to :user
   belongs_to :topic
-  belongs_to :video
-  belongs_to :photo_album
   belongs_to :vote
-  has_many :attachment_files, :dependent  => :delete_all
+  has_many :attachment_files, :dependent  => :destroy
   
   has_many :entity_photos, :as => :p_entity, :dependent => :destroy #has_many :photos, :dependent  => :delete_all
   has_many :photos, through: :entity_photos 
@@ -42,7 +40,7 @@ class Theme < ActiveRecord::Base
   end
   after_save :check_photos_in_content
   after_create :last_msg_upd_after_create
-  before_save :check_visibility_status
+  #before_save :check_visibility_status
   
   validate :deleted_photos_check, :on => :update
 
@@ -77,7 +75,10 @@ class Theme < ActiveRecord::Base
   
   
   def uploaded_photos=(attrs)
-	attrs.each {|attr| self.photos.build(:link => attr, :user_id => self.user_id)}
+	  attrs.each do |photo|
+       ph = Photo.create(:link => attr, :user_id => self.user_id)
+       self.entity_photos.create(photo_id: ph.id)
+    end
   end
 
   def attachment_files=(attrs)
@@ -85,7 +86,7 @@ class Theme < ActiveRecord::Base
   end
   
   def last_message #находим последнее сообщение темы
-	Message.where(theme_id: self.id, status_id: 1).order('created_at DESC').first
+	  self.messages.order('created_at DESC').first
   end
 #Валидация--------------------------------------------------------------------------
  validates :name, :presence => {:message => "Поле 'Заголовок темы' не должно быть пустым"},

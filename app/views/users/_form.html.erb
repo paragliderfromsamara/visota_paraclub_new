@@ -22,7 +22,7 @@
                 <%= f.text_field :name, :class => 't_field' %><span id = "user_name_check">  <span id = "length"></span><span class = 'istring' id = "errDesc"></span></span>
             </div>
 	        <div class = 'field'>
-	            <%= f.label "Пароль" %><span title = "Поля обязательные для заполнения" style = "color: red;">*</span><br />
+	            <i class = 'fi-key fi-medium'></i> <%= f.label "Пароль" %><span title = "Поля обязательные для заполнения" style = "color: red;">*</span><br />
 	            <%= f.password_field :password, :title => "От 6 до 40 знаков", :class => 't_field' %> <span id = "user_password_check">  <span id = "length"></span><span class = 'istring' id = "errDesc"></span></span>
 	        </div>
 	        <div class = 'field'>
@@ -30,7 +30,7 @@
 	            <%= f.password_field :password_confirmation, :title => "От 6 до 40 знаков", :class => 't_field' %> <span id = "user_password_confirmation_check">  <span id = "length"></span><span class = 'istring' id = "errDesc"></span></span>
 	        </div>
 	        <div class = 'field'>
-		        <img src="/files/mail.png" valign = 'middle' > <%= f.label "E-mail" %><span title = "Поля обязательные для заполнения" style = "color: red;">*</span><br />
+		        <i class = 'fi-mail fi-medium'></i> <%= f.label "E-mail" %><span title = "Поля обязательные для заполнения" style = "color: red;">*</span><br />
 	            <%= f.text_field :email, :class => 't_field' %> <span id = "user_email_check">  <span id = "length"></span><span class = 'istring' id = "errDesc"></span></span>
 	        </div>
       </div>
@@ -45,16 +45,16 @@
     		<%= f.text_field :full_name, :class => 't_field' %>
     	</div>
     	<div class = 'field'>
-    		<img src="/files/phone.png"  valign = middle > <%= f.label :cell_phone, 'Контактный номер' %><br /> 
+    		<i class = 'fi-telephone fi-medium'></i> <%= f.label :cell_phone, 'Контактный номер' %><br /> 
     		<%= f.text_field :cell_phone, :class => 't_field' %>
     	</div>
     	<div class = 'field'>
-    		<img src="/files/skype_logo.png"  valign = middle > <%= f.label :skype, 'Skype' %><br /> 
+    		<i class = 'fi-social-skype fi-medium'></i> <%= f.label :skype, 'Skype' %><br /> 
     		<%= f.text_field :skype, :class => 't_field' %>
     	</div>
     	<div class = 'field'>
-    			<img src="/files/icq.png"  valign = middle > <%= f.label :icq, 'ICQ' %><br />  
-    			<%= f.text_field :icq, :class => 't_field' %>
+    			<i class = 'fi-web fi-medium'></i> <%= f.label :web_site, 'Сайт' %><br />  
+    			<%= f.text_field :web_site, :class => 't_field' %>
     	</div>
     	<div class = 'field'>
     		<%= f.label :inform, 'О себе' %><br /> 

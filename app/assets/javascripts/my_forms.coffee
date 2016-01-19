@@ -281,12 +281,15 @@ initMessageForm = (frm)->
         if this.id is 'answer_but'
             msgToId = $(this).attr('alt')
             if f.formElement.find('#message_message_id').val() is undefined
-                f.formElement.append('<input type="hidden" name = "message[message_id]" value = "'+msgToId+'"/>')
+                f.formElement.append('<input id = "message_message_id" type="hidden" name = "message[message_id]" value = "'+msgToId+'"/>')
             else
                 f.formElement.find('#message_message_id').val(msgToId)
-            f.formElement.find('#answr_to_str').html('<a id = "ans_link" class = "b_link_i" href = "#m_'+msgToId+'">ответ пользователю '+$('#m_'+msgToId).find('#u_name').text()+'</a>').show()
+            f.formElement.find('#answr_to_str').html('<a id = "ans_link" class = "b_link_i" href = "#m_'+msgToId+'">ответ пользователю '+$('#m_'+msgToId).find('#u_name').text()+'</a> <a title = "Не отвечать" class = "b_link pointer" id = "noAnswer"><i class = "fi-x fi-small"></i></a>').show()
             f.formElement.find('#ans_link').click ()->
                 $($(this).attr('href')).find('.cWrapper').animate({opacity: 1.0}, 500 ).animate({opacity: 0.0}, 500) 
+            f.formElement.find('#noAnswer').click ()->
+                f.formElement.find('#answr_to_str').empty()
+                f.formElement.find('#message_message_id').remove()
         
 
 #tId = $(frm).attr('id').replace(themeFormId, "")

@@ -1,12 +1,15 @@
-<div class = 'm_1000wh'>
-    	<div class = 'section group'>
-            <div class = 'col span_7_of_12'>
-                <%= navigation_string.html_safe %>
-            </div>
-            <div class = 'col span_5_of_12'>
-                <%= will_paginate @themes %>
-            </div>
+<div class = 'm_1000wh tb-pad-s'>
+    <%= navigation_string.html_safe %>
+</div>
+<div class = 'm_1000wh tb-pad-s'>
+    <div class = 'section group'>
+        <div class = 'col span_7_of_12'>
+            <%= topic_themes_filter if signed_in? %>
         </div>
+        <div class = 'col span_5_of_12'>
+            <%= will_paginate @themes %>
+        </div>
+    </div>
 </div>
 <div class = 'c_box even'>
     <div class = 'm_1000wh'>
@@ -41,13 +44,16 @@
     	</div>
     </div>
 <% end %>
-<div class = 'm_1000wh'>
-    	<div class = 'section group'>
-            <div class = 'col span_7_of_12'>
-                <%= navigation_string.html_safe %>
-            </div>
-            <div class = 'col span_5_of_12'>
-                <%= will_paginate @themes %>
-            </div>
+<div class = 'm_1000wh tb-pad-s'>
+    <div class = 'section group'>
+        <div class = 'col span_7_of_12'>
+            <%= topic_themes_filter if signed_in? %>
         </div>
+        <div class = 'col span_5_of_12'>
+            <%= will_paginate @themes %>
+        </div>
+    </div>
+</div>
+<div class = 'm_1000wh tb-pad-s'>
+    <%= navigation_string.html_safe %>
 </div>

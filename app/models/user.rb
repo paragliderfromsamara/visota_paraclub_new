@@ -11,7 +11,7 @@
 require 'digest'
 class User < ActiveRecord::Base
   attr_accessor :password, :old_password, :current_password
-  attr_accessible :password, :avatar, :cell_phone, :email, :email_status, :encrypted_password, :full_name, :icq, :inform, :name, :photo, :salt, :skype, :user_group_id, :password_confirmation, :avatar_cache, :photo_cache, :old_password, :current_password, :guest_token
+  attr_accessible :password, :avatar, :cell_phone, :email, :email_status, :encrypted_password, :full_name, :inform, :name, :photo, :salt, :skype, :web_site, :user_group_id, :password_confirmation, :avatar_cache, :photo_cache, :old_password, :current_password, :guest_token, :bunned_to, :bunned_why
   require 'will_paginate'
   
 #--------Old_messages---------------------------------------------
@@ -32,20 +32,15 @@ has_many :photos, :dependent  => :delete_all
 #--------Themes--------------------------------------------------
 has_many :themes, :dependent  => :delete_all
 #--------Themes end----------------------------------------------
-#--------photo_album_like_marks--------------------------------------------------
-has_many :photo_album_like_marks, :dependent  => :delete_all
-#--------photo_album_like_marks end----------------------------------------------
-#--------photo_like_marks--------------------------------------------------
-has_many :photo_like_marks, :dependent  => :delete_all
-#--------photo_like_marks end----------------------------------------------
+
 #--------video_like_marks--------------------------------------------------
-has_many :photo_like_marks, :dependent  => :delete_all
+has_many :like_marks, :dependent  => :delete_all
 #--------video_like_marks end----------------------------------------------
 #--------Messages--------------------------------------------------
-has_many :messages, :dependent  => :delete_all
+has_many :messages, -> {where(status_id:1)}, :dependent  => :destroy
 #--------Messages end----------------------------------------------
 #--------steps-----------------------------------------------------
-has_many :steps
+has_many :steps, :dependent  => :delete_all
 #--------steps end-------------------------------------------------
 
 #--------topic_notifications-----------------------------------------------------

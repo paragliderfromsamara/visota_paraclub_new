@@ -91,7 +91,8 @@ module StepsHelper
                           user_id: user_id,
 								          visit_time: Time.now,
 								          ip_addr: request.env['REMOTE_ADDR'],
-							            host_name: request.env['REMOTE_HOST']
+							            host_name: request.env['REMOTE_HOST'],
+                          online_flag: signed_in?
 							            )
     
   end
@@ -117,7 +118,8 @@ module StepsHelper
   						                      :host_name => request.env['REMOTE_HOST'],
   						                      :ip_addr => request.env['REMOTE_ADDR'],
   						                      :visit_time => Time.now,
-                                    :guest_token => token
+                                    :guest_token => token,
+                                    online_flag: signed_in?
   						                      )
     else
   		step = Step.create(
@@ -128,7 +130,9 @@ module StepsHelper
   						          :host_name => request.env['REMOTE_HOST'],
   						          :ip_addr => request.env['REMOTE_ADDR'],
   						          :visit_time => Time.now,
-                        :guest_token => token
+                        :guest_token => token,
+                        online_flag: signed_in?
+                        
   						          )
     end
 	end
@@ -144,10 +148,10 @@ module StepsHelper
                                   guest_token: user.guest_token
                                   )
         if existStep != nil
-          existStep.update_attribute(:visit_time, s.visit_time)
+          existStep.update_attribute(:visit_time, s.visit_time, online_flag: true)
           s.delete
         else
-          s.update_attributes(user_id: user.id, guest_token: user.guest_token)
+          s.update_attributes(user_id: user.id, guest_token: user.guest_token, online_flag: true)
         end
       end
     end

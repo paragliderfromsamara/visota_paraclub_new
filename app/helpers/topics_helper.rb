@@ -1,11 +1,17 @@
 module TopicsHelper
 	
-	def index_topic_buttons(topic)
+	def index_topic_buttons(topic=nil)
+    if topic.nil?
+  		[
+  		 {:name => 'Перейти в раздел', :access => true, :link => "/followed_themes", :type => 'arrow-right', :id => 'showTopic' }
+      ]
+    else
 		[
 		 {:name => 'Перейти в раздел', :access => true, :link => "#{topic_path(topic)}", :type => 'arrow-right', :id => 'showTopic' },
 		 #{:name => "Добавить тему в раздел \"#{topic.name}\"", :access => userCreateThemeInTopic?(topic), :type => 'add', :link => "#{new_theme_path(:t => topic.id)}", :id => 'newTheme'}, 
 		 {:name => 'Редактировать', :access => is_super_admin?, :type => 'pencil', :link => "#{edit_topic_path(topic)}", :id => 'editTopic'}
 		]
+    end
 	end
 	def top_index_topic_buttons
     activeVotes = Vote.active_votes.count
@@ -24,6 +30,16 @@ module TopicsHelper
 		b = [v]
 		return b
 	end
+  def topic_themes_filter
+    buttons = []
+    allThemes = @topic.themes.size
+    myThemes = @topic.themes.where(user_id: current_user.id).size
+    myNtfThemes = @topic.themes.where(id: current_user.theme_notifications.select(:theme_id)).size
+    buttons[buttons.length] = {:name => "Все[#{allThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id)} 
+    buttons[buttons.length] = {:name => "Мои темы[#{myThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, th_filter: 'my')}
+    buttons[buttons.length] = {:name => "Отслеживаемые темы[#{myNtfThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, th_filter: 'ntf')}
+    return buttons_in_line(buttons).html_safe
+  end
 	def topics_list_in_vl
 		v = ''
 		topics = Topic.all

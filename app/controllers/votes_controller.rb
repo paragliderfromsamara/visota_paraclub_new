@@ -15,7 +15,8 @@ class VotesController < ApplicationController
 
   def show
   	@vote = Vote.find(params[:id])
-    @title = @vote.name
+    @theme = @vote.theme
+    @title = @header = @vote.name
   	@path_array = [
   						{:name => 'Общение', :link => '/visota_life'},
   						{:name => 'Опросы', :link => votes_path},

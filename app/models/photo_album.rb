@@ -7,7 +7,7 @@ class PhotoAlbum < ActiveRecord::Base
   has_many :entity_photos, :as => :p_entity, :dependent => :destroy #has_many :photos, :dependent  => :delete_all
   has_many :photos, through: :entity_photos
   has_many :messages, :dependent  => :delete_all
-  has_many :photo_album_like_marks, :dependent  => :delete_all
+  has_many :like_marks, :as => :likeble_entity, :dependent  => :delete_all
   has_one :entity_view, :as => :v_entity, :dependent => :delete
   #belongs_to :category 
   #has_many :events, :dependent  => :delete_all

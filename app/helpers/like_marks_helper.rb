@@ -1,36 +1,36 @@
 module LikeMarksHelper
   def user_photo_like_link(photo)
-    givenLike = (signed_in?)? photo.photo_like_marks.where(:user_id => current_user.id).count : 0
+    givenLike = (signed_in?)? photo.like_marks.where(:user_id => current_user.id).count : 0
     f = (givenLike  > 0)? true : false
-    c = photo.photo_like_marks.count
+    c = photo.like_marks.count
     return makeLikeBut(f, photo, c).html_safe
   end
   
   def user_photo_album_like_link(album)
-    givenLike = (signed_in?)? album.photo_album_like_marks.where(:user_id => current_user.id).count : 0
+    givenLike = (signed_in?)? album.like_marks.where(:user_id => current_user.id).count : 0
     f = (givenLike  > 0)? true : false
-    c = album.photo_album_like_marks.count
+    c = album.like_marks.count
     return makeLikeBut(f, album, c).html_safe
   end
   
   def user_video_like_link(video)
-    givenLike = (signed_in?)? video.video_like_marks.where(:user_id => current_user.id).count : 0
+    givenLike = (signed_in?)? video.like_marks.where(:user_id => current_user.id).count : 0
     f = (givenLike  > 0)? true : false
-    c = video.video_like_marks.count
+    c = video.like_marks.count
     return makeLikeBut(f, video, c).html_safe
   end
   
   def switchPhotoLike(id)
-    ph = Photo.find_by(id: id)
+    ph = Photo.find(id)
     if ph != nil
-      mCount = ph.photo_like_marks.count
-      like = ph.photo_like_marks.where(user_id: current_user.id).first
+      mCount = ph.like_marks.count
+      like = ph.like_marks.where(user_id: current_user.id).first
       if like == nil
-        if ph.photo_like_marks.create(user_id: current_user.id)
+        if ph.like_marks.create(user_id: current_user.id)
           return disLikeBut(mCount + 1)
         end
       else
-        if like.destroy
+        if like.delete
           return likeBut(mCount - 1)
         end 
       end
@@ -40,16 +40,16 @@ module LikeMarksHelper
   end
   
   def switchPhotoAlbumLike(id)
-    al = PhotoAlbum.find_by(id: id)
+    al = PhotoAlbum.find(id)
     if al != nil
-      mCount = al.photo_album_like_marks.count
-      like = al.photo_album_like_marks.where(user_id: current_user.id).first
+      mCount = al.like_marks.count
+      like = al.like_marks.where(user_id: current_user.id).first
       if like == nil
-        if al.photo_album_like_marks.create(user_id: current_user.id)
+        if al.like_marks.create(user_id: current_user.id)
           return disLikeBut(mCount + 1)
         end
       else
-        if like.destroy
+        if like.delete
           return likeBut(mCount - 1)
         end 
       end
@@ -59,16 +59,16 @@ module LikeMarksHelper
   end
 
   def switchVideoLike(id)
-    v = Video.find_by(id: id)
+    v = Video.find(id)
     if v != nil
-      mCount = v.video_like_marks.count
-      like = v.video_like_marks.where(user_id: current_user.id).first
+      mCount = v.like_marks.count
+      like = v.like_marks.where(user_id: current_user.id).first
       if like == nil
-        if v.video_like_marks.create(user_id: current_user.id)
+        if v.like_marks.create(user_id: current_user.id)
           return disLikeBut(mCount + 1)
         end
       else
-        if like.destroy
+        if like.delete
           return likeBut(mCount - 1)
         end 
       end

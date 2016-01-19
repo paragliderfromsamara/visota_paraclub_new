@@ -73,10 +73,10 @@ end
 def user_contacts(user)
 	if !is_not_authorized? || user == current_user
 		"<table>
-				#{data_container(:name => "E-mail:", :value => user.email)}
-				#{data_container(:name => "Контактный номер:", :value => user.cell_phone) if user.cell_phone?}
-				#{data_container(:name => "Skype:", :value => user.skype) if user.skype?}
-				#{data_container(:name => "ICQ:", :value => user.icq) if user.icq?}
+				#{data_container(:name => "<i class = 'fi-mail fi-medium'></i>", :value => user.email)}
+				#{data_container(:name => "<i class = 'fi-telephone fi-medium'></i>", :value => user.cell_phone) if user.cell_phone?}
+				#{data_container(:name => "<i class = 'fi-social-skype fi-medium'></i>", :value => user.skype) if user.skype?}
+				#{data_container(:name => "<i class = 'fi-web fi-medium'></i>", :value => link_to(user.web_site, user.web_site, class: 'b_link_i')) if user.web_site?}
 		</table>"
 	else
 		"<p class = 'istring norm'>Контактная информация скрыта, либо отсутствует</p>"

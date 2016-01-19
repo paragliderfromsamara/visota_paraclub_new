@@ -11,7 +11,7 @@
     		<% if user_type == 'admin' or user_type == 'super_admin' %>
     			<tr>
     				<td align = 'right' valign = 'middle' style = 'width: 130px; height: 30px;'>
-    					<%= f.label :user_group_id, 'Группа' %>
+    					<i class = 'fi-torsos-all fi-medium'></i> <%= f.label :user_group_id, 'Группа' %>
     				</td>
     				<td align = 'left' valign = 'middle'>
     					<%= my_collection_select(@user.user_groups, 'user_group_id', 'user', @user.user_group, '' ) %>
@@ -28,7 +28,7 @@
     		</tr>
     		<tr>
     			<td align = 'right' valign = 'middle' style = 'width: 150px; height: 30px;'>
-    				<img src="/files/phone.png"  valign = middle > <%= f.label :cell_phone, 'Контактный номер' %> 
+    				<i class = 'fi-telephone fi-medium'></i> <%= f.label :cell_phone, 'Контактный номер' %> 
     			</td>
     			<td align = 'left' valign = 'middle'>
     				<%= f.text_field :cell_phone, :class => 't_field' %>
@@ -36,7 +36,7 @@
     		</tr>
     		<tr>
     			<td align = 'right' valign = 'middle' style = 'width: 150px; height: 30px;'>
-    				<img src="/files/skype_logo.png"  valign = middle > <%= f.label :skype, 'Skype' %> 
+    				<i class = 'fi-social-skype fi-medium'></i> <%= f.label :skype, 'Skype' %> 
     			</td>
     			<td align = 'left' valign = 'middle'>
     				<%= f.text_field :skype, :class => 't_field' %>
@@ -44,10 +44,10 @@
     		</tr>
     		<tr>
     			<td align = 'right' valign = 'middle' style = 'width: 150px; height: 30px;'>
-    				<img src="/files/icq.png"  valign = middle > <%= f.label :icq, 'ICQ' %> 
+    				<i class = 'fi-web fi-medium'></i> <%= f.label :web_site, 'Сайт' %> 
     			</td>
     			<td align = 'left' valign = 'middle'>
-    				<%= f.text_field :icq, :class => 't_field' %>
+    				<%= f.text_field :web_site, :class => 't_field' %>
     			</td>
     		</tr>
     		<tr>

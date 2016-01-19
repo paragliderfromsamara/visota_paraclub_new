@@ -17,16 +17,26 @@ include EventsHelper
   # GET /topics/1.json
   def show
   @topic = Topic.find(params[:id])
-	@title = @header = @topic.name
+	@title = @header = @topic.name 
 	@themes_per_page = 25
-	if is_not_authorized?
-		@themes = @topic.themes.where(status_id: [1, 3], visibility_status_id: 1).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
-	else
-		@themes = @topic.themes.where(status_id: [1, 3], visibility_status_id: [1,2]).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
-	end
+  if signed_in?
+    if params[:th_filter] == 'my'
+      @themes = @topic.themes.where(user_id: current_user.id).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+    elsif params[:th_filter] == 'ntf'
+      @themes = @topic.themes.where(id: current_user.theme_notifications.select(:theme_id)).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+    else
+    	if is_not_authorized?
+    		@themes = @topic.themes.where(visibility_status_id: 1).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+    	else
+    		@themes = @topic.themes.where(visibility_status_id: [1,2]).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+    	end
+    end
+  else
+    @themes = @topic.themes.where(visibility_status_id: 1).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+  end
 	@path_array = [
 					        {:name => 'Общение', :link => '/visota_life'},
-					        {:name => @topic.name, :link => topic_path(@topic)}
+					        {:name => @title}
 				        ]
     respond_to do |format|
       format.html# show.html.erb
@@ -122,6 +132,4 @@ include EventsHelper
 		redirect_to '/404'
 	end
   end
-  
-  
 end

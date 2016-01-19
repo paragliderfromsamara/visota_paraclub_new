@@ -14,7 +14,7 @@ class Photo < ActiveRecord::Base
   belongs_to :message #Фото как вложение в сообщение
   has_many  :messages
   has_many  :comments, -> {where(status_id: 1).order('created_at ASC')}, class_name: "Message", :dependent  => :delete_all #Комментарии к фото
-  has_many :photo_like_marks, :dependent => :delete_all #Мне нравится к фото
+  has_many :like_marks, :as => :likeble_entity, :dependent  => :delete_all #Мне нравится к фото
   has_one :entity_view, :as => :v_entity, :dependent => :delete #просмотры
   mount_uploader :link, PhotoUploader
   before_destroy :delPhoto
