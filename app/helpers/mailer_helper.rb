@@ -1,7 +1,8 @@
 module MailerHelper
   def sendCheckUserData(user)
-    UserMailer.user_check(user).deliver_now if user.user_group_id == 5
-    UserMailer.mail_check(user).deliver_now if user.user_group_id != 5
+    return UserMailer.user_check(user).deliver_now if user.user_group_id == 5
+    return UserMailer.mail_check(user).deliver_now if user.user_group_id != 5
+    return false
   end
   def sendNewAlbumMail(album) #добавлено в PhotoAlbumsController update
     if album.photos.length > 2 and album.status_id == 1

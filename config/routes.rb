@@ -152,6 +152,7 @@ Rails.application.routes.draw do
   get '/users/:id/articles', :to => 'users#articles'
   get '/users/:id/themes', :to => 'users#themes'
   get '/send_email_check_message', :to => 'users#send_email_check_message'
+  get '/authorization', :to => 'users#authorization'
   #users_controller
   
   #sessions_controller

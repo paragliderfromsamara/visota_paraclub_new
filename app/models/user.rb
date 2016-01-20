@@ -11,26 +11,26 @@
 require 'digest'
 class User < ActiveRecord::Base
   attr_accessor :password, :old_password, :current_password
-  attr_accessible :password, :avatar, :cell_phone, :email, :email_status, :encrypted_password, :full_name, :inform, :name, :photo, :salt, :skype, :web_site, :user_group_id, :password_confirmation, :avatar_cache, :photo_cache, :old_password, :current_password, :guest_token, :bunned_to, :bunned_why
+  attr_accessible :password, :avatar, :cell_phone, :email, :email_status, :encrypted_password, :full_name, :inform, :name, :photo, :salt, :skype, :web_site, :user_group_id, :password_confirmation, :avatar_cache, :photo_cache, :old_password, :current_password, :guest_token, :bunned_to, :bunned_why, :prev_group_id, :role
   require 'will_paginate'
   
 #--------Old_messages---------------------------------------------
 has_many :old_messages
 #--------Old_messages end-----------------------------------------
 #--------Videos---------------------------------------------
-has_many :videos, :dependent  => :delete_all
+has_many :videos, :dependent  => :destroy
 #--------Videos end-----------------------------------------
   
 #--------PhotoAlbums---------------------------------------------
-has_many :photo_albums, :dependent  => :delete_all
+has_many :photo_albums, :dependent  => :destroy
 #--------PhotoAlbums end-----------------------------------------
 
 #--------PhotoAlbums---------------------------------------------
-has_many :photos, :dependent  => :delete_all
+has_many :photos, :dependent  => :destroy
 #--------PhotoAlbums end-----------------------------------------
 
 #--------Themes--------------------------------------------------
-has_many :themes, :dependent  => :delete_all
+has_many :themes, :dependent  => :destroy
 #--------Themes end----------------------------------------------
 
 #--------video_like_marks--------------------------------------------------
@@ -157,7 +157,7 @@ mount_uploader :photo, UserPhotoUploader
   def user_groups #в старой версии была отдельная таблица в базе
 		[
 			{:value => 7, :name => 'Удалённый', en_name: 'deleted'},#deleted
-			{:value => 6, :name => 'Руководитель клуба', en_name: 'manager'},#manager
+			{:value => 6, :name => (self.role.blank?)? "Руководство клуба" : self.role, en_name: 'manager'},#manager
 			{:value => 2, :name => 'Клубный пилот', en_name: 'club_pilot'},	 #club_pilot
 			{:value => 3, :name => 'Друг клуба', en_name: 'friend'},		 #friend
 			{:value => 5, :name => 'Вновь прибывший', en_name: 'new_user'},   #new_user
@@ -194,7 +194,7 @@ mount_uploader :photo, UserPhotoUploader
     user_group[:en_name]
   end
   def group_name
-	user_group[:name]
+	  (self.role.blank?)? user_group[:name] : self.role
   end
   
   def group_id
@@ -205,6 +205,13 @@ mount_uploader :photo, UserPhotoUploader
 	user_groups.each do |group|
 		return group if user_group_id == group[:value]
 	end
+  end
+  def check_bun_status
+    time = Time.now
+    self.update_attributes(user_group_id: self.prev_group_id, bunned_why: '') if time > self.bunned_to
+  end
+  def return_from_bun_list
+    self.update_attributes(user_group_id: self.prev_group_id)
   end
   #управление черновиками тем и сообщений
   def theme_message_draft(theme) #выдает, а если необходимо создает черновик сообщения

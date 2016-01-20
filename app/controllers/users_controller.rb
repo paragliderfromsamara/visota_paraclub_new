@@ -265,9 +265,12 @@ include UsersHelper
 	  @photo_albums
 	  @videos
 	  @articles
-	  #redirect_to root_path if user_type != 'new_user'
+	  redirect_to root_path if user_type != 'new_user'
   end
-  
+  def authorization
+	  @title = @header = 'Инструкция по авторизации'
+	  redirect_to root_path if user_type != 'new_user'
+  end
   def thanks
 	  @title = 'Аккаунт успешно активирован!!!'
   end
@@ -403,11 +406,12 @@ include UsersHelper
   def send_email_check_message
     user = User.find(params[:id])
     if (current_user == user and user != nil) || is_admin?
-      sendCheckUserData(user)
-      #UserMailer.user_check(user).deliver if user.user_group_id == 5
-      #UserMailer.mail_check(user).deliver if user.user_group_id != 5
-      respond_to do |format|
-  	    format.json {render :json => 'good'}
+      if sendCheckUserData(user)
+        #UserMailer.user_check(user).deliver if user.user_group_id == 5
+        #UserMailer.mail_check(user).deliver if user.user_group_id != 5
+        respond_to do |format|
+    	    format.json {render :json => {:callback => 'success'} }
+        end
       end
     end
   end

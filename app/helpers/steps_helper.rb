@@ -6,6 +6,7 @@ module StepsHelper
 	def define_action
 		@page_params = {:part_id => 0, :page_id => 0, :entity_id => 0} if @page_params == nil
 		@curTopImage = topImages.last
+    current_user.check_bun_status if user_type == 'bunned'
 		if controller.controller_name == 'pages' #@page_params[:part_id] == 0 #pages
 			if controller.action_name == 'about_us'
 				@curTopImage = topImages[0]
@@ -19,34 +20,45 @@ module StepsHelper
 				@curTopImage = topImages[3]
 			elsif controller.action_name == 'school'
 				@curTopImage = topImages[4]
+      elsif controller.action_name == 'media'
+        @show_authority_message_flag = true
 			end
 			
 		elsif controller.controller_name == 'topics' #@page_params[:part_id] == 1 #topics
 			@curMenuItem = 'Общение'
+      @show_authority_message_flag = true
 			#make_step
 		elsif controller.controller_name == 'users' #@page_params[:part_id] == 2 #users
+      @show_authority_message_flag = true
       @curTopImage = topImages[5]
 		elsif controller.controller_name == 'photo_albums' #@page_params[:part_id] == 3 #photo_albums
+      @show_authority_message_flag = true
 			@curMenuItem = 'Фото'
 			make_step
 		elsif controller.controller_name == 'photos' #@page_params[:part_id] == 4 #photos (внести изменения в контроллер)
-			@curMenuItem = 'Медиа'
+			@show_authority_message_flag = true
+      @curMenuItem = 'Медиа'
 			make_step
 		elsif controller.controller_name == 'videos' #@page_params[:part_id] == 5 #videos
-			@curMenuItem = 'Медиа'
+			@show_authority_message_flag = true
+      @curMenuItem = 'Медиа'
 			make_step
 		elsif controller.controller_name == 'messages' #@page_params[:part_id] == 6 #messages
+      
 		elsif controller.controller_name == 'articles'#@page_params[:part_id] == 7 #articles
+      @show_authority_message_flag = true
 			@curMenuItem = 'Медиа'
 			make_step
 		elsif controller.controller_name == 'events' #@page_params[:part_id] == 8 #events
       @curMenuItem = 'Новости'
 		elsif controller.controller_name == 'themes' #@page_params[:part_id] == 9 #themes
+      @show_authority_message_flag = true
 			@curMenuItem = 'Общение'
 			make_step
 		elsif controller.controller_name == 'old_messages' #@page_params[:part_id] == 9 #themes
 			@curMenuItem = 'Общение'
 		elsif controller.controller_name == 'votes' #@page_params[:part_id] == 9 #themes
+      @show_authority_message_flag = true
 			@curMenuItem = 'Общение'
 		end
 	end

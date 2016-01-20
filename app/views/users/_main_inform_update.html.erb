@@ -26,6 +26,16 @@
     				<%= f.text_field :full_name, :class => 't_field' %>
     			</td>
     		</tr>
+            <% if is_admin? %>
+    		<tr>
+    			<td align = 'right' valign = 'middle' style = 'width: 150px; height: 30px;'>
+    				<%= f.label :role, 'Роль в клубе' %>
+    			</td>
+    			<td align = 'left' valign = 'middle'>
+    				<%= f.text_field :role, :class => 't_field' %>
+    			</td>
+    		</tr>
+            <% end %>
     		<tr>
     			<td align = 'right' valign = 'middle' style = 'width: 150px; height: 30px;'>
     				<i class = 'fi-telephone fi-medium'></i> <%= f.label :cell_phone, 'Контактный номер' %> 

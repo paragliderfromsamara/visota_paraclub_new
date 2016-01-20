@@ -1132,6 +1132,8 @@ class textEditor
                   @imgAddr = 'fi-',
                   @tAlignMenus = ['align-left', 'align-center', 'align-right', 'quote', 'list-number'],
                   @tAlignMenusDescription = ['Выравнивание по левому краю', 'Выравнивание по центру', 'Выравнивание по правому краю', 'Цитирование', 'Нумерованный список'],
+                  @tFormatMenus = ['italic', 'bold', 'underline', 'strikethrough', 'h2', 'h3'],
+                  @tFormatMenusDescription = ['Наклонный', 'Жирный', 'Подчёркнутый', 'Зачёркнутый', 'Заголовок второго уровня', 'Заголовок третьего уровня'],
                   @curFormat = 'none',
                   @editorPreview = document.getElementById('editorPreview')
                   )->
@@ -1203,6 +1205,7 @@ class textEditor
             b.sTagStart = str.length
             b.eTagStart = str.length
             b
+
     escapeBbText: ()->
        str=$.trim(this.tArea.val())
        names = this.tAlignMenus
@@ -1236,7 +1239,7 @@ class textEditor
             cImg = if curBbAlign.name is this.tAlignMenus[i] then 'fi-blue' else 'fi-grey'
             nImg = this.imgAddr+this.tAlignMenus[i]
             sImg = menuIconSizeClass
-            v += '<li class = "alItem '+cBCl+'" title = "'+this.tAlignMenusDescription[i]+'" id = "'+this.tAlignMenus[i]+'">'+drawIcon(nImg, sImg, cImg)+'</li>'
+            v += '<li class = "alItem '+cBCl+'" title = "'+this.tAlignMenusDescription[i]+'" id = "'+this.tAlignMenus[i]+'">'+drawIcon(nImg, sImg, cImg)+'</li>' 
         v
     updateAlignMenu: ()->
        c = this.getCurAlignBbCode()
@@ -1251,7 +1254,10 @@ class textEditor
        c
      
 drawIcon = (n,s,c)->
-    "<i class = \""+n+" "+s+" "+c+"\"></i>"
+    if n isnt 'h2' && n isnt 'h3'
+        return "<i class = \""+n+" "+s+" "+c+"\"></i>"
+    else
+        return "<#{n} class = \"#{c} #{s}\">#{n}</#{n}>" 
 
 switchClasses = (cOn, cOff, e)->
     if e.hasClass(cOff) then e.removeClass(cOff)

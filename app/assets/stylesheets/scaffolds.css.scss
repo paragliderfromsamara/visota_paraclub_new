@@ -276,6 +276,11 @@ ul.myBut
 		{
 			text-decoration: underline;
 		}
+    a.w_link_u 
+    {
+        @extend a.w_link;
+        text-decoration: underline;
+    }
 	a.w_link_i {font-family: $font_family_3; font-size: 0.8125em;text-decoration: none; color:$link_color;}
 	a.w_link_i:hover {text-decoration: underline; }
 /*links end*/

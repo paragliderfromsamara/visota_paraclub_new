@@ -39,8 +39,16 @@
             <% end %>
 <% else %>
     <div class = 'c_box even'>
-    	<div class = 'm_1000wh'>
-            <p class = 'istring norm'>В данном разделе нет ни одной темы...</p>
+    	<div class = 'm_1000wh tp-pad-m' style = 'min-height: 300px;'>
+    		<p class = 'istring norm tb-pad-m medium-opacity'>
+                <% if params[:th_filter] == 'my' %>
+                    В разделе нет ни одного созданной Вами темы...
+                <% elsif params[:th_filter] == 'ntf' %> 
+                    В разделе нет ни одной отслеживаемой Вами темы...
+                <%else%>
+                    В разделе нет ни одной темы...
+                <%end%>
+             </p>
     	</div>
     </div>
 <% end %>

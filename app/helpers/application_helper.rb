@@ -5,6 +5,16 @@
 
 module ApplicationHelper
 require 'open-uri' #для парсера
+
+def authority_message
+  "
+    <div style = 'background-color: #417eb5; color: white;' class = 'm_1600wh'>
+      <div class = 'm_1000wh tb-pad-s'>
+        <i class = 'fi-alert fi-large'></i> Для того чтобы принять участие в общении, делиться фотографиями и видеозаписями - Вам необходимо <a style = 'font-size: 14px;' class = 'w_link_u' href = '/authorization'>авторизоваться</a>. 
+      </div>
+    </div>
+  ".html_safe
+end
 def current_path
   request.env['PATH_INFO']
 end

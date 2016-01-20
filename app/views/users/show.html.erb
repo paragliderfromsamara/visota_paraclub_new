@@ -3,7 +3,6 @@
         <%= control_buttons(show_path_buttons).html_safe %>
     </div>
 </div>
-
 <div class = 'c_box even'>
     <%= my_notice %>
     <div class = 'm_1000wh tb-pad-m'>
@@ -12,6 +11,11 @@
 				<%= image_tag @user.alter_avatar, :width => @user.widthAndHeight(@user.alter_avatar)[:width].to_s + 'px', :height => @user.widthAndHeight(@user.alter_avatar)[:height].to_s + 'px' %>						
 			</div>
 			<div class = 'col span_10_of_12'>
+                <% if @user.group == 'bunned' %>
+                    <p class = 'istring norm medium-opacity'>Заблокирован до <%= @user.bunned_to.strftime('%d-%m-%Y') %></p>
+                    <p class = 'istring norm'><%= @user.bunned_why %></p>
+                    <br />
+                <%end%>
 				<h3>Общая информация</h3>
 				<p>
 					<span class = 'istring norm medium-opacity'>Ник:</span> <span class = 'istring'><%= @user.name %></span>
@@ -19,7 +23,6 @@
 				<p>
 					<span class = 'istring norm medium-opacity'>Группа:</span> <span class = 'istring'><%= @user.group_name %></span>
 				</p>
-				
 				<% if !is_not_authorized? %>
 				<p>
 					<span class = 'istring medium-opacity'>Полное имя: </span> <span class = 'istring'><%= @user.full_name %></span>
@@ -36,6 +39,25 @@
 				<p><%= user_contacts(@user).html_safe %></p>
 			</div>
 		</div>
+        
+        <% if is_super_admin? && @user.id != 1 && @user.group != 'bunned'%>
+            <div class = 'section group'>
+                <div class = 'col span_2_of_12'>
+                </div>
+                <div class = 'col span_7_of_12'>
+                    <%= form_for(@user) do |f| %>
+                        <%= f.hidden_field :user_group_id, value: 4 %>
+                        <%= f.hidden_field :prev_group_id, value: @user.user_group_id %>
+                        <fieldset>
+                        <%= f.label :bunned_to, 'Блокировать до...' %><br />
+                        <%= f.date_select :bunned_to, order: [:day, :month, :year], use_month_names: ['Январь' ,'Февраль', 'Март', "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"] %><br />
+                        <%= f.label :bunned_why, 'Причина' %><br />
+                        <%= f.text_area :bunned_why, placeholder: 'Причина блокировки' %><br/>
+                        <%= f.submit 'Блокировать'%>
+                    </fieldset>
+                    <%end%> 
+                </div>
+        <%end%>
 	</div>
 </div>
 <% i = 0 %>

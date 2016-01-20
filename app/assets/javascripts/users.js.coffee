@@ -137,6 +137,14 @@ class userCard
 
 r = ()->
     uForm = document.getElementsByClassName(newUserFormClass)
+    $("a#sendCheckMail").on "ajax:start", ()-> 
+        $('#wait_message_send').html('Ожидание...')
+    $("a#sendCheckMail").on "ajax:success", (e, data, status, xhr)-> 
+        $('#wait_message_send').html '<i class = "fi-check"></i> В течение 3-х минут письмо дойдет до указанного Вами адреса'
+    $("a#sendCheckMail").on "ajax:error", (e, data, status, xhr)-> 
+        $('#wait_message_send').html '<i class = "fi-x"></i> Не удалось отправить сообщение...'
+    
+        
     if uForm.length > 0 then initNewUserForm(uForm[0])
     
 

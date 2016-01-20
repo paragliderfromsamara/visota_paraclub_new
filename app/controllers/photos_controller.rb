@@ -196,7 +196,7 @@ include MessagesHelper
     @photo = Photo.find(params[:id])
     respond_to do |format|
       if @photo.update_attributes(params[:photo])
-        format.html { redirect_to @photo, :notice => 'Фото успешно обновлено' }
+        format.html { redirect_to @photo }
         format.json { head :no_content }
       else
         format.html { render :action => "edit" }
