@@ -160,7 +160,7 @@ module StepsHelper
                                   guest_token: user.guest_token
                                   )
         if existStep != nil
-          existStep.update_attribute(:visit_time, s.visit_time, online_flag: true)
+          existStep.update_attributes(visit_time: s.visit_time, online_flag: true)
           s.delete
         else
           s.update_attributes(user_id: user.id, guest_token: user.guest_token, online_flag: true)

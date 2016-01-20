@@ -8,7 +8,7 @@
             <div class = 'col span_8_of_12'>
                 <ul>
                     <li type = '1' value = '1'>
-                        Проверить написание указанного Вами адреса электронной почты: <span class = 'bi-string'><%= current_user.email %></span>
+                        Проверить правильность написания указанного Вами адреса электронной почты: <span class = 'bi-string'><%= current_user.email %></span>
                     </li>
                     <li type = '1'>
                          Если адрес указан неверно измените его <%= link_to 'Изменить адрес', edit_user_path(id: current_user, tab: 'email_upd'), class: 'b_link', style:'font-size:14px;' %>

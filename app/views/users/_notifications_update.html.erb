@@ -31,7 +31,7 @@
 		<% end %>
 <%else%>
    <p class = istring norm medium-opacity>Адрес элетронной почты не подтверждён. Если на указанный Вами адрес электронной почты не приходило сообщение вы можете повторно отправить сообщение нажав на ссылку ниже.</p>
-   <a class = 'b_link' href = '/send_email_check_message.json?id=<%= @user.id.to_s %>' data-remote = true >Отправить проверочное сообщение</a>
+   <span id = 'wait_message_send'><a id = 'sendCheckMail' class = 'b_link' style = 'font-size: 14px;' href = '/send_email_check_message.json?id=<%= current_user.id.to_s %>' data-remote = 'true' >Отправить проверочное сообщение</a></span>
 <%end%>
     </div>
 </div>

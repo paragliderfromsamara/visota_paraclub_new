@@ -12,7 +12,8 @@
         <div  class = "m_1000wh">
             <div class = "section group">
                 <div style = "margin:0; padding:0;" class = "col span_2_of_12">
-                    <a href = "/index" title = "На главную"><img height = "55px" src = "/logo/white_logo_ns.png"/></a>
+                    <%= image_tag "white_logo_ns.png", id: "mLogo", link_to: root_path, height: "55px" %>
+                   
                 </div>
                 <div id = "mmPhPath" style = "margin:0; padding:0;" class = "col span_8_of_12">
                     <%= topMainMenu.html_safe %>
