@@ -8,8 +8,19 @@
             <%= will_paginate @entities %>
         </div>
     </div>
+</div>
+<div class = 'c_box'>
+    <div class = 'm_1000wh'>
+        <div class = 'section group'>
+            <div class = 'col span_10_of_12'>
+                <%= newMediaPanel %>
+            </div>
+            <div class = 'col span_2_of_12'>
+                <%= view_mode_albums_list.html_safe if @mediaPartHash[:typeName] == 'albums' %>
+            </div>
+        </div>
+    </div>
 </div> 
-<%= newMediaPanel %>  
 <% if @mediaPartHash[:typeName] == 'videos'%>
     <div class = 'c_box odd'>
         <div class = 'm_1000wh tb-pad-m' >
@@ -42,13 +53,13 @@
         </div>
     </div>
 <% elsif @mediaPartHash[:typeName] == 'albums' %>
-	<% @entities.each do |alb| %>
-		<div class = 'c_box'>
-            <div class = 'm_1000wh tb-pad-s'>
-                <%= album_table(alb, 'index').html_safe %>
-            </div>
-        </div>
-	<% end %>
+    <% if @entities.size > 0 %>
+            <%= render 'photo_albums/list_view' if session[:albums_list_type] == 'list' %>
+            <%= render 'photo_albums/thumbs_view' if session[:albums_list_type] == 'thumbs' %>
+    <%else%>
+        <p class = 'istring norm'>В данной категории нет фотоальбомов...</p>
+    <%end%>
+	
 <% end %>
 <div class = 'm_1000wh tb-pad-s'>
     <div class = 'section group'>

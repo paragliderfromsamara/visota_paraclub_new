@@ -226,20 +226,18 @@ class MessagesController < ApplicationController
   	if userCanEditMsg?(@message)
   		params[:message][:updater_id] = current_user.id if @message.status_id == 1
       old_status_id = @message.status_id
-      new_status_id = 0
-      new_status_id = params[:message][:status_id].to_i if params[:message][:status_id] != nil
-      if new_status_id > old_status_id
-        sMail = true
-        noticeText = "Сообщение успешно добавлено."
-      else
-        sMail = false
-        noticeText = "Сообщение успешно обновлено."
-      end
+      new_status_id = (params[:message][:status_id].nil?)? 0 : params[:message][:status_id].to_i
   		respond_to do |format|
   		  if @message.update_attributes(params[:message])
-          sendNewMessageMail(@message) if sMail
-          newTime = Time.now
-          @message.update_attributes(created_at: newTime, updated_at: newTime) if new_status_id > old_status_id
+          if new_status_id > old_status_id
+            sendNewMessageMail(@message)
+            noticeText = "Сообщение успешно добавлено."   
+            newTime = Time.now
+            @message.update_attributes(created_at: newTime, updated_at: newTime)
+            @message.theme.update_attribute(:last_message_date, newTime) if !@message.theme.nil?
+          else
+            noticeText = "Сообщение успешно обновлено."
+          end
           link = session[:link_after_message_save] + "#msg_#{@message.id}"
     			#link = "#{theme_path(@message.theme_id)}#msg_#{@message.id}" if @message.theme != nil
     			#link = "#{video_path(@message.video_id)}#msg_#{@message.id}" if @message.video != nil

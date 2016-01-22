@@ -221,5 +221,9 @@ class AdminToolsController < ApplicationController
     stepsAdaption
     #photosUpdate
   end
-  
+  def make_themes_steps
+    redirect_to '/404' if !is_super_admin?
+    makeThemesSteps
+    redirect_to topics_path
+  end
 end

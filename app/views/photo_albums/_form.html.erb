@@ -2,6 +2,7 @@
 <%= form_for(@albumToForm, :multipart => true, html: {class: "photo_album_form", id: "photo_album_form_#{@albumToForm.id}"}) do |f| %>
    <%= f.hidden_field :deleted_photos, :value => '' if controller.action_name == 'edit' || controller.action_name == 'update' %>
    <%= f.hidden_field :theme_id, value: @theme.id if !@theme.nil? %>
+   <%= f.hidden_field :photo_id, value: @albumToForm.photo.id if !@albumToForm.photo.nil? %>
             	<div class = 'c_box even'>
             			<div class = 'm_1000wh tb-pad-m' id = 'albumForm'>
                             <div class = "section group">

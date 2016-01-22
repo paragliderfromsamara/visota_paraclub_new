@@ -24,6 +24,8 @@ include EventsHelper
       @themes = @topic.themes.where(user_id: current_user.id).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
     elsif params[:th_filter] == 'ntf'
       @themes = @topic.themes.where(id: current_user.theme_notifications.select(:theme_id)).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+    elsif params[:th_filter] == 'not_visited' 
+      @themes = @topic.themes.where(id: current_user.not_readed_themes_ids(@topic, is_not_authorized?)).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
     else
     	if is_not_authorized?
     		@themes = @topic.themes.where(visibility_status_id: 1).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
@@ -82,7 +84,6 @@ include EventsHelper
   def create
 	if user_type == 'super_admin'
 		@topic = Topic.new(params[:topic])
-
 		respond_to do |format|
 		  if @topic.save
 			format.html { redirect_to @topic, :notice => 'Раздел успешно создан' }
@@ -117,6 +118,35 @@ include EventsHelper
 	end
   end
 
+  def set_as_read_all_themes
+    topic = Topic.find(params[:id])
+    redirect_to '/404' if !signed_in? || topic.nil?
+    themes = topic.themes.where(id: current_user.not_readed_themes_ids(topic, is_not_authorized?))
+    if themes.size > 0
+      themes.each do |th|
+        step = Step.find_by(part_id: 9, page_id: 1, entity_id: th.id, user_id: current_user.id)
+        if step.nil?
+    		  step = Step.create(
+    					              :user_id => current_user.id, 
+    						            :part_id => 9,
+    						            :page_id => 1,
+    						            :entity_id => th.id,
+    						            :host_name => request.env['REMOTE_HOST'],
+    						            :ip_addr => request.env['REMOTE_ADDR'],
+    						            :visit_time => Time.now,
+                            :guest_token => current_user.guest_token,
+                            online_flag: true
+    						            )
+        else
+          step.update_attributes(visit_time: Time.now, online_flag: true)
+        end
+      end
+    end
+		respond_to do |format|
+		  format.html { redirect_to topic }
+		  format.json { render :json => {callback: 'success'}}
+		end
+  end
   # DELETE /topics/1
   # DELETE /topics/1.json
   def destroy

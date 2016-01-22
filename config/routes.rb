@@ -41,6 +41,7 @@ Rails.application.routes.draw do
 	get "admin_tools/entities_recovery"	#Восстановление удалённых объектов
 	get "admin_tools/disabled_events" #Скрытые новости
 	get "admin_tools/adaptation_to_new"     #Создать темы
+  get "admin_tools/make_themes_steps"     #Создать темы
   get "admin_tools/recreate_photo_versions" #создание новых копий
   get "/functions_test", :to => 'admin_tools#functions_test'     #Тест
   #admin_tools_end
@@ -103,6 +104,7 @@ Rails.application.routes.draw do
   get '/visota_life', :to => 'topics#index'
   get '/communication', :to => 'topics#index'
   get '/gost.htm', :to => 'topics#index'
+  get '/topics/:id/set_as_read_all_themes', :to => 'topics#set_as_read_all_themes'
   #topics controller end
 
   #videos_controller

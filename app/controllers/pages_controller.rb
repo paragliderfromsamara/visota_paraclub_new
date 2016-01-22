@@ -27,7 +27,6 @@ include PagesHelper
 
   def about_us
 	  @title = "О клубе"
-    
   end
   
   def paragliding
@@ -39,31 +38,9 @@ include PagesHelper
   end 
   
   def feed
-  	if user_type != 'guest'
-      redirect_to '/404' if user_type != 'super_admin'
-  		@title = @header = "Лента событий"
-  		@title_2 = feed_part_name
-  		@entity_array = feed_blocks
-  		@photos = Photo.select(:id)
-  		@events = Event.where(display_area_id: [2, 3]).order('post_date DESC').limit(3)
-  		if current_feed_part[:en_name] == 'answers'
-  			@entity_on_page = 15
-  		elsif current_feed_part[:en_name] == 'themes' # or current_feed_part[:en_name] == 'comments'
-  			@entity_on_page = 15
-  		elsif current_feed_part[:en_name] == 'messages' # or current_feed_part[:en_name] == 'comments'
-  			@entity_on_page = 15
-  		elsif current_feed_part[:en_name] == 'albums'
-  			@entity_on_page = 10
-  		elsif current_feed_part[:en_name] == 'videos'
-  			@entity_on_page = 10
-  		elsif current_feed_part[:en_name] == 'articles' 
-  			@entity_on_page = 5
-  		elsif current_feed_part[:en_name] == 'comments' 
-  			@entity_on_page = 10
-  		end
-  	else
-  		redirect_to '/404'
-  	end
+    redirect_to '/404' if user_type != 'super_admin'
+  	@title = @header = "Лента событий"
+    
   end
   
   def media
@@ -80,9 +57,9 @@ include PagesHelper
       end
     elsif @mediaPartHash[:typeName] == 'albums'
       if category == 'all'
-        @entities = PhotoAlbum.paginate(:page => params[:page], :per_page => 5).where(status_id: 1).order('created_at DESC')
+        @entities = PhotoAlbum.paginate(:page => params[:page], :per_page => 6).where(status_id: 1).order('created_at DESC')
       else
-        @entities = PhotoAlbum.paginate(:page => params[:page], :per_page => 5).where(category_id: category, status_id: 1).order('created_at DESC')
+        @entities = PhotoAlbum.paginate(:page => params[:page], :per_page => 6).where(category_id: category, status_id: 1).order('created_at DESC')
       end
     elsif @mediaPartHash[:typeName] == 'articles'
       article = Article.new

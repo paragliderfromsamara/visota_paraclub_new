@@ -19,7 +19,8 @@ module TopicsHelper
 	end
 	def show_topic_buttons(topic)
 		[
-		 {:name => "Добавить тему", :access => userCreateThemeInTopic?(topic), :type => 'plus', :link => "#{new_theme_path(:t => topic.id)}", :id => 'newTheme'}, 
+		 {:name => "Добавить тему", :access => userCreateThemeInTopic?(topic), :type => 'plus', :link => "#{new_theme_path(:t => topic.id)}", :id => 'newTheme'},
+     {:name => "Пометить все как прочитанные", :access => signed_in?, :type => 'checkbox', :link => "#{topic_path(topic)}}/set_as_read_all_themes", :id => 'setAsRead', remote: true}
 		]
 	end
 	def visota_life_panel
@@ -35,10 +36,15 @@ module TopicsHelper
     allThemes = @topic.themes.size
     myThemes = @topic.themes.where(user_id: current_user.id).size
     myNtfThemes = @topic.themes.where(id: current_user.theme_notifications.select(:theme_id)).size
-    buttons[buttons.length] = {:name => "Все[#{allThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id)} 
-    buttons[buttons.length] = {:name => "Мои темы[#{myThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, th_filter: 'my')}
-    buttons[buttons.length] = {:name => "Отслеживаемые темы[#{myNtfThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, th_filter: 'ntf')}
+    myNotVisitedThemes = @topic.themes.where(id: current_user.not_readed_themes_ids(@topic, is_not_authorized?)).size
+    buttons[buttons.length] = {:name => "Все[#{allThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id), selected: is_cur_th_filter_mode_all?}
+    buttons[buttons.length] = {:name => "Не просмотренные[#{myNotVisitedThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, th_filter: 'not_visited'), selected: params[:th_filter] == 'not_visited'}
+    buttons[buttons.length] = {:name => "Мои темы[#{myThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, th_filter: 'my'), selected: params[:th_filter] == 'my'}
+    buttons[buttons.length] = {:name => "Отслеживаемые темы[#{myNtfThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, th_filter: 'ntf'), selected: params[:th_filter] == 'ntf'}
     return buttons_in_line(buttons).html_safe
+  end
+  def is_cur_th_filter_mode_all?
+    params[:th_filter] != 'not_visited' && params[:th_filter] != 'my' && params[:th_filter] != 'ntf'
   end
 	def topics_list_in_vl
 		v = ''
@@ -48,7 +54,6 @@ module TopicsHelper
 		if topics != []
 			topics.each do |t|
 				i += 1
-        v += 
 				v += "<div class = 'section group'>" if i == 1
 				v += "<div class = 'col span_6_of_12'>"
 				v += topic_mini_block_content(t)
@@ -114,18 +119,22 @@ module TopicsHelper
   def topic_themes_table(themes)
 		v = ''
     if themes != []
-			v += "<div style = 'width: 100%; height: 160px;'><table class = 'v_table' id = 'themes_list_vl'><tr><th id = 'first'>Тема</th><th>Автор крайнего сообщения</th><th>Дата</th></tr>"
+			v += "<div style = 'width: 100%; height: 160px;'><table class = 'v_table' id = 'themes_list_vl'><tr><th id = 'first'></th><th>Тема</th><th>Автор крайнего сообщения</th><th>Дата</th></tr>"
 			themes.each do |theme|
+        thReadInfo = theme.theme_read_info(current_user)
+        msg = thReadInfo[:last_message]
+        link = thReadInfo[:link]
+        not_read_txt = thReadInfo[:info]
 				m = ''
-				msg = theme.last_message
 				if msg != nil
 					m = "<td class = 'usr'>
-							#{ msg.user.name }
-						 </td>
-						 <td class = 'date'>
-							#{ my_time(msg.created_at) }
-						 </td>"
+							  #{ msg.user.name }
+						   </td>
+						   <td class = 'date'>
+							  #{ my_time(msg.created_at) }
+						   </td>"
 				else
+         
 					m = "<td class = 'usr'>
 							#{ theme.user.name }
 						 </td>
@@ -134,10 +143,13 @@ module TopicsHelper
 						 </td>"
 				end
 				v += "
-								<tbody title = '#{theme.name}' class = 't_link' link_to = '#{theme_path(theme)}'>
+								<tbody title = '#{theme.name}' class = 't_link' link_to = '#{link}'>
 								<tr>
-									<td class = 't_name' id = 'first'>
-										#{truncate(theme.name, :length => 19)}
+                  <td id = 'first' class = 'new_msg_counter'>
+                    #{not_read_txt}
+                  </td>
+									<td class = 't_name'>
+										#{truncate(theme.name, :length => 20)}
 									</td>
 									#{m}									
 								</tr>

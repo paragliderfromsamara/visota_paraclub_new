@@ -17,9 +17,13 @@
                                         <ul id = 'edit_ph_menu'>
                                             <% if params[:hashToCont] == 'true' and @entity != 'photo_album' %>
                                                  <a class="b_link pointer addHashCode" hashCode="#Photo<%= photo.id.to_s %>" title = "Нажмите, чтобы встроить фото в текст..."><li><p>Встроить в текст</p></li></a>
+                                                 
                                             <% end %>
                                             <% if userCanDeleteEntityPhoto?(e) %>
                                                 <a class = "del-photo-but b_link pointer" photo_id = "<%= e.id %>"><li><p>Удалить</p></li></a> 
+                                            <% end %>
+                                            <% if @entity == 'photo_album' %>
+                                                <a class="b_link pointer set-as-main" set_photo_id="<%= photo.id.to_s %>" title = "Сделать главной фотографией альбома..."><li><p>Установить как фото альбома</p></li></a>
                                             <% end %>
                                         </ul>
                                    

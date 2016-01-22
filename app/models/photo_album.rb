@@ -102,7 +102,7 @@ class PhotoAlbum < ActiveRecord::Base
   end
   
   def get_photo
-	if photo_id == nil
+	if self.photo.nil?
 		return photos.first
 	else
 		return photo

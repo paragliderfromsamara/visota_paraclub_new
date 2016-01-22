@@ -84,10 +84,58 @@ module AdminToolsHelper
       end
     end
     guestSteps = Step.where(user_id: 0)
-    if guestSteps != []
-      guestSteps.delete_all
+    guestSteps.delete_all if !guestSteps.blank?
+  end
+  
+  def makeThemesSteps
+    users = User.all
+    if !users.blank?
+      users.each do |u|
+        #Step.find_by(part_id: 9, page_id: 1, entity_id: self.id, user_id: user.id)
+        uThemes = u.themes
+        notUThemes = Theme.all - u.themes
+        if !uThemes.blank?
+          uThemes.each do |th|
+            step = Step.find_by(part_id: 9, page_id: 1, entity_id: th.id, user_id: u.id)
+            if step.nil?
+          		step = Step.create(
+          					            :user_id => u.id, 
+          						          :part_id => 9,
+          						          :page_id => 1,
+          						          :entity_id => th.id,
+          						          :host_name => '',
+          						          :ip_addr => '0.0.0.0',
+          						          :visit_time => th.last_message_date,
+                                :guest_token => u.guest_token,
+                                online_flag: true
+          						          )
+            else
+              step.update_attribute(:visit_time, th.last_message_date) if !th.last_message.nil?
+            end
+          end
+        end
+        if !notUThemes.blank?
+          notUThemes.each do |th|
+            step = Step.find_by(part_id: 9, page_id: 1, entity_id: th.id, user_id: u.id)
+            if step.nil? && !th.messages.where(user_id: u.id).last.nil?
+          		step = Step.create(
+          					            :user_id => u.id, 
+          						          :part_id => 9,
+          						          :page_id => 1,
+          						          :entity_id => th.id,
+          						          :host_name => '',
+          						          :ip_addr => '0.0.0.0',
+          						          :visit_time => th.messages.where(user_id: u.id).last.created_at,
+                                :guest_token => u.guest_token,
+                                online_flag: true
+          						          )
+            end
+          end
+        end
+      end
     end
   end
+  
   def photosUpdate
     photos = Photo.all
     if photos != []

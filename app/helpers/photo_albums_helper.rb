@@ -57,7 +57,53 @@ module PhotoAlbumsHelper
 		   </table>
 		"
 	end
-	
+	def album_mini_table(album, pathName='index')
+		"
+			<table style = 'width: 100%;'>				
+				<tr>
+          <td align = 'left' valign = 'middle' style = 'width: 60%;'>
+            <h3 style = 'height: 14px;' title = '#{album.name}'>#{truncate album.name, length: 26}</h3>
+          </td>
+          <td align = 'right'>
+            <p class = 'istring_m norm medium-opacity'>Размещён #{my_time(album.created_at)}</p>
+          </td>
+        </tr>
+				<tr>
+					<td align='left' valign='middle'>
+						<span class = 'istring_m norm medium-opacity'>Автор </span>#{link_to album.user.name, album.user, :class => 'b_link_i'}
+					</td>
+					<td align = 'right' valign='middle'>
+						 
+             #{albumInformation(album)}
+					</td>
+				</tr>
+				<tr>
+					<td colspan = '2'>
+						<div class = 'm_95p tb-pad-s'>
+              #{image_tag album.get_photo.link.thumb, width: '100%' if !album.get_photo.nil?}
+            </div>
+					</td>
+				</tr>
+				<tr>
+          <td  align='left' valign = 'middle'>
+            #{bottom_album_buttons(album, pathName)}	
+          </td>
+          <td align='right' valign = 'middle'>
+            #{user_photo_album_like_link(album)}
+          </td>
+        </tr>
+		   </table>
+		"
+	end
+  def view_mode_albums_list
+    if session[:albums_list_type].nil?
+      session[:albums_list_type] = (params[:albums_list_type].nil?)? "thumbs" : params[:albums_list_type]
+    else
+      session[:albums_list_type] = (params[:albums_list_type].nil?)? session[:albums_list_type] : params[:albums_list_type]
+    end
+    link = ["/media?albums_list_type=list#{"&page=#{params[:page]}" if !params[:page].nil?}", "/media?albums_list_type=thumbs#{"&page=#{params[:page]}" if !params[:page].nil?}"]
+	  "<a href = '#{link[0]}' class = 'th-view-mode' data-remote = 'true' id = 'th-as-list'><i class = 'fi-list fi-large#{session[:albums_list_type] == 'list' ? ' fi-blue' : ' fi-grey'}'></i></a>  <a href = '#{link[1]}' class = 'th-view-mode' data-remote = 'true' id = 'th-as-thumbnails'><i class = 'fi-thumbnails fi-large#{session[:albums_list_type] == 'thumbs' ? ' fi-blue' : ' fi-grey' }'></i></a>"
+  end
 	def album_photos_field(album, pathName)
 		value = ''
 		photos = []

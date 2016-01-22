@@ -13,4 +13,11 @@
 
 #last_event_heigth = (e) -> $('div#last_event').height() * $('div#last_event').length 
 
- 
+r = ()->
+    
+    $("a#setAsRead, a.th-view-mode").on "ajax:success", (e, data, status, xhr)-> 
+        Turbolinks.visit("#cs")
+    
+    
+$(document).ready r
+$(document).on "page:load", r

@@ -7,7 +7,9 @@ module ThemesHelper
 			"
 				<table class = 'v_table' id = 'themes_list'>
 					<tr>
-						<th id = 'first'>
+            <th id = 'first'>
+            </th>
+						<th>
 							Тема
 						</th>
 						<th title = 'Дата создания темы'>
@@ -38,15 +40,16 @@ module ThemesHelper
     else
       link = ["#{themes_path(themes_list_type: 'list')}#{"&page=#{params[:page]}" if !params[:page].nil?}#{"&th_filter=#{params[:th_filter]}" if !params[:th_filter].nil?}", "#{themes_path(themes_list_type: 'thumbs')}#{"&page=#{params[:page]}" if !params[:page].nil?}#{"&th_filter=#{params[:th_filter]}" if !params[:th_filter].nil?}"]
     end
-	  "<a href = '#{link[0]}' id = 'th-as-list'><i class = 'fi-list fi-large#{session[:themes_list_type] == 'list' ? ' fi-blue' : ' fi-grey'}'></i></a>  <a href = '#{link[1]}' id = 'th-as-thumbnails'><i class = 'fi-list-thumbnails fi-large#{session[:themes_list_type] == 'thumbs' ? ' fi-blue' : ' fi-grey' }'></i></a>"
+	  "<a href = '#{link[0]}' class = 'th-view-mode' data-remote = 'true' id = 'th-as-list'><i class = 'fi-list fi-large#{session[:themes_list_type] == 'list' ? ' fi-blue' : ' fi-grey'}'></i></a>  <a href = '#{link[1]}' class = 'th-view-mode' data-remote = 'true' id = 'th-as-thumbnails'><i class = 'fi-list-thumbnails fi-large#{session[:themes_list_type] == 'thumbs' ? ' fi-blue' : ' fi-grey' }'></i></a>"
   end
 	def build_rows(themes)
 		rows = ''
 		themes.each do |th|
-			last_msg = th.last_message
-			rows += "<tbody class = 't_link' link_to = '#{theme_path(th)}' title = '#{th.name}'>"
+      thReadInfo = th.theme_read_info(current_user)
+      last_msg = thReadInfo[:last_message]
+			rows += "<tbody class = 't_link' link_to = '#{thReadInfo[:link]}' title = '#{th.name}'>"
 			rows += '<tr>'
-			rows += "<td id = 'first' class = 't_name'>#{truncate(th.name, :length => 50)}</td><td class = 'date'>#{my_time(th.created_at)}</td>"
+      rows += "<td id = 'first' class = 'new_msg_counter'>#{thReadInfo[:info]}</td><td class = 't_name'>#{truncate(th.name, :length => 45)}</td><td class = 'date'>#{my_time(th.created_at)}</td>"
 			if last_msg != nil
 				rows += "<td>#{last_msg.user.name}</td><td class = 'date'>#{my_time(last_msg.created_at)}</td>"
 			else
@@ -58,7 +61,7 @@ module ThemesHelper
 		end
 		return rows
 	end
-
+  
 	def themeInformation(theme)
 		mCount = (@messages == nil)? theme.messages.count : @messages.count 
     h = theme.statusHash

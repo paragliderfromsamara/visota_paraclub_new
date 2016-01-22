@@ -229,7 +229,7 @@ initVideoForm = (frm)->
                         $("#tError").addClass('err').html("Ccылка должна быть указана в формате \"youtube\", \"vk\", \"vimeo\"...")
                         $("#video_preview").empty()
                         f.videoLinkFlag = false
-                        console.log(data.link_html)
+                        #console.log(data.link_html)
                     wb.stopInterval()
                     f.switchSubmitBut(f.videoLinkFlag & nFlag & cFlag)
                }
@@ -265,7 +265,7 @@ initMessageForm = (frm)->
         f.contentFieldMinLength = if f.imagesLength>0 || f.attachmentFilesLength>0 then 0 else minContentLength
         cFlag = f.contentLengthCheck()
         f.switchSubmitBut((iFlag && f.imagesLength>0) || cFlag || (afFlag && f.attachmentFilesLength>0))
-        console.log f.imagesLength, f.attachmentFilesLength
+        #console.log f.imagesLength, f.attachmentFilesLength
     f.formChecking()
     if msgType isnt 'comment'
         f.photosUploader()
@@ -412,7 +412,7 @@ class myForm
                else $(this).css('background-color', 'none')
             else $(this).hide()
         s.find('#txtMatchesErr').text(err)
-        console.log this.formElement.attr('class')
+        #console.log this.formElement.attr('class')
         f
     getLikebleNames: ()->
         if this.curNameValue isnt $.trim(this.nameField.val())
@@ -577,7 +577,7 @@ class myForm
             a = ''
             sv = ''
             sa = ''
-            console.log json.albums.length
+            #console.log json.albums.length
             $.each json.albums, (r, i)->
                 f = false
                 if arr_a.length>0
@@ -618,6 +618,12 @@ class myForm
              #updUploadedImageButtons(el.formElement.attr('id'))
              $(".addHashCode").click ()-> updCurFormText(" " + $(this).attr('hashCode'), el)    
              $(".del-photo-but").click ()-> el.deletePhoto(this)
+             cur_photo_id = if $("##{el.type}_photo_id").val() is undefined then null else $("##{el.type}_photo_id").val()
+             $(".set-as-main").each ()->
+                 if $(this).attr('set_photo_id') is $("##{el.type}_photo_id").val() then $(this).hide()
+                 
+             $(".set-as-main").click ()-> el.setAsMainAlbumPhoto(this)
+             
              $(".photo_form").on "ajax:success", (e, data, status, xhr) ->
                  nts = $(this).find("#notice")
                  nts.fadeIn 300, ()-> 
@@ -723,6 +729,18 @@ class myForm
     switchSubmitBut: (f)->
         if f then this.submitButt.removeClass('disabled') else this.submitButt.addClass('disabled')
         
+    setAsMainAlbumPhoto: (setBut)->
+        _this = this
+        id = $(setBut).attr('set_photo_id')
+        el = document.getElementById("#{this.type}_photo_id")
+        if el is null 
+            this.form_element.append("<input type = \"hidden\" id = \"#{this.type}_photo_id\" name = \"#{this.type}[photo_id]\" value = \"#{id}\" />")
+        else
+            cur = $(el).val()
+            $(el).val(id)
+            $(setBut).hide()
+            $("[set_photo_id=#{cur}]").show()
+                
     deletePhoto: (delBut)->
         _this = this
         id = $(delBut).attr('photo_id')

@@ -13,6 +13,11 @@
  *= require_tree .
  */
 
+html.turbolinks-progress-bar::before {
+  background-color: red !important;
+  height: 5px !important;
+}
+
 .waitbar, .wb-items
 {
     position:relative;
@@ -144,5 +149,6 @@ ol, ul { list-style: none; }
 hr {margin: 0;}
 
 .tb-pad-s {padding: 10px 0 10px 0;}
+.tb-pad-sm {padding: 20px 0 20px 0;}
 .tb-pad-m {padding: 30px 0 30px 0;}
 .tb-pad-l {padding: 60px 0 60px 0;}

@@ -4,36 +4,12 @@
 			<%= feed_nav_buttons %>
         </div>
         <div class = 'col span_4_of_12'>
-            <div class = 'pagination'><%= feed_pagination if @entity_array.length > @entity_on_page %></div>
+            <!-- Здесь должна быть пагинация-->
         </div>
     </div>
 </div>
 <div class = 'central_field' id = 'b_wrapper'>
-		<% if @entity_array != [] %>
-			<% i = 0 %>
-			<% array_to_view.each do |v| %>
-                <% if current_feed_part[:en_name] == 'answers'  %>
-				    <%= build_as_answer_block(v, i).html_safe %>
-                <% elsif current_feed_part[:en_name] == 'themes' %>
-				    <%= build_as_theme_block(v, i).html_safe %>
-                <% elsif current_feed_part[:en_name] == 'messages' %>
-				    <%= build_as_message_block(v, i).html_safe %>
-                <% elsif current_feed_part[:en_name] == 'albums' %>
-                    <%= build_as_album_block(v, i).html_safe %>
-                <% elsif current_feed_part[:en_name] == 'videos' %>
-                    <%= build_as_video_block(v, i).html_safe %>
-                <% elsif current_feed_part[:en_name] == 'articles' %>    
-                    <%= build_as_article_block(v, i).html_safe %>
-                <% elsif current_feed_part[:en_name] == 'comments' %>
-                    <%= build_as_comments_block(v, i).html_safe %>
-                <% end %>
-				<% i += 1 %>
-			<% end %>
-		<% else %>
-    		<div class = 'm_1000wh'>
-                <p class = 'istring norm'>В данной ленте ничего нет</p>
-            </diw>
-		<% end %>
+		
 </div>
 <div class = 'm_1000wh'>
     <div class = 'section group'>
@@ -41,9 +17,7 @@
 			<%= feed_nav_buttons %>
         </div>
         <div class = 'col span_4_of_12'>
-			<div class = 'pagination'>
-				<%= feed_pagination if @entity_array.length > @entity_on_page %>
-			</div>
+            <!-- Здесь должна быть пагинация-->
         </div>
     </div>
 </div>

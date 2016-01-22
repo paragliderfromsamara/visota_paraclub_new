@@ -174,6 +174,25 @@ mount_uploader :photo, UserPhotoUploader
   end
   #tracked_themes end
   
+  def not_readed_themes_ids(topic, flag=false) #use for select not visited themes in topic show
+    v_status = (flag)? 1 : [1,2]
+    topic_themes = topic.themes.where(visibility_status_id: v_status).order("last_message_date DESC")
+    my_steps = self.steps.where(part_id: 9, page_id: 1)
+    not_visited_themes_ids = []
+    no_read_last_message_ids = []
+    topic_themes.each do |th| 
+      s = my_steps.where(entity_id: th.id).first 
+      if s.nil?
+        not_visited_themes_ids[not_visited_themes_ids.length] = th.id
+      else
+        no_read_last_message_ids[no_read_last_message_ids.length] = th.id if th.not_read_messages(self, s).size > 0
+      end
+    end
+    #visited_but_not_read = topic_themes.select(:id).where(id: no_read_last_message_ids)
+    #not_visited = topic_themes.select(:id).where(id: not_visited_themes_ids)
+    return no_read_last_message_ids + not_visited_themes_ids
+  end
+  
   def self.club_pilots
 	  User.where(user_group_id: [0,1,2,6])
   end

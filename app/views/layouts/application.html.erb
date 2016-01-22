@@ -109,8 +109,7 @@
 	<div class = 'm_1000wh'>
 		<div class = 'section group'>
 			<div class = 'col span_3_of_12' style = 'margin-top:23px; '>
-                <%= image_tag "logo.png", id: "mLogo", link_to: root_path, height: "130px" %>
-				
+                <%= image_tag "logo.png", id: "mLogo", link_to: root_path, height: "130px" %>	
 			</div>
 			<div class = 'col span_9_of_12' style = 'padding: 0 0 0 0; margin-top:56px;'>
 				<div id = 'mainMenu'>
@@ -134,6 +133,7 @@
 		<% end %>
 	</div>
 </div>
+<a name = 'cs'></a>
 <div id = 'middle'>
     <%= authority_message if user_type == 'new_user' && @show_authority_message_flag == true %>
     <%= header_1 %>

@@ -33,7 +33,7 @@ class Message < ActiveRecord::Base
   end
   #start_quote
   #end_quote
-  after_create :statusControl
+  #after_create :update_last_message_date_in_theme
   after_save :check_photos_in_content #проверить наличие хэш тэгов фотографий, прикреплённых к сообщению, в тексте перед сохранением
   after_update :delete_selected_photos
   before_destroy :clean_binded_entities
@@ -74,13 +74,6 @@ class Message < ActiveRecord::Base
     end
   end
   
-  def statusControl
-	v_st = 2
-	v_st = theme.visibility_status_id if self.theme != nil
-	v_st = photo.visibility_status_id if self.photo != nil
-	v_st = photo_album.visibility_status_id if self.photo_album != nil
-	self.update_attribute(:visibility_status_id, v_st) if v_st == self.visibility_status_id and self.status != 'draft'
-  end
   def main_parent
 	return self.theme if self.theme != nil
 	return self.photo_album if self.photo_album != nil

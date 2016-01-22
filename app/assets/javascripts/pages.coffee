@@ -6,6 +6,8 @@ arrows = true
 phTopMenu = document.getElementById("topPhotoPanel")
 topMenu = document.getElementById("top")
 topEl = if phTopMenu isnt null then phTopMenu else topMenu 
+showAtMiddleLinksList = [".nav_string a", ".pagination a", "a#showTopic", ".l_menu a", ".l_menu_b a", ".ctrl_but a", "a.w_link_u", "a.b_link_i"] #добавляем к ссылкам якорь #cs к ссылкам под данными идентификаторами
+
 
 blocksSumHeight = ()-> 
     $(topEl).outerHeight(true) + $("#middle").outerHeight(true) + $("#bottom").outerHeight(true) + $("#ses_p").outerHeight(true) 
@@ -75,10 +77,16 @@ adaptWheatherTable = (whTable)->
     whTable = $(whTable)
     whTable.find("img").each ()->
         $(this).attr('src', "http://meteo.paraplan.net" + $(this).attr('src'))
+
+linksUpdater = ()->
+    $(".t_link").each ()-> if $(this).attr("link_to").indexOf('#') is -1 then $(this).attr("link_to", "#{$(this).attr('link_to')}#cs")
+    $("#{i}").each(()-> 
+        if $(this).attr('href') isnt undefined then if $(this).attr('href').indexOf('#') is -1 then $(this).attr("href", "#{$(this).attr('href')}#cs")) for i in showAtMiddleLinksList
     
 
 r = ()->
     initScrollControl()
+    linksUpdater()
     whTable = document.getElementById('forecast')
     if whTable isnt null then adaptWheatherTable(whTable)
     $(document).click ()-> bottomControl()
@@ -87,6 +95,8 @@ r = ()->
     if $("#notice").text.length > 0 then setTimeout (()-> $("#notice").fadeOut(500)), 6000
     sForm = document.getElementById("searchForm")
     if sForm isnt null then initSearchForm(sForm)
+    
+    
     
     
 $(document).ready r

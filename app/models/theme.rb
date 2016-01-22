@@ -10,7 +10,7 @@ class Theme < ActiveRecord::Base
  attr_accessor :deleted_photos
  attr_accessible :last_message_date, :name, :status_id, :topic_id, :user_id, :content, :photos, :uploaded_photos, :updater_id, :attachment_files, :created_at, :updated_at, :visibility_status_id, :deleted_photos, :vote_id
  
-  has_many :messages, -> { where(status_id: 1).order("created_at ASC")}, :dependent  => :delete_all
+  has_many :messages, -> { where(status_id: 1).order("created_at ASC")}, :dependent  => :destroy
   belongs_to :user
   belongs_to :topic
   belongs_to :vote
@@ -39,7 +39,7 @@ class Theme < ActiveRecord::Base
     simple_format
   end
   after_save :check_photos_in_content
-  after_create :last_msg_upd_after_create
+  #after_create :last_msg_upd_after_create
   #before_save :check_visibility_status
   
   validate :deleted_photos_check, :on => :update
@@ -86,7 +86,7 @@ class Theme < ActiveRecord::Base
   end
   
   def last_message #находим последнее сообщение темы
-	  self.messages.order('created_at DESC').first
+	  self.messages.last
   end
 #Валидация--------------------------------------------------------------------------
  validates :name, :presence => {:message => "Поле 'Заголовок темы' не должно быть пустым"},
@@ -261,14 +261,11 @@ class Theme < ActiveRecord::Base
   end
 #статусы end...
   def last_msg_upd
-	date = self.last_message.created_at if self.last_message != nil
-	date = self.created_at if self.last_message_date == nil
-	self.update_attribute(:last_message_date, self.created_at) if self.last_message_date != date
+	  date = self.last_message.created_at if self.last_message != nil
+	  date = self.created_at if self.last_message_date == nil
+	  self.update_attribute(:last_message_date, self.created_at) if self.last_message_date != date
   end
-  def last_msg_upd_after_create
-	self.update_attribute(:last_message_date, self.created_at)
-  end
-
+ 
 #управление содержимым  
   def check_photos_in_content 
 	if self.photos != [] and self.photos != nil
@@ -296,20 +293,35 @@ class Theme < ActiveRecord::Base
 	return updater_text
   end
 #управление содержимым end  
-  def last_read_message(user) #Находит крайнее непрочитанное сообщение пользователя
-	if user != nil
-		last_step_in_theme = Step.find_by(part_id: 9, page_id: 1, entity_id: self.id, user_id: user.id)
-		if last_step_in_theme != nil
-			step_time = last_step_in_theme.visit_time if last_step_in_theme.visit_time != nil and last_step_in_theme.visit_time != ''
-			not_read_msgs = self.messages.where({:created_at => step_time..Time.now, :status_id => 1})
-			if not_read_msgs != []
-				if not_read_msgs.first != not_read_msgs.last
-					return not_read_msgs.first 
-				end
-			end
-		end
-	end
-	return nil
+  def not_read_messages(user = User.find(1), step = nil)
+    if self.messages.size > 0
+      last_step_in_theme = (step.nil?)? Step.find_by(part_id: 9, page_id: 1, entity_id: self.id, user_id: user.id) : step
+      return (last_step_in_theme.nil?)? [] : self.messages.where("created_at > :step_time", {step_time: last_step_in_theme.visit_time}).order('created_at ASC')
+    else
+      return []
+    end
+  end
+  def theme_read_info(user) #информация прочитанности тем и ссылка
+    info = ""
+    link = "/themes/#{self.id}"
+    if !user.nil?
+      step = Step.find_by(part_id: 9, page_id: 1, entity_id: self.id, user_id: user.id)
+      if step.nil?
+        info = '<span class = "not-read-theme" title = "не прочитано">н/п</span>'
+      elsif !self.messages.blank?
+        nr_messages = self.not_read_messages(user, step)
+        if nr_messages.size < 100 && nr_messages.size != 0
+          info = "<span class = 'not-read-messages'>+#{nr_messages.size}</span>"
+          link = "/themes/#{self.id}#msg_#{nr_messages.last.id}"
+        elsif nr_messages.size > 99
+          info = '<span class = "not-read-messages">>99</span>'
+          link = "/themes/#{self.id}#msg_#{nr_messages.last.id}"
+        else
+          link = "/themes/#{self.id}#msg_#{self.last_message.id}"
+        end
+      end
+    end
+    return {info: info, link: link, last_message: self.last_message}
   end
   def clean
 		self.update_attributes(:content => '',:name => '')
