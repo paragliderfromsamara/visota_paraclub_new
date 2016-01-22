@@ -9,18 +9,20 @@
         </div>
     </div>
 </div>
+<%if !newMediaPanel.blank? || @mediaPartHash[:typeName] == 'albums' %>
 <div class = 'c_box'>
     <div class = 'm_1000wh'>
         <div class = 'section group'>
-            <div class = 'col span_10_of_12'>
+            <div class = 'col span_10_of_12' style = 'margin:0;padding:0;'>
                 <%= newMediaPanel %>
             </div>
-            <div class = 'col span_2_of_12'>
+            <div class = 'col span_2_of_12' style = 'margin:0;padding:0;'>
                 <%= view_mode_albums_list.html_safe if @mediaPartHash[:typeName] == 'albums' %>
             </div>
         </div>
     </div>
 </div> 
+<%end%>
 <% if @mediaPartHash[:typeName] == 'videos'%>
     <div class = 'c_box odd'>
         <div class = 'm_1000wh tb-pad-m' >
