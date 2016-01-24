@@ -220,6 +220,7 @@ ul.myBut
               color: grey;
               text-decoration:underline;
           }
+          i{padding-right:3px;}
     }
     .sesLink, .sesText
         {
@@ -572,59 +573,6 @@ ul.myBut
 
 /*------VisotaLife end---------------------------------------------------------------------------------------------------------------------------------*/
 
-/* Wheather panel */
-.right_menu
-	{
-		position: fixed;
-		width: 650px;
-		height: 150px;
-		right:0; /*изменияемый параметр*/
-		top: 20%;
-		/* background-color: $second_color; */
-		z-index: 600;
-		#but_area
-			{
-				position: relative;
-				width: 50px;
-				height: 100%;
-				display: inline-block;
-				float: right;
-				#w_but {
-						background-color: white; 
-						background-image: url('/files/cloud.png');background-repeat: no-repeat; 
-						height: 50px;
-						width:50px;
-						z-index: 601;
-						cursor: pointer;
-						border-bottom: 1px solid $second_color; 
-						border-left: 1px solid $second_color; 
-						border-top: 1px solid $second_color; 
-						@include animation($time_1);
-					   }
-				#w_but:hover {
-								/* background-color: $main_color; */
-								background-image: url('/files/b_cloud.png');
-							 }
-			}
-		
-		#cont {
-				float: right;
-				position: relative;
-				display: inline-block;
-				height: 100%;
-				/* width: 100px; */
-				z-index: 601;
-				background-color: white; 
-				border: 1px solid $second_color;
-			  }
-		#wh_cont /*Содержит погоду*/
-				 {
-					position: absolute;
-					display: none;
-				 }
-	}
-
-/* Wheather panel end */
 #cButWrapper
 {
 	position: relative;

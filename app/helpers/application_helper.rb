@@ -240,19 +240,20 @@ end
 					 }
 					 ]
 	end
-	def user_session_menu
-			b = [
-					#{:name => 'Лента событий', :link => '/feed'},
-          {:name => 'Погода', :link => '/wheather'},
-          {:name => 'Пилоты', :link => '/pilots'},
-					{:name => 'Профиль', :link => user_path(current_user)}
-			    ]
-		v = ''
+  def wheather_top_but
+    return [{:name => '<i class = "fi-cloud fi-small"></i>Погода', :link => '/wheather'}]
+  end
+  def user_top_buttons
+    return [{:name => '<i class = "fi-torsos-all fi-small"></i>Пилоты', :link => '/pilots'},{:name => '<i class = "fi-torso fi-small"></i>Профиль', :link => user_path(current_user)}]
+  end
+	def user_session_menu(b)
+    v = ''
 		b.each do |i|
 			v += (current_page?(i[:link]))? "<li id = 'c_nav_li' link_to = '#{i[:link]}'>#{i[:name]}</li>" : "<li link_to = '#{i[:link]}'>#{i[:name]}</li>"
 		end
 		return "<ul id = 'userMenu'>#{v}</ul>"
 	end
+
 	def topMainMenu #меню в шапке сайта
 		value = ""
 		primaryMenuItems.each do |item|
@@ -365,37 +366,7 @@ end
     #    </div>
     #</div>
   end
-	def wheather_panel
-	"
-		<div id = 'wheather_panel' class = 'wheather_panel'>
-			<div  id = 'wheather_button' align = 'center'  class = 'wheather_link'>
-				<b><a style = 'position: relative;'><img src = '/files/wheather.png' style = 'height: 80px; padding-top: 5px;'></a></b>
-			</div>
-			<div id = 'wheather' style = 'display: block;' class = 'wheather_content'>
-					<div id = 'wheather_blocks' style = 'text-align: center; height: 100%; margin-left: 10px; padding-right: 5px; display: none; position: relative;'>
-							<br />
-							<a class = 'b_link' target = '_blank' href = 'http://rp5.ru/7259/ru'><b>Самара</b></a>
-							<br />
-							<EMBED src='http://rp5.ru/informer/100x100/1/17.swf' loop=false menu=false quality=high scale=noscale wmode=transparent bgcolor=#CCCCCC flashvars='id=7259&lang=ru&um=00000' WIDTH='100' HEIGHT='100' NAME='loader' ALIGN='' TYPE='application/x-shockwave-flash' PLUGINSPAGE= 'http://www.macromedia.com/go/getflashplayer'></EMBED>
-					</div>
-					<div id = 'wheather_blocks' style = 'text-align: center; height: 100%; display: none; position: relative; padding-right: 5px;'>
-							<br />
-							<a class = 'b_link' target = '_blank'  href = 'http://rp5.ru/123798/ru'><b>Б. Раковка</b></a><br />
-							<br />
-							<EMBED src='http://rp5.ru/informer/100x100/1/17.swf' loop=false menu=false quality=high scale=noscale wmode=transparent bgcolor=#CCCCCC flashvars='id=123798&lang=ru&um=00000' WIDTH='100' HEIGHT='100' NAME='loader' ALIGN='' TYPE='application/x-shockwave-flash' PLUGINSPAGE= 'http://www.macromedia.com/go/getflashplayer'></EMBED>
-					</div>
-					<div id = 'wheather_blocks' style = 'text-align: center; height: 100%; display: none; position: relative; padding-right: 5px;'>
-						<a href='http://6.pogoda.by/28807' title='Прогноз атмосферного давления,скорости и направления ветра по данным UKMET. Самара' target='_blank'>
-						<img src='http://pogoda.by/mg/366/egrr_W28807.gif' width='366' height='100' border='1' alt='График элементов погоды P, Ws, Wa г. Самара прогноз на 126 ч.'></a>
-					</div>
-					<div id = 'wheather_blocks' style = 'height: 100%; display: none; position: relative; width: 140px; '>
-							<a class = 'b_link' target = '_blank' href = 'http://meteo.paraplan.net/forecast/summary.html?place=4954'><b>Подробный прогноз по Самаре</b></a> <hr />
-							<a class = 'b_link' target = '_blank' href = 'http://meteoinfo.by/radar/?q=RUSM&t=10'><b>Радиолокационная карта метеоявлений</b></a><br><br>
-					</div>
-			</div>
-		</div>
-	"
-	end
+
 	def my_collection_select(collection, list_name, form_name, base_item, prompt) #структура collection [{:value => integer, :name => string}]
 		if collection != {} and collection != nil and list_name != nil and list_name != '' and form_name != nil and form_name != ''
 			options = ""

@@ -80,7 +80,7 @@ module PhotoAlbumsHelper
 				<tr>
 					<td colspan = '2'>
 						<div class = 'm_95p tb-pad-s'>
-              #{image_tag album.get_photo.link.thumb, width: '100%' if !album.get_photo.nil?}
+              #{image_tag album.get_photo.link.big_thumb, width: '100%' if album.get_photo.link?}
             </div>
 					</td>
 				</tr>

@@ -1,3 +1,14 @@
 // Place all the styles related to the PhotoAlbums controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import "scaffolds";
+.pa-thumbs
+{
+    h3 {
+        font-family:$font_family_2;
+    }
+    .stat span, .fi-grey
+    {
+        color:#9d9d9d;
+    }
+}

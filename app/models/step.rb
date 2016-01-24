@@ -79,7 +79,7 @@ class Step < ActiveRecord::Base
   def self.users_online
     users_on_site = {signed: [], unsigned: 0}
     users_on_site[:signed] = User.where(id: Step.select(:user_id).where("visit_time > :time_now AND online_flag = :online_flag", {:time_now => Time.now-5.minutes, :online_flag => true}).where.not(user_id: [0,nil])).distinct
-    users_on_site[:unsigned] = Step.select(:guest_token).where("visit_time > :time_now AND online_flag = :online_flag", {:time_now => Time.now-5.minutes, :online_flag => false}).distinct.count
+    users_on_site[:unsigned] = Step.select(:guest_token).distinct.where("visit_time > :time_now AND online_flag = :online_flag", {:time_now => Time.now-5.minutes, :online_flag => false}).count
     return users_on_site
   end
   

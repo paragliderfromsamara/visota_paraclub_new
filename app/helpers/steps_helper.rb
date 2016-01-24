@@ -115,12 +115,14 @@ module StepsHelper
     usr = guest_user
     if usr.nil?
       user_id = 0
-      token = get_guest_token
+      step = Step.where("user_id = ? AND visit_time < ? AND ip_addr = ?", 0, Time.now - 7.days, request.env['REMOTE_ADDR']).order('visit_time ASC').last
+      token = (step.nil?)? get_guest_token : step.guest_token    
     else
       user_id = usr.id
       token = usr.guest_token
+      step = Step.where("user_id = ? AND visit_time < ?", 0, Time.now - 7.days).order('visit_time ASC').last
     end
-    step = Step.where("user_id = ? AND visit_time < ?", 0, Time.now - 7.days).order('visit_time ASC').last
+    
     if !step.nil?
   		step.update_attributes(
   					                        :user_id => user_id, 
