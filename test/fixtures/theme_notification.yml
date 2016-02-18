@@ -1,0 +1,26 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+thNtf1:
+  user_id: 202
+  theme_id: 111
+  
+
+ntfForThemeDestroy_1:
+  user_id: 200
+  theme_id: 20322
+  
+ntfForThemeDestroy_2:
+  user_id: 201
+  theme_id: 20322
+  
+ntfForThemeDestroy_3:
+  user_id: 202
+  theme_id: 20322
+  
+ntfForThemeDestroy_4:
+  user_id: 203
+  theme_id: 20322
+  
+ntfForThemeDestroy_5:
+  user_id: 204
+  theme_id: 20322

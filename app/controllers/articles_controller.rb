@@ -2,7 +2,7 @@ class ArticlesController < ApplicationController
   # GET /articles
   # GET /articles.json
   def index
-    redirect_to "/media?t=articles&c=3"
+    redirect_to "/media?t=reports"
   #article = Article.new
 	#@curArtCat = article.types.first
 	#article.types.each do |t|
@@ -87,7 +87,7 @@ class ArticlesController < ApplicationController
   # POST /articles
   # POST /articles.json
   def create
-	if user_type != 'guest' and user_type != 'bunned'
+	if userCanCreateArticle?
 		params[:article][:user_id] = current_user.id
     params[:article][:status_id] = 1
 		@article = Article.new(params[:article])

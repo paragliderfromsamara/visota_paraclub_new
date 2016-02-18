@@ -1,0 +1,288 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+super_admin:
+  id: 200
+  name: SuperAdmin
+  email: romankozvonin@gmail.com
+  full_name: MyString
+  avatar: MyString
+  photo: MyString
+  cell_phone: MyString
+  skype: MyString
+  inform: MyString
+  salt: SuperAdminSalt
+  encrypted_password: abcdef
+  user_group_id: 0
+  email_status: MyString
+
+admin:
+  id: 201
+  name: Admin
+  email: MyString
+  full_name: MyString
+  avatar: MyString
+  photo: MyString
+  cell_phone: MyString
+  skype: MyString
+  inform: MyString
+  salt: AdminSalt
+  encrypted_password: abcdef 
+  user_group_id: 1
+  email_status: MyString
+  
+club_pilot:
+  id: 202
+  name: club_pilot
+  email: club_pilot@visota.ru
+  full_name: MyString
+  avatar: MyString
+  photo: MyString
+  cell_phone: MyString
+  skype: MyString
+  inform: MyString
+  salt: clubPilotSalt
+  encrypted_password: abcdef
+  user_group_id: 2
+  email_status: MyString
+  
+club_friend:
+  id: 203
+  name: ClubFriend
+  email: ClubFriend@visota.ru
+  full_name: MyString
+  avatar: MyString
+  photo: MyString
+  cell_phone: MyString
+  skype: MyString
+  inform: MyString
+  salt: clubFriendSalt
+  encrypted_password: abcdef 
+  user_group_id: 3
+  email_status: MyString 
+  
+new_user:
+  id: 205	
+  name: new_user
+  email: new_user@visota.ru
+  full_name: MyString
+  avatar: MyString
+  photo: MyString
+  cell_phone: MyString
+  skype: MyString
+  inform: MyString
+  salt: newUserSalt
+  encrypted_password: abcdef
+  user_group_id: 5
+  email_status: MyString
+  
+bunned:
+  id: 204
+  name: Bunned
+  email: bunned@visota.ru
+  full_name: MyString
+  avatar: MyString
+  photo: MyString
+  cell_phone: MyString
+  skype: MyString
+  inform: MyString
+  salt: bunnedSalt
+  encrypted_password: abcdef 
+  user_group_id: 4
+  email_status: MyString
+  bunned_to: Time.now
+  
+  
+manager:
+  id: 206
+  name: Manager
+  email: manager@visota.ru
+  full_name: MyString
+  avatar: MyString
+  photo: MyString
+  cell_phone: MyString
+  skype: MyString
+  inform: MyString
+  salt: managerSalt
+  encrypted_password: abcdef 
+  user_group_id: 6
+  email_status: MyString
+  
+deleted:
+  id: 207
+  name: Deleted
+  email: deleted@visota.ru
+  full_name: MyString
+  avatar: MyString
+  photo: MyString
+  cell_phone: MyString
+  skype: MyString
+  inform: MyString
+  salt: deletedSalt
+  encrypted_password: abcdef 
+  user_group_id: 7
+  email_status: MyString
+  
+videoOwner:
+  id: 10
+  name: videoOwner
+  email: videoOwner@visota.ru
+  full_name: MyString
+  avatar: MyString
+  photo: MyString
+  cell_phone: MyString
+  skype: MyString
+  inform: MyString
+  salt: videoOwnerSalt
+  encrypted_password: abcdef
+  user_group_id: 2
+  email_status: MyString
+
+
+voteOwner:
+  id: 13
+  name: voteOwner
+  email: voteOwner@visota.ru
+  full_name: MyString
+  avatar: MyString
+  photo: MyString
+  cell_phone: MyString
+  skype: MyString
+  inform: MyString
+  salt: albumOwnerSalt
+  encrypted_password: abcdef
+  user_group_id: 2
+  email_status: MyString  
+
+albumOwner:
+  id: 15
+  name: albumOwner
+  email: albumOwner@visota.ru
+  full_name: MyString
+  avatar: MyString
+  photo: MyString
+  cell_phone: MyString
+  skype: MyString
+  inform: MyString
+  salt: albumOwnerSalt
+  encrypted_password: abcdef
+  user_group_id: 2
+  email_status: MyString
+ 
+albumOwner2:
+  id: 33
+  name: albumOwner2
+  email: albumOwner2@visota.ru
+  full_name: MyString
+  avatar: MyString
+  photo: MyString
+  cell_phone: MyString
+  skype: MyString
+  inform: MyString
+  salt: albumOwnerSalt2
+  encrypted_password: abcdef
+  user_group_id: 2
+  email_status: MyString 
+
+albumOwner3:
+  id: 25
+  name: albumOwner3
+  email: albumOwner3@visota.ru
+  full_name: MyString
+  avatar: MyString
+  photo: MyString
+  cell_phone: MyString
+  skype: MyString
+  inform: MyString
+  salt: albumOwnerSalt3
+  encrypted_password: abcdef
+  user_group_id: 2
+  email_status: MyString 
+
+  
+themeOwner:
+  id: 20
+  name: themeOwner
+  email: themeOwner@visota.ru
+  full_name: MyString
+  avatar: MyString
+  photo: MyString
+  cell_phone: MyString
+  skype: MyString
+  inform: MyString
+  salt: themeOwnerSalt
+  encrypted_password: abcdef
+  user_group_id: 2
+  email_status: MyString
+
+articleOwner:
+  id: 30
+  name: articleOwner
+  email: articleOwner@visota.ru
+  full_name: MyString
+  cell_phone: MyString
+  skype: MyString
+  inform: MyString
+  salt: articleOwnerSalt
+  encrypted_password: abcdef
+  user_group_id: 2
+  email_status: MyString  
+  
+oldMessageOwner:
+  id: 40
+  name: oldMessageOwner
+  email: oldMessageOwner@visota.ru
+  full_name: MyString
+  avatar: MyString
+  photo: MyString
+  cell_phone: MyString
+  skype: MyString
+  inform: MyString
+  salt: oldMessageOwnerSalt
+  encrypted_password: abcdef
+  user_group_id: 2
+  email_status: MyString
+
+userForDelete:
+  id: 50
+  name: userForDelete
+  email: userForDelete@visota.ru
+  full_name: MyString
+  avatar: MyString
+  photo: MyString
+  cell_phone: MyString
+  skype: MyString
+  inform: MyString
+  salt: oldMessageOwnerSalt
+  encrypted_password: abcdef
+  user_group_id: 2
+  email_status: MyString
+
+club_pilot_for_conversation_test:
+  id: 2021
+  name: club_pilot_for_conversation
+  email: club_pilot_for_conversation@visota.ru
+  full_name: MyString
+  avatar: MyString
+  photo: MyString
+  cell_phone: MyString
+  skype: MyString
+  inform: MyString
+  salt: clubPilotSalt
+  encrypted_password: abcdef
+  user_group_id: 2
+  email_status: MyString
+  
+club_friend_for_conversation_test:
+  id: 2031
+  name: club_friend_for_conversation
+  email: club_friend_for_conversation@visota.ru
+  full_name: MyString
+  avatar: MyString
+  photo: MyString
+  cell_phone: MyString
+  skype: MyString
+  inform: MyString
+  salt: clubFriendSalt
+  encrypted_password: abcdef 
+  user_group_id: 3
+  email_status: MyString

@@ -14,8 +14,8 @@ module VideosHelper
 		[
 		 {:name => 'К списку видео', :access => true, :type => 'arrow-right', :link => "#{videos_path}"}, 
 		 {:name => 'Все видео пользователя', :access => true, :type => 'arrow-right', :link => "/users/#{@video.user.id.to_s}/videos"},
-     {:name => 'Изменить видео', :access => isEntityOwner?(@video), :type => 'pencil', :link => edit_video_path(@video)},  
-     {:name => 'Удалить', :access => isEntityOwner?(@video), :type => 'trash', :link => "#{video_path(@video)}", :data_confirm => 'Вы уверены что хотите удалить данное видео?', :data_method => 'delete', :rel => 'nofollow'}
+     {id: 'editVideo', :name => 'Изменить видео', :access => isEntityOwner?(@video), :type => 'pencil', :link => edit_video_path(@video)},  
+     {id: 'delVideo', :name => 'Удалить', :access => isEntityOwner?(@video) || is_admin?, :type => 'trash', :link => "#{video_path(@video)}", :data_confirm => 'Вы уверены что хотите удалить данное видео?', :data_method => 'delete', :rel => 'nofollow'}
 		]
 	end
 	def videoInformation(video)

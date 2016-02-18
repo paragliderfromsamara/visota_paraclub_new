@@ -110,8 +110,8 @@ class Message < ActiveRecord::Base
 	[	
 		{:id => 0, :value => 'draft'},	  		  #черновики
 		{:id => 1, :value => 'normal'},			  #в рабочем состоянии
-		{:id => 2, :value => 'to_delete'}, 		  #в очереди на удаление
-		{:id => 3, :value => 'on_deleted_entity'} #если прикреплено к сущности со статусом to_delete
+		{:id => 2, :value => 'to_delete'} 		  #в очереди на удаление
+		#{:id => 3, :value => 'on_deleted_entity'} #если прикреплено к сущности со статусом to_delete
 	]
   end
   
@@ -138,21 +138,11 @@ class Message < ActiveRecord::Base
   end
   
   def set_as_delete #помечает сообщение как удалённое
-	self.update_attribute(:status_id, 3)
-	if self.photos != []
-		self.photos.each do |ph|
-			ph.set_as_on_deleted_entity
-		end
-	end
+	  self.update_attribute(:status_id, 2)
   end
   
   def set_as_visible #Делает видимым
-	self.update_attribute(:visibility_status_id, 1)
-	if self.photos != []
-		self.photos.each do |ph|
-			ph.set_as_visible
-		end
-	end
+	  self.update_attribute(:status_id, 1)
   end 
   
   #статусы end... 

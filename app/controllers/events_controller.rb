@@ -2,8 +2,8 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.json
   def index
-  @title = @header = 'Новости'
-	@events = Event.paginate(:page => params[:page], :per_page => 10).where(status_id: 2).order('post_date DESC')
+    @title = @header = 'Новости'
+	  @events = Event.paginate(:page => params[:page], :per_page => 10).where(status_id: 2).order('post_date DESC')
     respond_to do |format|
       format.html # index.html.erb
       format.json { render :json => @events }
@@ -13,20 +13,20 @@ class EventsController < ApplicationController
   # GET /events/1
   # GET /events/1.json
   def show
-    @event = Event.find_by(id: params[:id])
-	if @event != nil
-		@title = @header = @event.title
-		@path_array = [
-						{:name => 'Новости', :link => '/events'},
-						{:name => @event.title}
-					  ]
-		respond_to do |format|
-		  format.html # show.html.erb
-		  format.json { render :json => @event }
-		end
-	else
-		redirect_to '/404'
-	end
+    @event = Event.find(params[:id])
+  	if userCanSeeEvent?(@event)
+  		@title = @header = @event.title
+  		@path_array = [
+  						{:name => 'Новости', :link => '/events'},
+  						{:name => @event.title}
+  					  ]
+  		respond_to do |format|
+  		  format.html # show.html.erb
+  		  format.json { render :json => @event }
+  		end
+  	else
+  		redirect_to '/404'
+  	end
   end
 
   # GET /events/new

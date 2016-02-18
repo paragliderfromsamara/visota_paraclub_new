@@ -178,14 +178,29 @@ include TopicsHelper
   def destroy 
     @theme = Theme.find(params[:id])
   	link = topic_path(@theme.topic)
-    redirect_to '/404' if !userCanDeleteTheme?(@theme)
-    @theme.destroy
-		respond_to do |format|
-			format.html { redirect_to link }
-			format.json { head :no_content }
-		end
+    if userCanDeleteTheme?(@theme)
+      if is_admin? && current_user != @theme.user
+        if @theme.status_id == 1 || @theme.status_id == 3 
+          @theme.update_attribute(:status_id, 2)
+        elsif @theme.status_id == 2 and user_type == 'super_admin'
+          @theme.destroy 
+        end
+      else
+        @theme.destroy          
+      end    
+      respond_to do |format|
+    		format.html { redirect_to link }
+    		format.json { head :no_content }
+    	end
+    else
+      redirect_to '/404' 
+    end
   end
-  
+  def recovery
+    @theme = Theme.find(params[:id])
+    redirect_to '/404' if user_type != "super_admin" || @theme.nil?
+    redirect_to @theme if @theme.update_attribute(:status_id, 1)
+  end
 #Работа с темами----------------------------  
   def merge_themes
 	@theme = Theme.find_by(id: params[:id])

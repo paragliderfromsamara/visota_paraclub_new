@@ -1,0 +1,366 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+defaultPhoto1:
+  user_id: 15
+  description: MyString
+  link: ''
+
+
+defaultPhoto2:
+  user_id: 15
+  description: MyString
+  link: ''
+ 
+defaultPhoto3:
+  user_id: 15
+  description: MyString
+  link: ''
+
+defaultPhoto4:
+  user_id: 15
+  description: MyString
+  link: ''
+ 
+defaultPhoto5:
+  user_id: 15
+  description: MyString
+  link: ''
+ 
+defaultPhoto6:
+  user_id: 15
+  description: MyString
+  link: ''
+  
+defaultPhoto7:
+  user_id: 15
+  description: MyString
+  link: ''
+
+
+defaultPhoto8:
+  user_id: 15
+  name: MyString
+  description: MyString
+  link: ''
+ 
+defaultPhoto9:
+  user_id: 15
+  name: MyString
+  description: MyString
+  link: ''
+
+defaultPhoto10:
+  user_id: 15
+  name: MyString
+  description: MyString
+  link: ''
+ 
+defaultPhoto11:
+  user_id: 15
+  name: MyString
+  description: MyString
+  link: ''
+ 
+defaultPhoto12:
+  user_id: 15
+  name: MyString
+  description: MyString
+  link: ''
+
+defaultPhoto13:
+  user_id: 15
+  name: MyString
+  description: MyString
+  link: ''
+
+defaultPhoto14:
+  user_id: 15
+  name: MyString
+  description: MyString
+  link: ''
+ 
+defaultPhoto15:
+  user_id: 15
+  name: MyString
+  description: MyString
+  link: ''
+
+defaultPhoto16:
+  user_id: 15
+  name: MyString
+  description: MyString
+  link: ''
+ 
+defaultPhoto17:
+  id: 101
+  user_id: 15
+  name: MyString
+  description: MyString
+  link: ''
+ 
+defaultPhoto18:
+  id: 102
+  user_id: 15
+  name: MyString
+  description: MyString
+  link: ''
+  
+defaultPhoto19:
+  id: 103
+  user_id: 15
+  name: MyString
+  description: MyString
+  link: ''
+
+defaultPhoto20:
+  id: 104
+  user_id: 15
+  name: MyString
+  description: MyString
+  link: ''
+
+defaultPhoto21:
+  id: 105
+  user_id: 15
+  name: MyString
+  description: MyString
+  link: ''
+  
+superAdminPhoto:
+  id: 20001
+  user_id: 200
+  name: MyString
+  description: MyString
+  link: ''
+
+superAdminPhoto_2:
+  id: 20002
+  user_id: 200
+  name: MyString
+  description: MyString
+  link: ''
+
+superAdminPhoto_3:
+  id: 20003
+  user_id: 200
+  name: MyString
+  description: MyString
+  link: ''
+
+superAdminPhoto_4:
+  id: 20004
+  user_id: 200
+  name: MyString
+  description: MyString
+  link: '' 
+  
+superAdminPhoto_5:
+  id: 20005
+  user_id: 200
+  name: MyString
+  description: MyString
+  link: '' 
+ 
+adminPhoto:
+  id: 20101
+  user_id: 201
+  name: MyString
+  description: MyString
+  link: ''
+
+adminPhoto_2:
+  id: 20102
+  user_id: 201
+  name: MyString
+  description: MyString
+  link: ''
+
+adminPhoto_3:
+  id: 20103
+  user_id: 201
+  name: MyString
+  description: MyString
+  link: ''
+
+adminPhoto_4:
+  id: 20104
+  user_id: 201
+  name: MyString
+  description: MyString
+  link: ''
+
+adminPhoto_5:
+  id: 20105
+  user_id: 201
+  name: MyString
+  description: MyString
+  link: ''
+
+clubPilotPhoto:
+  id: 20201
+  user_id: 202
+  name: MyString
+  description: MyString
+  link: ''
+
+clubPilotPhoto_2:
+  id: 20202
+  user_id: 202
+  name: MyString
+  description: MyString
+  link: ''
+
+clubPilotPhoto_3:
+  id: 20203
+  user_id: 202
+  name: MyString
+  description: MyString
+  link: ''
+
+clubPilotPhoto_4:
+  id: 20204
+  user_id: 202
+  name: MyString
+  description: MyString
+  link: ''
+
+clubPilotPhoto_5:
+  id: 20205
+  user_id: 202
+  name: MyString
+  description: MyString
+  link: ''
+
+
+clubFriendPhoto:
+  id: 20301
+  user_id: 203
+  name: MyString
+  description: MyString
+  link: ''
+
+clubFriendPhoto_2:
+  id: 20302
+  user_id: 203
+  name: MyString
+  description: MyString
+  link: ''
+
+clubFriendPhoto_3:
+  id: 20303
+  user_id: 203
+  name: MyString
+  description: MyString
+  link: ''
+
+clubFriendPhoto_4:
+  id: 20304
+  user_id: 203
+  name: MyString
+  description: MyString
+  link: ''
+
+clubFriendPhoto_5:
+  id: 20305
+  user_id: 203
+  name: MyString
+  description: MyString
+  link: ''
+ 
+managerPhoto:
+  id: 20601
+  user_id: 206
+  name: MyString
+  description: MyString
+  link: ''
+
+managerPhoto_2:
+  id: 20602
+  user_id: 206
+  name: MyString
+  description: MyString
+  link: ''
+
+managerPhoto_3:
+  id: 20603
+  user_id: 206
+  name: MyString
+  description: MyString
+  link: ''
+  
+managerPhoto_4:
+  id: 20604
+  user_id: 206
+  name: MyString
+  description: MyString
+  link: ''
+
+managerPhoto_5:
+  id: 20605
+  user_id: 206
+  name: MyString
+  description: MyString
+  link: ''
+  
+photo_for_test_destroing_photo_entity_1:
+  id: 20306
+  user_id: 203
+  name: MyString
+  description: MyString
+  link: ''
+  
+photo_for_test_destroing_photo_entity_2:
+  id: 20307
+  user_id: 203
+  name: MyString
+  description: MyString
+  link: ''
+
+photo_for_test_destroing_photo_entity_3:
+  id: 20308
+  user_id: 203
+  name: MyString
+  description: MyString
+  link: ''
+  
+photo_for_test_destroing_photo_entity_4:
+  id: 20309
+  user_id: 203
+  name: MyString
+  description: MyString
+  link: ''
+  
+photo_for_test_destroing_photo_entity_5:
+  id: 20310
+  user_id: 203
+  name: MyString
+  description: MyString
+  link: ''
+
+photo_for_test_destroing_photo_entity_6:
+  id: 20311
+  user_id: 203
+  name: MyString
+  description: MyString
+  link: ''
+  
+photo_for_theme_destroing_7:
+  id: 20312
+  user_id: 203
+  name: MyString
+  description: MyString
+  link: ''
+  
+photo_for_theme_destroing_8:
+  id: 20313
+  user_id: 203
+  name: MyString
+  description: MyString
+  link: ''
+  
+photo_for_theme_destroing_9:
+  id: 20314
+  user_id: 203
+  name: MyString
+  description: MyString
+  link: ''

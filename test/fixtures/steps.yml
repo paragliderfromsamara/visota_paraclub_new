@@ -1,0 +1,71 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  user_id: 1
+  part_id: 1
+  page_id: 1
+  entity_id: 1
+  ip_addr: MyString
+  host_name: MyString
+
+two:
+  user_id: 1
+  part_id: 1
+  page_id: 1
+  entity_id: 1
+  ip_addr: MyString
+  host_name: MyString
+
+destroyedThemeStep_1:
+  user_id: 200
+  part_id: 9
+  page_id: 1
+  entity_id: 20322
+  visit_time: 2014-02-27 04:46:48
+  ip_addr: MyString
+  host_name: MyString
+
+destroyedThemeStep_2:
+  user_id: 201
+  part_id: 9
+  page_id: 1
+  entity_id: 20322
+  visit_time: 2014-02-27 04:46:48
+  ip_addr: MyString
+  host_name: MyString
+  
+destroyedThemeStep_3:
+  user_id: 202
+  part_id: 9
+  page_id: 1
+  entity_id: 20322
+  visit_time: 2014-02-27 04:46:48
+  ip_addr: MyString
+  host_name: MyString
+  
+destroyedThemeStep_4:
+  user_id: 203
+  part_id: 9
+  page_id: 1
+  entity_id: 20322
+  visit_time: 2014-02-27 04:46:48
+  ip_addr: MyString
+  host_name: MyString
+  
+destroyedThemeStep_5:
+  user_id: 204
+  part_id: 9
+  page_id: 1
+  entity_id: 20322
+  visit_time: 2014-02-27 04:46:48
+  ip_addr: MyString
+  host_name: MyString
+  
+destroyedThemeStep_6:
+  user_id: 205
+  part_id: 9
+  page_id: 1
+  entity_id: 20322
+  visit_time: 2014-02-27 04:46:48
+  ip_addr: MyString
+  host_name: MyString

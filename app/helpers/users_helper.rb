@@ -89,7 +89,7 @@ def show_path_buttons
 		{:name => 'Уведомления', :title => "Уведомления на почтовый ящик", :access => userCanEditUserCard?(@user), :type => 'megaphone', :link => edit_user_path(:id => @user.id, :tab => 'notification_upd'), :id => 'change_notification'},
 		{:name => 'Изменить E-mail', :title => "Изменить адрес электронной почты", :access => userCanEditUserCard?(@user), :type => 'mail', :link => edit_user_path(:id => @user.id, :tab => 'email_upd'), :id => 'change_email'},
     {:name => 'Изменить пароль', :access => userCanEditUserCard?(@user), :type => 'key', :link => edit_user_path(:id => @user.id, :tab => 'password_upd'), :id => 'change_password'},
-    {:name => 'Удалить пользователя', :access => is_super_admin?, :type => 'trash', :link => user_path(@user), :data_method => 'delete', :data_confirm => 'Вы уверены, что хотите удалить пользователя?'}
+    {:name => 'Удалить', :access => is_super_admin? && @user.id != 1, :type => 'trash', :link => user_path(@user), :data_method => 'delete', :data_confirm => 'Вы уверены, что хотите удалить пользователя?'}
   ]	
 end
 def last_user_videos(i)

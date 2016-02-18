@@ -1,6 +1,6 @@
-class CreateFiles < ActiveRecord::Migration
+class CreateAttachmentFiles < ActiveRecord::Migration
   def change
-    create_table :files do |t|
+    create_table :attachment_files do |t|
       t.string :name
       t.string :link
 	  t.integer :article_id

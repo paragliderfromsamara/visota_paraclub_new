@@ -17,7 +17,7 @@ module ThemeNotificationsHelper
 		if signed_in?
 			ntf = current_user.getThemeNotification(ntfData[:theme_id])
 			but = watchBut(ntfData[:theme_id])
-			if ntf == nil
+			if ntf.nil?
 				ntf = ThemeNotification.new(:user_id => current_user.id, :theme_id => ntfData[:theme_id])
 				but = unWatchBut(ntfData[:theme_id]) if ntf.save
 			else

@@ -6,7 +6,7 @@ include TopicNotificationsHelper
   def create
 	ntfData = params[:topic_notifications]
 	d = false
-	if ntfData != [] and ntfData != nil and current_user != nil
+	if !ntfData.blank? and signed_in? and user_type != 'new_user'
 		if ntfData[:type] == 'multiple' 
 			d = multipleTopicNtfUpd(ntfData)
 			if d == true 

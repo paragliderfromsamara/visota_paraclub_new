@@ -166,7 +166,7 @@ include UsersHelper
   		  format.json { render :json => @user }
   		end
   	else
-  		redirect_to user_path(user)
+  		redirect_to user_path(current_user)
   	end
   end
 
@@ -414,6 +414,11 @@ include UsersHelper
         end
       end
     end
+  end
+  def get_conversation
+    @user = User.find(params[:id])
+    redirect_to '/404' if @user.nil? || !is_not_authorized?
+    redirect_to current_user.get_conversation(@user)
   end
   def steps
 	  if is_super_admin?

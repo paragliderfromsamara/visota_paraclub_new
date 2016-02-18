@@ -1,0 +1,44 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+youtube:
+  name: youtubeVideo
+  category_id: 1
+  link: http://www.youtube.com/watch?v=DRNAndsH494
+  user_id: 10
+
+vimeo:
+  name: vimeoVideo
+  category_id: 3
+  link: https://vimeo.com/75537154
+  user_id: 10
+
+super_admin_video:
+  name: super_admin_video
+  category_id: 1
+  link: https://youtu.be/Y38IgSe8i0c
+  user_id: 200
+
+admin_video:
+  name: admin_video
+  category_id: 1
+  link: https://youtu.be/gSaQgqpThuI
+  user_id: 201
+
+club_pilot_video:
+  name: club_pilot_video
+  category_id: 1
+  link: https://youtu.be/WwyOc4oWsME
+  user_id: 202
+
+manager_video:
+  name: manager_video
+  category_id: 1
+  link: https://youtu.be/ZUtYiV1ro8E
+  user_id: 206
+  
+club_friend_video:
+  name: club_friend_video
+  category_id: 1
+  link: https://youtu.be/fmu_Zf2UEd8
+  user_id: 203
+ 

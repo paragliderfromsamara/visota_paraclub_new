@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+club_friend_topic_notification:
+  user_id: 203
+  topic_id: 1
+
+club_pilot_topic_notification:
+  user_id: 202
+  topic_id: 1
+  
+manager_topic_notification:
+  user_id: 206
+  topic_id: 1
+
+admin_topic_notification:
+  user_id: 201
+  topic_id: 1
+
+super_admin_topic_notification:
+  user_id: 200
+  topic_id: 1

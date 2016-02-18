@@ -147,7 +147,8 @@ module MessagesHelper
 		buttons += [{:name => 'Ответить', :access => userCanCreateMsgInTheme?(message.theme), :type => 'comments', :alt => message.id, :id => 'answer_but'}] if (user_type != 'bunned' and user_type != 'guest' || (user_type == 'new_user' and @theme.topic_id == 6)) if @theme.status == 'open'
 		#buttons += [{:name => 'Смотреть ответы', :access => true, :type => 'arrow-right', :link => "#{message_path(message.id)}"}] if treadCount != 0 and @message != message
 		buttons += [{:name => 'Изменить', :access => userCanEditMsg?(message), :type => 'pencil', :link => "#{edit_message_path(message)}"}]
-		buttons += [{:name => 'Удалить', :access => userCanDeleteMessage?(message), :type => 'trash', :link => message_path(message), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить сообщение?', :data_method => 'delete'}] if @theme.status == 'open'
+		buttons += [{:name => 'Восстановить', :access => user_type == 'super_admin' && message.status == 'to_delete', :type => 'refresh', :link => "#{message_path(message)}/recovery"}]
+    buttons += [{:name => 'Удалить', :access => userCanDeleteMessage?(message), :type => 'trash', :link => message_path(message), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить сообщение?', :data_method => 'delete'}] if @theme.status == 'open'
 		buttons[buttons.length] = {:name => 'Перенести сообщение', :type => "page-export", :access => is_admin?, :link => "/messages/#{message.id}/replace_message"}
 		return buttons
 	end

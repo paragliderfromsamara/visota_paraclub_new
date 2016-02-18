@@ -1,0 +1,358 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  photo_id: 1
+  p_entity_id: 1
+  p_entity_type: MyString
+  visibility_status_id: 1
+
+two:
+  photo_id: 1
+  p_entity_id: 1
+  p_entity_type: MyString
+  visibility_status_id: 1
+
+albumOneEntityPhoto_1:
+    photo_id: 101
+    p_entity_id: 10
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+albumOneEntityPhoto_2:
+    photo_id: 102
+    p_entity_id: 10
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+albumOneEntityPhoto_3:
+    photo_id: 103
+    p_entity_id: 10
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+albumOneEntityPhoto_4:
+    photo_id: 104
+    p_entity_id: 10
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+albumOneEntityPhoto_5:
+    photo_id: 101
+    p_entity_id: 11
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+albumOneEntityPhoto_6:
+    photo_id: 102
+    p_entity_id: 11
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+albumOneEntityPhoto_7:
+    photo_id: 103
+    p_entity_id: 11
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+albumOneEntityPhoto_8:
+    photo_id: 104
+    p_entity_id: 11
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+albumOneEntityPhoto_81:
+    photo_id: 105
+    p_entity_id: 10
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1 
+    
+albumOneEntityPhoto_9:
+    photo_id: 101
+    p_entity_id: 12
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+albumOneEntityPhoto_10:
+    photo_id: 102
+    p_entity_id: 12
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+albumOneEntityPhoto_11:
+    photo_id: 103
+    p_entity_id: 12
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+albumOneEntityPhoto_12:
+    photo_id: 104
+    p_entity_id: 12
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+albumOneEntityPhoto_13:
+    photo_id: 101
+    p_entity_id: 13
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+albumOneEntityPhoto_14:
+    photo_id: 102
+    p_entity_id: 13
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+albumOneEntityPhoto_15:
+    photo_id: 103
+    p_entity_id: 13
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+albumOneEntityPhoto_16:
+    photo_id: 104
+    p_entity_id: 13
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+superAdminAlbumEntityPhoto:
+    id: 20001
+    photo_id: 20001
+    p_entity_id: 20001
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+superAdminAlbumEntityPhoto_2:
+    id: 20002
+    photo_id: 20002
+    p_entity_id: 20001
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+superAdminAlbumEntityPhoto_3:
+    id: 20003
+    photo_id: 20003
+    p_entity_id: 20001
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+superAdminAlbumEntityPhoto_4:
+    id: 20004
+    photo_id: 20004
+    p_entity_id: 20001
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+superAdminAlbumEntityPhoto_5:
+    id: 20005
+    photo_id: 20005
+    p_entity_id: 20001
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+adminAlbumEntityPhoto:
+    id: 20101
+    photo_id: 20101
+    p_entity_id: 20101
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+adminAlbumEntityPhoto_2:
+    id: 20102
+    photo_id: 20102
+    p_entity_id: 20101
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+adminAlbumEntityPhoto_3:
+    id: 20103
+    photo_id: 20103
+    p_entity_id: 20101
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+adminAlbumEntityPhoto_4:
+    id: 20104
+    photo_id: 20104
+    p_entity_id: 20101
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+adminAlbumEntityPhoto_5:
+    id: 20105
+    photo_id: 20105
+    p_entity_id: 20101
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+clubPilotAlbumEntityPhoto:
+    id: 20201
+    photo_id: 20201
+    p_entity_id: 20201
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+clubPilotAlbumEntityPhoto_2:
+    id: 20202
+    photo_id: 20202
+    p_entity_id: 20201
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+clubPilotAlbumEntityPhoto_3:
+    id: 20203
+    photo_id: 20203
+    p_entity_id: 20201
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+clubPilotAlbumEntityPhoto_4:
+    id: 20204
+    photo_id: 20204
+    p_entity_id: 20201
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+clubPilotAlbumEntityPhoto_5:
+    id: 20205
+    photo_id: 20205
+    p_entity_id: 20201
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+clubFriendAlbumEntityPhoto:
+    id: 20301
+    photo_id: 20301
+    p_entity_id: 20301
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+clubFriendAlbumEntityPhoto_2:
+    id: 20302
+    photo_id: 20302
+    p_entity_id: 20301
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+clubFriendAlbumEntityPhoto_3:
+    id: 20303
+    photo_id: 20303
+    p_entity_id: 20301
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+clubFriendAlbumEntityPhoto_4:
+    id: 20304
+    photo_id: 20304
+    p_entity_id: 20301
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+clubFriendAlbumEntityPhoto_5:
+    id: 20305
+    photo_id: 20305
+    p_entity_id: 20301
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+managerAlbumEntityPhoto:
+    id: 20601
+    photo_id: 20601
+    p_entity_id: 20601
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+managerAlbumEntityPhoto_2:
+    id: 20602
+    photo_id: 20602
+    p_entity_id: 20601
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+managerAlbumEntityPhoto_3:
+    id: 20603
+    photo_id: 20603
+    p_entity_id: 20601
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+managerAlbumEntityPhoto_4:
+    id: 20604
+    photo_id: 20604
+    p_entity_id: 20601
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+managerAlbumEntityPhoto_5:
+    id: 20605
+    photo_id: 20605
+    p_entity_id: 20601
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+adminDelTestAlbumEntity:
+    id: 20606
+    photo_id: 20605
+    p_entity_id: 20601
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+superAdminDelTestAlbumEntity:
+    id: 20307
+    photo_id: 20305
+    p_entity_id: 20301
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+entityPhotoDelTestAlbumEntityInAlbum_1:
+    photo_id: 20306
+    p_entity_id: 20310
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+entityPhotoDelTestAlbumEntityInAlbum_2:
+    photo_id: 20307
+    p_entity_id: 20310
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+entityPhotoDelTestAlbumEntityInAlbum_3:
+    photo_id: 20308
+    p_entity_id: 20310
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+multipleEntityPhotoForDestroyTest:
+    photo_id: 20309
+    p_entity_id: 20310
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+
+singleEntityPhotoForDestroyTest:
+    photo_id: 20310
+    p_entity_id: 20310
+    p_entity_type: PhotoAlbum
+    visibility_status_id: 1
+    
+entityPhotoDelTestEntityInTheme:
+    photo_id: 20309
+    p_entity_id: 20320
+    p_entity_type: Theme
+    visibility_status_id: 1
+
+entityPhotoDelTestThemeDestroing_1:
+    photo_id: 20312
+    p_entity_id: 20322
+    p_entity_type: Theme
+    visibility_status_id: 1    
+
+entityPhotoDelTestThemeDestroing_2:
+    photo_id: 20313
+    p_entity_id: 20322
+    p_entity_type: Theme
+    visibility_status_id: 1 
+
+entityPhotoDelTestThemeDestroing_3:
+    photo_id: 20314
+    p_entity_id: 20322
+    p_entity_type: Theme
+    visibility_status_id: 1 

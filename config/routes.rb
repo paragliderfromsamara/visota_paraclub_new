@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   
 
+  resources :conversations
   post '/switch_mark', :to => 'like_marks#switch_mark'
   get  '/switch_mark', :to => 'like_marks#switch_mark'
   # The priority is based upon order of creation: first created -> highest priority.
@@ -97,6 +98,7 @@ Rails.application.routes.draw do
   post '/themes/:id/upload_photos', :to => 'themes#upload_photos' #загрузка с помощью dropzone.js и собственную функцию photosUploader() в application.js
   post '/themes/:id/upload_attachment_files', :to => 'themes#upload_attachment_files'
   get '/themes/:id/upload_attachment_files', :to => 'themes#upload_attachment_files'
+  get '/themes/:id/recovery', :to => 'themes#recovery'
   #themes_controller end
 
   #topics controller
@@ -115,7 +117,7 @@ Rails.application.routes.draw do
 
   #photos_controller
   resources :entity_photos, :only => [:destroy]
-  resources :photos
+  resources :photos, only: [:index, :update, :destroy, :show]
   get "photos/recovery"
   post "photos/update_photos"
   get '/photos/:id/recovery', :to => 'photos#recovery' #восстановление
@@ -180,6 +182,7 @@ Rails.application.routes.draw do
   get '/equipment', :to => 'pages#equipment'
   get '/media', :to => 'pages#media'
   get '/wheather', to: 'pages#wheather'
+  get '/why_delete', to: 'pages#why_delete'
   #pages_controller end
   # You can have the root of your site routed with "root"
   root 'pages#index'

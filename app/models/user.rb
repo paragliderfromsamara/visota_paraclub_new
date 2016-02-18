@@ -42,7 +42,10 @@ has_many :messages, -> {where(status_id:1)}, :dependent  => :destroy
 #--------steps-----------------------------------------------------
 has_many :steps, :dependent  => :delete_all
 #--------steps end-------------------------------------------------
-
+#conversations 
+has_many :conversation_users
+has_many :conversations, through: :conversation_users
+#conversations end
 #--------topic_notifications-----------------------------------------------------
 has_many :topic_notifications
 def getTopicNotification(topic_id)
@@ -456,6 +459,16 @@ mount_uploader :photo, UserPhotoUploader
 	return result_themes
   end
  #feed functions for current_user end----------------------------------------------------------------------------
+ #conversations
+ def get_conversation(user)
+   cnv = self.conversations.where(id: user.conversations.where(multiple_users_flag: false).select(:id), multiple_users_flag: false).first
+   if cnv.nil?
+     cnv = Conversation.create(cnv_users: [self.id, user.id], name: user.name, multiple_users_flag: false)
+   end
+   return cnv
+ end
+ #conversations end
+ 
   private
   
   def encrypt_password

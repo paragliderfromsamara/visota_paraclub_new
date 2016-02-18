@@ -26,6 +26,8 @@ include EventsHelper
       @themes = @topic.themes.where(id: current_user.theme_notifications.select(:theme_id)).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
     elsif params[:th_filter] == 'not_visited' 
       @themes = @topic.themes.where(id: current_user.not_readed_themes_ids(@topic, is_not_authorized?)).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+    elsif params[:th_filter] == 'deleted' && user_type == 'super_admin'
+      @themes = @topic.themes.rewhere(status_id: 2).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
     else
     	if is_not_authorized?
     		@themes = @topic.themes.where(visibility_status_id: 1).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
@@ -50,7 +52,12 @@ include EventsHelper
   # GET /topics/new.json
   def new
 	if user_type == 'super_admin'
+    @title = @header = "Новый раздел"
 		@topic = Topic.new
+  	@path_array = [
+  					        {:name => 'Общение', :link => '/visota_life'},
+  					        {:name => @title}
+  				        ]
 		respond_to do |format|
 		  format.html# new.html.erb
 		  format.json { render :json => @topic }

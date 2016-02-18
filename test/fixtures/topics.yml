@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+typicalTopic:
+  id: 1
+  name: typicalTopic
+  description: MyString
+  
+typicalTopic_2:
+  id: 2
+  name: typicalTopic_2
+  description: MyString
+
+typicalTopic_3:
+  id: 3
+  name: typicalTopic_3
+  description: MyString
+
+faqTopic:
+  id: 6
+  name: faqTopic
+  description: MyString

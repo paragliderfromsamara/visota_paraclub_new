@@ -1,0 +1,117 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+themeMessage:
+  user_id: 15
+  topic_id: 1
+  theme_id: 1
+  status_id: 1
+  visibility_status_id: 1
+  content: MyDefaultString
+
+themeMessageForMessagesTest_2:
+  user_id: 202
+  topic_id: 1
+  theme_id: 20321
+  status_id: 0
+  content: MyDefaultString MyDefaultString
+  created_at: 2014-02-27 04:46:48
+  updated_at: 2014-02-27 04:46:48
+  
+themeMessageForMessagesTest_3:
+  user_id: 203
+  topic_id: 1
+  theme_id: 20321
+  status_id: 0
+  content: MyDefaultString MyDefaultString
+  created_at: 2014-02-27 04:46:48
+  updated_at: 2014-02-27 04:46:48
+
+themeMessageForMessagesTest_4:
+  user_id: 203
+  topic_id: 1
+  theme_id: 20321
+  status_id: 1
+  content: MyDefaultString MyDefaultString
+  created_at: 2015-02-02 04:46:48
+  updated_at: 2015-02-02 04:46:48
+  
+themeMessageForMessagesTest_5:
+  user_id: 203
+  topic_id: 1
+  theme_id: 20321
+  status_id: 1
+  content: MyDefaultString MyDefaultString
+  created_at: 2015-02-02 04:46:48
+  updated_at: 2015-02-02 04:46:48
+  
+themeMessageForMessagesTest_6:
+  user_id: 203
+  topic_id: 1
+  theme_id: 20321
+  status_id: 1
+  content: MyDefaultString MyDefaultString
+  created_at: 2015-02-02 07:46:48
+  updated_at: 2015-02-02 07:46:48
+  
+themeMessageForMessagesTest_7:
+  user_id: 203
+  topic_id: 1
+  theme_id: 20321
+  status_id: 2
+  content: MyDefaultString MyDefaultString
+  created_at: 2015-02-02 07:46:48
+  updated_at: 2015-02-02 07:46:48
+
+draftWithoutPhoto:
+  id: 10
+  user_id: 15
+  topic_id: 1
+  theme_id: 1
+  status_id: 0
+  content: ''
+ 
+draftWithPhoto:
+  id: 15
+  user_id: 20
+  topic_id: 1
+  theme_id: 1
+  status_id: 0
+  content: ''
+  
+photoMessage:
+  user_id: 203
+  photo_id: 12
+  content: myDefaultString
+  status_id: 1
+  photo_album_id: 10
+  
+themeDestroyMessage_1:
+  id: 20001
+  user_id: 200
+  theme_id: 20322
+  content: myDefaultString
+  status_id: 1
+  
+themeDestroyMessage_2:
+  id: 20101
+  user_id: 201
+  message_id: 20001
+  theme_id: 20322
+  content: myDefaultString
+  status_id: 1
+
+themeDestroyMessage_3:
+  id: 20201
+  user_id: 202
+  message_id: 20001
+  theme_id: 20322
+  content: myDefaultString
+  status_id: 1
+  
+themeDestroyMessage_4:
+  id: 20301
+  user_id: 203
+  message_id: 20001
+  theme_id: 20322
+  content: myDefaultString
+  status_id: 1

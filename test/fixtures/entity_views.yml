@@ -1,0 +1,7 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+destroyedThemeViewCounter:
+    v_entity: Theme
+    v_entity_id: 20322
+    counter: 330
+    

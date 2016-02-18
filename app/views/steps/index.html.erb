@@ -5,7 +5,6 @@
     <th>Пользователь</th>
     <th>Раздел</th>
     <th>Страница</th>
-    <th>Сущность</th>
     <th>IP</th>
     <th>Host name</th>
     <th></th>
@@ -18,7 +17,6 @@
     <td><%= step.user.name if step.user != nil %><%= 'Гость' if step.user == nil %></td>
     <td><%= step.part_name %></td>
     <td><%= step.page_id %></td>
-    <td><%= entity_link(step).html_safe %></td>
     <td><%= step.ip_addr %></td>
     <td><%= step.host_name %></td>
     <td><%= link_to 'Show', step %></td>

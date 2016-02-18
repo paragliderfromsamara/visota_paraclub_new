@@ -43,7 +43,7 @@ module VotesHelper
 	def vote_show_buttons
 		b = []
     b += [{:name => "К списку опросов", :access => true, :type => 'arrow-right', :link => votes_path}]
-    b += [{:name => "Удалить опрос", :access => userCanEditVote?(@vote), :type => 'trash', :link => vote_path(@vote), :data_method => 'delete', :data_confirm => 'Вы уверены, что хотите удалить данное голосование?', :rel => 'nofollow'}]
+    b += [{:name => "Удалить опрос", :access => userCanEditVote?(@vote), :type => 'trash', :link => vote_path(@vote), :data_method => 'delete', :data_confirm => 'Вы уверены, что хотите удалить данное голосование?', :rel => 'nofollow', id: 'deleteVote'}]
 	  return control_buttons(b)
   end
 	
@@ -101,11 +101,12 @@ module VotesHelper
 						#{val.voices.count} (#{p.to_i}%)
 				 </div>
 				"
-        v += "<div class = 'col span_10_of_12' style = 'margin-top:0; margin-bottom:0;'>#{vote_val_users(val)}</div>" if !val.vote.is_private? && val.users.size > 0   
+        v += "<div id = 'voiceGivers' class = 'col span_10_of_12' style = 'margin-top:0; margin-bottom:0;'>#{vote_val_users(val)}</div>" if !val.vote.is_private? && val.users.size > 0   
 		else
-			if user_type == 'guest'
-				v = "<div class = 'col span_12_of_12' style = 'margin-top:0; margin-bottom:0;'><p class = 'istring norm medium-opacity'>Чтобы проголосовать, необходимо войти на сайт</p></div>"
-			else
+			if user_type == 'guest' || user_type == 'new_user'
+				v = "<div class = 'col span_12_of_12' style = 'margin-top:0; margin-bottom:0;'><p class = 'istring norm medium-opacity'>Чтобы проголосовать, необходимо войти на сайт</p></div>" if user_type == 'guest' 
+			  v = "<div class = 'col span_12_of_12' style = 'margin-top:0; margin-bottom:0;'><p class = 'istring norm medium-opacity'>Чтобы проголосовать, необходимо подтвердить аккаунт</p></div>" if user_type == 'new_user'
+      else
 				if val.vote.user == current_user
 					v = "
 						<div class = 'col span_10_of_12' style = 'margin-top:0; margin-bottom:0;'>
@@ -117,7 +118,7 @@ module VotesHelper
 							#{val.voices.count} (#{p.to_i}%)
 						</div>
 						"
-          v += "<div class = 'col span_10_of_12' style = 'margin-top:0; margin-bottom:0;'>#{vote_val_users(val)}</div>" if !val.vote.is_private? && val.users.size > 0   
+          v += "<div id = 'voiceGivers' class = 'col span_10_of_12' style = 'margin-top:0; margin-bottom:0;'>#{vote_val_users(val)}</div>" if !val.vote.is_private? && val.users.size > 0   
 				else
 					v = "<div class = 'col span_12_of_12'  style = 'margin-top:0; margin-bottom:0;'><a style = 'cursor: pointer;' class = 'b_link' id = 'giveVoice' vote-id = \"#{val.vote.id}\" vote-value-id = \"#{val.id}\">Голосовать</a></div>"
 				end

@@ -1,7 +1,7 @@
 module ThemesHelper
 	def hidden_check_box(f)
-		"#{ f.hidden_field :visibility_status_id, :value => 1}"	if is_not_authorized?  
-		"<br />#{ f.label :visibility_status_id, ('<i class = "fi-shield fi-grey fi-medium"></i> Скрыть от не авторизованных пользователей').html_safe} #{ f.check_box :visibility_status_id, {:class=>'check_box'}, '2', '1'}<br />" if !is_not_authorized?
+		return "#{ f.hidden_field :visibility_status_id, :value => 1}"	if is_not_authorized?  
+		return "<br />#{ f.label :visibility_status_id, ('<i class = "fi-shield fi-grey fi-medium"></i> Скрыть от не авторизованных пользователей').html_safe} #{ f.check_box :visibility_status_id, {:class=>'check_box'}, '2', '1'}<br />" if !is_not_authorized?
 	end
 	def themes_table(themes)
 			"
@@ -101,7 +101,7 @@ module ThemesHelper
 		"<table style = 'width: 100%;'>
 			<tr>
 				<td valign = 'middle' align = 'left'  style='height: 45px;'>
-					#{themeInformation(theme)}
+					#{themeInformation(theme)} #{"<span class = 'istring medium-opacity'>(#{theme.status(:ru)})<span>" if user_type == 'super_admin' && theme.status_id == 2}
 				</td>
 				<td valign = 'middle' align = 'right' style='height: 45px;'>
 					<p class = 'istring_m norm'>Тема создана #{my_time(theme.created_at)}</p>
@@ -137,16 +137,17 @@ module ThemesHelper
 	def theme_owner_buttons #в контроллере themes#show
 		buttons_array = []
 		buttons_array += [{:name => 'Новое сообщение', :access => userCanCreateMsgInTheme?(@theme), :type => 'comment', :id => 'newMsgBut'}]
-		buttons_array += [themeNotificationButton(@theme.id)] if signed_in?
+		buttons_array += [themeNotificationButton(@theme.id)] if signed_in? and user_type != 'deleted'  && @theme.status_id != 2
 		buttons_array += [
-							        {:name => "Редактировать", :access => userCanEditTheme?(@theme), :type => 'pencil', :link => "#{edit_theme_path(@theme)}", :id => 'editTheme'}
+							        {:name => "Редактировать", :access => userCanEditTheme?(@theme) && @theme.status_id != 2, :type => 'pencil', :link => "#{edit_theme_path(@theme)}", :id => 'editTheme'}
 						         ]
-		buttons_array[buttons_array.length] = {:name => 'Объединить с...', :access => is_super_admin?, :type => 'shuffle', :link => theme_path(@theme) + "/merge_themes", :title => "Объединить с другой темой", :id => 'mergeTheme'}
-		buttons_array[buttons_array.length] = {:name => 'Закрыть тему', :access => userCanSwitchTheme?(@theme), :type => 'lock',  :link => "/themes/#{@theme.id}/theme_switcher?to_do=close", :rel => 'nofollow', :id => 'themeClose'}  if @theme.status != 'closed'
-		buttons_array[buttons_array.length] = {:name => 'Открыть тему', :access => userCanSwitchTheme?(@theme), :type => 'unlock',  :link => "/themes/#{@theme.id}/theme_switcher?to_do=open", :rel => 'nofollow', :id=> 'themeOpen'} if @theme.status != 'open'
-		buttons_array[buttons_array.length] = {:name => 'Удалить тему', :access => userCanSwitchTheme?(@theme), :type => 'trash', :link => theme_path(@theme), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить тему?', :data_method => 'delete', :id=> 'deleteTheme'}
-		buttons_array[buttons_array.length] = {:name => 'Создать статью из темы', :access => is_admin?, :type => 'book-bookmark', :link => theme_path(@theme) + '/make_article'}
-		buttons_array[buttons_array.length] = {:name => 'Создать фотоальбом из темы', :access => @theme.all_photos_in_theme.size > 3, :type => 'photo', :link => theme_path(@theme) + '/make_album'} if is_admin?
+		buttons_array[buttons_array.length] = {:name => 'Объединить с...', :access => is_super_admin? && @theme.status_id != 2, :type => 'shuffle', :link => theme_path(@theme) + "/merge_themes", :title => "Объединить с другой темой", :id => 'mergeTheme'}
+		buttons_array[buttons_array.length] = {:name => 'Закрыть тему', :access => userCanSwitchTheme?(@theme) && @theme.status_id != 2, :type => 'lock',  :link => "/themes/#{@theme.id}/theme_switcher?to_do=close", :rel => 'nofollow', :id => 'themeClose'}  if @theme.status != 'closed'
+		buttons_array[buttons_array.length] = {:name => 'Открыть тему', :access => userCanSwitchTheme?(@theme) && @theme.status_id != 2, :type => 'unlock',  :link => "/themes/#{@theme.id}/theme_switcher?to_do=open", :rel => 'nofollow', :id=> 'themeOpen'} if @theme.status != 'open'
+		buttons_array[buttons_array.length] = {:name => 'Удалить', :access => userCanSwitchTheme?(@theme), :type => 'trash', :link => theme_path(@theme), :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите удалить тему?', :data_method => 'delete', :id=> 'deleteTheme'} if @theme.status != 'closed' || @theme.status != 'open'
+		buttons_array[buttons_array.length] = {:name => 'Восстановить', :access => is_super_admin? && @theme.status_id == 2, :type => 'refresh', :link => "/themes/#{@theme.id}/recovery", :rel => 'nofollow', :data_confirm => 'Вы уверены что хотите восстановить тему?', :id=> 'recoveryTheme'} if @theme.status != 'closed' || @theme.status != 'open'
+    buttons_array[buttons_array.length] = {:name => 'Создать статью из темы', :access => is_admin? && @theme.status_id != 2, :type => 'book-bookmark', :link => theme_path(@theme) + '/make_article'}
+		buttons_array[buttons_array.length] = {:name => 'Создать фотоальбом из темы', :access => @theme.all_photos_in_theme.size > 3 && @theme.status_id != 2 , :type => 'photo', :link => theme_path(@theme) + '/make_album'} if is_admin?
     return control_buttons(buttons_array).html_safe
 	end
 	

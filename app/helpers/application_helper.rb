@@ -244,12 +244,12 @@ end
     return [{:name => '<i class = "fi-cloud fi-small"></i>Погода', :link => '/wheather'}]
   end
   def user_top_buttons
-    return [{:name => '<i class = "fi-torsos-all fi-small"></i>Пилоты', :link => '/pilots'},{:name => '<i class = "fi-torso fi-small"></i>Профиль', :link => user_path(current_user)}]
+    return [{:name => '<i class = "fi-comments fi-small"></i>Диалоги', :link => "/conversations", :access => user_type == 'super_admin'},{:name => '<i class = "fi-torsos-all fi-small"></i>Пилоты', :link => '/pilots'},{:name => '<i class = "fi-torso fi-small"></i>Профиль', :link => user_path(current_user)}]
   end
 	def user_session_menu(b)
     v = ''
 		b.each do |i|
-			v += (current_page?(i[:link]))? "<li id = 'c_nav_li' link_to = '#{i[:link]}'>#{i[:name]}</li>" : "<li link_to = '#{i[:link]}'>#{i[:name]}</li>"
+			v += (current_page?(i[:link]))? "<li id = 'c_nav_li' link_to = '#{i[:link]}'>#{i[:name]}</li>" : "<li link_to = '#{i[:link]}'>#{i[:name]}</li>" if i[:access].nil? || i[:access] == true
 		end
 		return "<ul id = 'userMenu'>#{v}</ul>"
 	end

@@ -1,0 +1,145 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+albumOne:
+  id: 10
+  user_id: 15
+  name: Album1
+  description: MyString
+  category_id: 1
+  status_id: 1
+
+albumTwo:
+  id: 11
+  user_id: 15
+  name: Album2
+  description: MyString
+  category_id: 1
+  status_id: 1
+
+albumThree:
+  id: 9
+  user_id: 15
+  name: Album3
+  description: MyString
+  category_id: 1
+  status_id: 1
+  
+albumFour:
+  id: 8
+  user_id: 15
+  name: Album4
+  description: MyString
+  category_id: 1
+  status_id: 1
+
+clubFriendAlbum:
+  id: 12
+  user_id: 203
+  name: ClubFriendAlbum
+  description: MyString
+  category_id: 1
+  status_id: 1
+
+clubFriendAlbumForPhotosTest:
+  id: 20301
+  user_id: 203
+  name: clubFriendAlbumForPhotosTest
+  description: MyString
+  category_id: 1
+  status_id: 1
+
+clubPilotAlbum:
+  id: 13
+  user_id: 202
+  name: ClubPilotAlbum
+  description: MyString
+  category_id: 1
+  status_id: 1
+
+clubPilotAlbumForPhotosTest:
+  id: 20201
+  user_id: 202
+  name: clubPilotAlbumForPhotosTest
+  description: MyString
+  category_id: 1
+  status_id: 1
+  
+managerAlbum:
+  id: 14
+  user_id: 206
+  name: managerAlbum
+  description: MyString
+  category_id: 1
+  status_id: 1
+
+managerAlbumForPhotosTets:
+  id: 20601
+  user_id: 206
+  name: managerAlbumForPhotosTets
+  description: MyString
+  category_id: 1
+  status_id: 1
+
+adminAlbum:
+  id: 15
+  user_id: 201
+  name: adminAlbum
+  description: MyString
+  category_id: 1
+  status_id: 1
+
+adminAlbumForPhotosTest:
+  id: 20101
+  user_id: 201
+  name: adminAlbumForPhotosTest
+  description: MyString
+  category_id: 1
+  status_id: 1
+
+superAdminAlbum:
+  id: 16
+  user_id: 200
+  name: superAdminAlbum
+  description: MyString
+  category_id: 1
+  status_id: 1
+
+superAdminAlbumForPhotosTest:
+  id: 20001
+  user_id: 200
+  name: superAdminAlbumForPhotosTest
+  description: MyString
+  category_id: 1
+  status_id: 1
+
+albumEmptyDraft:
+  user_id: 20
+  category_id: 1
+  status_id: 0
+  
+albumFullDraft:
+  id: 22
+  user_id: 15
+  category_id: 1
+  status_id: 0
+ #Для тестирования создания двух альбомов с одинаковыми именами  
+albumFullDraft2:
+  id: 33
+  user_id: 33
+  category_id: 1
+  status_id: 0
+
+albumFullDraft3:
+  id: 25
+  user_id: 25
+  category_id: 1
+  status_id: 0
+  #Для тестирования создания двух альбомов с одинаковыми именами end
+  
+entityPhotoDestroyTestAlbum:
+  id: 20310
+  user_id: 203
+  name: entityPhotoDestroyTestAlbum
+  description: MyString
+  category_id: 1
+  status_id: 1

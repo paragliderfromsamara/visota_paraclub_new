@@ -39,6 +39,7 @@ class Theme < ActiveRecord::Base
     simple_format
   end
   after_save :check_photos_in_content
+  before_destroy :delete_steps
   #after_create :last_msg_upd_after_create
   #before_save :check_visibility_status
   
@@ -144,15 +145,15 @@ class Theme < ActiveRecord::Base
 		{:id => 0, :value => 'draft', :img => 'unlock', :ru => 'Черновик'},	  #черновики
 		#отображенные
 		{:id => 1, :value => 'open', :img => 'unlock', :ru => 'Открыта'},     #отображенные
-		{:id => 2, :value => 'open_to_delete', :img => 'unlock', :ru => 'Удалена'},#в очереди на удаление
+		{:id => 2, :value => 'delete', :img => 'unlock', :ru => 'Удалена'},#в очереди на удаление
 		{:id => 3, :value => 'closed', :img => 'lock', :ru => 'Закрыта'},    #Тема закрыта
 		{:id => 4, :value => 'closed_to_delete', :img => 'lock', :ru => 'Закрыта и удалена'}    #Тема закрыта    #Тема закрыта и удалена
 		#отображенные end
 	]
   end
-  def status
+  def status(loc = :value)
 	statuses.each do |s|
-		return s[:value] if s[:id] == self.status_id
+		return s[loc] if s[:id] == self.status_id
 	end
   end
   def v_statuses #статус отображения
@@ -252,13 +253,7 @@ class Theme < ActiveRecord::Base
 	self.unbind_photos
 	self.attachment_files
   end
-  def status
-	stat = 'draft'
-	statuses.each do |s|
-		stat = s[:value] if status_id == s[:id]
-	end
-	return stat
-  end
+
 #статусы end...
   def last_msg_upd
 	  date = self.last_message.created_at if self.last_message != nil
@@ -428,6 +423,13 @@ def update_album_draft(album)
   return album
 end
 
+def steps
+  Step.where(part_id: 9, page_id: 1, entity_id: self.id)
+end
+
+def delete_steps
+  self.steps.delete_all
+end
 
 private
 	def openThemeMessage

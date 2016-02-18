@@ -66,33 +66,6 @@ class PhotoAlbum < ActiveRecord::Base
 	end
   #валидация альбома end-----------------------------------------
   
-  #categories-------
-  def categories #в старой версии была отдельная таблица в базе
-		[
-			{:value => 3, :name => 'Клубные мероприятия', :path_name => 'club_events'},
-			{:value => 5, :name => 'Свободные полёты', :path_name => 'paragliding'},
-			{:value => 4, :name => 'Моторные полёты', :path_name => 'power_paragliding'},
-			{:value => 2, :name => 'Кайтинг', :path_name => 'kiting'},
-			{:value => 1, :name => 'Разное', :path_name => 'another'}
-		]
-  end
-  
-  def category_name
-	category[:name]
-  end
-  
-  def cur_category_id
-	category[:value]
-  end
-  def category_path
-	category[:path_name]
-  end
-  def category
-	categories.each do |group|
-		return group if category_id == group[:value]
-	end
-  end
-  #categories end---
   def uploaded_photos=(attrs)
 	attrs.each {|attr| self.photos.build(:link => attr, :user_id => self.user_id, :category_id => self.category_id)}
   end
@@ -123,33 +96,6 @@ class PhotoAlbum < ActiveRecord::Base
 	  #Step.where(part_id: 3, page_id: 1, entity_id: self.id)
     (self.entity_view == nil)? 0 : self.entity_view.counter 
   end
-  #статусы...  
-  def statuses 
-	[	
-		{:id => 0, :value => 'draft', :ru => 'Черновик'},	  #черновики
-		{:id => 1, :value => 'visible', :ru => 'Отображён'},  #отображенные
-		{:id => 2, :value => 'hidden', :ru => 'Скрыт'},	  #скрытые
-		{:id => 3, :value => 'to_delete', :ru => 'В удалённых'} #в очереди на удаление
-	]
-  end
-  
-  def status
-	stat = 'draft'
-	statuses.each do |s|
-		stat = s[:value] if status_id == s[:id]
-	end
-	return stat
-  end
-  
-  def status_ru
-	stat = 'Не определён'
-	statuses.each do |s|
-		stat = s[:ru] if status_id == s[:id]
-	end
-	return stat
-  end
-#статусы end...
-
 #Управление отображением альбома
   def clean 
 	self.update_attributes(:name => '', :description => '', :category_id => nil)

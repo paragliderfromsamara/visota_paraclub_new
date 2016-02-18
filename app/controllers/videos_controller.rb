@@ -4,7 +4,8 @@ include ApplicationHelper
   # GET /videos
   # GET /videos.json
   def index
-    @videos = Video.all
+    redirect_to "/media?t=videos" and return
+  @videos = Video.all
 	@title = 'Видео'
 	@per_page = 18
 	@video = Video.new
@@ -97,7 +98,7 @@ include ApplicationHelper
   # POST /videos
   # POST /videos.json
   def create
-	if user_type != 'guest' and user_type != 'bunned' and user_type != 'new_user'
+	if !is_not_authorized?
 		params[:video][:user_id] = current_user.id
 		@video = Video.new(params[:video])
 		respond_to do |format|
@@ -151,7 +152,7 @@ include ApplicationHelper
   # DELETE /videos/1.json
   def destroy
     @video = Video.find(params[:id])
-  	if isEntityOwner?(@video)
+  	if isEntityOwner?(@video) || is_admin?
   		@video.destroy
   		respond_to do |format|
   		  format.html { redirect_to '/media?t=videos&c=all' }

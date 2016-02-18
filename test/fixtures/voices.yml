@@ -1,0 +1,74 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+completedNotPrivateVoteVoice:
+  id: 111
+  vote_value_id: 44
+  user_id: 13
+  vote_id: 7
+  
+completedPrivateVoteVoice:
+  id: 112
+  vote_value_id: 46
+  user_id: 13
+  vote_id: 8
+
+
+notPrivateVoteVoiceByClubFriend:
+  id: 11
+  vote_value_id: 11
+  user_id: 203
+  vote_id: 10
+  
+privateVoteVoteVoiceByClubFriend:
+  id: 12
+  vote_value_id: 13
+  user_id: 203
+  vote_id: 11  
+
+notPrivateVoteVoiceByClubPilot:
+  id: 13
+  vote_value_id: 12
+  user_id: 202
+  vote_id: 10
+  
+privateVoteVoteVoiceByClubPilot:
+  id: 14
+  vote_value_id: 14
+  user_id: 202
+  vote_id: 11
+
+notPrivateVoteVoiceByManager:
+  id: 15
+  vote_value_id: 12
+  user_id: 206
+  vote_id: 10
+  
+privateVoteVoteVoiceByManager:
+  id: 16
+  vote_value_id: 14
+  user_id: 206
+  vote_id: 11
+  
+notPrivateVoteVoiceByAdmin:
+  id: 17
+  vote_value_id: 12
+  user_id: 201
+  vote_id: 10
+  
+privateVoteVoteVoiceByAdmin:
+  id: 18
+  vote_value_id: 14
+  user_id: 201
+  vote_id: 11
+  
+notPrivateVoteVoiceBySuperAdmin:
+  id: 19
+  vote_value_id: 12
+  user_id: 200
+  vote_id: 10
+  
+privateVoteVoteVoiceBySuperAdmin:
+  id: 20
+  vote_value_id: 14
+  user_id: 200
+  vote_id: 11  

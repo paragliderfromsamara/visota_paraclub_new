@@ -19,7 +19,7 @@ end
 		vote.end_date < Time.now
 	end
 	def userCanGiveVoice?(vote)
-		if vote != nil and user_type != 'guest'
+		if vote != nil and user_type != 'guest' and user_type != 'new_user'
 			voice = Voice.find_by(user_id: current_user.id, vote_id: vote.id) 
 			if vote_completed?(vote) and voice != nil
 				return false
@@ -140,6 +140,11 @@ end
 		return true if (is_admin? || user_type == 'manager') and event != nil
 		return false
 	end
+  def userCanSeeEvent?(event)
+    return false if event.nil?
+    return false if event.status_id == 0 && !userCanEditEvent?(event)
+    return true
+  end
 	#events_part end
 	#photo_albums_part
 		def userCanSeeAlbum?(album)
@@ -183,10 +188,10 @@ end
 		end
 	end
 	def isEntityOwner?(entity)
-		if entity != nil
-			(entity.user == current_user and user_type != 'bunned' and user_type != 'guest') || is_super_admin?
-		else
+		if entity.nil?
 			return false
+		else
+      (entity.user == current_user and user_type != 'bunned' and user_type != 'guest') || is_super_admin?
 		end
 	end
 	def userCanEditTheme?(theme) #проверка может ли пользователь редактировать тему
@@ -275,7 +280,7 @@ end
 		return false
 	end
 	def userCanDeleteMessage?(msg)
-		return true if isEntityOwner?(msg)
+		return true if isEntityOwner?(msg) || (user_type == 'admin' && msg.status_id == 1)
 		return false
 	end
 	#messages_part end

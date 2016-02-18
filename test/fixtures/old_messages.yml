@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+oldMessageWithoutUserId:
+  user_id: 0
+  user_name: DefaultName
+  content: DefaultContent
+  created_when: 2014-02-27 07:03:12
+
+oldMessageWithUserId:
+  user_id: 40
+  user_name: DefaultName
+  content: DefaultContent
+  created_when: 2014-02-27 07:03:12
+
+oldMessageWithoutUserId_2:
+  user_id: 0
+  user_name: DefaultName
+  content: DefaultContent
+  created_when: 2014-02-27 07:03:12

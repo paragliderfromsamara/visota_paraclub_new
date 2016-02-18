@@ -1,0 +1,75 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+#Отчёт
+report:
+  user_id: 30
+  article_type_id: 3
+  name: MyReport
+  content: defaultTextContent defaultTextContent defaultTextContent defaultTextContent defaultTextContent defaultTextContent defaultTextContent defaultTextContent 
+  status_id: 1
+  visibility_status_id: 1
+#Отзыв 
+review:
+  user_id: 30
+  article_type_id: 5
+  name: MyReview
+  content: defaultTextContent
+  status_id: 1
+  visibility_status_id: 1
+#Отчёт о ЛП
+flight_accident:
+  user_id: 30
+  article_type_id: 1
+  content: defaultTextContent
+  status_id: 1
+  accident_date: 2014-02-27 04:46:48
+  visibility_status_id: 1
+
+club_article:
+  user_id: 30
+  article_type_id: 4
+  name: club_article
+  content: defaultTextContent
+  status_id: 1
+  visibility_status_id: 1
+ 
+risen_from_the_ruin:
+  user_id: 30
+  article_type_id: 6
+  name: risen_from_the_ruin
+  content: defaultTextContent
+  status_id: 1
+  visibility_status_id: 1
+
+
+draft:
+  user_id: 30
+  status_id: 0 
+
+
+superAdminArticle:
+  user_id: 200
+  article_type_id: 3
+  name: super_admin_article
+  content: defaultTextContent defaultTextContent defaultTextContent defaultTextContent defaultTextContent 
+  status_id: 1
+  
+adminArticle:
+  user_id: 201
+  article_type_id: 3
+  name: adminArticle
+  content: defaultTextContent defaultTextContent defaultTextContent defaultTextContent defaultTextContent 
+  status_id: 1
+
+clubPilotArticle:
+  user_id: 202
+  article_type_id: 3
+  name: clubPilotArticle
+  content: defaultTextContent defaultTextContent defaultTextContent defaultTextContent defaultTextContent 
+  status_id: 1
+  
+managerArticle:
+  user_id: 206
+  article_type_id: 3
+  name: managerArticle
+  content: defaultTextContent defaultTextContent defaultTextContent defaultTextContent defaultTextContent 
+  status_id: 1

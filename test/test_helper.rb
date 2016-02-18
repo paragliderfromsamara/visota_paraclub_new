@@ -47,6 +47,7 @@ class ActiveSupport::TestCase
   
   def comeAsBunned
 	user = users(:bunned)
+  user.update_attribute(:bunned_to, Time.now + 1.day)
 	cookies.permanent.signed[:remember_token] = [user.id, user.salt]
 	return user
   end

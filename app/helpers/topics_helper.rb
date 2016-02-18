@@ -41,10 +41,14 @@ module TopicsHelper
     buttons[buttons.length] = {:name => "Не просмотренные[#{myNotVisitedThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, th_filter: 'not_visited'), selected: params[:th_filter] == 'not_visited'}
     buttons[buttons.length] = {:name => "Мои темы[#{myThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, th_filter: 'my'), selected: params[:th_filter] == 'my'}
     buttons[buttons.length] = {:name => "Отслеживаемые темы[#{myNtfThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, th_filter: 'ntf'), selected: params[:th_filter] == 'ntf'}
+    if user_type == 'super_admin'
+      delThemes = Theme.where(status_id: 2).size
+      buttons[buttons.length] = {:name => "Удалённые темы[#{delThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, th_filter: 'deleted'), selected: params[:th_filter] == 'deleted'}
+    end
     return buttons_in_line(buttons).html_safe
   end
   def is_cur_th_filter_mode_all?
-    params[:th_filter] != 'not_visited' && params[:th_filter] != 'my' && params[:th_filter] != 'ntf'
+    params[:th_filter] != 'not_visited' && params[:th_filter] != 'my' && params[:th_filter] != 'ntf' && (params[:th_filter] != 'deleted' && user_type == 'super_admin')
   end
 	def topics_list_in_vl
 		v = ''

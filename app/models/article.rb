@@ -126,19 +126,19 @@ class Article < ActiveRecord::Base
      #view.save
      #return view
    end
-  def type
-	types.each do |t|
-		return t if self.article_type_id == t[:value]
-	end
-	return nil
+   def type
+	  types.each do |t|
+	    return t if self.article_type_id == t[:value]
+	  end
+	  return nil
    end
    
    def type_path #Возвращает ссылку конкретный раздел с материалами
     t_path = '/articles'
-	if article_type_id != nil
-		type = get_type_by_id(article_type_id)
-		t_path = t_path + "?c="+type[:link] if type != nil
-	end
+	  if article_type_id != nil
+		  type = get_type_by_id(article_type_id)
+		  t_path = t_path + "?c="+type[:link] if type != nil
+	  end
    end
    
    def alter_date

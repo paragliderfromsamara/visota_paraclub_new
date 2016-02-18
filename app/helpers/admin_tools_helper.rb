@@ -149,8 +149,8 @@ module AdminToolsHelper
           p.link.recreate_versions!(:small_thumb, :in_content, :big_thumb) if p.link?
       end
     end
-    #users = User.all
-    #users.each {|u| u.avatar.recreate_versions!(:sq_thumb) if u.avatar?} 
+    users = User.all
+    users.each {|u| u.avatar.recreate_versions!(:sq_thumb) if u.avatar?} 
   end
 
    

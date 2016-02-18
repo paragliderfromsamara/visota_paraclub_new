@@ -54,7 +54,7 @@ module EventsHelper
 		return val
 	end
 	def add_new_event
-		control_buttons([{:name => 'Добавить новость', :access => userCanCreateEvent?, :type => 'plus', :link => new_event_path}]).html_safe
+		control_buttons([{:name => 'Добавить новость', :access => userCanCreateEvent?, :type => 'plus', :link => new_event_path, id: 'newEvent'}]).html_safe
 	end
 	
 	def event_show_photos

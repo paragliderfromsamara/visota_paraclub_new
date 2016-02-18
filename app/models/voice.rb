@@ -3,10 +3,5 @@ class Voice < ActiveRecord::Base
   belongs_to :user
   belongs_to :vote_value
   belongs_to :vote
-  validate :check_exist_voice, :on => :create
-  def check_exist_voice
-    extVoice = Voice.find_by(user_id: self.user_id, vote_id: self.vote_id)
-    errors.add(:user_id, "У Вас недостаточно прав для создания новой темы.") if !extVoice.nil?
-  end
-  
+  validates :vote_id, uniqueness: { scope: :user_id, message: "Невозможно проголосовать дважды" }
 end

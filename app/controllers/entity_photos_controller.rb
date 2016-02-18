@@ -1,7 +1,7 @@
 class EntityPhotosController < ApplicationController
   def destroy
     ePhoto = EntityPhoto.find(params[:id])
-    if userCanDeleteEntityPhoto?(ePhoto)
+    if userCanDeleteEntityPhoto?(ePhoto) || user_type == 'admin'
       phId = ePhoto.photo_id
 			if ePhoto.destroy
 				respond_to do |format|

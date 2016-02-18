@@ -1,0 +1,133 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+voiceTestVoteVoteValueOne:
+    id: 77
+    vote_id: 77
+    value: yes
+
+voiceTestVoteVoteValueTwo:
+    id: 78
+    vote_id: 77
+    value: no
+
+voiceTestVoteCompletedVoteValueOne:
+    id: 79
+    vote_id: 78
+    value: yes
+
+voiceTestVoteCompletedVoteValueTwo:
+    id: 80
+    vote_id: 78
+    value: no
+
+completedNotPrivateVoteVoteValueOne:
+  id: 44
+  vote_id: 7
+  value: yes
+  
+completedNotPrivateVoteVoteValueTwo:
+  id: 45
+  vote_id: 7
+  value: no  
+
+completedPrivateVoteVoteValueOne:
+  id: 46
+  vote_id: 8
+  value: yes
+  
+completedPrivateVoteVoteValueTwo:
+  id: 47
+  vote_id: 8
+  value: no 
+
+voteForSuperAdminDestroyVoteValueOne:
+  id: 4
+  vote_id: 4
+  value: yes
+  
+voteForSuperAdminDestroyVoteValueTwo:
+  id: 5
+  vote_id: 4
+  value: no  
+
+voteForAdminDestroyVoteValueOne:
+  id: 6
+  vote_id: 5
+  value: yes
+  
+voteForAdminDestroyVoteValueTwo:
+  id: 7
+  vote_id: 6
+  value: no 
+
+
+notPrivateVoteVoteValueOne:
+  id: 11
+  vote_id: 10
+  value: yes
+  
+notPrivateVoteVoteValueTwo:
+  id: 12
+  vote_id: 10
+  value: no  
+
+privateVoteVoteValueOne:
+  id: 13
+  vote_id: 11
+  value: yes
+  
+privateVoteVoteValueTwo:
+  id: 14
+  vote_id: 11
+  value: no   
+
+clubFriendVoteValueOne:
+  id: 15
+  vote_id: 12
+  value: yes
+  
+clubFriendVoteValueTwo:
+  id: 16
+  vote_id: 12
+  value: no  
+
+clubPilotVoteValueOne:
+  id: 17
+  vote_id: 13
+  value: yes
+  
+clubPilotVoteValueTwo:
+  id: 18
+  vote_id: 13
+  value: no 
+
+clubManagerVoteValueOne:
+  id: 19
+  vote_id: 14
+  value: yes
+  
+clubManagerVoteValueTwo:
+  id: 20
+  vote_id: 14
+  value: no 
+
+clubAdminVoteValueOne:
+  id: 21
+  vote_id: 15
+  value: yes
+  
+clubAdminVoteValueTwo:
+  id: 22
+  vote_id: 15
+  value: no  
+  
+clubSuperAdminVoteValueOne:
+  id: 23
+  vote_id: 16
+  value: yes
+  
+clubSuperAdminVoteValueTwo:
+  id: 24
+  vote_id: 16
+  value: no 
+  

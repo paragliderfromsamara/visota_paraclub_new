@@ -14,59 +14,58 @@ class MessagesController < ApplicationController
   # GET /messages/1.json
   def show
     @message = Message.find_by(id: params[:id])
-	if userCanSeeMessage?(@message) and params[:preview_mode] == 'true'
+	if isEntityOwner?(@message) and params[:preview_mode] == 'true'
 		#themes part
-		@theme = Theme.find_by(id: @message.theme_id, status_id: ([1, 3]))
-    @photo_album = @message.photo_album
-    @photo = Photo.find_by(id: @message.photo_id, status_id: 1)
-		if @theme != nil
-			@title = @header = "Ответы на сообщение от #{@message.created_at.to_s(:ru_datetime)}"
-			@path_array = [
-							        {:name => 'Клубная жизнь', :link => '/visota_life'},
-						          {:name => @theme.topic.name, :link => topic_path(@theme.topic)},
-					            {:name => @theme.name, :link => theme_path(@theme)},
-					            {:name => @title, :link => ''}
-					          ]
-		end
+		#@theme = Theme.find_by(id: @message.theme_id, status_id: ([1, 3]))
+    #@photo_album = @message.photo_album
+    #@photo = Photo.find_by(id: @message.photo_id, status_id: 1)
+		#if @theme != nil
+		#	@title = @header = "Ответы на сообщение от #{@message.created_at.to_s(:ru_datetime)}"
+		#	@path_array = [
+		#					        {:name => 'Клубная жизнь', :link => '/visota_life'},
+		#				          {:name => @theme.topic.name, :link => topic_path(@theme.topic)},
+		#			            {:name => @theme.name, :link => theme_path(@theme)},
+		#			            {:name => @title, :link => ''}
+		#			          ]
+		#end
 		#themes part end
 		#photos part
-    if @photo_album != nil
-      if @photo != nil
-    			@title = @header = "Комментарий к фото"
-    			@path_array = [
-                          {:name => 'Медиа', :link => '/media'},
-		                      {:name => 'Фотоальбомы', :link => '/media?t=albums&c=all'},
-		                      {:name => @photo_album.category_name, :link => "/media?t=albums&c=#{@photo_album.category_id}"},
-		                      {:name => @photo_album.name,:link => photo_album_path(@photo_album)},
-                          {:name => @title}
-    					          ]
-      else
-  			@title = @header = "Комментарий к фотоальбому"
-    		@path_array = [
-                        {:name => 'Медиа', :link => '/media'},
-    						        {:name => 'Фотоальбомы', :link => '/media?t=albums&c=all'},
-    						        {:name => @photo_album.category_name, :link => "/media?t=albums&c=#{@photo_album.category_id}"},
-    						        {:name => @photo_album.name, :link => photo_album_path(@photo_album)},
-                        {:name => @title}
-    					        ]
-      end
-		
-		end
+    #if @photo_album != nil
+    #  if @photo != nil
+    #			@title = @header = "Комментарий к фото"
+    #			@path_array = [
+    #                      {:name => 'Медиа', :link => '/media'},
+		#                      {:name => 'Фотоальбомы', :link => '/media?t=albums&c=all'},
+		#                      {:name => @photo_album.category_name, :link => "/media?t=albums&c=#{@photo_album.category_id}"},
+		#                      {:name => @photo_album.name,:link => photo_album_path(@photo_album)},
+    #                      {:name => @title}
+    #					          ]
+    #  else
+  	#		@title = @header = "Комментарий к фотоальбому"
+   # 		@path_array = [
+    #                    {:name => 'Медиа', :link => '/media'},
+    #						        {:name => 'Фотоальбомы', :link => '/media?t=albums&c=all'},
+    #						        {:name => @photo_album.category_name, :link => "/media?t=albums&c=#{@photo_album.category_id}"},
+    #						        {:name => @photo_album.name, :link => photo_album_path(@photo_album)},
+    #                    {:name => @title}
+    #					        ]
+    #  end
+		#end
 
 		#photos part end
 		#videos part
-		@video = Video.find_by(id: @message.video_id)
-		if @video != nil
-			@title = "Ответы комментарий от #{@message.created_at.to_s(:ru_datetime)}"
-			@path_array = [
-							{:name => 'Видео', :link => videos_path},
-							{:name => @video.category_name, :link => videos_path(:c => @video.category_path)},
-							{:name => @video.alter_name, :link => video_path(@video)},
-							{:name => @title, :link => '/'}
-						  ]
-		end
+		#@video = Video.find_by(id: @message.video_id)
+		#if @video != nil
+		#	@title = "Ответы комментарий от #{@message.created_at.to_s(:ru_datetime)}"
+		#	@path_array = [
+		#					{:name => 'Видео', :link => videos_path},
+		#					{:name => @video.category_name, :link => videos_path(:c => @video.category_path)},
+		#					{:name => @video.alter_name, :link => video_path(@video)},
+		#					{:name => @title, :link => '/'}
+		#				  ]
+		#end
 		#videos part end
-		@messages = @message.get_visible_tread
+		#@messages = @message.get_visible_tread
 		respond_to do |format|
 		  format.html # show.html.erb
 		  format.json { render :json => @message }
@@ -312,10 +311,10 @@ class MessagesController < ApplicationController
     ent = @message.video if @message.video != nil
   	if userCanDeleteMessage?(@message)
   		if is_admin?
-  			if @message.status_id == 3
+  			if @message.status_id != 1
   				@message.destroy
   			else
-  				@message.set_as_delete
+  				@message.update_attribute(:status_id, 2)#@message.set_as_delete
   			end 
   		else
   			@message.destroy
@@ -331,7 +330,7 @@ class MessagesController < ApplicationController
   
   def recovery
   	msg = Message.find_by(id: params[:id])
-  	if msg != nil and is_admin?
+  	if msg != nil and user_type != 'super_admin'
   		msg.set_as_visible
   	else
   		redirect_to '/404'
@@ -360,36 +359,36 @@ class MessagesController < ApplicationController
   end
   
   def do_replace_message
-	if is_admin?
-		message = Message.find_by(id: params[:replace_message][:current_message])
-		new_topic = Topic.find_by(id: params[:merge_theme][:topic_id])
-		target_theme = Theme.find_by(id: params[:merge_theme][:theme_id])
-		new_theme_flag = (params[:replace_message][:make_new_as_theme]).to_i
-		new_theme_name = (params[:replace_message][:new_theme_name]).strip
-		if message != nil and new_topic != nil
-			replace_path = "/messages/#{message.id}/replace_message"
-			if new_theme_flag == 1
-				if new_theme_name != ''
-					new_theme = message.makeThemeFromMessage(new_theme_name, new_topic)
-					redirect_to new_theme
-				else
-					redirect_to replace_path, :notice => 'Введите название новой темы'
-				end
-			else
-				if target_theme != nil
-					message.update_attributes(:theme_id => target_theme.id, :topic_id => target_theme.topic_id, :visibility_status_id => target_theme.visibility_status_id, :message_id => nil)
-					message.bind_child_messages_to_theme(target_theme)
-					redirect_to "#{theme_path(target_theme)}#m_#{message.id.to_s}"
-				else
-					redirect_to replace_path, :notice => 'Выберите тему, либо создайте новую'
-				end
-			end
-		else
-			redirect_to '/404'
-		end
-	else
-		redirect_to '/404'
-	end
+  	if is_admin?
+  		message = Message.find_by(id: params[:replace_message][:current_message])
+  		new_topic = Topic.find_by(id: params[:merge_theme][:topic_id])
+  		target_theme = Theme.find_by(id: params[:merge_theme][:theme_id])
+  		new_theme_flag = (params[:replace_message][:make_new_as_theme]).to_i
+  		new_theme_name = (params[:replace_message][:new_theme_name]).strip
+  		if message != nil and new_topic != nil
+  			replace_path = "/messages/#{message.id}/replace_message"
+  			if new_theme_flag == 1
+  				if new_theme_name != ''
+  					new_theme = message.makeThemeFromMessage(new_theme_name, new_topic)
+  					redirect_to new_theme
+  				else
+  					redirect_to replace_path, :notice => 'Введите название новой темы'
+  				end
+  			else
+  				if target_theme != nil
+  					message.update_attributes(:theme_id => target_theme.id, :topic_id => target_theme.topic_id, :visibility_status_id => target_theme.visibility_status_id, :message_id => nil)
+  					message.bind_child_messages_to_theme(target_theme)
+  					redirect_to "#{theme_path(target_theme)}#m_#{message.id.to_s}"
+  				else
+  					redirect_to replace_path, :notice => 'Выберите тему, либо создайте новую'
+  				end
+  			end
+  		else
+  			redirect_to '/404'
+  		end
+  	else
+  		redirect_to '/404'
+  	end
   end
   def upload_photos
 	  message = Message.find(params[:id]) 

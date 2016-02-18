@@ -4,7 +4,6 @@ class Video < ActiveRecord::Base
   belongs_to :article
   has_many :messages, :dependent  => :delete_all
   has_many :like_marks, :as => :likeble_entity, :dependent  => :delete_all
-  has_one :theme, :dependent  => :destroy
   has_one :entity_view, :as => :v_entity, :dependent => :delete
   require 'will_paginate'
   #has_many :events, :dependent  => :delete_all
@@ -51,34 +50,7 @@ class Video < ActiveRecord::Base
 	validates :name, :length => { :maximum => 100, :message => "Название не может быть длиннее 100 знаков"}
 					
 	 #validation end---
-	 #categories-------
-	  def categories #в старой версии была отдельная таблица в базе
-			[	
-				{:value => 5, :name => 'Свободные полёты', :path_name => 'paragliding'},
-				{:value => 4, :name => 'Моторные полёты', :path_name => 'power_paragliding'},
-				{:value => 2, :name => 'Кайтинг', :path_name => 'kiting'},
-				{:value => 3, :name => 'Клубные мероприятия', :path_name => 'club_events'},
-				{:value => 1, :name => 'Разное', :path_name => 'another'}	
-			]
-	  end
-	  
-	  def category_name
-		  category[:name]
-	  end
-	  
-	  def cur_category_id
-		category[:value]
-	  end
-	  def category_path
-		category[:path_name]
-	  end
-	  def category
-      cat = categories.last 
-		categories.each do |group|
-			cat = group if category_id == group[:value]
-		end
-    return cat
-	  end
+
 	  
   #categories end---
   #Просмотры--------

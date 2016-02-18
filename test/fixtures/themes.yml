@@ -1,0 +1,471 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+themeForNotificationsTest:
+  id: 111
+  name: themeForNotificationsTest
+  user_id: 20
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 1 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48    
+
+themeVisibleOpen:
+  id: 1
+  name: themeVisibleOpen
+  user_id: 20
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 1 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+themeDraft:
+  user_id: 20
+  topic_id: 1
+  status_id: 0
+  visibility_status_id: 1  
+
+themeDraft2:
+  id: 6
+  user_id: 15
+  topic_id: 1
+  status_id: 0
+  visibility_status_id: 1 
+
+themeVisibleClosed:
+  id: 2
+  name: themeVisibleClosed
+  user_id: 20
+  topic_id: 1
+  status_id: 3
+  visibility_status_id: 1 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes. 
+  last_message_date: 2014-02-27 04:46:48
+
+themeHiddenOpen:
+  id: 3
+  name: themeHiddenOpen
+  user_id: 20
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 2 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes. 
+  last_message_date: 2014-02-27 04:46:48
+
+themeHiddenClosed:
+  id: 4
+  name: themeHiddenClosed
+  user_id: 20
+  topic_id: 1
+  status_id: 3
+  visibility_status_id: 2 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes. 
+  last_message_date: 2014-02-27 04:46:48
+ 
+themeByForNewUserInAnyTopic:
+  id: 5
+  name: themeByNewUserInAnyTopic
+  user_id: 20
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 1
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes. 
+  last_message_date: 2014-02-27 04:46:48
+  
+#NewUserThemes  
+newUserThemeToDelete:
+  name: newUserThemeToDelete
+  topic_id: 6
+  status_id: 2
+  visibility_status_id: 1
+  user_id: 205  
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+    
+newUserThemeOpenVisible:
+  name: newUserThemeOpenVisible
+  topic_id: 6
+  status_id: 1
+  visibility_status_id: 1
+  user_id: 205 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+newUserThemeCloseVisible:
+  name: newUserThemeCloseVisible
+  topic_id: 6
+  status_id: 3
+  visibility_status_id: 1
+  user_id: 205  
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+#NewUserThemes end 
+
+#ClubPilotThemes  
+clubPilotThemeToDelete:
+  name: clubPilotThemeToDelete
+  topic_id: 1
+  status_id: 2
+  visibility_status_id: 1
+  user_id: 202 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+clubPilotThemeOpenHidden:
+  name: clubPilotThemeOpenHidden
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 2
+  user_id: 202 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+clubPilotThemeCloseHidden:
+  name: clubPilotThemeCloseHidden
+  topic_id: 1
+  status_id: 3
+  visibility_status_id: 2
+  user_id: 202  
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+ 
+clubPilotThemeOpenVisible:
+  name: clubPilotThemeOpenVisible
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 1
+  user_id: 202 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+clubPilotThemeCloseVisible:
+  name: clubPilotThemeCloseVisible
+  topic_id: 1
+  status_id: 3
+  visibility_status_id: 1
+  user_id: 202  
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+
+#ClubPilotThemes end 
+
+#ClubFriend Themes
+clubFriendThemeToDelete:
+  name: clubFriendThemeToDelete
+  topic_id: 1
+  status_id: 2
+  visibility_status_id: 1
+  user_id: 203 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+clubFriendThemeOpenHidden:
+  name: clubFriendThemeOpenHidden
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 2
+  user_id: 203 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+clubFriendThemeCloseHidden:
+  name: clubFriendThemeCloseHidden
+  topic_id: 1
+  status_id: 3
+  visibility_status_id: 2
+  user_id: 203  
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+
+clubFriendThemeOpenVisible:
+  name: clubFriendThemeOpenVisible
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 1
+  user_id: 203 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+clubFriendThemeCloseVisible:
+  name: clubFriendThemeCloseVisisble
+  topic_id: 1
+  status_id: 3
+  visibility_status_id: 1
+  user_id: 203  
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48  
+#ClubFriend Themes end 
+
+#Manager Themes
+managerThemeToDelete:
+  name: managerThemeToDelete
+  topic_id: 1
+  status_id: 2
+  visibility_status_id: 1
+  user_id: 206 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+managerThemeOpenHidden:
+  name: managerThemeOpenHidden
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 2
+  user_id: 206 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+managerThemeCloseHidden:
+  name: managerThemeCloseHidden
+  topic_id: 1
+  status_id: 3
+  visibility_status_id: 2
+  user_id: 206  
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+
+managerThemeOpenVisible:
+  name: managerThemeOpenVisisble
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 1
+  user_id: 206 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+managerThemeCloseVisible:
+  name: managerThemeCloseVisisble
+  topic_id: 1
+  status_id: 3
+  visibility_status_id: 1
+  user_id: 206  
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48  
+#Manager Themes end 
+
+#Admin Themes
+adminThemeToDelete:
+  name: adminThemeToDelete
+  topic_id: 1
+  status_id: 2
+  visibility_status_id: 1
+  user_id: 201 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+adminThemeOpenHidden:
+  name: adminThemeOpenHidden
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 2
+  user_id: 201 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+adminThemeCloseHidden:
+  name: adminThemeCloseHidden
+  topic_id: 1
+  status_id: 3
+  visibility_status_id: 2
+  user_id: 201  
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+
+adminThemeOpenVisible:
+  name: adminThemeOpenVisisble
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 1
+  user_id: 201 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+adminThemeCloseVisible:
+  name: adminThemeCloseVisisble
+  topic_id: 1
+  status_id: 3
+  visibility_status_id: 1
+  user_id: 201  
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48  
+#admin Themes end
+
+#SuperAdmin Themes
+superAdminThemeToDelete:
+  name: superAdminThemeToDelete
+  topic_id: 1
+  status_id: 2
+  visibility_status_id: 1
+  user_id: 200 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+superAdminThemeOpenHidden:
+  name: superAdminThemeOpenHidden
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 2
+  user_id: 200 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+superAdminThemeCloseHidden:
+  name: superAdminThemeCloseHidden
+  topic_id: 1
+  status_id: 3
+  visibility_status_id: 2
+  user_id: 200  
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+
+superAdminThemeOpenVisible:
+  name: superAdminThemeOpenVisisble
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 1
+  user_id: 200 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+superAdminThemeCloseVisible:
+  name: superAdminThemeCloseVisisble
+  topic_id: 1
+  status_id: 3
+  visibility_status_id: 1
+  user_id: 200  
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48  
+#superAdmin Themes end  
+
+#Bunned Themes
+bunnedThemeToDelete:
+  name: bunnedThemeToDelete
+  topic_id: 1
+  status_id: 2
+  visibility_status_id: 1
+  user_id: 204 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+bunnedThemeOpenHidden:
+  name: bunnedThemeOpenHidden
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 2
+  user_id: 204 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+bunnedThemeCloseHidden:
+  name: bunnedThemeCloseHidden
+  topic_id: 1
+  status_id: 3
+  visibility_status_id: 2
+  user_id: 204  
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+
+bunnedThemeOpenVisible:
+  name: bunnedThemeOpenVisisble
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 1
+  user_id: 204 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+bunnedThemeCloseVisible:
+  name: bunnedThemeCloseVisisble
+  topic_id: 1
+  status_id: 3
+  visibility_status_id: 1
+  user_id: 204  
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48  
+#bunned Themes end 
+#deleted Themes
+deletedThemeToDelete:
+  name: deletedToDelete
+  topic_id: 1
+  status_id: 2
+  visibility_status_id: 1
+  user_id: 207 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+deletedThemeOpenHidden:
+ name: deletedThemeOpenHidden
+ topic_id: 1
+ status_id: 1
+ visibility_status_id: 2
+ user_id: 207 
+ content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+ last_message_date: 2014-02-27 04:46:48
+  
+deletedThemeCloseHidden:
+ name: deletedThemeCloseHidden
+ topic_id: 1
+ status_id: 3
+ visibility_status_id: 2
+ user_id: 207  
+ content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+ last_message_date: 2014-02-27 04:46:48
+
+deletedThemeOpenVisible:
+  name: deletedThemeOpenVisisble
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 1
+  user_id: 207 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+  
+deletedThemeCloseVisible:
+  name: bunnedThemeCloseVisisble
+  topic_id: 1
+  status_id: 3
+  visibility_status_id: 1
+  user_id: 207  
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48  
+#deleted Themes end 
+
+themeForEntityPhotoTest:
+  id: 20320
+  name: themeForEntityPhotoTest
+  topic_id: 1
+  status_id: 3
+  visibility_status_id: 1
+  user_id: 203  
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes. themeForEntityPhotoTest 
+  last_message_date: 2014-02-27 04:46:48  
+ 
+themeForMessageTest:
+  id: 20321
+  name: themeForMessageTest
+  topic_id: 1
+  status_id: 3
+  visibility_status_id: 1
+  user_id: 203  
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes. themeForEntityPhotoTest 
+  last_message_date: 2014-02-27 04:46:48
+  
+themeForDestroyTest:
+  id: 20322
+  name: themeForDestroyTest
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 1
+  user_id: 203 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+
+themeForStepsTest:
+  name: themeForStepsTest
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 1
+  user_id: 20 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48

@@ -1,0 +1,52 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+notDraft:
+  title: NoDraftEvent
+  content: MyString
+  short_content: MyString
+  display_area_id: 1
+  status_id: 1
+  post_date: 2014-08-03 11:03:16
+
+notDraft2:
+  title: NoDraftEvent2
+  content: MyString
+  short_content: MyString
+  display_area_id: 1
+  status_id: 1
+  post_date: 2014-08-03 11:03:16
+  
+notDraft3:
+  title: NoDraftEvent3
+  content: MyString
+  short_content: MyString
+  display_area_id: 1
+  status_id: 1
+  post_date: 2014-08-03 11:03:16
+
+notDraft4:
+  title: NoDraftEvent4
+  content: MyString
+  short_content: MyString
+  display_area_id: 1
+  status_id: 1
+  post_date: 2014-08-03 11:03:16
+
+draft:
+  title: DraftEvent
+  content: MyString
+  short_content: MyString
+  display_area_id: 1
+  status_id: 0
+  post_date: 2014-08-03 11:03:16
+
+two:
+  title: MyString
+  content: MyString
+  short_content: MyString
+  display_area_id: 1
+  status_id: 1
+  post_date: 2014-08-03 11:03:16
+  photo_album_id: 1
+  video_id: 1
+  article_id: 1

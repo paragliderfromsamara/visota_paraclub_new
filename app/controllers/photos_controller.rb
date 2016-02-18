@@ -3,27 +3,28 @@ include MessagesHelper
   # GET /photos
   # GET /photos.json
   def index
-	@js_photos = [{:id => 'null'}] #application.js getMsgPhotosToForm(msgId, el)
-	jsPhotos = []
-	if params[:message_id] != nil
-		@photos = Photo.find_all_by_message_id(params[:message_id])
-	elsif params[:photo_album_id] != nil
-		@photos = Photo.find_all_by_photo_album_id(params[:photo_album_id])
-	else
-		 @photos = Photo.all
-	end
-	if @photos != [] and params[:format] == 'json'
-		@photos.each do |photo|
-			jsPhotos[jsPhotos.length] = {:id => photo.id, :link => photo.link.to_s, :thumb => photo.link.thumb.to_s, :description => photo.description}
-		end
-		@js_photos = jsPhotos
+    redirect_to '/media?t=albums' and return
+    	@js_photos = [{:id => 'null'}] #application.js getMsgPhotosToForm(msgId, el)
+    	jsPhotos = []
+    	if params[:message_id] != nil
+    		@photos = Photo.find_all_by_message_id(params[:message_id])
+    	elsif params[:photo_album_id] != nil
+    		@photos = Photo.find_all_by_photo_album_id(params[:photo_album_id])
+    	else
+    		 @photos = Photo.all
+    	end
+    	if @photos != [] and params[:format] == 'json'
+    		@photos.each do |photo|
+    			jsPhotos[jsPhotos.length] = {:id => photo.id, :link => photo.link.to_s, :thumb => photo.link.thumb.to_s, :description => photo.description}
+    		end
+    		@js_photos = jsPhotos
 	
-	end
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render :json => @js_photos }
-    end
-  end
+    	end
+        respond_to do |format|
+          format.html # index.html.erb
+          format.json { render :json => @js_photos }
+        end
+      end
 
   # GET /photos/1
   # GET /photos/1.json
@@ -93,17 +94,16 @@ include MessagesHelper
   # GET /photos/new
   # GET /photos/new.json
   def new
-    @photo = Photo.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render :json => @photo }
-    end
+    #@photo = Photo.new
+    #respond_to do |format|
+    #  format.html # new.html.erb
+    #  format.json { render :json => @photo }
+    #end
   end
 
   # GET /photos/1/edit
   def edit
-    @photo = Photo.find(params[:id])
+   # @photo = Photo.find(params[:id])
   end
 
   def edit_photos
@@ -173,49 +173,55 @@ include MessagesHelper
   # POST /photos
   # POST /photos.json
   def create
-	if user_type != 'guest' and user_type != 'bunned'
-		params[:photo][:user_id] = current_user.id	
-		@photo = Photo.new(params[:photo])
-		respond_to do |format|
-		  if @photo.save
-			format.html { redirect_to @photo, :notice => 'Фото успешно добавлено' }
-			format.json { render :json => @photo, :status => :created, :location => @photo }
-		  else
-			format.html { render :action => "new" }
-			format.json { render :json => @photo.errors, :status => :unprocessable_entity }
-		  end
-		end
-	else 
-		redirect_to '/404'
-	end
+	  #if user_type != 'guest' and user_type != 'bunned'
+		#params[:photo][:user_id] = current_user.id	
+		#@photo = Photo.new(params[:photo])
+		#respond_to do |format|
+		#  if @photo.save
+		#	format.html { redirect_to @photo, :notice => 'Фото успешно добавлено' }
+		#	format.json { render :json => @photo, :status => :created, :location => @photo }
+		#  else
+		#	format.html { render :action => "new" }
+		#	format.json { render :json => @photo.errors, :status => :unprocessable_entity }
+		#  end
+		#end
+    #else 
+		#redirect_to '/404'
+    #end
   end
 
   # PUT /photos/1
   # PUT /photos/1.json
   def update
     @photo = Photo.find(params[:id])
-    respond_to do |format|
-      if @photo.update_attributes(params[:photo])
-        format.html { redirect_to @photo }
-        format.json { head :no_content }
-      else
-        format.html { render :action => "edit" }
-        format.json { render :json => @photo.errors, :status => :unprocessable_entity }
+    if isEntityOwner?(@photo)
+      respond_to do |format|
+        if @photo.update_attributes(params[:photo])
+          format.html { redirect_to @photo }
+          format.json { head :no_content }
+        else
+          format.html { render :action => "edit" }
+          format.json { render :json => @photo.errors, :status => :unprocessable_entity }
+        end
       end
+    else
+      redirect_to '/404'
     end
   end
 
   # DELETE /photos/1
   # DELETE /photos/1.json
   def destroy
-    @photo = EntityPhoto.find(params[:id])
-    if userCanDeletePhoto?(@photo)
+    @photo = Photo.find(params[:id])
+    if userCanDeletePhoto?(@photo) || is_admin?
 			if @photo.destroy
 				respond_to do |format|
-				  format.html { redirect_to photos_url }
+				  format.html { redirect_to '/media?t=albums' }
 				  format.json { render :json => {:callback => 'success'} }
 				end
 			end
+    else
+      redirect_to '/404'
 		end
   end
   

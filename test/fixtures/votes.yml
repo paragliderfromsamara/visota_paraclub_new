@@ -1,0 +1,119 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+voteForVoiceCotrollerTest:
+  id: 77
+  user_id: 13
+  title: voteForVoiceCotrollerTest
+  content: voteForVoiceCotrollerTest question is here
+  start_date: 2014-08-03 11:03:16
+  end_date: 2115-08-03 11:03:16
+  private_flag: 1
+
+completedVoteForVoiceCotrollerTest:
+  id: 78
+  user_id: 13
+  title: completedVoteForVoiceCotrollerTest
+  content: completedVoteForVoiceCotrollerTest question is here
+  start_date: 2014-08-03 11:03:16
+  end_date: 2015-08-03 11:03:16
+  private_flag: 1
+
+
+voteForSuperAdminDestroy:
+  id: 4
+  user_id: 13
+  title: voteForSuperAdminDestroy
+  content: voteForSuperAdminDestroy question is here
+  start_date: 2014-08-03 11:03:16
+  end_date: 2015-08-03 11:03:16
+  private_flag: 1
+
+voteForAdminDestroy:
+  id: 6
+  user_id: 13
+  title: voteForAdminDestroy
+  content: voteForAdminDestroy question is here
+  start_date: 2014-08-03 11:03:16
+  end_date: 2015-08-03 11:03:16
+  private_flag: 1
+
+completedNotPrivateVote:
+  id: 7
+  user_id: 13
+  title: completedNotPrivateVote
+  content: completedNotPrivateVote question is here
+  start_date: 2014-08-03 11:03:16
+  end_date: 2015-08-03 11:03:16
+  private_flag: 1
+
+completedPrivateVote:
+  id: 8
+  user_id: 13
+  title: completedPrivateVote
+  content: completedPrivateVote question is here
+  start_date: 2014-08-03 11:03:16
+  end_date: 2015-08-03 11:03:16
+  private_flag: 2
+
+notPrivateVote:
+  id: 10
+  user_id: 13
+  title: notPrivateVote
+  content: notPrivateVote question is here
+  start_date: 2014-08-03 11:03:16
+  end_date: 2114-08-03 11:03:16
+  private_flag: 1
+
+privateVote:
+  id: 11
+  user_id: 13
+  title: privateVote
+  content: privateVote question is here
+  start_date: 2014-08-03 11:03:16
+  end_date: 2114-08-03 11:03:16
+  private_flag: 2
+
+clubFriendVote:
+  id: 12
+  user_id: 203
+  title: clubFriendVote
+  content: clubFriendVote question is here
+  start_date: 2014-08-03 11:03:16
+  end_date: 2114-08-03 11:03:16
+  private_flag: 1
+
+clubPilotVote:
+  id: 13
+  user_id: 202
+  title: clubPilotVote
+  content: clubPilotVote question is here
+  start_date: 2014-08-03 11:03:16
+  end_date: 2114-08-03 11:03:16
+  private_flag: 1
+ 
+clubManagerVote:
+  id: 14
+  user_id: 206
+  title: clubManagerVote
+  content: clubManagerVote question is here
+  start_date: 2014-08-03 11:03:16
+  end_date: 2114-08-03 11:03:16
+  private_flag: 1
+  
+clubAdminVote:
+  id: 15
+  user_id: 201
+  title: clubAdminVoteVote
+  content: clubAdminVoteVote question is here
+  start_date: 2014-08-03 11:03:16
+  end_date: 2114-08-03 11:03:16
+  private_flag: 1
+  
+clubSuperAdminVote:
+  id: 16
+  user_id: 200
+  title: clubSuperAdminVoteVote
+  content: clubSuperAdminVoteVote question is here
+  start_date: 2014-08-03 11:03:16
+  end_date: 2114-08-03 11:03:16
+  private_flag: 1

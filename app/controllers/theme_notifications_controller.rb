@@ -6,7 +6,7 @@ include ThemeNotificationsHelper
   def create
 	ntfData = params[:theme_notifications]
 	d = false
-	if ntfData != [] and ntfData != nil
+	if !ntfData.blank? and signed_in?
 		if ntfData[:type] == 'multiple' 
 			d = multipleThemeNtfUpd(ntfData)
 			if d == true 
@@ -14,8 +14,6 @@ include ThemeNotificationsHelper
 					format.html {redirect_to edit_user_path(:id => current_user.id, :tab => 'notification_upd')}# index.html.erb
 					format.json { render :json => themeNotificationButton(@theme.id) }
 				end
-			else
-			
 			end
 		else
 			val = singleThemeNtfUpd(ntfData)

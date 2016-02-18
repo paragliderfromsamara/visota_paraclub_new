@@ -152,7 +152,7 @@ include MessagesHelper
       if @albumToForm.user_id != (params[:photo_album][:user_id]).to_i
 				if @albumToForm.photos != []
 					@albumToForm.photos.each do |photo|
-						photo.update_attributes(:user_id => params[:photo_album][:user_id])
+						photo.update_attribute(:user_id, params[:photo_album][:user_id])
 					end
 				end
 			end
@@ -188,16 +188,16 @@ include MessagesHelper
   # DELETE /photo_albums/1.json
   def destroy
     @photo_album = PhotoAlbum.find_by(id: params[:id])
-	if @photo_album.user == current_user || is_admin?
-		if @photo_album.destroy
-			respond_to do |format|
-				format.html { redirect_to '/media?t=albums&c=all' }
-				format.json { head :no_content }
-			end
-    end
-	else
-		redirect_to '/404'
-	end
+  	if @photo_album.user == current_user || is_admin?
+  		if @photo_album.destroy
+  			respond_to do |format|
+  				format.html { redirect_to '/media?t=albums&c=all' }
+  				format.json { head :no_content }
+  			end
+      end
+  	else
+  		redirect_to '/404'
+  	end
   end
   def get_albums_list
 	if params[:format] == 'json'
