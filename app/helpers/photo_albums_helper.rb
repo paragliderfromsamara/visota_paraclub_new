@@ -70,10 +70,9 @@ module PhotoAlbumsHelper
         </tr>
 				<tr>
 					<td align='left' valign='middle'>
-						<span class = 'istring_m norm medium-opacity'>Автор </span>#{link_to album.user.name, album.user, :class => 'b_link_i'}
+						<span class = 'istring_m norm medium-opacity'>Автор: </span>#{link_to album.user.name, album.user, :class => 'b_link_i'}
 					</td>
-					<td align = 'right' valign='middle'>
-						 
+					<td align = 'right' valign='middle'> 
              #{albumInformation(album)}
 					</td>
 				</tr>

@@ -68,7 +68,21 @@
 			<h3>Крайние размещенные видео</h3>
 		</div>
 	</div>
+    <div class = 'm_1000wh'>
+    <%= control_buttons([{:name => 'Все видео пользователя', :access => true, :type => 'arrow-right', :link => "/users/#{@user.id.to_s}/videos"} ]).html_safe%>
+    </div>
     <%= last_user_videos(i).html_safe %>
 <% end %>
-
+<% if @albums != [] %>
+    <% i+=1 %>
+	<div class = 'cBoxSplitter'>
+		<div class = 'm_1000wh'>
+			<h3>Крайние размещенные альбомы</h3>
+		</div>
+	</div>
+    <div class = 'm_1000wh'>
+    <%= control_buttons([{:name => 'Все альбомы пользователя', :access => true, :type => 'arrow-right', :link => "/users/#{@user.id.to_s}/photo_albums"} ]).html_safe%>
+    </div>
+    <%= render 'photo_albums/thumbs_view' %>
+<% end %>
 

@@ -145,6 +145,7 @@ include UsersHelper
   	if @user != nil
   		#@alter_logo = @user.photo if @user.photo?
   		@title = "#{@user.name}"
+      @albums = @user.photo_albums.where(status_id: 1).order("created_at DESC").limit(4)
   		respond_to do |format|
   		  format.html # show.html.erb
   		  format.json { render :json => @user }

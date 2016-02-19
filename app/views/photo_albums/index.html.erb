@@ -8,15 +8,22 @@
         </div>
     </div>
 </div>
-<% if !is_not_authorized? %>
-		<div class = 'c_box'><div class = 'm_1000wh'><%= control_buttons(index_albums_buttons).html_safe %></div></div>	
-<% end %>
+<div class = 'c_box'>
+    <div class = 'm_1000wh'>
+        <div class = 'section group'>
+            <div class = 'col span_10_of_12' style = 'margin:0;padding:0;'>
+                <%= control_buttons(index_albums_buttons).html_safe %>
+            </div>
+            <div class = 'col span_2_of_12' style = 'margin:0;padding:0;'>
+                <%= view_mode_albums_list.html_safe %>
+            </div>
+        </div>
+    </div>
+</div>	
+
 <% if @albums != [] %>
-			<% i=0 %>
-			<% @albums.each do |album| %>
-				<%= album_index_block(album, i, 'index') %>
-				<% i+=1 %>
-			<% end %>
+            <%= render 'photo_albums/list_view' if session[:albums_list_type] == 'list' %>
+            <%= render 'photo_albums/thumbs_view' if session[:albums_list_type] == 'thumbs' %>
 <% else %>
 	<div class = 'm_1000wh tb-pad-m'>
 		<p class = 'istring norm medium-opacity'>Нет ни одного фотоальбома в данной категории...</p>
