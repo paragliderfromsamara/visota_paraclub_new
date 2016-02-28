@@ -171,6 +171,9 @@ end
 		def userCreateThemeInTopic?(topic)
 			!is_not_authorized? || (user_type == 'new_user' and topic.id == 6) 
 		end
+		def userCanCreateAds? #может ли пользователь создавать тему с типом объявление
+			user_type == 'manager' || is_admin?
+		end
 	#topics_part
 	#themes_part
 	def userCanDeleteTheme?(theme)

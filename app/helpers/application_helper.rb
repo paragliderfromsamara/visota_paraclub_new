@@ -528,7 +528,7 @@ end
 		return value
 	end
 	
-	def ru_month(m, type) #type == partial or full or родительный падеж
+	def ru_month(m, type='full') #type == partial or full or родительный падеж
 		value = ''
 		month_array = [
 						[1, 'Январь', 'Янв.', 'Января'],
@@ -548,10 +548,17 @@ end
 			value = month[1] if month[0] == m and type == 'full'
 			value = month[2] if month[0] == m and type == 'partial'
 			value = month[3] if month[0] == m and type == 'rod_padej'
+      break if !value.blank?
 		end
 	return value
   end
-  
+  def ru_month_list
+    v = []
+    for i in 1..12
+      v[i-1] = ru_month(i)
+    end
+    return v
+  end
   	
   #smiles_part
   def smiles_draw

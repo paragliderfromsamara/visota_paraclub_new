@@ -3,14 +3,14 @@ module ThemesHelper
 		return "#{ f.hidden_field :visibility_status_id, :value => 1}"	if is_not_authorized?  
 		return "<br />#{ f.label :visibility_status_id, ('<i class = "fi-shield fi-grey fi-medium"></i> Скрыть от не авторизованных пользователей').html_safe} #{ f.check_box :visibility_status_id, {:class=>'check_box'}, '2', '1'}<br />" if !is_not_authorized?
 	end
-	def themes_table(themes)
+	def themes_table(themes, ads = @ads)
 			"
 				<table class = 'v_table' id = 'themes_list'>
 					<tr>
             <th id = 'first'>
             </th>
 						<th>
-							Тема
+							Заголовок
 						</th>
 						<th title = 'Дата создания темы'>
 							Дата
@@ -25,7 +25,9 @@ module ThemesHelper
 							Информация
 						</th>
 					</tr>
-					#{build_rows(themes)}
+          #{"<tr><th class = 'splitter' colspan = 6 >Закреплённые темы</th></tr>#{build_rows(ads)}" if !ads.blank?}
+					<tr><th class = 'splitter' colspan = 6>#{themesFilterHash[:cat_name] }</th></tr>
+          #{build_rows(themes)}
 				</table>
 			"
 	end
@@ -44,21 +46,25 @@ module ThemesHelper
   end
 	def build_rows(themes)
 		rows = ''
-		themes.each do |th|
-      thReadInfo = th.theme_read_info(current_user)
-      last_msg = thReadInfo[:last_message]
-			rows += "<tbody class = 't_link' link_to = '#{thReadInfo[:link]}' title = '#{th.name}'>"
-			rows += '<tr>'
-      rows += "<td id = 'first' class = 'new_msg_counter'>#{thReadInfo[:info]}</td><td class = 't_name'>#{truncate(th.name, :length => 45)}</td><td class = 'date'>#{my_time(th.created_at)}</td>"
-			if last_msg != nil
-				rows += "<td>#{last_msg.user.name}</td><td class = 'date'>#{my_time(last_msg.created_at)}</td>"
-			else
-				rows += "<td class = 'usr'>#{th.user.name}</td><td class = 'date'>#{my_time(th.created_at)}</td>"
-			end
-			rows += "<td class = 'stat' valign = 'top' id = 'last'>#{themeInformation(th)}</td>"
-			rows += '</tr>'
-			rows += "</tbody>"
-		end
+    if themes.size != 0
+  		themes.each do |th|
+        thReadInfo = th.theme_read_info(current_user)
+        last_msg = thReadInfo[:last_message]
+  			rows += "<tbody class = 't_link' link_to = '#{thReadInfo[:link]}' title = '#{th.name}'>"
+  			rows += '<tr>'
+        rows += "<td id = 'first' class = 'new_msg_counter'>#{thReadInfo[:info]}</td><td class = 't_name'>#{truncate(th.name, :length => 45)}</td><td class = 'date'>#{my_time(th.created_at)}</td>"
+  			if last_msg != nil
+  				rows += "<td>#{last_msg.user.name}</td><td class = 'date'>#{my_time(last_msg.created_at)}</td>"
+  			else
+  				rows += "<td class = 'usr'>#{th.user.name}</td><td class = 'date'>#{my_time(th.created_at)}</td>"
+  			end
+  			rows += "<td class = 'stat' valign = 'top' id = 'last'>#{themeInformation(th)}</td>"
+  			rows += '</tr>'
+  			rows += "</tbody>"
+  		end
+    else
+      rows += "<tr><th class = 'no-entities' colspan = 6 ><p class = 'istring norm tb-pad-m medium-opacity'> #{themesFilterHash[:empty_msg]}</p></th></tr>"
+    end
 		return rows
 	end
   
@@ -134,6 +140,26 @@ module ThemesHelper
 		"
 	end
   
+  def themesFilterHash
+    if @topic.is_not_equipment?
+      if params[:th_filter] == 'my'
+        {empty_msg: 'В разделе нет ни одного созданной Вами темы...', cat_name: 'Мои темы'}
+      elsif params[:th_filter] == 'not_visited'     
+        {empty_msg: 'В разделе нет ни одной непросмотренной Вами темы...', cat_name: 'Непросмотренные темы'}
+      elsif params[:th_filter] == 'ntf'
+        {empty_msg: 'В разделе нет ни одной отслеживаемой Вами темы...', cat_name: 'Отслеживаемые темы'}
+       
+      elsif params[:th_filter] == 'deleted' && user_type == 'super_admin'
+        {empty_msg: 'В разделе нет ни одной удалённой темы...', cat_name: 'Удалённые темы'}
+      else
+        {empty_msg: 'В разделе нет ни одной темы...', cat_name: 'Все темы'}
+      end
+    else
+      #to_do
+      {empty_msg: 'В категории нет ни одного объявления...', cat_name: @cur_equipment_part[:name]}
+    end
+  end
+  
 	def theme_owner_buttons #в контроллере themes#show
 		buttons_array = []
 		buttons_array += [{:name => 'Новое сообщение', :access => userCanCreateMsgInTheme?(@theme), :type => 'comment', :id => 'newMsgBut'}]
@@ -150,7 +176,9 @@ module ThemesHelper
 		buttons_array[buttons_array.length] = {:name => 'Создать фотоальбом из темы', :access => @theme.all_photos_in_theme.size > 3 && @theme.status_id != 2 , :type => 'photo', :link => theme_path(@theme) + '/make_album'} if is_admin?
     return control_buttons(buttons_array).html_safe
 	end
-	
+	def is_form_for_ads?
+    userCanCreateAds? and params[:add_ads] == 'true'
+  end
 	def theme_errors
 		@content_error = ''
 		@content_f_color = ''

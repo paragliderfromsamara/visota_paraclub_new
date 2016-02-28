@@ -21,6 +21,25 @@ module EventsHelper
           return c_box_block(p)
 	end
 	
+	def event_compact_item(event, s=1) #Миниатюра на странице Общение 
+    ph = event.alter_photo('small_thumb')
+    strLength = (ph.nil?)? 450 : 200
+    html = "<div class = 'col span_#{12/s}_of_12'><h4><span class = 'black'>#{event.post_date.strftime('%d-%m-%Y')} |</span> #{event.title}</h4>
+							<table style = 'width: 99%; height: 90px;'>
+								<tr>
+									#{"<td>#{event.alter_photo('small_thumb')}</td>" if !ph.nil?}
+									<td valign = 'top' align = 'left'>
+                    <span class = 'mText' id = 'content'>
+                      <p>#{truncate(event.content.escapeBbCode, :length => strLength/s)}</p>
+                    </span>      						
+                  </td>
+								</tr>
+							</table>
+              #{control_buttons(event_compact_buttons(event))}
+            </div>"
+        return html
+	end
+  
 	def event_show_block
 		"
     <table style = 'width:100%;'>
@@ -47,6 +66,9 @@ module EventsHelper
 	end
 	def event_index_buttons(event)
 		[{:name => 'Перейти', :access => true, :type => 'arrow-right', :link => event.link_to}] + event_manage_buttons(event) 
+	end
+	def event_compact_buttons(event)
+		[{:name => 'Перейти', :access => true, :type => 'arrow-right', :link => event.link_to}]
 	end
 	def event_show_buttons
 		val = [{:name => 'К списку новостей', :access => true, :type => 'arrow-right', :link => events_path}] + event_manage_buttons(@event)

@@ -3,10 +3,21 @@
 	<%= form_for(@formTheme, :multipart => 'true', html: {id: "theme_form_#{@formTheme.id}", class: "theme_form"}) do |f| %>
                 <%= f.hidden_field :deleted_photos, :value => '' if controller.action_name == 'edit' || controller.action_name == 'update'%>
 				<div style = 'display: none;'><%=  f.file_field :uploaded_photos, :multiple => 'true' %></div>
-					<table id = 'msg_table'>
+					<% if !@topic.is_not_equipment? %>
+                    <br />
+                    <h4>Тип снаряжения</h4>
+                    <%= f.radio_button :equipment_part_id, nil, {id: 'theme_e_part_difference'} %><%= f.label 'e_part_difference', 'Разное' %>
+                    <%Theme.equipment_parts.each do |p| %>
+                        <%= f.radio_button :equipment_part_id, p[:id], {id: "theme_e_part_#{p[:id]}"} %>
+                        <%= f.label "e_part_#{p[:id]}", p[:name] %>
+                    <%end%>
+                    <br /><br />
+                    <% end %>
+                    <table id = 'msg_table'>
 						<tr>
 							<td>
-								<%=  f.hidden_field :topic_id, :value => @topic.id %>	
+								<%=  f.hidden_field :topic_id, :value => @topic.id %>
+                               
 								<%=  f.text_field :name, :size => '157', :class => 't_field', :placeholder => 'Заголовок темы', :style => 'padding: 5px;', :autocomplete=>'off' %>	
 								<div><p class = 'istring <%= @name_f_color if @name_f_color != nil %>' id = 'nLength'><span id = 'txtL'></span> <span class = 'err' id = 'txtMatchesErr'></span> <span id = 'txtErr'><%= @name_error if @name_error != nil %></span><span id = 'txtErrSrv'><%= @name_error if @name_error != nil %></span></p></div><br />									
 								<div style = 'position: relative; z-index: 1000; width: 100%;' id = 'likebleNames'></div>
@@ -31,6 +42,21 @@
                     </tr>
 									</table>
 									<%=  hidden_check_box(f).html_safe %>
+                                    
+            
+                                    <% if userCanCreateAds? %>
+                                        <%= f.check_box :theme_type_id, {}, 2, 1 %> 
+                                        <%= f.label :theme_type_id, 'Закрепить тему' %> <br /> 
+
+                                           <br />
+                                           <fieldset>
+                                              
+                                               <legend>Новость из темы</legend>
+                                                   <% if @formTheme.event.nil? %>
+                                                    <%= f.check_box :make_event_flag, {}, 'true', 'false' %> <%= f.label :make_event_flag, 'Рассказать в новостях' %> <br /> <%end%><%= f.label :event_display_area_id, 'Дата публикации' %>
+                                               <%= f.date_select :event_post_date, order: [:day, :month, :year], use_month_names: ru_month_list, default: (@formTheme.event.nil?)? Time.now : @formTheme.event.post_date %>
+                                           </fieldset>
+                                    <%end%>
 							</td>
 						</tr>
 						<tr>

@@ -19,7 +19,7 @@ module TopicsHelper
 	end
 	def show_topic_buttons(topic)
 		[
-		 {:name => "Добавить тему", :access => userCreateThemeInTopic?(topic), :type => 'plus', :link => "#{new_theme_path(:t => topic.id)}", :id => 'newTheme'},
+		 {:name => "#{(@topic.is_not_equipment?)? 'Добавить тему' : 'Подать объявление'}", :access => userCreateThemeInTopic?(topic), :type => 'plus', :link => "#{new_theme_path(:t => topic.id)}", :id => 'newTheme'},
      {:name => "Пометить все как прочитанные", :access => signed_in?, :type => 'checkbox', :link => "#{topic_path(topic)}}/set_as_read_all_themes", :id => 'setAsRead', remote: true}
 		]
 	end
@@ -38,7 +38,7 @@ module TopicsHelper
     myNtfThemes = @topic.themes.where(id: current_user.theme_notifications.select(:theme_id)).size
     myNotVisitedThemes = @topic.themes.where(id: current_user.not_readed_themes_ids(@topic, is_not_authorized?)).size
     buttons[buttons.length] = {:name => "Все[#{allThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id), selected: is_cur_th_filter_mode_all?}
-    buttons[buttons.length] = {:name => "Не просмотренные[#{myNotVisitedThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, th_filter: 'not_visited'), selected: params[:th_filter] == 'not_visited'}
+    buttons[buttons.length] = {:name => "Непросмотренные[#{myNotVisitedThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, th_filter: 'not_visited'), selected: params[:th_filter] == 'not_visited'}
     buttons[buttons.length] = {:name => "Мои темы[#{myThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, th_filter: 'my'), selected: params[:th_filter] == 'my'}
     buttons[buttons.length] = {:name => "Отслеживаемые темы[#{myNtfThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, th_filter: 'ntf'), selected: params[:th_filter] == 'ntf'}
     if user_type == 'super_admin'
@@ -188,6 +188,31 @@ module TopicsHelper
 		return v
   end
   
+  def topicEquipmentPartButtons
+    if !@topic.is_not_equipment?
+      current_part = @cur_equipment_part[:id]
+      vStatus = (is_not_authorized?)? 1 : [1, 2]
+      allActualThemes = @topic.themes.rewhere(status_id: 1, visibility_status_id: vStatus)
+      buttons = [{:name => "Все актульные[#{allActualThemes.size}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id), selected: current_part.nil?}]
+      if user_type != 'guest' && user_type != 'new_user'
+        curPartThemes = @topic.themes.rewhere(status_id: [1,3], visibility_status_id: [1,2], user_id: current_user.id)
+        buttons[buttons.size] = {:name => "Мои[#{curPartThemes.size}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, e_part: 100), selected: current_part == 100}
+      end
+      Theme.equipment_parts.each do |p|
+        curPartThemes = @topic.themes.rewhere(status_id: 1, visibility_status_id: vStatus, equipment_part_id: p[:id])
+        buttons[buttons.size] = {:name => "#{p[:name]}[#{curPartThemes.size}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, e_part: p[:id]), selected: current_part == p[:id]}
+      end
+      curPartThemes = @topic.themes.rewhere(status_id: 1, visibility_status_id: vStatus, equipment_part_id: nil)
+      buttons[buttons.size] = {:name => "Разное[#{curPartThemes.size}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, e_part: 500), selected: current_part == 500}
+      
+      curPartThemes = @topic.themes.rewhere(status_id: 3, visibility_status_id: vStatus)
+      buttons[buttons.size] = {:name => "Архив[#{curPartThemes.size}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, e_part: 100500), selected: current_part == 100500}
+      
+      return buttons_in_line(buttons).html_safe
+    else
+      return ''
+    end
+  end
   
   def topic_description(topic=@topic)
    return "" if topic.description.blank?

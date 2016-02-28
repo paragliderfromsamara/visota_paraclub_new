@@ -27,21 +27,34 @@ class Topic < ActiveRecord::Base
   
   #Для адаптации старого форума в новый
   def firstMessages
-    self.messages.where(:photo_id => nil, :video_id => nil, :first_message_id => nil).order('id ASC')
+    msgs = Message.select(:name, :id).where(photo_id: nil, video_id: nil, first_message_id: nil, topic_id: self.id)#.order('id ASC')
+    msgsWithoutName = []
+    msgsWithName = [] 
+    msgs.each do |m|
+      if m.name.blank?
+        msgsWithoutName[msgsWithoutName.length] = m.id
+      else
+        msgsWithName[msgsWithName.length] = m.id
+      end
+    end
+    return {withName: msgsWithName, withoutName: msgsWithoutName}       
+    #self.messages.rewhere(:photo_id => nil, :video_id => nil, :first_message_id => nil).order('id ASC')
   end
  
-  def firstMessagesWithoutName #Находим все первые сообщения без заголовка
-    msgs = []
-    frst_messages = []
-    msgs += self.messages.select(:id).where(:photo_id => nil, :video_id => nil, :first_message_id => nil, :name => nil)
-    msgs += self.messages.select(:id).where(:photo_id => nil, :video_id => nil, :first_message_id => nil, :name => '')
-    if msgs != []
-	    frst_messages = Message.where(id: msgs).order('id ASC')
-    end
-	  return frst_messages 
+  def firstMessagesWithoutName(ids) #Находим все первые сообщения без заголовка
+    #frst_messages = []
+    Message.where(id: ids).order('id ASC')
+    #msgs += self.messages.select(:id).rewhere(:photo_id => nil, :video_id => nil, :first_message_id => nil, :name => '')
+    #if msgs != []
+	  #  frst_messages = Message.where(id: msgs).order('id ASC')
+    #end
+	  #return frst_messages 
   end
-  def firstMessagesWithName #Находим все первые сообщения c заголовком
-	  self.firstMessages - self.firstMessagesWithoutName 
+  def firstMessagesWithName(ids) #Находим все первые сообщения c заголовком
+	  Message.where(id: ids).order('id ASC')
   end
   
+  def is_not_equipment? #проверка не является ли раздел купи-продайкой
+    self.id != 9
+  end
 end

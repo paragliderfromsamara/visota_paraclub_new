@@ -7,6 +7,7 @@ include EventsHelper
     @topics = Topic.all
 	  @title = @header = "Общение"
     @add_functions = "initSearchForm();"
+    @events = Event.where("post_date > ?", Time.now-10.days).where.not(status_id: [0,1]).limit(3)
     respond_to do |format|
 	  format.html# index.html.erb
       format.json { render :json => @topics }
@@ -17,26 +18,43 @@ include EventsHelper
   # GET /topics/1.json
   def show
   @topic = Topic.find(params[:id])
-	@title = @header = @topic.name 
+	@title = @header = @topic.name
+  thType = (session[:themes_list_type] == 'list')? [1,2] : 1
+   
 	@themes_per_page = 25
-  if signed_in?
-    if params[:th_filter] == 'my'
-      @themes = @topic.themes.where(user_id: current_user.id).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
-    elsif params[:th_filter] == 'ntf'
-      @themes = @topic.themes.where(id: current_user.theme_notifications.select(:theme_id)).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
-    elsif params[:th_filter] == 'not_visited' 
-      @themes = @topic.themes.where(id: current_user.not_readed_themes_ids(@topic, is_not_authorized?)).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
-    elsif params[:th_filter] == 'deleted' && user_type == 'super_admin'
-      @themes = @topic.themes.rewhere(status_id: 2).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+  if @topic.id != 9
+    if signed_in?
+      @ads = @topic.themes.where(theme_type_id: 2).order('last_message_date DESC') if session[:themes_list_type] != 'list'
+      if params[:th_filter] == 'my'
+        @themes = @topic.themes.where(user_id: current_user.id, theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+      elsif params[:th_filter] == 'ntf'
+        @themes = @topic.themes.where(id: current_user.theme_notifications.select(:theme_id), theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+      elsif params[:th_filter] == 'not_visited' 
+        @themes = @topic.themes.where(id: current_user.not_readed_themes_ids(@topic, is_not_authorized?), theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+      elsif params[:th_filter] == 'deleted' && user_type == 'super_admin'
+        @themes = @topic.themes.rewhere(status_id: 2, theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+      else
+      	if is_not_authorized?
+          @ads = @topic.themes.where(theme_type_id: 2, visibility_status_id: 1).order('last_message_date DESC') if session[:themes_list_type] != 'list'
+      		@themes = @topic.themes.where(visibility_status_id: 1, theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+      	else
+          @ads = @topic.themes.where(theme_type_id: 2, visibility_status_id: [1,2]).order('last_message_date DESC') if session[:themes_list_type] != 'list'
+      		@themes = @topic.themes.where(visibility_status_id: [1,2], theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+      	end
+      end
     else
-    	if is_not_authorized?
-    		@themes = @topic.themes.where(visibility_status_id: 1).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
-    	else
-    		@themes = @topic.themes.where(visibility_status_id: [1,2]).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
-    	end
+      @ads = @topic.themes.where(theme_type_id: 2, visibility_status_id: 1).order('last_message_date DESC') if session[:themes_list_type] != 'list'
+      @themes = @topic.themes.where(visibility_status_id: 1, theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
     end
-  else
-    @themes = @topic.themes.where(visibility_status_id: 1).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+  else #если топик == купи-продайка
+    @cur_equipment_part = Theme.equipment_part_by_id(params[:e_part])
+    @ads = @topic.themes.where(theme_type_id: 2).order('last_message_date DESC') if session[:themes_list_type] != 'list'
+    vStatus = (is_not_authorized?)? 1 : [1,2]
+    if @cur_equipment_part[:id] == 100 && user_type != 'guest' && user_type != 'new_user'
+      @themes = @topic.themes.rewhere(theme_type_id: 1, user_id: current_user.id, status_id: [1,3]).order('updated_at DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+    else
+      @themes = @topic.themes.rewhere(visibility_status_id: vStatus, theme_type_id: 1, status_id: @cur_equipment_part[:status_id], equipment_part_id: @cur_equipment_part[:equipment_part_id] ).order('updated_at DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+    end
   end
 	@path_array = [
 					        {:name => 'Общение', :link => '/visota_life'},

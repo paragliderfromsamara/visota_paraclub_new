@@ -157,10 +157,10 @@ class Article < ActiveRecord::Base
  	end  
    def alter_photo
 	if photos != []
-		return photos.first.link.thumb
+		return photos.first
 	else
 		if photo_albums != []
-			return photo_albums.first.get_photo.link.thumb
+			return photo_albums.first.get_photo
 		else
 			return nil
 		end

@@ -131,5 +131,85 @@ class ThemeTest < ActiveSupport::TestCase
     assert stepsCount - themeSteps == Step.count, "Steps темы удалить не удалось"
     assert (themePhotosNewVal == Photo.count) && (themeEntityPhotosNewVal == EntityPhoto.count), "Фотографии удалить не удалось"
   end
+    
+  test "Тест на недопустимость создания новости из темы без заголовка" do
+    user = users(:manager)
+    theme = user.theme_draft(Topic.first)
+    eCount = Event.count
+    assert_no_difference("Event.count", 'Удалось создать новость из темы без заголовка') do
+      theme.update_attributes(
+                              status_id: 1,
+                              visibility_status_id: 1,
+                              make_event_flag: 'true', 
+                              event_display_area_id: 2, 
+                              name: '', 
+                              content: 'Тема для теста создания новости из темы'
+                              )
+    end
+  end
+  
+  test "Тест на недопустимость создания новости из темы со статусом 0" do
+    user = users(:manager)
+    theme = user.theme_draft(Topic.first)
+    eCount = Event.count
+    assert_no_difference("Event.count", 'Удалось создать новость из темы без заголовка') do
+      theme.update_attributes(
+                              status_id: 0,
+                              visibility_status_id: 1,
+                              make_event_flag: 'true', 
+                              event_display_area_id: 2, 
+                              name: 'Тест на недопустимость создания новости из темы со статусом 0', 
+                              content: 'Тема для теста создания новости из темы'
+                              )
+    end
+  end
+  
+  test "Тест на недопустимость создания новости из темы со статусом видимости 2" do
+    user = users(:manager)
+    theme = user.theme_draft(Topic.first)
+    eCount = Event.count
+    assert_no_difference("Event.count", 'Удалось создать новость из темы без заголовка') do
+      theme.update_attributes(
+                              status_id: 1,
+                              visibility_status_id: 2,
+                              make_event_flag: 'true', 
+                              event_display_area_id: 2, 
+                              name: 'Тест на недопустимость создания новости из темы со статусом видимости 2', 
+                              content: 'Тема для теста создания новости из темы'
+                              )
+    end
+  end
+  
+  test "Тест на недопустимость создания новости из темы без флага создания новости из темы" do
+    user = users(:manager)
+    theme = user.theme_draft(Topic.first)
+    eCount = Event.count
+    assert_no_difference("Event.count", 'Удалось создать новость из темы без заголовка') do
+      theme.update_attributes(
+                              status_id: 1,
+                              visibility_status_id: 1,
+                              #make_event_flag: 'true', 
+                              event_display_area_id: 2, 
+                              name: 'Тест на недопустимость создания новости из темы без флага создания новости из темы', 
+                              content: 'Тема для теста создания новости из темы'
+                              )
+    end
+  end
+  
+  test "Тест на создание темы с новостью" do
+    user = users(:manager)
+    theme = user.theme_draft(Topic.first)
+    assert_difference("Event.count", 1, 'Не удалось создать новость из темы') do
+      theme.update_attributes(
+                              status_id: 1,
+                              visibility_status_id: 1,
+                              make_event_flag: 'true', 
+                              event_display_area_id: 2, 
+                              name: 'ThemeForEventCreationTest', 
+                              content: 'Тема для теста создания новости из темы'
+                              )
+    end
+    #assert eCount + 1 == Event.count
+  end
   
 end

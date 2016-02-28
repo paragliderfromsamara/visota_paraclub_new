@@ -372,7 +372,7 @@ def mediaTypes
            {ru_name: "Видео", en_name: "videos", className: "videos", categories: video.categories}
         ]
   article.types.each do |t|
-    val[val.length] = {ru_name: t[:media_name], en_name: t[:link], className: "articles", categories: []}
+    val[val.length] = {ru_name: t[:media_name], en_name: t[:link], className: "articles", categories: []} if t[:value] != 1 && t[:value] != 5
   end
   return val
 end 
@@ -457,6 +457,7 @@ end
       buttons = []
       i = 0
       article.types.each do |c|
+        next if c[:value] == 1 || c[:value] == 5
         buttons[i] = {:name => c[:multiple_name], :access => true, :type => 'b_grey', :link => "/media?c=#{c[:value]}", :data_remote => true}
         buttons[i][:selected] = true if session[:media_category] == c[:value]
         i += 1

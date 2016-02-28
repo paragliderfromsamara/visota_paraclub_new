@@ -7,8 +7,8 @@ class Theme < ActiveRecord::Base
   #---------при объединении тем все лайки от сливаемой темы привязывать к создаваемому сообщению
   #---------при полном удалении темы удалять и лайки
   
- attr_accessor :deleted_photos
- attr_accessible :last_message_date, :name, :status_id, :topic_id, :user_id, :content, :photos, :uploaded_photos, :updater_id, :attachment_files, :created_at, :updated_at, :visibility_status_id, :deleted_photos, :vote_id
+ attr_accessor :deleted_photos, :make_event_flag, :event_post_date
+ attr_accessible :last_message_date, :name, :status_id, :topic_id, :user_id, :content, :photos, :uploaded_photos, :updater_id, :attachment_files, :created_at, :updated_at, :visibility_status_id, :deleted_photos, :vote_id, :theme_type_id, :make_event_flag, :event_post_date, :equipment_part_id
  
   has_many :messages, -> { where(status_id: 1).order("created_at ASC")}, :dependent  => :destroy
   belongs_to :user
@@ -21,6 +21,7 @@ class Theme < ActiveRecord::Base
     
   has_many :theme_notifications, :dependent => :delete_all
   has_one :entity_view, :as => :v_entity, :dependent => :delete
+  has_one :event, dependent: :destroy
   has_one :article
   auto_html_for :content do
     html_escape
@@ -38,10 +39,10 @@ class Theme < ActiveRecord::Base
 	#end_quote
     simple_format
   end
-  after_save :check_photos_in_content
+  after_save :check_photos_in_content 
   before_destroy :delete_steps
   #after_create :last_msg_upd_after_create
-  #before_save :check_visibility_status
+  after_validation :check_event_flag
   
   validate :deleted_photos_check, :on => :update
 
@@ -59,6 +60,18 @@ class Theme < ActiveRecord::Base
     end
   end
   
+  def check_event_flag
+    
+    if self.event.nil? && make_event_flag == 'true' && visibility_status_id == 1  && (self.status_id == 1 || self.status_id == 3)
+      #dAreaId = (self.event_display_area_id.blank?)? 2 : self.event_display_area_id
+      pDate = event_post_date.blank? ? self.updated_at : event_post_date
+      self.build_event(post_date: self.updated_at, content: self.content, status_id: 2, title: self.name)
+    elsif !self.event.nil? 
+      status = (self.status_id != 1 && self.status_id != 3)? 1 : 2
+      pDate = event_post_date.blank? ? self.event.post_date : event_post_date
+      self.event.update_attributes(title: self.name, content: self.content, status_id: status, :post_date => pDate) 
+    end
+  end
   #searchable do
   #    text :name, :content
   #    text :messages do
@@ -431,6 +444,52 @@ def delete_steps
   self.steps.delete_all
 end
 
+
+
+
+def equipment_part
+  if self.equipment_part_id.blank? 
+    return 'Прочее' 
+  else
+    equipment_parts.each do |p|
+      return p[:name] if p.id == self.equipment_part_id
+    end
+    return 'Прочее' 
+  end
+end
+
+def self.equipment_part_by_id(params)
+   all = Theme.equipment_parts('id').push(nil)
+  if !params.nil?
+    params = params.to_i
+    all = Theme.equipment_parts('id').push(nil)
+    if params > 0 && params < Theme.equipment_parts.size + 1
+       Theme.equipment_parts.each do |p|
+         return {id: p[:id], name: p[:name], equipment_part_id: p[:id], status_id: 1 } if p[:id] == params
+       end
+    elsif params == 100500 #Архив
+      return {id: 100500, name: 'Неактуальные', status_id: 3, equipment_part_id: all}
+    elsif params == 100 #Мои
+      return {id: 100, name: 'Мои', status_id: [1,3], equipment_part_id: all}
+    elsif params == 500 #Разное
+      return {id: 500, name: 'Разное', status_id: 1, equipment_part_id: nil}
+    end
+  end
+  return {id: nil, name: 'Все актульные', status_id: 1, equipment_part_id: all}
+end
+def self.equipment_parts(s = 'all')
+  parts = [
+            {id: 1, name: 'Парапланы'},
+            {id: 2, name: 'Подвесные системы'},
+            {id: 3, name: 'Запасные парашюты'},
+            {id: 4, name: 'Парамоторы и асессуары'},
+            {id: 5, name: 'Приборы'},
+            {id: 6, name: 'Кайтинг'}
+          ]
+  return parts if s != 'id' && s != 'name'
+  return parts.map{ |i| i[:id] } if s == 'id'
+  return parts.map{ |i| i[:name] } if s == 'name'
+end
 private
 	def openThemeMessage
 		'Тема возобновлена'
@@ -438,4 +497,5 @@ private
 	def closeThemeMessage
 		'Тема закрыта'
 	end
+  
 end

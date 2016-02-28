@@ -156,7 +156,7 @@ mount_uploader :photo, UserPhotoUploader
     msg = "Подтверждён" if self.email_status == "Активен" 
     return "#{self.email} (#{msg})"
   end
-
+  
   def user_groups #в старой версии была отдельная таблица в базе
 		[
 			{:value => 7, :name => 'Удалённый', en_name: 'deleted'},#deleted
@@ -165,8 +165,8 @@ mount_uploader :photo, UserPhotoUploader
 			{:value => 3, :name => 'Друг клуба', en_name: 'friend'},		 #friend
 			{:value => 5, :name => 'Вновь прибывший', en_name: 'new_user'},   #new_user
 			{:value => 4, :name => 'Бан лист', en_name: 'bunned'},		 #bunned
-			{:value => 1, :name => 'Site Admin', en_name: 'admin'},		 #admin
-			{:value => 0, :name => 'Super Admin', en_name: 'super_admin'}    #super_admin
+			{:value => 1, :name => 'Site Admin', en_name: 'admin'}#,		 #admin
+			#{:value => 0, :name => 'Super Admin', en_name: 'super_admin'}    #super_admin
 		]
   end
   
@@ -224,9 +224,10 @@ mount_uploader :photo, UserPhotoUploader
   end
   
   def user_group
-	user_groups.each do |group|
-		return group if user_group_id == group[:value]
-	end
+    return {:value => 0, :name => 'Super Admin', en_name: 'super_admin'} if self.id == 1 
+	  user_groups.each do |group|
+	    return group if user_group_id == group[:value]
+	  end
   end
   def check_bun_status
     time = Time.now

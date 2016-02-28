@@ -45,16 +45,15 @@ include TopicsHelper
   # GET /themes/new.json
   def new 
   	@topic = Topic.find_by_id(params[:t])
-  	@button_name = 'Создать тему'
   	if userCreateThemeInTopic?(@topic)
   		@path_array = [
   						{:name => 'Клубная жизнь', :link => '/visota_life'},
   						{:name => @topic.name, :link => topic_path(@topic)},
-  						{:name => "Новая тема"}
+  						{:name => (@topic.is_not_equipment?)? "Новая тема" : "Новое объявление"}
   					  ]
   		@draft = current_user.theme_draft(@topic)
   		@formTheme = @draft 
-  		@title = @header = "Новая тема в разделе #{@topic.name}"
+  		@title = @header = (@topic.is_not_equipment?)? "Новая тема в разделе #{@topic.name}" : "Новое объявление в разделе #{@topic.name}" 
   		#@add_functions = "initThemeForm(#{@draft.id}, '.edit_theme');"
   		respond_to do |format|
   		  format.html { render 'new'}# new.html.erb
@@ -130,9 +129,11 @@ include TopicsHelper
 	if userCanEditTheme?(@formTheme) 
     curStatusId = @formTheme.status_id
     newStatusId = (params[:theme][:status_id] == nil)? curStatusId : params[:theme][:status_id].to_i  
+    params[:theme][:theme_type_id] = (userCanCreateAds?)? params[:theme][:theme_type_id] : 1
     if curStatusId == 0 && newStatusId == 1
       notice = 'Тема успешно добавлена' 
-      params[:theme][:created_at] = params[:theme][:updated_at] = Time.now
+      params[:theme][:created_at] =  params[:theme][:updated_at] = params[:theme][:last_message_date] = Time.now
+
       sMail = true
     else
       notice = 'Тема успешно обновлена' 

@@ -87,6 +87,149 @@ module AdminToolsHelper
     guestSteps.delete_all if !guestSteps.blank?
   end
   
+  def makeThemesFromMessages
+		i = 0
+		@fuck = []
+		fuck = []
+		topics = Topic.all		
+		topics.each do |topic| 
+			msgsWithoutTread = []
+      msgs = topic.firstMessages
+			frstMsgsWithName = topic.firstMessagesWithName(msgs[:withName])
+			frstMsgsWithoutName = topic.firstMessagesWithoutName(msgs[:withoutName])
+			if frstMsgsWithName != []
+				frstMsgsWithName.each do |msg|
+					theme = Theme.find_by(name: msg.name)
+					if theme.nil?
+            theme = Theme.new(
+										:name => msg.name, 
+										:content => msg.content, 
+										:status_id => 1, 
+										:user_id => msg.user_id, 
+										:topic_id => topic.id, 
+										:created_at => msg.created_at,  
+										:updated_at => msg.updated_at,
+										:updater_id => msg.updater_id,
+										:visibility_status_id => 1,
+										:last_message_date => msg.created_at,
+                    theme_type_id: 1
+									) #Создаём новую тему на базе текущего первого сообщения
+						if theme.save
+						  msg.bind_child_messages_to_theme_from_first_message(theme)
+						  msg.bind_photos_to_theme(theme)
+						  msg.bind_attachments_to_theme(theme)
+						  msg.destroy
+            end
+					else	
+						msg.update_attributes(:theme_id => theme.id, :status_id => 1)
+						msg.bind_child_messages_to_theme_from_first_message(theme)
+					end
+					theme.last_msg_upd
+				end
+			end
+			if frstMsgsWithoutName != []
+				frstMsgsWithoutName.each do |msg|
+					if msg.get_tread != []
+						i+=1
+            theme = Theme.new(
+										:name => "Обсуждение без имени #{i}", 
+										:content => msg.content, 
+										:status_id => 1, 
+										:user_id => msg.user_id, 
+										:topic_id => topic.id, 
+										:created_at => msg.created_at,  
+										:updated_at => msg.updated_at,
+										:updater_id => msg.updater_id,
+										:visibility_status_id => 1,
+										:last_message_date => msg.created_at,
+                    theme_type_id: 1
+									)  #Создаём новую тему на базе текущего первого сообщения
+            if theme.save
+						  msg.bind_child_messages_to_theme_from_first_message(theme)
+						  msg.bind_photos_to_theme(theme)
+						  msg.bind_attachments_to_theme(theme)
+						  theme.last_msg_upd
+						  msg.destroy
+            end
+					else
+						theme = Theme.find_by(name: 'Сообщения без темы', topic_id: topic.id)
+						if theme == nil
+              theme = Theme.new(
+  												:user_id => 1, 
+  												:name => 'Сообщения без темы', 
+  												:content => "Здесь собраны сообщения без темы для раздела '#{topic.name}'", 
+  												:topic_id => topic.id, 
+  												:created_at => msg.created_at, 
+  												:updated_at => msg.updated_at, 
+  												:status_id => 1,
+  												:visibility_status_id => 1,
+  												:last_message_date => msg.created_at,
+                          theme_type_id: 1
+  											 ) 
+              theme.save
+            end
+						msg.update_attributes(:theme_id => theme.id, :visibility_status_id => 1, :status_id => 1)
+						theme.last_msg_upd
+					end
+				end
+			end
+		end
+  end
+  
+  def adaptationAlbums
+		albums = PhotoAlbum.all
+		if albums != []
+			albums.each do |album|
+				album.update_attributes(:status_id => 1)
+        steps = Step.where(part_id: 3, page_id: 1, entity_id: album.id)
+        v = album.build_entity_view(counter: steps.count)
+        v.save
+			end
+		end
+  end
+  
+  def adaptationPhotos
+		photos = Photo.all
+		if photos != []
+			photos.each do |photo|
+				#photo.update_attributes(:visibility_status_id => 1)
+        steps = Step.where(part_id: 4, page_id: 1, entity_id: photo.id)
+        v = photo.build_entity_view(counter: steps.count)
+        v.save
+        if photo.messages != []
+          photo.messages.each do |m|
+            m.update_attributes(status_id: 1)
+          end
+        end
+			end
+		end
+  end
+  
+  def adaptationArticles
+		articles = Article.all
+		if articles != []
+			articles.each do |article|
+				article.update_attributes(:status_id => 1, :visibility_status_id => 1, :accident_date => article.created_at)
+        steps = Step.where(part_id: 7, page_id: 1, entity_id: article.id)
+        v = article.build_entity_view(counter: steps.count)
+        v.save
+      end
+		end
+  end
+  
+  def adaptationVideos
+    videos = Video.all
+    if videos != []
+      videos.each do |v|
+        if v.messages != []
+          v.messages.each do |m|
+            m.update_attributes(status_id: 1)
+          end
+        end
+      end
+    end
+  end
+  
   def makeThemesSteps
     users = User.all
     if !users.blank?
@@ -140,17 +283,17 @@ module AdminToolsHelper
     photos = Photo.all
     if photos != []
       photos.each do |p|
-         # p.theme.entity_photos.create(photo_id: p.id, visibility_status_id: 1) if p.theme != nil
-         # p.message.entity_photos.create(photo_id: p.id, visibility_status_id: 1) if p.message != nil
-         # p.article.entity_photos.create(photo_id: p.id, visibility_status_id: 1) if p.article != nil
-         # p.event.entity_photos.create(photo_id: p.id, visibility_status_id: 1) if p.event != nil
-         # p.photo_album.entity_photos.create(photo_id: p.id, visibility_status_id: 1) if p.photo_album != nil
-         # p.update_attributes(theme_id: nil, message_id: nil, event_id: nil, article_id: nil, photo_album_id: nil)
-          p.link.recreate_versions!(:small_thumb, :in_content, :big_thumb) if p.link?
+         p.theme.entity_photos.create(photo_id: p.id, visibility_status_id: 1) if p.theme != nil
+         p.message.entity_photos.create(photo_id: p.id, visibility_status_id: 1) if p.message != nil
+         p.article.entity_photos.create(photo_id: p.id, visibility_status_id: 1) if p.article != nil
+         p.event.entity_photos.create(photo_id: p.id, visibility_status_id: 1) if p.event != nil
+         p.photo_album.entity_photos.create(photo_id: p.id, visibility_status_id: 1) if p.photo_album != nil
+         p.update_attributes(theme_id: nil, message_id: nil, event_id: nil, article_id: nil, photo_album_id: nil)
+        #p.link.recreate_versions!(:small_thumb, :in_content, :big_thumb) if p.link?
       end
     end
-    users = User.all
-    users.each {|u| u.avatar.recreate_versions!(:sq_thumb) if u.avatar?} 
+    #users = User.all
+   # users.each {|u| u.avatar.recreate_versions!(:sq_thumb) if u.avatar?} 
   end
 
    

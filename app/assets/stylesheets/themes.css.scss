@@ -64,6 +64,8 @@ table#themes_list {
 					td.usr  {
 							width: 220px;
 						   }
+                    th.splitter {height: 30px; color: $main_color; background-color: $second_color; vertical-align: middle;}
+                    th.no-entities {height: 50px; background-color: $oddBlockColor; vertical-align: middle;}
 				}
 				
 table#themes_list_vl {

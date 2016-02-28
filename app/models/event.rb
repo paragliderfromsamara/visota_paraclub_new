@@ -1,5 +1,5 @@
 class Event < ActiveRecord::Base
-  attr_accessible :title, :content, :updated_at, :status_id, :post_date, :uploaded_photos, :attachment_files
+  attr_accessible :title, :content, :updated_at, :status_id, :post_date, :uploaded_photos, :attachment_files, :theme_id
  
   has_many :entity_photos, :as => :p_entity, :dependent => :destroy #has_many :photos, :dependent  => :delete_all
   has_many :photos, through: :entity_photos
@@ -8,6 +8,7 @@ class Event < ActiveRecord::Base
   belongs_to :video
   belongs_to :article
   belongs_to :photo
+  belongs_to :theme
   require 'will_paginate'
   
   auto_html_for :content do
@@ -75,32 +76,38 @@ class Event < ActiveRecord::Base
 		photo_tag = nil
 		if video != nil
 			width = '250px' if type == 'article' or type == 'thumb'
-			width = '150px' if type == 'small'
+			width = '150px' if type == 'small' || type == 'small_thumb'
 			if video.image_link != '' and video.image_link != nil
 				photo_tag = "<img src = '#{video.image_link}' width = #{width} align = 'left' style = 'padding-right: 5px;'/>"
 			end
 		else
 			photo_to_return = nil
-			if article != nil || photo_album != nil || photo != nil || photos != []
-				if photo_album != nil
-					photo_to_return = photo_album.photo
-				end
-				if article != nil
+			if !article.nil? || !photo_album.nil? || photo != nil || photos != [] || !theme.nil?
+				if !photo_album.nil?
+					photo_to_return = photo_album.get_photo
+        elsif !article.nil?
 					photo_to_return = article.alter_photo  
-				end
-				if photo != nil || photos != []
-					photo_to_return = photos.first if photo == nil 
-					photo_to_return = photo if photo != nil 
-				end
+        elsif !theme.nil?
+          photo_to_return = self.theme.photos.first
+        else
+          if !self.photos.blank?
+					  photo_to_return = self.photos.first if self.photo.nil? 
+					  photo_to_return = self.photo if !self.photo.nil?
+          end
+        end
 			end
-			if photo_to_return != nil
-				if type == 'thumb'
-					photo_tag = "<img src = '#{photo_to_return.link.thumb}' align = 'left' style = 'padding-right: 5px;' />"
-				elsif type == 'article'
-					photo_tag = "<img src = '#{photo_to_return.link.article}' align = 'left' style = 'padding-right: 5px;' />"
-				elsif type == 'small'
-					photo_tag = "<img src = '#{photo_to_return.link.small}' align = 'left' style = 'padding-right: 5px;' />"
-				end
+			if !photo_to_return.nil?
+        if photo_to_return.link?
+  				if type == 'thumb'
+  					photo_tag = "<img src = '#{photo_to_return.link.thumb}' align = 'left' style = 'padding-right: 5px;' />"
+  				elsif type == 'article'
+  					photo_tag = "<img src = '#{photo_to_return.link.article}' align = 'left' style = 'padding-right: 5px;' />"
+  				elsif type == 'small'
+  					photo_tag = "<img src = '#{photo_to_return.link.small}' align = 'left' style = 'padding-right: 5px;' />"
+  				elsif type == 'small_thumb'
+  					photo_tag = "<img src = '#{photo_to_return.link.small_thumb}' align = 'left' style = 'padding-right: 5px;' />"
+  				end
+        end
 			end
 		end
 
@@ -130,6 +137,7 @@ class Event < ActiveRecord::Base
 		link = "/articles/#{article.id}" if article != nil
 		link = "/photo_albums/#{photo_album.id}" if photo_album != nil
 		link = "/videos/#{video.id}" if video != nil
+    link = "/themes/#{theme.id}" if !theme.nil?
 		return link
 	end
   

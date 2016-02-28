@@ -15,7 +15,7 @@ class Message < ActiveRecord::Base
   belongs_to :message
   belongs_to :article
   belongs_to :photo_album
-  has_many :messages 
+  has_many :messages #, -> {where(status_id: 1)} 
   require 'will_paginate'
   auto_html_for :content do
 	html_escape
@@ -171,19 +171,19 @@ class Message < ActiveRecord::Base
 
 #Поиск потомков сообщения  
   def get_tread #Поиск всех сообщений в иерархии
-	msgs_array = self.messages #Начальный массив сообщений
-	if msgs_array != []
-		msgs_to_loop = msgs_array #Массив для обработки в цикле
-		begin 
-			msgs_temp = [] #временный массив для сообщений
-			msgs_to_loop.each do |msg|
-				msgs_temp += msg.messages if msg.messages != []
-			end
-			msgs_array += msgs_temp if msgs_temp !=[] #Обновляем возвращаемый массив
-			msgs_to_loop = msgs_temp #Обновляем массив для цикла полученным
-		end until(msgs_to_loop == [])
-	end
-	return msgs_array
+  	msgs_array = self.messages #Начальный массив сообщений
+  	if msgs_array != []
+  		msgs_to_loop = msgs_array #Массив для обработки в цикле
+  		begin 
+  			msgs_temp = [] #временный массив для сообщений
+  			msgs_to_loop.each do |msg|
+  				msgs_temp += msg.messages if msg.messages != []
+  			end
+  			msgs_array += msgs_temp if msgs_temp !=[] #Обновляем возвращаемый массив
+  			msgs_to_loop = msgs_temp #Обновляем массив для цикла полученным
+  		end until(msgs_to_loop == [])
+  	end
+  	return msgs_array
   end
   
   def get_visible_tread
@@ -210,7 +210,8 @@ class Message < ActiveRecord::Base
 							:user_id => self.user.id,
 							:created_at => self.created_at,
 							:updated_at => self.updated_at,
-							:visibility_status_id => self.theme.visibility_status_id
+							:visibility_status_id => self.theme.visibility_status_id,
+              :theme_type_id => self.theme.visibility_status_id
 							)
 	new_theme.save(:validate => false)				
 	if self.get_tread != []
