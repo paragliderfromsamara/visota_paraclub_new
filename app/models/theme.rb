@@ -475,7 +475,7 @@ def self.equipment_part_by_id(params)
       return {id: 500, name: 'Разное', status_id: 1, equipment_part_id: nil}
     end
   end
-  return {id: nil, name: 'Все актульные', status_id: 1, equipment_part_id: all}
+  return {id: nil, name: 'Все актуальные', status_id: 1, equipment_part_id: all}
 end
 def self.equipment_parts(s = 'all')
   parts = [

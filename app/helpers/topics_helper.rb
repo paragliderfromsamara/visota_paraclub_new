@@ -193,7 +193,7 @@ module TopicsHelper
       current_part = @cur_equipment_part[:id]
       vStatus = (is_not_authorized?)? 1 : [1, 2]
       allActualThemes = @topic.themes.rewhere(status_id: 1, visibility_status_id: vStatus)
-      buttons = [{:name => "Все актульные[#{allActualThemes.size}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id), selected: current_part.nil?}]
+      buttons = [{:name => "Все актуальные[#{allActualThemes.size}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id), selected: current_part.nil?}]
       if user_type != 'guest' && user_type != 'new_user'
         curPartThemes = @topic.themes.rewhere(status_id: [1,3], visibility_status_id: [1,2], user_id: current_user.id)
         buttons[buttons.size] = {:name => "Мои[#{curPartThemes.size}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, e_part: 100), selected: current_part == 100}
