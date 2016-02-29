@@ -4,22 +4,23 @@ include UsersHelper
   # GET /users.json
   def index
 	category = params[:g]
+  per_page = 25
 	if category == 'club_friends'
 		@title = 'Друзья клуба'
 		@active_button = 1 
-		@users = User.paginate(:page => params[:page], :per_page => 10).where(user_group_id: 3)
+		@users = User.paginate(:page => params[:page], :per_page => per_page).where(user_group_id: 3)
 	elsif category == 'just_came'
 		@title = 'Вновь прибывшие'
 		@active_button = 2
-		@users = User.paginate(:page => params[:page], :per_page => 10).where(user_group_id: 5)
+		@users = User.paginate(:page => params[:page], :per_page => per_page).where(user_group_id: 5)
 	elsif category == 'bun_list' and is_admin?
 		@title = 'Бан лист'
 		@active_button = 3 
-		@users = User.paginate(:page => params[:page], :per_page => 10).where(user_group_id: 4)
+		@users = User.paginate(:page => params[:page], :per_page => per_page).where(user_group_id: 4)
 	else 
 		@title = 'Клубные пилоты'
 		@active_button = 0
-		@users = User.paginate(:page => params[:page], :per_page => 10).where(user_group_id: [1, 0, 2, 6]).order('user_group_id DESC')
+		@users = User.paginate(:page => params[:page], :per_page => per_page).where(user_group_id: [1, 2, 6]).order('user_group_id DESC').order('order_number ASC')
 	end
   @header = @title
     respond_to do |format|

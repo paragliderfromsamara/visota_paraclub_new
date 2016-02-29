@@ -11,7 +11,7 @@
 require 'digest'
 class User < ActiveRecord::Base
   attr_accessor :password, :old_password, :current_password
-  attr_accessible :password, :avatar, :cell_phone, :email, :email_status, :encrypted_password, :full_name, :inform, :name, :photo, :salt, :skype, :web_site, :user_group_id, :password_confirmation, :avatar_cache, :photo_cache, :old_password, :current_password, :guest_token, :bunned_to, :bunned_why, :prev_group_id, :role
+  attr_accessible :password, :avatar, :cell_phone, :email, :email_status, :encrypted_password, :full_name, :inform, :name, :photo, :salt, :skype, :web_site, :user_group_id, :password_confirmation, :avatar_cache, :photo_cache, :old_password, :current_password, :guest_token, :bunned_to, :bunned_why, :prev_group_id, :role, :order_number
   require 'will_paginate'
   
 #--------Old_messages---------------------------------------------
@@ -160,7 +160,7 @@ mount_uploader :photo, UserPhotoUploader
   def user_groups #в старой версии была отдельная таблица в базе
 		[
 			{:value => 7, :name => 'Удалённый', en_name: 'deleted'},#deleted
-			{:value => 6, :name => (self.role.blank?)? "Руководство клуба" : self.role, en_name: 'manager'},#manager
+			{:value => 6, :name => (self.role.blank?)? "Лица клуба" : self.role, en_name: 'manager'},#manager
 			{:value => 2, :name => 'Клубный пилот', en_name: 'club_pilot'},	 #club_pilot
 			{:value => 3, :name => 'Друг клуба', en_name: 'friend'},		 #friend
 			{:value => 5, :name => 'Вновь прибывший', en_name: 'new_user'},   #new_user

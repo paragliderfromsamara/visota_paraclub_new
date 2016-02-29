@@ -9,9 +9,30 @@
 	</div>
 </div>
 <div id = 'b_wrapper' style='min-height: 400px;'>
-	<% if @users != [] %>
+    <% if @users != [] %>
         <%i=0%>
+        <%if @users.first.user_group_id == 6%>
+            <div class = 'm_1000wh tb-pad-s'>
+                <h2>
+                    Лица клуба
+                </h2>
+            </div>
+            <%prev_group_id = 6%>
+        <%else%>
+            <%prev_group_id = 2%>
+        <%end%>
 		<% @users.each do |user| %>
+            <%if prev_group_id == 6 && user.user_group_id != 6%>
+                <div class = 'c_box'>
+                <div class = 'm_1000wh tb-pad-s'>
+                    <br />
+                    <h2>
+                        Клубные пилоты
+                    </h2>
+                </div>
+            </div>
+                <%prev_group_id = user.user_group_id%>
+            <%end%>
 			<%= user_index_list(user, i) %>
             <%i+=1%>
 		<% end %>
