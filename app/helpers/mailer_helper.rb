@@ -8,18 +8,18 @@ module MailerHelper
     if album.photos.length > 2 and album.status_id == 1
       users = User.select(:id).where(email_status: 'Активен').where.not(id: album.user_id)
       mailers = Mailer.where(album:'yes', user_id: users)
-      mailers.each {|m| PhotoAlbumMailer.new_album_mailer(album, m.user).deliver_later if m.user_id == 1} if mailers != []
+      mailers.each {|m| PhotoAlbumMailer.new_album_mailer(album, m.user).deliver_later} if mailers != []
     end
   end
   def sendNewVideoMail(video) #добавлено в VideosController create
     users = User.select(:id).where(email_status: 'Активен').where.not(id: video.user_id)
     mailers = Mailer.where(video:'yes', user_id: users)
-    mailers.each {|m| VideoMailer.new_video_mailer(video, m.user).deliver_later if m.user_id == 1} if mailers != []
+    mailers.each {|m| VideoMailer.new_video_mailer(video, m.user).deliver_later} if mailers != []
   end
   def sendNewThemeMail(theme) #добавлено в Themes update
     users = User.select(:id).where(email_status: 'Активен', user_group_id: theme.users_who_can_see).where.not(id: theme.user_id)
     mailers = TopicNotification.where(topic_id:theme.topic_id, user_id: users)
-    mailers.each {|m| ThemesMailer.new_theme_notification(theme, m.user).deliver_later if m.user_id == 1} if mailers != []
+    mailers.each {|m| ThemesMailer.new_theme_notification(theme, m.user).deliver_later} if mailers != []
   end
   def sendNewMessageMail(message) #добавлено в Messages update   
     if !message.theme.nil?
@@ -28,11 +28,11 @@ module MailerHelper
       if ntfs != []
         users = User.select(:id).where(email_status: 'Активен', id: ntfs)
         mailers = Mailer.where(message:'yes', user_id: users)
-        mailers.each {|m| MessageMailer.new_message_in_theme_mailer(message, m.user).deliver_later if m.user.id == 1} if mailers != []
+        mailers.each {|m| MessageMailer.new_message_in_theme_mailer(message, m.user).deliver_later} if mailers != []
       end
       if !message.message.nil?
         u = message.message.user 
-        MessageMailer.new_answer_in_theme_mailer(message, u).deliver_later if u != message.user && u.email_status == 'Активен' && u.mailer.message == 'yes' && u.id == 1
+        MessageMailer.new_answer_in_theme_mailer(message, u).deliver_later if u != message.user && u.email_status == 'Активен' && u.mailer.message == 'yes'
       end  
     elsif !message.video.nil?
       vUser = message.video.user
@@ -65,15 +65,15 @@ module MailerHelper
     if mailers != []
 			case article.type[:link]
 				when "reports"
-				  mailers.each {|m| ArticlesMailer.new_report_mailer(article, m.user).deliver_later if m.user_id == 1} 
+				  mailers.each {|m| ArticlesMailer.new_report_mailer(article, m.user).deliver_later } 
 				when "reviews"
-			    mailers.each {|m| ArticlesMailer.new_review_mailer(article, m.user).deliver_later if m.user_id == 1} 
+			    mailers.each {|m| ArticlesMailer.new_review_mailer(article, m.user).deliver_later } 
 				when "club_articles"
-				  mailers.each {|m| ArticlesMailer.new_article_mailer(article, m.user).deliver_later if m.user_id == 1} 
+				  mailers.each {|m| ArticlesMailer.new_article_mailer(article, m.user).deliver_later } 
 				when "flight_accidents"
-				  mailers.each {|m| ArticlesMailer.new_flight_accident_mailer(article, m.user).deliver_later if m.user_id == 1} 
+				  mailers.each {|m| ArticlesMailer.new_flight_accident_mailer(article, m.user).deliver_later } 
 				when "documents"
-				  mailers.each {|m| ArticlesMailer.new_document_mailer(article, m.user).deliver_later if m.user_id == 1} 
+				  mailers.each {|m| ArticlesMailer.new_document_mailer(article, m.user).deliver_later} 
 			end
     end
   end
