@@ -236,15 +236,15 @@ include TopicsHelper
   end
   
   def do_merge_themes
-	current_theme = Theme.find_by(id: params[:merge_theme][:current_theme])
-	new_topic = Topic.find_by(id: params[:merge_theme][:topic_id])
-	new_theme = Theme.find_by(id: params[:merge_theme][:theme_id])
-	if is_admin? and current_theme != nil and new_topic != nil
-    th  = current_theme.merge(new_topic, new_theme)
-     redirect_to theme_path(th) if !th.nil?
-	else
-		redirect_to '/404'
-	end
+  	current_theme = Theme.find_by(id: params[:merge_theme][:current_theme])
+  	new_topic = Topic.find_by(id: params[:merge_theme][:topic_id])
+  	new_theme = Theme.find_by(id: params[:merge_theme][:theme_id])
+  	if is_admin? and current_theme != nil and new_topic != nil
+      th  = current_theme.merge(new_topic, new_theme)
+       redirect_to theme_path(th) if !th.nil?
+  	else
+  		redirect_to '/404'
+  	end
   end
   
   def get_themes_list

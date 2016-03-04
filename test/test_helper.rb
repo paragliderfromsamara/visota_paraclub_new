@@ -12,6 +12,7 @@ class ActiveSupport::TestCase
   def comeAsSuperAdmin
 	user = users(:super_admin)
 	cookies.permanent.signed[:remember_token] = [user.id, user.salt]
+  #comeAsUser(user)
 	return user
   end
   
@@ -59,7 +60,7 @@ class ActiveSupport::TestCase
   end
   
   def comeAsUser(user)
-	cookies.permanent.signed[:remember_token] = [user.id, user.salt]
+	  cookies.permanent.signed[:remember_token] = [user.id, user.salt]
   end
   
   def comeAsGuest

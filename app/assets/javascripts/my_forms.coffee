@@ -734,7 +734,8 @@ class myForm
         id = $(setBut).attr('set_photo_id')
         el = document.getElementById("#{this.type}_photo_id")
         if el is null 
-            this.form_element.append("<input type = \"hidden\" id = \"#{this.type}_photo_id\" name = \"#{this.type}[photo_id]\" value = \"#{id}\" />")
+            this.formElement.append("<input type = \"hidden\" id = \"#{this.type}_photo_id\" name = \"#{this.type}[photo_id]\" value = \"#{id}\" />")
+            $(setBut).hide()
         else
             cur = $(el).val()
             $(el).val(id)

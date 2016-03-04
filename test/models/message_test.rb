@@ -50,4 +50,9 @@ class MessageTest < ActiveSupport::TestCase
     message = Message.find(message.id)
     assert message.visible_photos.count == 0, "Фотография не скрылась после добавления ее хэш тэга в текст"
   end
+  
+  test "Из сообщение должно превращаться в тему, а его сообщения-потомки переноситься вместе с ним" do
+    messageForNewTheme = messages(:messageForNewThemeCreation)
+    
+  end
 end

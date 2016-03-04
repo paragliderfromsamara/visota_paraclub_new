@@ -104,6 +104,8 @@ include ApplicationHelper
 		respond_to do |format|
 		  if @video.save
       sendNewVideoMail(@video)
+      alter_text = (@video.description.blank?)? "#{@video.user.name} добавил новое видео" : @video.description
+      @video.create_event(post_date: Time.now, content: alter_text, status_id: 1, title: @video.alter_name)
 			format.html { redirect_to @video, :notice => 'Видео успешно добавлено' }
 			format.json { render :json => @video, :status => :created, :location => @video }
 		  else

@@ -1,5 +1,5 @@
 class Event < ActiveRecord::Base
-  attr_accessible :title, :content, :updated_at, :status_id, :post_date, :uploaded_photos, :attachment_files, :theme_id
+  attr_accessible :title, :content, :updated_at, :status_id, :post_date, :uploaded_photos, :attachment_files, :theme_id, :photo_album_id, :video_id, :article_id
  
   has_many :entity_photos, :as => :p_entity, :dependent => :destroy #has_many :photos, :dependent  => :delete_all
   has_many :photos, through: :entity_photos
@@ -157,5 +157,5 @@ class Event < ActiveRecord::Base
       end
     end
   end
-  
+
 end

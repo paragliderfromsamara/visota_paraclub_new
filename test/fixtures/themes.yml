@@ -469,3 +469,23 @@ themeForStepsTest:
   user_id: 20 
   content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
   last_message_date: 2014-02-27 04:46:48
+  
+themeForMergeTestTarget:
+  id: 201
+  name: themeForMergeTestTarget
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 1
+  user_id: 20 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48
+
+themeForMergeTestMerged:
+  id: 202
+  name: themeForMergeTestMerged
+  topic_id: 1
+  status_id: 1
+  visibility_status_id: 1
+  user_id: 20 
+  content: Default content for testin themes. Default content for testin themes. Default content for testin themes.  
+  last_message_date: 2014-02-27 04:46:48

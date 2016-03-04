@@ -64,14 +64,16 @@ class Theme < ActiveRecord::Base
     
     if self.event.nil? && make_event_flag == 'true' && visibility_status_id == 1  && (self.status_id == 1 || self.status_id == 3)
       #dAreaId = (self.event_display_area_id.blank?)? 2 : self.event_display_area_id
-      pDate = event_post_date.blank? ? self.updated_at : event_post_date
-      self.build_event(post_date: self.updated_at, content: self.content, status_id: 2, title: self.name)
+      pDate = event_post_date.blank? ? Time.now : Date.strptime("{ #{event_post_date[1]}, #{event_post_date[2]}, #{event_post_date[3]} }", "{ %Y, %m, %d }")#event_post_date #2016-03-02 01:37:55.591844
+      self.build_event(post_date: pDate, content: self.content, status_id: 2, title: self.name)
     elsif !self.event.nil? 
       status = (self.status_id != 1 && self.status_id != 3)? 1 : 2
-      pDate = event_post_date.blank? ? self.event.post_date : event_post_date
+      pDate = event_post_date.blank? ? Time.now : Date.strptime("{ #{event_post_date[1]}, #{event_post_date[2]}, #{event_post_date[3]} }", "{ %Y, %m, %d }")
       self.event.update_attributes(title: self.name, content: self.content, status_id: status, :post_date => pDate) 
     end
   end
+  
+  
   #searchable do
   #    text :name, :content
   #    text :messages do
@@ -244,8 +246,8 @@ class Theme < ActiveRecord::Base
         newNtf = ThemeNotification.create(theme_id: new_theme.id, user_id: usr_id) if newNtf == nil
   		end
   	end
-	
-  	self.destroy
+    th = Theme.find self.id
+  	th.destroy
     return new_theme
   else
     self.update_attribute(:topic_id, new_topic.id)

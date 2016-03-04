@@ -53,7 +53,7 @@
                                               
                                                <legend>Новость из темы</legend>
                                                    <% if @formTheme.event.nil? %>
-                                                    <%= f.check_box :make_event_flag, {}, 'true', 'false' %> <%= f.label :make_event_flag, 'Рассказать в новостях' %> <br /> <%end%><%= f.label :event_display_area_id, 'Дата публикации' %>
+                                                    <%= f.check_box :make_event_flag, {}, 'true', 'false' %> <%= f.label :make_event_flag, 'Рассказать в новостях' %> <br /> <%end%><%= f.label :event_post_date, 'Дата публикации' %>
                                                <%= f.date_select :event_post_date, order: [:day, :month, :year], use_month_names: ru_month_list, default: (@formTheme.event.nil?)? Time.now : @formTheme.event.post_date %>
                                            </fieldset>
                                     <%end%>

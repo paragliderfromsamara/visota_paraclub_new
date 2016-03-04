@@ -115,3 +115,59 @@ themeDestroyMessage_4:
   theme_id: 20322
   content: myDefaultString
   status_id: 1
+  
+messageForNewThemeCreation:
+  id: 20302
+  user_id: 203
+  theme_id: 1
+  content: myDefaultString
+  status_id: 1
+  
+threadMessageForNewThemeCreation_2:
+  id: 20202
+  user_id: 202
+  message_id: 20302
+  theme_id: 1
+  content: myDefaultString
+  status_id: 1  
+  
+threadMessageForNewThemeCreation_3:
+  id: 20303
+  user_id: 203
+  message_id: 20202
+  theme_id: 1
+  content: myDefaultString
+  status_id: 1 
+  
+threadMessageForNewThemeCreation_4:
+  id: 20601
+  user_id: 206
+  message_id: 20202
+  theme_id: 1
+  content: myDefaultString
+  status_id: 1 
+  
+
+threadMessageForMergeTheme_1:
+  id: 20203
+  user_id: 202
+  theme_id: 202
+  content: myDefaultString
+  status_id: 1  
+  
+threadMessageFoMergeTheme_2:
+  id: 20304
+  user_id: 203
+  message_id: 20203
+  theme_id: 202
+  content: myDefaultString
+  status_id: 1 
+  
+threadMessageForNewMergeTheme_3:
+  id: 20602
+  user_id: 206
+  message_id: 20203
+  theme_id: 202
+  content: myDefaultString
+  status_id: 1 
+    

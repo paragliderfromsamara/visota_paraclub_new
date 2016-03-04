@@ -62,6 +62,18 @@
                         <div><p class = 'istring <%= @description_f_color if @description_f_color != nil %>' id = 'cLength'><span id = 'txtL'></span> <span id = 'txtErr'><%= @description_error if @description_error != nil %></span><span id = 'txtErrSrv'><%= @description_error if @description_error != nil %></span></p></div>
 			</td>
 		</tr>
+        <%if is_admin?%>
+		<tr>
+			<td align = 'right' valign = 'top' >
+				<%= f.label :image_link, 'Фото' %>
+                <br />
+			</td>
+			<td align = 'left' valign = 'middle'>
+				<%= f.text_field :image_link, :size => '60' %>
+                <br />
+			</td>
+		</tr>
+        <%end%>
 		<tr>
 			<td align = 'left' valign = 'top'>
 				

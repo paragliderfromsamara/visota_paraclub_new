@@ -6,7 +6,11 @@ module GrantsHelper
 		user_type == 'admin' || user_type == 'super_admin'
 	end
 	def is_super_admin? 
-		user_type == 'super_admin'
+    #if signed_id?
+		  user_type == 'super_admin'# || current_user.id == 1
+      #else 
+    #  false
+   # end
 	end
 #votes
 def userCanEditVote?(vote)
@@ -54,18 +58,23 @@ def userCanCreateEvent?
   return false
 end
 def userCanEditEvent?(event)
-  if event != nil
-   return true if is_admin? || user_type == 'manager'
-  end
-  return false
+	return true if (is_admin? || user_type == 'manager') and !event.nil?
+	return false
 end
 def userCanSeeEvent?(event)
   if event != nil
-    return true if event.status_id == 2 || (event.status_id != 2 and (is_admin? || user_type == 'manager')) 
+    return true if event.status_id == 2 || (event.status_id != 2 and (userCanSeeHiddenEvents?)) 
   end
   return false
 end
+def userCanSeeHiddenEvents? #кто может смотреть скрытые новости
+  is_admin? || user_type == 'manager'
+end
 #events end
+#events_part
+
+
+#events_part end
 #photos_part
 	def userCanSeePhoto?(photo)
 		#f = false
@@ -135,17 +144,7 @@ end
     return true if Time.now < (article.created_at + 1.day) and isEntityOwner?(article)
   end
 	#articles_part end
-	#events_part
-	def userCanEditEvent?(event)
-		return true if (is_admin? || user_type == 'manager') and event != nil
-		return false
-	end
-  def userCanSeeEvent?(event)
-    return false if event.nil?
-    return false if event.status_id == 0 && !userCanEditEvent?(event)
-    return true
-  end
-	#events_part end
+
 	#photo_albums_part
 		def userCanSeeAlbum?(album)
 			if album != nil

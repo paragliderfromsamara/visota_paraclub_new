@@ -148,7 +148,6 @@ include MessagesHelper
   if isEntityOwner?(@albumToForm) 
     curStatusId = @albumToForm.status_id 
     newStatusId = (params[:photo_album][:status_id] != nil)? params[:photo_album][:status_id].to_i : curStatusId
-    
       if @albumToForm.user_id != (params[:photo_album][:user_id]).to_i
 				if @albumToForm.photos != []
 					@albumToForm.photos.each do |photo|
@@ -159,8 +158,12 @@ include MessagesHelper
 			respond_to do |format|
 			  if @albumToForm.update_attributes(params[:photo_album])
           if curStatusId == 0 && newStatusId == 1
+            @albumToForm = PhotoAlbum.find(@albumToForm.id)
             notice = 'Альбом успешно добавлен'
             sendNewAlbumMail(@albumToForm)
+            alter_text = @albumToForm.description.blank? ? "#{@albumToForm.user.name} добавил новый фотоальбом" : @albumToForm.description
+            alter_title = @albumToForm.name.blank? ? "Новый фотоальбом" : "Новый фотоальбом: #{@albumToForm.name}" 
+            @albumToForm.create_event(post_date: Time.now, content: alter_text, status_id: 1, title: alter_title)
           else
             notice = 'Альбом успешно обновлён'
           end

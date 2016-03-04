@@ -76,7 +76,11 @@ module EventsHelper
 		return val
 	end
 	def add_new_event
-		control_buttons([{:name => 'Добавить новость', :access => userCanCreateEvent?, :type => 'plus', :link => new_event_path, id: 'newEvent'}]).html_safe
+    but = [
+            {:name => 'Добавить новость', :access => userCanCreateEvent?, :type => 'plus', :link => new_event_path, id: 'newEvent'}
+          ]
+          but[but.length] = params[:show_hidden].nil? ? {:name => "Неактивные #{Event.where(status_id: 1).count}", :access => userCanSeeHiddenEvents?, :type => 'arrow-right', :link => events_path(show_hidden: true), id: 'showHidden'} : {:name => "Активные #{Event.where(status_id: 2).count}", :access => true, :type => 'arrow-right', :link => events_path, id: 'showVisible'}
+		return control_buttons(but).html_safe
 	end
 	
 	def event_show_photos

@@ -212,4 +212,16 @@ class ThemeTest < ActiveSupport::TestCase
     #assert eCount + 1 == Event.count
   end
   
+  test "Тема должна совмещаться с другими темами и перетаскивать за собой сообщения" do
+    targetTheme = themes(:themeForMergeTestTarget)
+    mergedTheme = themes(:themeForMergeTestMerged)
+    oldMsgCount = targetTheme.messages.size
+    newMessageCount = oldMsgCount + mergedTheme.messages.size + 1
+    assert_difference('Theme.count', -1, 'После переноса тема не удалилась') do
+      targetTheme = mergedTheme.merge(targetTheme.topic, targetTheme)
+    end
+    targetTheme = Theme.find(targetTheme.id)
+    assert  targetTheme.messages.size == newMessageCount, "Количество сообщений в теме #{targetTheme.messages.size}; Должно быть: #{newMessageCount}"
+  end
+  
 end

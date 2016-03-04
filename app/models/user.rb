@@ -165,8 +165,8 @@ mount_uploader :photo, UserPhotoUploader
 			{:value => 3, :name => 'Друг клуба', en_name: 'friend'},		 #friend
 			{:value => 5, :name => 'Вновь прибывший', en_name: 'new_user'},   #new_user
 			{:value => 4, :name => 'Бан лист', en_name: 'bunned'},		 #bunned
-			{:value => 1, :name => 'Site Admin', en_name: 'admin'}#,		 #admin
-			#{:value => 0, :name => 'Super Admin', en_name: 'super_admin'}    #super_admin
+			{:value => 1, :name => 'Site Admin', en_name: 'admin'},		 #admin
+			{:value => 0, :name => 'Super Admin', en_name: 'super_admin'}    #super_admin
 		]
   end
   

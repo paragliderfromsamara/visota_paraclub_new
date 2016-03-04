@@ -218,6 +218,9 @@ class Message < ActiveRecord::Base
 		self.get_tread.each do |msg|
 			msg.update_attributes(:theme_id => new_theme.id, :topic_id => new_theme.topic_id)
 		end	
+    new_theme.update_attribute(:last_message_date, self.get_tread.last.created_at)
+  else
+    new_theme.update_attribute(:last_message_date, new_theme.created_at)
 	end	
 	if self.entity_photos != []
 		self.entity_photos.each do |ph|

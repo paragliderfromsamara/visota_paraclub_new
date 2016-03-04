@@ -3,7 +3,8 @@ class EventsController < ApplicationController
   # GET /events.json
   def index
     @title = @header = 'Новости'
-	  @events = Event.paginate(:page => params[:page], :per_page => 10).where(status_id: 2).order('post_date DESC')
+    status = (!params[:show_hidden].nil? and userCanSeeHiddenEvents?)? 1 : 2
+	  @events = Event.paginate(:page => params[:page], :per_page => 10).where(status_id: status).order('post_date DESC')
     respond_to do |format|
       format.html # index.html.erb
       format.json { render :json => @events }

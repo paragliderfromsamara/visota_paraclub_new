@@ -7,7 +7,7 @@ include EventsHelper
     @topics = Topic.all
 	  @title = @header = "Общение"
     @add_functions = "initSearchForm();"
-    @events = Event.where("post_date > ?", Time.now-10.days).where.not(status_id: [0,1]).limit(3)
+    @events = Event.where("post_date > ?", Time.now-10.days).where.not(status_id: [0,1]).order('post_date DESC').limit(3)
     respond_to do |format|
 	  format.html# index.html.erb
       format.json { render :json => @topics }
