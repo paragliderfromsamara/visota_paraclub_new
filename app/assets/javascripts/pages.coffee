@@ -81,7 +81,7 @@ adaptWheatherTable = (whTable)->
 linksUpdater = ()->
     $(".t_link").each ()-> if $(this).attr("link_to").indexOf('#') is -1 then $(this).attr("link_to", "#{$(this).attr('link_to')}#cs")
     $("#{i}").each(()-> 
-        if $(this).attr('href') isnt undefined then if $(this).attr('href').indexOf('#') is -1 then $(this).attr("href", "#{$(this).attr('href')}#cs")) for i in showAtMiddleLinksList
+        if $(this).attr('href') isnt undefined and this.id isnt 'user_site_link' then if $(this).attr('href').indexOf('#') is -1 then $(this).attr("href", "#{$(this).attr('href')}#cs")) for i in showAtMiddleLinksList
     
 
 r = ()->

@@ -76,11 +76,22 @@ def user_contacts(user)
 				#{data_container(:name => "<i class = 'fi-mail fi-medium'></i>", :value => user.email)}
 				#{data_container(:name => "<i class = 'fi-telephone fi-medium'></i>", :value => user.cell_phone) if user.cell_phone?}
 				#{data_container(:name => "<i class = 'fi-social-skype fi-medium'></i>", :value => user.skype) if user.skype?}
-				#{data_container(:name => "<i class = 'fi-web fi-medium'></i>", :value => link_to(user.web_site, user.web_site, class: 'b_link_i')) if user.web_site?}
+				#{data_container(:name => "<i class = 'fi-web fi-medium'></i>", :value => link_to(user.web_site, check_user_www_link(user.web_site), class: 'b_link_i', id: 'user_site_link', target: '_blank')) if user.web_site?}
 		</table>"
 	else
 		"<p class = 'istring norm'>Контактная информация скрыта, либо отсутствует</p>"
 	end
+end
+def check_user_www_link(link)
+  if link.blank?
+    return 'http://visota-paraclub.ru'
+  else
+    if link.index(/http:\/\//).nil?
+      return "http://#{link}"
+    else
+      return link
+    end
+  end
 end
 def show_path_buttons
 	[

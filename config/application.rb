@@ -24,7 +24,7 @@ module Test212
     config.encoding = "utf-8"
     config.active_record.raise_in_transactional_callbacks = true
     
-    config.action_mailer.default_url_options = { host: 'kozvonin.ru' } #kozvonin.ru
+    config.action_mailer.default_url_options = { host: 'visota-paraclub.ru' } #kozvonin.ru
     config.action_mailer.asset_host = 'http://visota-paraclub.ru'
     
   end

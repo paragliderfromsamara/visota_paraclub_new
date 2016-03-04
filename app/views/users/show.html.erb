@@ -10,7 +10,7 @@
 			<div class = 'col span_2_of_12'>
 				<%= image_tag @user.alter_avatar, :width => @user.widthAndHeight(@user.alter_avatar)[:width].to_s + 'px', :height => @user.widthAndHeight(@user.alter_avatar)[:height].to_s + 'px' %>						
 			</div>
-			<div class = 'col span_10_of_12'>
+			<div class = 'col span_4_of_12'>
                 <% if @user.group == 'bunned' %>
                     <p class = 'istring norm medium-opacity'>Заблокирован до <%= @user.bunned_to.strftime('%d-%m-%Y') %></p>
                     <p class = 'istring norm'><%= @user.bunned_why %></p>
@@ -38,8 +38,15 @@
 				<h3>Контактные данные</h3>
 				<p><%= user_contacts(@user).html_safe %></p>
 			</div>
+            <div class = 'col span_1_of_12'>
+            </div>
+            <div class = 'col span_5_of_12'>
+                <%if @user.photo?%>
+                    <%= image_tag @user.photo, width: '300px' %>
+                <%end%>
+            </div>
 		</div>
-        
+
         <% if is_super_admin? && @user.id != 1 && @user.group != 'bunned'%>
             <div class = 'section group'>
                 <div class = 'col span_2_of_12'>
