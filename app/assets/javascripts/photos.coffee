@@ -31,6 +31,16 @@ updScrIndexes = (f)->
     if fVisible is 0 then $(".ph-arr-left").css("visibility", "hidden") else $(".ph-arr-left").css("visibility", "visible")
     if lVisible is (blC-1) then $(".ph-arr-right").css("visibility", "hidden") else $(".ph-arr-right").css("visibility", "visible")
 
+getMessageFormTopOffset = (f)-> #вычисляет есть ли форма на странице, если есть в зависимости от отступа блокирует событие нажатия стрелок
+    e = document.getElementsByClassName("message_form")
+    v = true
+    if e.size isnt 0
+       e = $(e[0])
+       o = e.offset().top
+       s = $(document).scrollTop()
+       if s > (o / 4) then v = false 
+    v
+
 
 updPhotoPaginate = (f)->
     j=0
@@ -53,8 +63,9 @@ initPhotoPage = ()->
         sumPagWidth = blC*($(".ph-paginate").outerWidth(true)+1+parseInt($(".ph-paginate").css("border-width"))*2)
         $("#paginationLine").width(sumPagWidth)
     $(document).keyup (event)->
-        if event.keyCode is 37 then goToLink($(".ph-big-prev").attr('link_to'))
-        else if event.keyCode is 39 then goToLink($(".ph-big-next").attr('link_to'))
+        if getMessageFormTopOffset() is true
+            if event.keyCode is 37 then goToLink($(".ph-big-prev").attr('link_to'))
+            else if event.keyCode is 39 then goToLink($(".ph-big-next").attr('link_to'))
     $(window).resize ()-> setPhotoSizeByScreen()
 
 
@@ -90,7 +101,7 @@ r = ()->
                 updScrIndexes('right')
                 updPhotoPaginate('upd')
     	$(".ph-arr-left").click ()->
-            console.log 'ass'
+            #console.log 'ass'
             if lVisible-(maxVBlocks-1) isnt 0
                 lVisible--
                 updScrIndexes('left')
