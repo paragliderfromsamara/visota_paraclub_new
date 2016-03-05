@@ -12,6 +12,23 @@ eventFormClass = 'event_form'
 articleFormClass = "article_form"
 menuIconSizeClass = "fi-large"
 
+waitLineHtml = (id)-> 
+    "
+    <div class = 'tb-pad-m'>
+    <p>Идет загрузка фотографий...</p>
+    <div style = 'display:none;' id = '#{id}' class = 'wl'>
+        <div class = 'wl-item'>
+        </div>
+	    <div class = 'wl-item'>
+		</div>
+		<div class = 'wl-item'>
+		</div>
+		<div class = 'wl-item'>
+		</div>
+		<div class = 'wl-item'>
+		</div>
+	</div></div>"
+
 initArticleAsFlightAccidents = (f)->
     f.aButList = [2]
     f.imagesMaxLength = 30
@@ -183,7 +200,7 @@ initAlbumForm = (frm)->
 
         
 initVideoForm = (frm)->
-    wb = new waitbar("wait_video_check");
+    wb = new waitbar("wait_video_check")
     f = new myForm('video', null, "#" + frm.id)
     nFlag = false
     dFlag = false
@@ -614,8 +631,12 @@ class myForm
     getPhsToForm: ()->
         t = $(this.formElement).find("#uploadedPhotos")
         el = this
+        t.html(waitLineHtml("wait_photos_to_form"))
+        wb = new waitbar("wait_photos_to_form")
+        wb.startInterval()
         $(t).load "/edit_photos #update_photos_form", { 'e': el.type, 'e_id': el.entityID, "hashToCont": "true", "submitBut": "false"}, ()->
              #updUploadedImageButtons(el.formElement.attr('id'))
+             wb.stopInterval()
              $(".addHashCode").click ()-> updCurFormText(" " + $(this).attr('hashCode'), el)    
              $(".del-photo-but").click ()-> el.deletePhoto(this)
              cur_photo_id = if $("##{el.type}_photo_id").val() is undefined then null else $("##{el.type}_photo_id").val()
