@@ -10,7 +10,7 @@
     -moz-transition-duration: $t;
     transition-duration: $t;
 	}
-#phTop, #phContent, #photoField,#phInfo {position: relative; width: 100%;}
+#phTop, #phContent, #photoField,#phInfo, #topPhotoPanel {position: relative; width: 100%; min-width:1100px;}
 #phTop {
 		height: 50px;
 		background-color: #484848;
@@ -73,7 +73,7 @@
 		background-color: black;
 		z-index: 5;
 		img {border-left: 1px solid #404040; border-right: 1px solid #404040;}
-		
+
 	}
 	#photoPagination
 	{
