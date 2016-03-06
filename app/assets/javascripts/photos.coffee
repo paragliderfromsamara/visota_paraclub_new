@@ -68,12 +68,20 @@ initPhotoPage = ()->
             else if event.keyCode is 39 then goToLink($(".ph-big-next").attr('link_to'))
     $(window).resize ()-> setPhotoSizeByScreen()
 
-
-setPhotoSizeByScreen = ()->
+getHeightAndWidth = ()->
     if height isnt 0 and width isnt 0
-        wHeight =  $(window).height()
+        wHeight = $(window).height()
+        wWidth = $("#phContent").width()
+        sDiv= height / width #Вычисляем пропорцию сторон
         pagHeight = $("#photoPagination").outerHeight(true) + $("#topPhotoPanel").outerHeight(true)
         newHeight = wHeight-pagHeight
+        if (newHeight / sDiv) > wWidth then newHeight = (wWidth - 40) * sDiv
+    else newHeight = 0 
+    newHeight
+        
+setPhotoSizeByScreen = ()->
+    newHeight = getHeightAndWidth()
+    if newHeight isnt 0    
         iconsTop = 200
         if height > newHeight 
             $("#bPhoto").height(newHeight)
