@@ -20,11 +20,12 @@ include EventsHelper
   @topic = Topic.find(params[:id])
 	@title = @header = @topic.name
   thType = (session[:themes_list_type] == 'list')? [1,2] : 1
-   
-	@themes_per_page = 25
+  @ads = Theme.where(theme_type_id: 2,status_id: [1,3], visibility_status_id: 1).order('last_message_date DESC') if session[:themes_list_type] != 'list' and is_not_authorized?
+	@ads = Theme.where(theme_type_id: 2,status_id: [1,3], visibility_status_id: [1,2]).order('last_message_date DESC') if session[:themes_list_type] != 'list' and !is_not_authorized?
+  @themes_per_page = 25
   if @topic.id != 9
     if signed_in?
-      @ads = @topic.themes.where(theme_type_id: 2).order('last_message_date DESC') if session[:themes_list_type] != 'list'
+      #@ads = Theme.where(theme_type_id: 2,status_id: [1,3]).order('last_message_date DESC') if session[:themes_list_type] != 'list'
       if params[:th_filter] == 'my'
         @themes = @topic.themes.where(user_id: current_user.id, theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
       elsif params[:th_filter] == 'ntf'
@@ -35,20 +36,20 @@ include EventsHelper
         @themes = @topic.themes.rewhere(status_id: 2, theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
       else
       	if is_not_authorized?
-          @ads = @topic.themes.where(theme_type_id: 2, visibility_status_id: 1).order('last_message_date DESC') if session[:themes_list_type] != 'list'
+          #@ads = Theme.where.where(theme_type_id: 2, visibility_status_id: 1,status_id: [1,3]).order('last_message_date DESC') if session[:themes_list_type] != 'list'
       		@themes = @topic.themes.where(visibility_status_id: 1, theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
       	else
-          @ads = @topic.themes.where(theme_type_id: 2, visibility_status_id: [1,2]).order('last_message_date DESC') if session[:themes_list_type] != 'list'
+          #@ads = Theme.where(theme_type_id: 2, visibility_status_id: [1,2],status_id: [1,3]).order('last_message_date DESC') if session[:themes_list_type] != 'list'
       		@themes = @topic.themes.where(visibility_status_id: [1,2], theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
       	end
       end
     else
-      @ads = @topic.themes.where(theme_type_id: 2, visibility_status_id: 1).order('last_message_date DESC') if session[:themes_list_type] != 'list'
+      #@ads = Theme.where(theme_type_id: 2, visibility_status_id: 1,status_id: [1,3]).order('last_message_date DESC') if session[:themes_list_type] != 'list'
       @themes = @topic.themes.where(visibility_status_id: 1, theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
     end
   else #если топик == купи-продайка
     @cur_equipment_part = Theme.equipment_part_by_id(params[:e_part])
-    @ads = @topic.themes.where(theme_type_id: 2).order('last_message_date DESC') if session[:themes_list_type] != 'list'
+    #@ads = Theme.where(theme_type_id: 2, status_id: [1,3]).order('last_message_date DESC') if session[:themes_list_type] != 'list'
     vStatus = (is_not_authorized?)? 1 : [1,2]
     if @cur_equipment_part[:id] == 100 && user_type != 'guest' && user_type != 'new_user'
       @themes = @topic.themes.rewhere(theme_type_id: 1, user_id: current_user.id, status_id: [1,3]).order('updated_at DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
