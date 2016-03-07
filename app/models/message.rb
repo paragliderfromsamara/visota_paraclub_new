@@ -29,7 +29,8 @@ class Message < ActiveRecord::Base
 	theme_hash
 	my_quotes
 	fNum
-    simple_format
+  my_simple_format
+    #simple_format
   end
   #start_quote
   #end_quote

@@ -205,7 +205,20 @@ AutoHtml.add_filter(:user_hash) do |text|
   end
 end
 
+AutoHtml.add_filter(:my_simple_format) do |text|
+  prgs = split_paragraphs(text)
+  t = ''
+  prgs.each do |p|
+    t += "<p>#{p}</p><br />"
+  end
+  t
+end
 
+def split_paragraphs(text)
+  text.to_s.gsub(/\r\n?/, "\n").split(/\n\n+/).map! do |t|
+      t.gsub!(/([^\n]\n)(?=[^\n])/, '\1<br />') || t
+  end
+end 
 #module AutoHtml
 #  class MySimpleFormat
 #      def call(text)

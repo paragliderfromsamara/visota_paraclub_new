@@ -24,7 +24,8 @@ class Article < ActiveRecord::Base
 	theme_hash
 	my_quotes
 	fNum
-    simple_format
+  #  simple_format
+  my_simple_format
   end
   #статусы...  
   def statuses 

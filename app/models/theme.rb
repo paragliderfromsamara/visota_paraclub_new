@@ -25,19 +25,19 @@ class Theme < ActiveRecord::Base
   has_one :article
   auto_html_for :content do
     html_escape
-	my_youtube_msg(:width => 480, :height => 360, :span => true)
-	my_vimeo(:width => 480, :height => 360, :span => true)
-	vk_video_msg(:width => 480, :height => 360, :span => true)
-	smiles
+	  my_youtube_msg(:width => 480, :height => 360, :span => true)
+	  my_vimeo(:width => 480, :height => 360, :span => true)
+	  vk_video_msg(:width => 480, :height => 360, :span => true)
+	  smiles
     link :target => "_blank", :rel => "nofollow", :class => "b_link"
-	my_photo_hash
-	user_hash
-	theme_hash
-	my_quotes
-	fNum
+	  my_photo_hash
+	  user_hash
+	  theme_hash
+	  my_quotes
+	  fNum
 	#start_quote
 	#end_quote
-    simple_format
+    my_simple_format
   end
   after_save :check_photos_in_content 
   before_destroy :delete_steps
