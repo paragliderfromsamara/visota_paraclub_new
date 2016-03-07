@@ -10,7 +10,9 @@ class String
                 "[align-center]",
                 "[/align-center]",
                 '[align-right]',
-                '[/align-right]'
+                '[/align-right]',
+                '[list-number]',
+                '[/list-number]'
                ]
     regExArr.each do |a|
       text = text.gsub(a, "")
