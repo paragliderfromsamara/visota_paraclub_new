@@ -21,10 +21,11 @@ module EventsHelper
           return c_box_block(p)
 	end
 	
-	def event_compact_item(event, s=1) #Миниатюра на странице Общение 
+	def event_compact_item(event, s=1, i = 1) #Миниатюра на странице Общение 
     ph = event.alter_photo('small_thumb')
+    s = 3 if s>3
     strLength = (ph.nil?)? 450 : 200
-    html = "<div class = 'col span_#{12/s}_of_12'><h4><span class = 'black'>#{event.post_date.strftime('%d-%m-%Y')} |</span> #{event.title}</h4>
+    html = "<div class = 'col span_#{12/s}_of_12 #{(i>3)? 'h-event' : "v-event"}' #{'style = "display: none;"' if i>3}><h4><span class = 'black'>#{event.post_date.strftime('%d-%m-%Y')} |</span> #{event.title}</h4>
 							<table style = 'width: 99%; height: 90px;'>
 								<tr>
 									#{"<td>#{event.alter_photo('small_thumb')}</td>" if !ph.nil?}

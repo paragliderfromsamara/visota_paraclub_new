@@ -10,10 +10,6 @@
                      <%= f.label :status_id, 'Статус новости' %><br />
                      <%= my_collection_select(@event.statuses_list, 'status_id', 'event', @event.get_status_item, '') %> 
                  </div>
-                 <div class = 'col span_4_of_12'>
-                     <%= f.label :display_area_id, 'Зоны видимости' %><br />
-                     <%= my_collection_select(@event.display_area_list, 'display_area_id', 'event', @event.get_display_area_list_item, '') %>
-                 </div>
                  <div class = 'col span_5_of_12'>
                        <%= f.label :post_date, 'Дата размещения' %><br />
                        <%= f.datetime_select :post_date, :start_year => 2000, :end_year => Date.today.year, :order => [:day, :month, :year], :use_month_names => ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'] %>

@@ -5,9 +5,11 @@
         </h3>
     </div>
     <div class = 'm_1000wh tb-pad-s'>
+        <% i = 0%>
         <div class = 'section group'>
             <% @events.each do |e| %>
-                <%=event_compact_item(e, @events.size).html_safe%>
+                <% i += 1%>
+                <%=event_compact_item(e, @events.size, i).html_safe%>
             <%end%>
         </div>
     </div>
