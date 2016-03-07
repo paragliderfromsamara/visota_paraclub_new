@@ -36,7 +36,7 @@ table.v_table
                             font-size: 12px;
                             color:white; 
                         }
-                        span.not-read-messages
+                        span.not-read-messages, span.new-theme
                         {
                             background-color: $main_color;
                         }
@@ -44,6 +44,7 @@ table.v_table
                         {
                             background-color: #ababab;
                         }
+
                     }
 					td#first, th#first {padding-left: 5px;}
 					tbody.t_link {cursor: pointer;@include animation($time_1);}

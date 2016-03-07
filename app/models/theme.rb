@@ -317,7 +317,7 @@ class Theme < ActiveRecord::Base
     if !user.nil?
       step = Step.find_by(part_id: 9, page_id: 1, entity_id: self.id, user_id: user.id)
       if step.nil?
-        info = '<span class = "not-read-theme" title = "не прочитано">н/п</span>'
+        info = (self.created_at + 10.days < Time.now)? '<span class = "not-read-theme" title = "не прочитано">н/п</span>' : '<span class = "new-theme" title = "новая тема">new</span>'
       elsif !self.messages.blank?
         nr_messages = self.not_read_messages(user, step)
         if nr_messages.size < 100 && nr_messages.size != 0
