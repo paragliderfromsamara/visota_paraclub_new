@@ -88,7 +88,7 @@ class AdminToolsController < ApplicationController
 		render "events/index.html.erb"
   end
   def recreate_photo_versions
-      photosUpdate
+      #photosUpdate
       redirect_to photo_albums_path
   end
 # Шаги для адаптации базы данных
@@ -100,16 +100,16 @@ class AdminToolsController < ApplicationController
   def adaptation_to_new #Создание тем из базы данных первой версии сайта.
     #makeThemesFromMessages #адаптируем старую гостевую под новую
 		#adaptationAlbums
-		adaptationPhotos
+		#adaptationPhotos
 		#adaptationArticles
     #adaptationVideos
-    photosUpdate
+    #photosUpdate
     redirect_to '/visota_life'
   end
   def make_themes_steps
-    redirect_to '/404' if !is_super_admin?
-    stepsAdaption
-    makeThemesSteps
+    #redirect_to '/404' if !is_super_admin?
+    #stepsAdaption
+    #makeThemesSteps
     redirect_to topics_path
   end
 end

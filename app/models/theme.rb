@@ -247,7 +247,10 @@ class Theme < ActiveRecord::Base
   		end
   	end
     th = Theme.find self.id
+    new_theme = Theme.find new_theme.id
+    new_theme.last_msg_upd
   	th.destroy
+      
     return new_theme
   else
     self.update_attribute(:topic_id, new_topic.id)
@@ -271,9 +274,13 @@ class Theme < ActiveRecord::Base
 
 #статусы end...
   def last_msg_upd
-	  date = self.last_message.created_at if self.last_message != nil
-	  date = self.created_at if self.last_message_date == nil
-	  self.update_attribute(:last_message_date, self.created_at) if self.last_message_date != date
+    selfDate = self.created_at
+    lastMessageDate = (self.last_message.nil?)? self.created_at : self.last_message.created_at
+    self.update_attribute(:last_message_date, (selfDate < lastMessageDate)? lastMessageDate : selfDate)
+    #dateToUpdate = 
+    #date = (self.last_message.nil?)
+	  #date = self.last_message.created_at if self.last_message != nil
+	  #date = self.created_at if self.last_message_date == nil
   end
  
 #управление содержимым  

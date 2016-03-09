@@ -133,7 +133,6 @@ include TopicsHelper
     if curStatusId == 0 && newStatusId == 1
       notice = 'Тема успешно добавлена' 
       params[:theme][:created_at] =  params[:theme][:updated_at] = params[:theme][:last_message_date] = Time.now
-
       sMail = true
     else
       notice = 'Тема успешно обновлена' 

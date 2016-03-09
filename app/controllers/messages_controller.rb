@@ -310,6 +310,7 @@ class MessagesController < ApplicationController
 	  ent = @message.photo_album if @message.photo_album != nil
     ent = @message.video if @message.video != nil
   	if userCanDeleteMessage?(@message)
+      theme = @message.theme
   		if is_admin?
   			if @message.status_id != 1
   				@message.destroy
@@ -319,6 +320,7 @@ class MessagesController < ApplicationController
   		else
   			@message.destroy
   		end
+      theme.last_msg_upd if !theme.nil?
   		respond_to do |format|
   		  format.html { redirect_to ent }
   		  format.json { head :no_content }
@@ -329,9 +331,18 @@ class MessagesController < ApplicationController
   end
   
   def recovery
-  	msg = Message.find_by(id: params[:id])
-  	if msg != nil and user_type != 'super_admin'
+  	msg = Message.find(params[:id])
+	  ent = msg.theme if msg.theme != nil
+	  ent = msg.photo if msg.photo != nil
+	  ent = msg.photo_album if msg.photo_album != nil
+    ent = msg.video if msg.video != nil
+  	if msg != nil# and user_type != 'super_admin'
   		msg.set_as_visible
+      msg.theme.last_msg_upd if !msg.theme.nil? 
+  		respond_to do |format|
+  		  format.html { redirect_to ent }
+  		  format.json { head :no_content }
+  		end
   	else
   		redirect_to '/404'
   	end
@@ -366,11 +377,13 @@ class MessagesController < ApplicationController
   		new_theme_flag = (params[:replace_message][:make_new_as_theme]).to_i
   		new_theme_name = (params[:replace_message][:new_theme_name]).strip
   		if message != nil and new_topic != nil
-  			replace_path = "/messages/#{message.id}/replace_message"
+  			old_theme = message.theme #для изменения last_message_date у старой темы после переноса
+        replace_path = "/messages/#{message.id}/replace_message"
   			if new_theme_flag == 1
   				if new_theme_name != ''
   					new_theme = message.makeThemeFromMessage(new_theme_name, new_topic)
-  					redirect_to new_theme
+  					old_theme.last_msg_upd if !old_theme.nil?
+            redirect_to new_theme
   				else
   					redirect_to replace_path, :notice => 'Введите название новой темы'
   				end
@@ -378,6 +391,7 @@ class MessagesController < ApplicationController
   				if target_theme != nil
   					message.update_attributes(:theme_id => target_theme.id, :topic_id => target_theme.topic_id, :visibility_status_id => target_theme.visibility_status_id, :message_id => nil)
   					message.bind_child_messages_to_theme(target_theme)
+            old_theme.last_msg_upd if !old_theme.nil?
   					redirect_to "#{theme_path(target_theme)}#m_#{message.id.to_s}"
   				else
   					redirect_to replace_path, :notice => 'Выберите тему, либо создайте новую'

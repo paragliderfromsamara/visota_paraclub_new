@@ -73,7 +73,7 @@ Rails.application.routes.draw do
   
   post '/messages/:id/upload_attachment_files', :to => 'messages#upload_attachment_files'
   get '/messages/:id/upload_attachment_files', :to => 'messages#upload_attachment_files'
-  
+  get '/messages/:id/recovery', :to => 'messages#recovery'
   post '/do_replace_message', :to => 'messages#do_replace_message'
   #messages_controller end
   

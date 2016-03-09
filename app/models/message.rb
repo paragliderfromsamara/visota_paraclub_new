@@ -214,7 +214,8 @@ class Message < ActiveRecord::Base
 							:visibility_status_id => self.theme.visibility_status_id,
               :theme_type_id => self.theme.visibility_status_id
 							)
-	new_theme.save(:validate => false)				
+	new_theme.save(:validate => false)
+  new_theme = Theme.find new_theme.id				
 	if self.get_tread != []
 		self.get_tread.each do |msg|
 			msg.update_attributes(:theme_id => new_theme.id, :topic_id => new_theme.topic_id)
@@ -258,11 +259,16 @@ class Message < ActiveRecord::Base
   end
 #превращение сообщения в тему  
   def bind_child_messages_to_theme(theme) #Переносит в тему не созданную из first_message
-	if self.get_tread != []
-		self.get_tread.each do |msg|
-			msg.update_attributes(:theme_id => theme.id, :topic_id => theme.topic_id, :visibility_status_id => theme.visibility_status_id)
-		end	
-	end	
+  	if self.get_tread != []
+  		self.get_tread.each do |msg|
+  			msg.update_attributes(:theme_id => theme.id, :topic_id => theme.topic_id, :visibility_status_id => theme.visibility_status_id)
+  		end	
+      
+    end	
+    theme = Theme.find theme.id
+    if theme.messages.last != nil
+      theme.update_attribute(:last_message_date, theme.messages.last.created_at) if theme.last_message_date < theme.messages.last.created_at
+    end
   end
 
 
