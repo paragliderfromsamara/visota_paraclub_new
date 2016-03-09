@@ -19,6 +19,7 @@ class Message < ActiveRecord::Base
   require 'will_paginate'
   auto_html_for :content do
 	html_escape
+  my_google_map
 	my_youtube_msg(:width => 480, :height => 360, :span => true)
 	my_vimeo(:width => 480, :height => 360, :span => true)
 	vk_video_msg(:width => 480, :height => 360, :span => true)

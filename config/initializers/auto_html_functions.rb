@@ -219,6 +219,13 @@ def split_paragraphs(text)
       t.gsub!(/([^\n]\n)(?=[^\n])/, '\1<br />') || t
   end
 end 
+
+
+AutoHtml.add_filter(:my_google_map) do |text|
+  text.gsub(/&lt;iframe\s+src=&quot;(https:\/\/www.google.com\/maps\/embed\S+)&quot;\s*(.)*&gt;\s*(&lt;\/iframe&gt;{1})/) do
+    "<br /><div class = 'central_field' style = 'width: 700px;'><iframe src='#{$1}' width='700' height='450' frameborder='0' style='border:0' allowfullscreen></iframe></div><br />"
+  end
+end
 #module AutoHtml
 #  class MySimpleFormat
 #      def call(text)
