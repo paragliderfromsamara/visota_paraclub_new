@@ -90,11 +90,10 @@ class Event < ActiveRecord::Base
 					photo_to_return = article.alter_photo  
         elsif !theme.nil?
           photo_to_return = self.theme.photos.first
-        else
-          if !self.photos.blank?
-					  photo_to_return = self.photos.first if self.photo.nil? 
-					  photo_to_return = self.photo if !self.photo.nil?
-          end
+        end
+        if !self.photos.blank? && photo_to_return.nil?
+				  photo_to_return = self.photos.first if self.photo.nil? 
+				  photo_to_return = self.photo if !self.photo.nil?
         end
 			end
 			if !photo_to_return.nil?
