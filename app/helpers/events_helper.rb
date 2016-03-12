@@ -1,5 +1,6 @@
 module EventsHelper
 	def event_index_item(event, i) #Миниатюра в списке новостей  
+    event.update_attribute(:post_date, event.created_at) if event.post_date.blank?
     html = "<h4><span class = 'black'>#{event.post_date.strftime('%d-%m-%Y')} |</span> #{event.title}</h4>
 							<table style = 'width: 99%;'>
 								<tr>
