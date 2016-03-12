@@ -23,6 +23,7 @@ module EventsHelper
 	
 	def event_compact_item(event, s=1, i = 1) #Миниатюра на странице Общение 
     ph = event.alter_photo('small_thumb')
+    event.update_attribute(:post_date, event.created_at) if event.post_date.blank?
     s = 3 if s>3
     strLength = (ph.nil?)? 450 : 200
     html = "<div class = 'col span_#{12/s}_of_12 #{(i>3)? 'h-event' : "v-event"}' #{'style = "display: none;"' if i>3}><h4><span class = 'black'>#{event.post_date.strftime('%d-%m-%Y')} |</span> <span title = '#{event.title}'>#{truncate event.title, length: 35}</span></h4>
