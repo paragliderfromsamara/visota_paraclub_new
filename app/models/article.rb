@@ -1,6 +1,6 @@
 class Article < ActiveRecord::Base
-  attr_accessor :assigned_albums, :assigned_videos
-  attr_accessible :article_type_id, :content, :event_id, :name, :user_id, :accident_date, :attachment_files, :photos, :uploaded_photos,:assigned_albums, :assigned_videos, :status_id, :visibility_status_id, :created_at, :updated_at, :theme_id
+  attr_accessor :assigned_albums, :assigned_videos, :make_event_flag, :event_post_date
+  attr_accessible :article_type_id, :content, :event_id, :name, :user_id, :accident_date, :attachment_files, :photos, :uploaded_photos,:assigned_albums, :assigned_videos, :status_id, :visibility_status_id, :created_at, :updated_at, :theme_id, :make_event_flag, :event_post_date
   belongs_to :user
   belongs_to :theme
   #belongs_to :article_type
@@ -11,6 +11,7 @@ class Article < ActiveRecord::Base
   has_many :videos
   has_one :entity_view, :as => :v_entity, :dependent => :delete #просмотры
   has_one :article
+  has_one :event, dependent: :destroy
   require 'will_paginate'
   auto_html_for :content do
 	html_escape
@@ -27,6 +28,18 @@ class Article < ActiveRecord::Base
 	fNum
   #  simple_format
   my_simple_format
+  end
+  after_validation :check_event_flag
+  def check_event_flag
+    altCont = (self.content.blank?) ? "#{self.user.name} добавил #{self.type[:name]}" : self.content
+    if self.event.nil? && make_event_flag == 'true' && self.status_id == 1
+      pDate = event_post_date.blank? ? Time.now : Date.strptime("{ #{event_post_date[1]}, #{event_post_date[2]}, #{event_post_date[3]} }", "{ %Y, %m, %d }")
+      self.build_event(post_date: pDate, content: altCont, status_id: 2, title: self.name)
+    elsif !self.event.nil? 
+      status = (self.status_id != 1 && self.status_id != 3)? 1 : 2
+      pDate = event_post_date.blank? ? Time.now : Date.strptime("{ #{event_post_date[1]}, #{event_post_date[2]}, #{event_post_date[3]} }", "{ %Y, %m, %d }")
+      self.event.update_attributes(title: self.name, content: altCont, status_id: status, :post_date => pDate) 
+    end
   end
   #статусы...  
   def statuses 

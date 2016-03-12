@@ -18,9 +18,27 @@
                 
                 <tr>
                     <td>
+                        <div class = 'section group'>
+                            <div class = 'col span_6_of_12'>
+                                <%= f.label :accident_date, 'Дата описываемого события' %><br />
+                                <%= f.date_select :accident_date, :start_year => 2000, :end_year => Date.today.year, :order => [:day, :month, :year], :use_month_names => ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'] %><br /><br />
+                            </div>
+                            <div class = 'col span_6_of_12'>
+                                <% if userCanCreateAds? %>
+                           
+                                       <fieldset>
+                                  
+                                           <legend>Рассказать в новостях</legend>
+                                               <% if @formArticle.event.nil? %>
+                                                <%= f.check_box :make_event_flag, {}, 'true', 'false' %> <%= f.label :make_event_flag, 'Рассказать в новостях' %> <br /> <%end%><%= f.label :event_post_date, 'Дата публикации' %>
+                                           <%= f.date_select :event_post_date, order: [:day, :month, :year], use_month_names: ru_month_list, default: (@formArticle.event.nil?)? Time.now : @formArticle.event.post_date %>
+                                       </fieldset>
+                                <%end%>
+                            </div>
+                        </div>
                         
-                        <%= f.label :accident_date, 'Дата описываемого события' %><br />
-                        <%= f.date_select :accident_date, :start_year => 2000, :end_year => Date.today.year, :order => [:day, :month, :year], :use_month_names => ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'] %><br /><br />
+                       
+                        
                     </td>
                 </tr>
                 <% if @type[:link] != 'flight_accidents' %>
