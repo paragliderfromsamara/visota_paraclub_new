@@ -10,7 +10,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :icq
       t.string :email
       t.string :inform
-      t.string :encrypted
+      t.string :encrypted_password
       t.string :salt
 
       t.timestamps

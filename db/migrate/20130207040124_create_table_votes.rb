@@ -3,6 +3,7 @@ class CreateTableVotes < ActiveRecord::Migration
     create_table :votes do |t|
       t.integer :user_id
 	  t.integer :topic_id
+    t.integer :message_id
 	  t.string :title
 	  t.string :content
 	  t.integer :status_id
