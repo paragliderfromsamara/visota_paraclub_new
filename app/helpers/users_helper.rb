@@ -153,4 +153,12 @@ def users_paths_buttons #buttons => {:name => 'Перейти', :title => "Пе�
 	buttons_in_line(buttons_array)
 end
 #Отображение пользователя в списке пользователей end
+
+def usersLinkString(users)
+  return '' if users.blank?
+  uNames = ''
+  users.each {|u| uNames += "#{link_to u.name, u,class: 'b_link_i', target: '_blank'}#{', ' if u != users.last}"}
+  return uNames
+end
+
 end

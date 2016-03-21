@@ -170,6 +170,9 @@ mount_uploader :photo, UserPhotoUploader
 		]
   end
   
+  def self.n_users
+    User.where('user_group_id in (:user_gr_id) and created_at > :cr_at_offset ', {user_gr_id: [2,3,0,1,6], cr_at_offset: Time.now - 10.days}).select(:name, :id)
+  end
   #tracked_themes
   def tracked_themes(flag)
     v_status = (flag)? 1 : [1,2]

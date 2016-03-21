@@ -334,8 +334,10 @@ end
     end
   end
   def whoIsOnlineMenu    
+    newUsrs = User.n_users
+    nUsrsText = "<div class = 'm_1000wh tb-pad-s'><span class = 'istring_m'>К нам присоединил#{newUsrs.size == 1 ? 'ся' : 'ись'}: </span>#{usersLinkString(newUsrs)}</div>"
+    signedTxt = ""
     if signed_in?
-      signedTxt = ""
       stps = Step.users_online
       stps[:signed] -= [current_user]
       signedTxt = "<span class = 'istring_m'>Сейчас на сайте#{' только' if stps[:signed].size == 0 && stps[:unsigned] == 0}</span> <span style = 'font-size: 12px;' class = 'bi-string'>Вы</span>"
@@ -349,22 +351,13 @@ end
         signedTxt += (stps[:signed].size == 0)? " <span class = 'istring_m'>и</span> " : " <span class = 'istring_m'>, а также</span> "
         signedTxt += (stps[:unsigned] == 1)? "<span style = 'font-size: 12px;' class = 'bi-string'>Гость</span>" : "<span style = 'font-size: 12px;' class = 'istring_m'>#{stps[:unsigned]}</span> <span style = 'font-size: 12px;' class = 'bi-string'>Гостей</span>" 
       end
-      return "<div class = 'c_box even'><div class = 'm_1000wh tb-pad-s'>#{signedTxt}</div></div>".html_safe
-    else
-      return ""
+      signedTxt = "<div class = 'm_1000wh tb-pad-s'>#{signedTxt}</div>"
     end
-    
-    #if signed.size > 0
-    #  if signed.size == 1 
-   # end
-    #<% stps = Step.users_online %>
-    # 
-    #    <div class = 'm_1000wh tb-pad-s'>
-    #        <% stps[:signed].each do |u| %>
-    #            <%=link_to u.name, u, class: "b_link_i"%>
-    #        <% end %> | <span class = 'istring_m'>Гостей:(<%= stps[:unsigned] %>)</span>
-    #    </div>
-    #</div>
+    if newUsrs.size > 0 || !signedTxt.blank?
+      return "<div class = 'c_box even'>#{signedTxt}#{nUsrsText if newUsrs.size > 0}</div>".html_safe
+    else
+      return ''
+    end
   end
 
 	def my_collection_select(collection, list_name, form_name, base_item, prompt) #структура collection [{:value => integer, :name => string}]
@@ -632,6 +625,5 @@ end
 	return "<div class = 'nav_string'>#{value}</div>"
   end
 #Основные блоки	end
-
 
 end
