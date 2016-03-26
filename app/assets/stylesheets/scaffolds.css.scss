@@ -285,24 +285,7 @@ ul.myBut
 	a.w_link_i {font-family: $font_family_3; font-size: 0.8125em;text-decoration: none; color:$link_color;}
 	a.w_link_i:hover {text-decoration: underline; }
 /*links end*/
-/*like_marks*/
-.like_marks
-{
-    cursor:pointer;
-	#mark_link
-    {
-        font-family: $font_family_1;
-	    color: $link_color;
-	    font-size: 0.8125em;
-	    text-decoration: none;
-    }
-}
-.like_marks:hover 
-{
-    #mark_link {text-decoration: underline;}
-    #mark_img {color: $main_color;}
-}
-/*like_marks end*/    
+
 /*mainMenu*/
 
 

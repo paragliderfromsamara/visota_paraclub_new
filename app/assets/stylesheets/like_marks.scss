@@ -1,3 +1,41 @@
 // Place all the styles related to the LikeMarks controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import 'scaffolds';
+
+/*like_marks*/
+.like_marks
+{
+    position: relative;
+    cursor:pointer;
+    overflow: visible;
+    #lm-list
+    {
+        position: absolute;
+        display: none;
+    }
+	#mark_link
+    {
+        font-family: $font_family_1;
+	    color: $link_color;
+	    font-size: 12px;
+	    text-decoration: none;
+    }
+
+}
+.ui-dialog-titlebar
+{
+    color: white;
+    background: $fiveth_color;
+    font-size: 14px;
+}
+.lm-avatar
+{
+    padding: 0 3px 0 3px;
+}
+.like_marks:hover 
+{
+    #mark_link {text-decoration: underline;}
+    #mark_img {color: $main_color; z-index: 5000;}
+}
+/*like_marks end*/    

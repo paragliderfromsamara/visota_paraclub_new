@@ -80,8 +80,18 @@ module LikeMarksHelper
   def makeLikeBut(f, e, c)
     t = (f)? (disLikeBut(c)):(likeBut(c))
     v = (!signed_in?)? (""):("<span id = 'mark_link'>#{t[:linkName]}</span>")
-    return "<div lm-entity-id = \"#{e.id}\" lm-entity-type = \"#{e.class.name.downcase}\" class='stat fi-float-right like_marks'>#{v} <i id = 'mark_img' class = 'fi-heart fi-small #{t[:img]}'></i><span id = 'mark_count'>#{t[:mCount]}</span></div>"
+    return "<div  lm-entity-id = \"#{e.id}\" lm-entity-type = \"#{e.class.name.downcase}\" class='stat like_marks fi-float-right'><span id = 'give-mark'>#{like_mark_avatars_list(e)}#{v} <i id = 'mark_img' class = 'fi-heart fi-small #{t[:img]}'></i></span><span id = 'mark_count'>#{t[:mCount]}</span></div>"
   end
+  
+  def like_mark_avatars_list(e)
+    return '' if e.like_marks.blank?
+    v = ''
+    e.like_marks.each do |m| 
+      v += link_to(image_tag(m.user.alter_avatar_thumb, class: 'lm-avatar').html_safe, m.user, title: m.user.name)
+    end
+    return "<div id = 'lm-list'>#{v}</div>"
+  end
+  
   def likeBut(c)
     {:linkName => "Мне нравится", :mCount => c, :img => 'fi-grey'}
   end

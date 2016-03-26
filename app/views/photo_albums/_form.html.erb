@@ -19,7 +19,9 @@
                 						<% @users = User.all.order('created_at ASC') %>
                 						<%= f.label :user_id, 'Автор' %><br />
                 						<%= f.collection_select :user_id, @users, :id, :name, {}, {:class => 'c_select'} %><br /><br />
-                					<% end %>
+                					<% else %>
+                                        <%= f.hidden_field :user_id, value: current_user.id %>
+                                    <% end %>
                 					<%= f.label :category_id, 'Категория' %><br />
                 					<%= my_collection_select(@albumToForm.categories, "category_id", 'photo_album', {}, '') %><br /><br />
                                 </div>
