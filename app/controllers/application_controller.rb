@@ -7,10 +7,20 @@ class ApplicationController < ActionController::Base
   #include AlbumBindersHelper
   include StepsHelper
   #before_action :site_works
+  before_action :check_domain_name
   
   def site_works
     redirect_to '/404' if user_type == 'guest'
     redirect_to '/404' if current_user.id != 1 
+  end
+  
+  def check_domain_name
+    url = request.url.to_s
+    new_url = 'visota63'
+    regexp = /visota-paraclub/i
+    if !url.index(regexp).nil?
+      redirect_to url.gsub(regexp, new_url)
+    end
   end
   
 end
