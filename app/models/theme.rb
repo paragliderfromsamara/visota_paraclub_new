@@ -455,7 +455,13 @@ def delete_steps
 end
 
 
-
+def theme_types 
+  [
+    {id: 1, name: "Не закреплять"},
+    {id: 2, name: "Закрепить только в своем разделе"},
+    {id: 3, name: "Закрепить для всех разделов"}
+  ]
+end
 
 def equipment_part
   if self.equipment_part_id.blank? 

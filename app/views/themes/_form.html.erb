@@ -45,7 +45,20 @@
                                     
             
                                     <% if userCanCreateAds? %>
-                                        <%= f.check_box :theme_type_id, {}, 2, 1 %> 
+                                        <select name = 'theme[theme_type_id]'>
+                                            <% if !@formTheme.theme_type_id.nil? %>
+                                                <%@formTheme.theme_types.each do |t|%>
+                                                    <%if t[:id] == @formTheme.theme_type_id %>
+                                                        <option value = '<%=  @formTheme.theme_type_id  %>'><%= t[:name] %></option>
+                                                    <%end%>
+                                                <%end%>
+                                            <%end%>
+                                            <%@formTheme.theme_types.each do |t|%>
+                                                <%if t[:id] != @formTheme.theme_type_id %>
+                                                    <option value = '<%=  t[:id]  %>'><%= t[:name] %></option>
+                                                <%end%>
+                                            <%end%>
+                                        </select>
                                         <%= f.label :theme_type_id, 'Закрепить тему' %> <br /> 
 
                                            <br />
