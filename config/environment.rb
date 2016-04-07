@@ -5,7 +5,7 @@ Time::DATE_FORMATS[:ru_datetime] = "%d.%m.%Y в %k:%M:%S"
 # Initialize the Rails application.
 Rails.application.initialize!
 
-ActionMailer::Base.delivery_method = :smtp
+ActionMailer::Base.delivery_method = :sendmail
 
 ActionMailer::Base.smtp_settings = {
   :address              => "smtp.yandex.ru",
