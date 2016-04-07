@@ -8,18 +8,18 @@ module MailerHelper
     if album.photos.length > 2 and album.status_id == 1
       users = User.select(:id).where(email_status: 'Активен').where.not(id: album.user_id)
       mailers = Mailer.where(album:'yes', user_id: users)
-     # mailers.each {|m| PhotoAlbumMailer.new_album_mailer(album, m.user).deliver_later} if mailers != []
+      mailers.each {|m| PhotoAlbumMailer.new_album_mailer(album, m.user).deliver_later} if mailers != []
     end
   end
   def sendNewVideoMail(video) #добавлено в VideosController create
     users = User.select(:id).where(email_status: 'Активен').where.not(id: video.user_id)
     mailers = Mailer.where(video:'yes', user_id: users)
-    #mailers.each {|m| VideoMailer.new_video_mailer(video, m.user).deliver_later} if mailers != []
+    mailers.each {|m| VideoMailer.new_video_mailer(video, m.user).deliver_later} if mailers != []
   end
   def sendNewThemeMail(theme) #добавлено в Themes update
     users = User.select(:id).where(email_status: 'Активен', user_group_id: theme.users_who_can_see).where.not(id: theme.user_id)
     mailers = TopicNotification.where(topic_id:theme.topic_id, user_id: users)
-    #mailers.each {|m| ThemesMailer.new_theme_notification(theme, m.user).deliver_later} if mailers != []
+    mailers.each {|m| ThemesMailer.new_theme_notification(theme, m.user).deliver_later} if mailers != []
   end
   def sendNewMessageMail(message) #добавлено в Messages update   
     if !message.theme.nil?
@@ -28,33 +28,33 @@ module MailerHelper
       if ntfs != []
         users = User.select(:id).where(email_status: 'Активен', id: ntfs)
         mailers = Mailer.where(message:'yes', user_id: users)
-        #mailers.each {|m| MessageMailer.new_message_in_theme_mailer(message, m.user).deliver_later} if mailers != []
+        mailers.each {|m| MessageMailer.new_message_in_theme_mailer(message, m.user).deliver_later} if mailers != []
       end
       if !message.message.nil?
         u = message.message.user 
-       # MessageMailer.new_answer_in_theme_mailer(message, u).deliver_later if u != message.user && u.email_status == 'Активен' && u.mailer.message == 'yes'
+        MessageMailer.new_answer_in_theme_mailer(message, u).deliver_later if u != message.user && u.email_status == 'Активен' && u.mailer.message == 'yes'
       end  
     elsif !message.video.nil?
       vUser = message.video.user
-      #MessageMailer.new_comment_in_video_mailer(message, vUser).deliver_later if vUser != message.user && vUser.email_status == 'Активен' && vUser.mailer.video_comment == 'yes' 
+      MessageMailer.new_comment_in_video_mailer(message, vUser).deliver_later if vUser != message.user && vUser.email_status == 'Активен' && vUser.mailer.video_comment == 'yes' 
       if !message.message.nil?
         aUser = message.message.user
-        #MessageMailer.new_answer_in_video_mailer(message, aUser).deliver_later if message.video.user != aUser && aUser.mailer.message == 'yes' && aUser.email_status == 'Активен'
+        MessageMailer.new_answer_in_video_mailer(message, aUser).deliver_later if message.video.user != aUser && aUser.mailer.message == 'yes' && aUser.email_status == 'Активен'
       end
     elsif !message.photo_album.nil?
       if !message.photo.nil?
         pUser = message.photo.user  
-        #MessageMailer.new_comment_in_photo_mailer(message, pUser).deliver_later if message.user != pUser && pUser.mailer.photo_comment == 'yes' && pUser.email_status == 'Активен'
+        MessageMailer.new_comment_in_photo_mailer(message, pUser).deliver_later if message.user != pUser && pUser.mailer.photo_comment == 'yes' && pUser.email_status == 'Активен'
         if !message.message.nil?
           mUser = message.message.user
-          #MessageMailer.new_answer_in_photo_mailer(message, mUser).deliver_later if pUser != mUser && mUser.mailer.message == 'yes' && mUser.email_status == 'Активен'
+          MessageMailer.new_answer_in_photo_mailer(message, mUser).deliver_later if pUser != mUser && mUser.mailer.message == 'yes' && mUser.email_status == 'Активен'
         end
       else
         aUser = message.photo_album.user
-        #MessageMailer.new_comment_in_album_mailer(message, aUser).deliver_later if message.user != aUser && aUser.mailer.photo_comment == 'yes' && aUser.email_status == 'Активен'
+        MessageMailer.new_comment_in_album_mailer(message, aUser).deliver_later if message.user != aUser && aUser.mailer.photo_comment == 'yes' && aUser.email_status == 'Активен'
         if !message.message.nil?
           mUser = message.message.user
-          #MessageMailer.new_answer_in_album_mailer(message, mUser).deliver_later if aUser != mUser && mUser.mailer.message == 'yes' && mUser.email_status == 'Активен'
+          MessageMailer.new_answer_in_album_mailer(message, mUser).deliver_later if aUser != mUser && mUser.mailer.message == 'yes' && mUser.email_status == 'Активен'
         end
       end
     end
@@ -65,15 +65,15 @@ module MailerHelper
     if mailers != []
 			case article.type[:link]
 				when "reports"
-				 return true# mailers.each {|m| ArticlesMailer.new_report_mailer(article, m.user).deliver_later } 
+				  mailers.each {|m| ArticlesMailer.new_report_mailer(article, m.user).deliver_later } 
 				when "reviews"
-			    return true # mailers.each {|m| ArticlesMailer.new_review_mailer(article, m.user).deliver_later } 
+			    mailers.each {|m| ArticlesMailer.new_review_mailer(article, m.user).deliver_later } 
 				when "club_articles"
-				 return true# mailers.each {|m| ArticlesMailer.new_article_mailer(article, m.user).deliver_later } 
+				  mailers.each {|m| ArticlesMailer.new_article_mailer(article, m.user).deliver_later } 
 				when "flight_accidents"
-				 return true# mailers.each {|m| ArticlesMailer.new_flight_accident_mailer(article, m.user).deliver_later } 
+				  mailers.each {|m| ArticlesMailer.new_flight_accident_mailer(article, m.user).deliver_later } 
 				when "documents"
-				 return true# mailers.each {|m| ArticlesMailer.new_document_mailer(article, m.user).deliver_later} 
+				  mailers.each {|m| ArticlesMailer.new_document_mailer(article, m.user).deliver_later} 
 			end
     end
   end

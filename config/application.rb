@@ -27,5 +27,16 @@ module Test212
     config.action_mailer.default_url_options = { host: 'visota63.ru' } #kozvonin.ru
     config.action_mailer.asset_host = 'http://visota63.ru'
     
+
+    config.action_mailer.delivery_method = :smtp
+
+    config.action_mailer.smtp_settings = {
+      :address              => "smtp.yandex.ru",
+      :port                 => 587,
+      :domain               => 'visota63.ru',
+      :user_name            => 'noreply@visota63.ru',
+      :password             => 'koz13onin',
+      :authentication       => 'plain',
+      :enable_starttls_auto => true   }
   end
 end
