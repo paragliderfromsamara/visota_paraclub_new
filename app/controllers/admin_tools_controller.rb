@@ -8,7 +8,7 @@ class AdminToolsController < ApplicationController
     @title = @header = 'Тест функций'
     message = Message.find(2936)
     user = User.find(1)
-    new_message_in_theme_mailer(message, user)
+    MessageMailer.new_message_in_theme_mailer(message, user)
     #photosRebindings
     #album = PhotoAlbum.find(53)
     #sendNewAlbumMail(album)
