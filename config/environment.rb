@@ -8,7 +8,7 @@ Rails.application.initialize!
 ActionMailer::Base.delivery_method = :sendmail
 
 ActionMailer::Base.smtp_settings = {
-  :address              => "smtp.yandex.ru",
+  :address              => "imap.yandex.ru",
   :port                 => 587,
   :domain               => 'visota63.ru',
   :user_name            => 'noreply@visota63.ru',
