@@ -1,0 +1,14 @@
+<div class = 'c_box odd'>
+	<div class = 'm_1000wh tb-pad-m' >
+            <% @topics.each do |t| %>
+                    <div class = 'section group'>
+                        <div class = 'col span_12_of_12'>
+                            <%= topic_mini_block_as_list(t).html_safe %>
+                        </div>
+                    </div>
+            <% end %>
+        <div class = 'section group'>
+            <div class = 'col span_12_of_12'><%= guest_book_vl_block.html_safe %></div>
+        </div>
+	</div>
+</div>

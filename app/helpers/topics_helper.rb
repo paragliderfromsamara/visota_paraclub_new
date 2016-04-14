@@ -50,31 +50,52 @@ module TopicsHelper
   def is_cur_th_filter_mode_all?
     params[:th_filter] != 'not_visited' && params[:th_filter] != 'my' && params[:th_filter] != 'ntf' && (params[:th_filter] != 'deleted' && user_type == 'super_admin')
   end
-	def topics_list_in_vl
+	def topic_mini_block_as_list(topic)
 		v = ''
-		topics = Topic.all
-		i = 0
-		j = 0
-		if topics != []
-			topics.each do |t|
-				i += 1
-				v += "<div class = 'section group'>" if i == 1
-				v += "<div class = 'col span_6_of_12'>"
-				v += topic_mini_block_content(t)
-				v += "</div>"
-				if i == 2
-					v += "</div>"
-					i = 0
-				end
-				if t == topics.last
-					i += 1
-					v += "</div><div class = 'section group'>" if i == 1  
-					v += "<div class = 'col span_6_of_12'>#{guest_book_vl_block}</div>"
-					v += "</div>"
-				end
-			end
-		end
+		v += "#{link_to(topic.name, topic, :class => 'b_link_bold', :style => 'font-size: 16px;')} <br />"
+		themes = topic.last_active_themes(is_not_authorized?, 2)
+		entities_count = topic.entities_count(is_not_authorized?)
+    v += topic_description(topic)
+		v += topic_themes_big_table(themes)
+		v += "<div class = 'central_field' style = 'width: 100%;'>
+						<table style = 'width: 100%;'>
+							<tr>
+								<td align = 'left' valign = 'middle'>
+									#{ control_buttons(index_topic_buttons(topic)).html_safe }
+								</td>
+								<td style = 'width: 150px;'>
+									<p class = 'istring_m norm medium-opacity'>Тем: #{ entities_count[:cThemes]} Сообщений: #{ entities_count[:cMessages] }</p>
+								</td>
+							</tr>
+						</table>
+					</div>"
 		return v
+	end
+	def topic_themes_big_table(themes)
+			"
+				<table class = 'v_table' id = 'themes_list'>
+					<tr>
+            <th id = 'first'>
+            </th>
+						<th>
+							Заголовок
+						</th>
+						<th title = 'Дата создания темы'>
+							Дата
+						</th>
+						<th>
+							Автор крайнего сообщения
+						</th>
+						<th title = 'Дата крайнего сообщения в теме'>
+							Дата
+						</th>
+						<th id = 'last'>
+							Информация
+						</th>
+					</tr>
+          #{build_rows(themes)}
+				</table>
+			"
 	end
 	def topic_mini_block_content(topic)
 		v = ''
@@ -217,5 +238,15 @@ module TopicsHelper
   def topic_description(topic=@topic)
    return "" if topic.description.blank?
    return "<p class = 'istring_m norm tb-pad-s'>#{topic.description}</p>"
+  end
+  
+  def topic_index_mode
+    mode = (cookies[:topic_index_mode] != 'thumbs' && cookies[:topic_index_mode] != 'list')? 'thumbs' : cookies[:topic_index_mode] 
+    p_mode = (params[:t_view_mode] != 'thumbs' && params[:t_view_mode] != 'list')? nil : params[:t_view_mode]
+    if !p_mode.nil?
+      mode = p_mode
+      cookies[:topic_index_mode] = mode
+    end
+    return [mode, "<a href = '/visota_life?t_view_mode=list' title = 'Показать разделы списком' class = 'th-view-mode' id = 'th-as-list'><i class = 'fi-list fi-large#{mode == 'list' ? ' fi-blue' : ' fi-grey'}'></i></a>  <a href = '/visota_life?t_view_mode=thumbs' title = 'Показать разделы миниатюрами' class = 'th-view-mode' id = 'th-as-thumbnails'><i class = 'fi-thumbnails fi-large#{mode == 'thumbs' ? ' fi-blue' : ' fi-grey' }'></i></a>"] 
   end
 end

@@ -10,10 +10,10 @@ class Topic < ActiveRecord::Base
    return image if image != nil and image != ''
   end
   
-  def last_active_themes(is_not_authorized)
+  def last_active_themes(is_not_authorized, limit = 4)
 	v_status = 1
 	v_status = [1,2] if !is_not_authorized
-    return self.themes.select('id, name, last_message_date, user_id, created_at').where(:visibility_status_id => v_status).order('last_message_date DESC').limit(4)
+    return self.themes.select('id, name, last_message_date, user_id, created_at, status_id, visibility_status_id').where(:visibility_status_id => v_status).order('last_message_date DESC').limit(limit)
   end
   
   def entities_count(is_not_authorized)
