@@ -16,7 +16,7 @@ class VotesController < ApplicationController
   def show
   	@vote = Vote.find(params[:id])
     @theme = @vote.theme
-    @title = @header = @vote.name
+    @title = @header = (@vote.theme.blank?)? @vote.name : @vote.theme.name
   	@path_array = [
   						{:name => 'Общение', :link => '/visota_life'},
   						{:name => 'Опросы', :link => votes_path},
@@ -68,9 +68,28 @@ class VotesController < ApplicationController
   end
 
   def edit
+    @vote = Vote.find(params[:id])
+    redirect_to '/404' if @vote.user != current_user && is_not_admin?
+		@title = @header = 'Изменение опроса'
+    @path_array = [
+					{:name => 'Общение', :link => '/visota_life'},
+					{:name => 'Опросы', :link => votes_path},
+					{:name => @header }
+				  ]
   end
 
   def update
+    @vote = Vote.find(params[:id])
+    redirect_to '/404' if @vote.user != current_user && is_not_admin?
+		respond_to do |format|
+		 if @vote.update_attributes(params[:vote])
+			format.html { redirect_to @vote, :notice => 'Опрос успешно обновлен...' }
+			format.json { render :json => @vote, :status => :updated, :location => @vote }
+		 else
+ 			format.html { redirect_to @vote, :alert => 'Не удалось обновить опрос...' }
+ 			format.json { render :json => @vote, :status => :error, :location => @vote }
+		 end
+		end
   end
 
   def destroy
