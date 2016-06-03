@@ -114,44 +114,21 @@ textarea {resize: none;}
 /*social icons*/
 .social-icons
 {
-    position: relative;
-    width: 60px;
-    height: 60px;
-    cursor: pointer;
-	@include animation($time_1);
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    top:45px;
 }
-#vkontakte
+.normal
 {
-    background-image: url('/files/vk.png');
+    z-index: 100;
 }
-#vkontakte:hover
+.normal:hover {@include my_opacity(0.0);}
+.hovered
 {
-    background-image: url('/files/vk_b.png');
+    z-index: 99;
 }
-#twitter
-{
-    background-image: url('/files/tw.png');
-}
-#twitter:hover
-{
-    background-image: url('/files/tw_b.png');
-}
-#facebook
-{
-    background-image: url('/files/fb.png');
-}
-#facebook:hover
-{
-    background-image: url('/files/fb_b.png');
-}
-#googlePlus
-{
-    background-image: url('/files/gp.png');
-}
-#googlePlus:hover
-{
-    background-image: url('/files/gp_b.png');
-}
+
 /*social icons end*/
 .bi-string {font-family:$font_family_3;}
 .string {font-family: $font_family_1; font-size: 0.875em;}
