@@ -36,6 +36,9 @@ end
 def meta_content
   (@meta_content == nil)? "Круглогодичное обучение полетам на параплане, мотопараплане и кайтах. Помощь в выборе и приобретении снаряжения" : @meta_content
 end
+def meta_keywords
+  default = "параплан,самара, высота, тандем, аэрофотосъемка, кайтинг, параавис, полет, обучение, парапланеризм"
+end
   def waitline(id)
     "
 		<div style = 'display:none;' id = '#{id}' class = 'wl'>
