@@ -25,7 +25,7 @@ include UsersHelper
   @header = @title
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render :json => @users }
+      format.json { render :json => User.all }
     end
   end
   def videos
@@ -433,5 +433,18 @@ include UsersHelper
 	  else
 		  redirect_to '/404'
     end
+  end
+  
+  def delete_unused_accounts
+    redirect_to "/404" if user_type != "super_admin"
+    ids = []
+    usrs = User.where(user_group_id: 5)
+    if !usrs.blank?
+      usrs.each {|u| ids += [u.id] if !u.check_user_activity}
+    end
+    @ids = User.where(id: ids)
+    @ids.destroy_all
+    flash[:notice] = "Было удалено #{ids.count} неиспользуемых аккаунтов"
+    redirect_to "/pilots?g=just_came#cs"
   end
 end

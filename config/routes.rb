@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
 
-  
-
   resources :conversations
+  get 'conversations/:id/last_conversation_message', to: "conversations#last_conversation_message"
+  resources :conversation_messages, only: [:create, :destroy, :show]
+  
+  	
   post '/switch_mark', :to => 'like_marks#switch_mark'
   get  '/switch_mark', :to => 'like_marks#switch_mark'
   # The priority is based upon order of creation: first created -> highest priority.
@@ -157,6 +159,7 @@ Rails.application.routes.draw do
   get '/users/:id/themes', :to => 'users#themes'
   get '/send_email_check_message', :to => 'users#send_email_check_message'
   get '/authorization', :to => 'users#authorization'
+  get "/delete_unused_accounts", to: "users#delete_unused_accounts"
   #users_controller
   
   #sessions_controller

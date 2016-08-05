@@ -32,7 +32,7 @@ has_many :photos, :dependent  => :destroy
 #--------Themes--------------------------------------------------
 has_many :themes, :dependent  => :destroy
 #--------Themes end----------------------------------------------
-
+has_many :articles, :dependent => :destroy
 #--------video_like_marks--------------------------------------------------
 has_many :like_marks, :dependent  => :delete_all
 #--------video_like_marks end----------------------------------------------
@@ -44,7 +44,14 @@ has_many :steps, :dependent  => :delete_all
 #--------steps end-------------------------------------------------
 #conversations 
 has_many :conversation_users
+has_many :conversation_user_messages
 has_many :conversations, through: :conversation_users
+
+def conversation_messages(conversation, last_message_id=nil)
+  return [] if conversation.nil?
+  return self.conversation_user_messages.where(conversation_message_id: conversation.conversation_messages.select(:id).where("id>#{last_message_id}")).order("created_at ASC") if !last_message_id.nil?
+  return self.conversation_user_messages.where(conversation_message_id: conversation.conversation_messages.select(:id)).order("created_at ASC") if last_message_id.nil?
+end
 #conversations end
 #--------topic_notifications-----------------------------------------------------
 has_many :topic_notifications
@@ -472,7 +479,9 @@ mount_uploader :photo, UserPhotoUploader
    return cnv
  end
  #conversations end
- 
+ def check_user_activity
+  self.avatar? || !self.messages.blank? || !self.themes.blank? || !self.videos.blank? || !self.articles.blank? && !(self.created_at + 1.month < Time.now)
+ end
   private
   
   def encrypt_password
