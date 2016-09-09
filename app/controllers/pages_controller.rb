@@ -5,7 +5,7 @@ include PagesHelper
 #include VideosHelper
 
   def index
-	  @title = "Главная"
+	  #@title = "Главная"
 	  @topSlider = true
 	  @add_functions = "myParalaxes();"
 	  @events = Event.where(display_area_id: ([1, 3]), occupation: 'Code Artist').order('post_date DESC').limit(5)
