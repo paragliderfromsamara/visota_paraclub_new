@@ -44,7 +44,7 @@ def vk_like_vidget(prms=nil)
                                                   noparse: #{noparse}
                                                 },
                                                 {type: 'button', text: 'Поделиться'}
-                                                ));
+                                                )); 
             </script>"
   }
   return v
