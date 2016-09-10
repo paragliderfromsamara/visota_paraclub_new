@@ -4,7 +4,7 @@
 <%= my_notice %>
 <% i=1 %>
 <%if is_admin?%>
-<%= vk_like_vidget({title: @album.name, description: @album.description, image: @album.photo.link})[:button].html_safe %>
+<%= vk_like_vidget({title: @album.name, description: @album.description, image: @album.photo.link.to_s})[:button].html_safe %>
 <%end%>
 <%= album_index_block(@album, i, 'show') %>
 <div class = 'cBoxSplitter'>

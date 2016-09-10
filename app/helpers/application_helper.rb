@@ -29,14 +29,13 @@ def vk_like_vidget(prms=nil)
     noparse = 'true'
     if !prms.nil?
        title = prms[:title].blank? ? title : prms[:title]
-       description = prms[:decription].blank? ? description : prms[:decription]  
+       description = prms[:description].blank? ? description : prms[:description]  
        image = prms[:image].blank? ? image : url + prms[:image]
     end    
   v = {
     script: '<script type="text/javascript" src="http://vk.com/js/api/share.js?90" charset="windows-1251"></script>',
     button: "<script type=\"text/javascript\">
                 document.write(VK.Share.button({
-                                                  type: 'button',
                                                   url: '#{url}',
                                                   title: '#{title}',
                                                   description: '#{description}',
