@@ -3,6 +3,9 @@
 </div>
 <%= my_notice %>
 <% i=1 %>
+<%if is_admin?%>
+<%= vk_like_vidget[:button].html_safe %>
+<%end%>
 <%= album_index_block(@album, i, 'show') %>
 <div class = 'cBoxSplitter'>
 	<div class = 'm_1000wh'>
