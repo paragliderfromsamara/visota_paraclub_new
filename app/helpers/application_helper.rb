@@ -37,17 +37,24 @@ def vk_like_vidget(prms=nil)
        url = prms[:url].blank? ? url : url + prms[:url]
     end    
   v = {
-    script: '<script type="text/javascript" src="http://vk.com/js/api/share.js?90" charset="windows-1251"></script>',
+    script: '<script data-turbolinks-track = "true" type="text/javascript" src="http://vk.com/js/api/share.js?90" charset="windows-1251"></script>',
     button: "<script type=\"text/javascript\">
-                document.write(VK.Share.button({
-                                                  url: '#{url}',
-                                                  title: '#{title}',
-                                                  description: '#{description}',
-                                                  image: '#{image}',
-                                                  noparse: #{noparse}
-                                                },
-                                                {type: 'button', text: 'Поделиться'}
-                                                )); 
+                var f = function() 
+                {
+                    $('#vk_but').html(VK.Share.button({
+                                                      url: '#{url}',
+                                                      title: '#{title}',
+                                                      description: '#{description}',
+                                                      image: '#{image}',
+                                                      noparse: #{noparse}
+                                                    },
+                                                    {
+                                                        type: 'button', text: 'Поделиться'
+                                                    }
+                                                    ));
+                }
+                $(document).ready(f);
+                $(document).on('page:load', f);
             </script>"
   }
   return v

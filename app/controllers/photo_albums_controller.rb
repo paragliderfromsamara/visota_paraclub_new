@@ -49,7 +49,7 @@ include MessagesHelper
 	@album = PhotoAlbum.find_by(id: params[:id], status_id: 1) if !is_admin? 
 	@album = PhotoAlbum.find_by(id: params[:id]) if is_admin?
 	if userCanSeeAlbum?(@album)
-    @meta_content = (@album.description.blank?)? nil : @album.description
+    @meta_content = (@album.description.blank?)? "Альбом категории \"#{@album.category[:name]}\"" : @album.description
     @vkBut = true
 		@page_params = {:part_id => 3,:page_id => 1,:entity_id => @album.id}
 		@return_to = photo_album_path(@album)

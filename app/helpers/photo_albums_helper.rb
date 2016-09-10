@@ -146,8 +146,11 @@ module PhotoAlbumsHelper
 			v = [{:name => 'Перейти', :access => true, :type => 'arrow-right', :link => "#{photo_album_path(album)}"}]
       #elsif pathName == 'show' and @album != nil
 			#v = [{:name => 'Добавить комментарий', :access => userCanCreateMsg?, :type => 'plus', :id => 'newMsgBut', :link => '#new_message'}]
-		end
-		val = "#{control_buttons(v)}" if v != []
+            val = "#{control_buttons(v)}" if v != []
+        else
+            val = "#{vk_like_vidget({title: @album.name, description: @album.description.blank? ? "Альбом категории \"#{@album.category[:name]}\"" : @album.description, image: @album.get_photo.link.to_s, url: photo_album_path(@album)})[:button]} <div id = 'vk_but'></div>"
+        end
+
 		return val
 	end
 	def albumInformation(album)
