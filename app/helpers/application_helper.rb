@@ -15,6 +15,9 @@ def authority_message
     </div>
   ".html_safe
 end
+def page_image
+    @page_image.nil? ? 'http://visota63.ru/sliderImages/main_1.jpg' : 'http://visota63.ru' + @page_image
+end
 def current_path
   request.env['PATH_INFO']
 end
@@ -31,6 +34,7 @@ def vk_like_vidget(prms=nil)
        title = prms[:title].blank? ? title : prms[:title]
        description = prms[:description].blank? ? description : prms[:description]  
        image = prms[:image].blank? ? image : url + prms[:image]
+       url = prms[:url].blank? ? url : url + prms[:url]
     end    
   v = {
     script: '<script type="text/javascript" src="http://vk.com/js/api/share.js?90" charset="windows-1251"></script>',

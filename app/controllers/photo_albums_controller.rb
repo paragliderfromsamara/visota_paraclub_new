@@ -54,6 +54,7 @@ include MessagesHelper
 		@page_params = {:part_id => 3,:page_id => 1,:entity_id => @album.id}
 		@return_to = photo_album_path(@album)
 		@title = @header = @album.name
+        @page_image = @album.get_photo.link.to_s
 		@path_array = [
             {:name => 'Медиа', :link => '/media'},
 						{:name => 'Фотоальбомы', :link => '/media?t=albums&c=all'},
