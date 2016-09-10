@@ -21,23 +21,44 @@ end
 def oldMessagesPerPage
   25
 end
-def vk_like_vidget
-  {
-    script: '<script data-turbolinks-track="true" type="text/javascript" src="//vk.com/js/api/openapi.js?121"></script>
-             <script data-turbolinks-track="true" type="text/javascript">
-                VK.init({apiId: 5201088, onlyWidgets: true});
-             </script>',
-    button: '<div id="vk_like"></div>
-             <script type="text/javascript">
-               VK.Widgets.Like("vk_like", {type: "mini", verb: 1, height: 18});
-             </script>' 
+def vk_like_vidget(prms=nil)
+    url = 'http://visota63.ru'
+    title = '"ВЫСОТА"-Самарский Парапланерный Клуб'
+    description = "Круглогодичное обучение полетам на параплане, мотопараплане и кайтах. Помощь в выборе и приобретении снаряжения"
+    image = url + '/sliderImages/main_1.jpg'
+    noparse = 'true'
+    if !prms.nil?
+       title = prms[:title].blank? ? title : prms[:title]
+       description = prms[:decription].blank? ? description : prms[:decription]  
+       image = prms[:image].blank? ? image : url + prms[:image]
+    end    
+  v = {
+    script: '<script type="text/javascript" src="http://vk.com/js/api/share.js?90" charset="windows-1251"></script>',
+    button: "<script type=\"text/javascript\">
+                document.write(VK.Share.button({
+                                                  type: 'button',
+                                                  url: '#{url}',
+                                                  title: '#{title}',
+                                                  description: '#{description}',
+                                                  image: '#{image}',
+                                                  noparse: #{noparse}
+                                                },
+                                                {type: 'button', text: 'Поделиться'}
+                                                ));
+            </script>"
   }
+  return v
 end
 def meta_content
   (@meta_content == nil)? "Круглогодичное обучение полетам на параплане, мотопараплане и кайтах. Помощь в выборе и приобретении снаряжения" : @meta_content
 end
 def meta_keywords
-  default = "параплан,самара, высота, тандем, аэрофотосъемка, кайтинг, параавис, полет, обучение, парапланеризм"
+  default = "параплан, самара, высота, тандем, аэрофотосъемка, кайтинг, параавис, полет, обучение, парапланеризм"
+  if @keywords.blank? 
+    return default
+  else
+    @keywords
+  end
 end
   def waitline(id)
     "
