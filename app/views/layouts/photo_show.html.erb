@@ -4,6 +4,7 @@
   <title><%= my_title %></title>
   <%= stylesheet_link_tag "application", :media => "all" %>
   <%= javascript_include_tag "application", 'data-turbolinks-track' => true  %>
+  <%= vk_like_vidget[:script].html_safe %>
   <%= csrf_meta_tags %>
   <% define_action %>
 </head>
@@ -40,7 +41,7 @@
         <div  class = "m_1000wh">
             <div class = "section group">
                 <div style = "margin:0; padding:0;" class = "col span_2_of_12">
-                    <%= image_tag "white_logo_ns.png", id: "mLogo", link_to: root_path, height: "55px" %>
+                    <a href = '<%= root_path %>'><%= image_tag "white_logo_ns.png", id: "mLogo", height: "55px" %></a>
                    
                 </div>
                 <div id = "mmPhPath" style = "margin:0; padding:0;" class = "col span_8_of_12">
