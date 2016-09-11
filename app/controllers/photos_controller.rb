@@ -37,6 +37,7 @@ include MessagesHelper
 		@prev_photo = nil
 		@next_photo = nil
 		@return_to = photo_path(id: @photo.id, e: params[:e], e_id: params[:e_id])
+        @page_image = @photo.link.to_s
     @link = ""
 		case params[:e]
     when 'photo_album'

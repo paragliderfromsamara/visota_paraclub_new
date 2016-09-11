@@ -40,9 +40,9 @@ module PhotosHelper
 				if i == cur_index
 					val += "<div class = 'ph-paginate ph-cur' style = 'background-image:url(\"#{p.link.thumb}\");' ></div>"
 				elsif !(i<fVisible) and !(i>lVisible) 
-					val += "<div class='ph-paginate' link_to='#{photo_path(id: p.id, e: params[:e], e_id: params[:e_id])}' style = 'background-image:url(\"#{p.link.thumb}\");'></div>"
+					val += "<a href = '#{photo_path(id: p.id, e: params[:e], e_id: params[:e_id])}'><div class='ph-paginate' style = 'background-image:url(\"#{p.link.thumb}\");'></div></a>"
 				else
-					val += "<div class='ph-paginate ph-h' link_to='#{photo_path(id: p.id, e: params[:e], e_id: params[:e_id])}' style = 'background-image:url(\"#{p.link.thumb}\");'></div>"
+					val += "<a href = '#{photo_path(id: p.id, e: params[:e], e_id: params[:e_id])}'><div class='ph-paginate ph-h' style = 'background-image:url(\"#{p.link.thumb}\");'></div></a>"
 				end
 				i+=1
 			end
