@@ -37,7 +37,7 @@ def vk_like_vidget(prms=nil)
        url = prms[:url].blank? ? url : url + prms[:url]
     end    
   v = {
-    script: '<script data-turbolinks-track = "true" type="text/javascript" src="http://vk.com/js/api/share.js?90" charset="windows-1251"></script>',
+    script: '<script data-turbolinks-track = "true" type="text/javascript" src="http://vk.com/js/api/share.js?90" charset="windows-1251"></script><script data-turbolinks-track = "true" type="text/javascript">VK.init({apiId: 5201088, onlyWidgets: true});</script>',
     button: "<script type=\"text/javascript\">
                 var f = function() 
                 {
