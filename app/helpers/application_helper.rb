@@ -24,13 +24,38 @@ end
 def oldMessagesPerPage
   25
 end
-def vk_like_vidget   
+def vk_like_vidget(prms=nil)
+    url = 'http://visota63.ru'
+    title = '"ВЫСОТА"-Самарский Парапланерный Клуб'
+    description = "Круглогодичное обучение полетам на параплане, мотопараплане и кайтах. Помощь в выборе и приобретении снаряжения"
+    image = url + '/sliderImages/main_1.jpg'
+    noparse = 'true'
+    if !prms.nil?
+       title = prms[:title].blank? ? title : prms[:title]
+       description = prms[:description].blank? ? description : prms[:description]  
+       image = prms[:image].blank? ? image : url + prms[:image]
+       url = prms[:url].blank? ? url : url + prms[:url]
+    end    
   v = {
-    script: '<script data-turbolinks-track = "true"  type="text/javascript" src="//vk.com/js/api/openapi.js?127"></script><script data-turbolinks-track = "true"  type="text/javascript">VK.init({apiId: 5201088, onlyWidgets: true});</script>',
-    button: "<div id=\"vk_like\"></div>
-<script type=\"text/javascript\">
-VK.Widgets.Like(\"vk_like\", {type: \"button\", verb: 1});
-</script>"
+    script: '<script data-turbolinks-track = "true" type="text/javascript" src="http://vk.com/js/api/share.js?90" charset="windows-1251"></script>',
+    button: "<script type=\"text/javascript\">
+                var f = function() 
+                {
+                    $('#vk_but').html(VK.Share.button({
+                                                      url: '#{url}',
+                                                      title: '#{title}',
+                                                      description: '#{description}',
+                                                      image: '#{image}',
+                                                      noparse: #{noparse}
+                                                    },
+                                                    {
+                                                        type: \"round\", text: \"Поделиться\"
+                                                    }
+                                                    ));
+                }
+                $(document).ready(f);
+                $(document).on('page:load', f);
+            </script>"
   }
   return v
 end
