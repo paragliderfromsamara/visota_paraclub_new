@@ -148,7 +148,7 @@ module PhotoAlbumsHelper
 			#v = [{:name => 'Добавить комментарий', :access => userCanCreateMsg?, :type => 'plus', :id => 'newMsgBut', :link => '#new_message'}]
             val = "#{control_buttons(v)}" if v != []
         else
-            val = "#{vk_like_vidget({title: @album.name, description: @album.description.blank? ? "Альбом категории \"#{@album.category[:name]}\"" : @album.description, image: @album.get_photo.link.to_s, url: photo_album_path(@album)})[:button]} <div id = 'vk_but'></div>"
+            val = "#{vk_like_vidget[:button]}"
         end
 
 		return val
