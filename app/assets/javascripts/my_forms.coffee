@@ -553,6 +553,7 @@ class myForm
                                         sending: (file, xhr, formData)->
                                             formData.append("authenticity_token", _this.formElement.find("input[name='authenticity_token']").val())
                                         success: (file, response)->
+ 
                                             _this.formElement.find('#update_photos_form').append response.form
                                             _this.initPhotoFormsListners()
                                             #_this.getPhsToForm()
@@ -638,7 +639,9 @@ class myForm
             $(this).parents(".photo_form").submit()
         if el.formChecking isnt null then el.formChecking()
     getPhsToForm: ()->
-        if $(this.formElement).attr('intgp') == 'false' then return true
+        if $(this.formElement).attr('intgp') == 'false'
+            $(this.formElement).find("#uploadedPhotos").html("<ul id = \"update_photos_form\"></ul>")
+            return true 
         t = $(this.formElement).find("#uploadedPhotos")
         el = this
         t.html(waitLineHtml("wait_photos_to_form"))
