@@ -53,7 +53,7 @@ session[:link_after_message_save] = request.env['ORIGINAL_FULLPATH'] if controll
     formClass = "message_form" 
 %>
 <% if tmpMessage != nil %>
-        <%= form_for(tmpMessage, :multipart => 'true', html:{class: formClass, id: "#{formClass}_#{tmpMessage.id}",form_type: mType}) do |f| %>
+        <%= form_for(tmpMessage, :multipart => 'true', html:{class: formClass, id: "#{formClass}_#{tmpMessage.id}",form_type: mType, intgp: tmpMessage.entity_photos.blank? ? "false" : "true"}) do |f| %>
                 <div style = "display: none;"><%= f.file_field :uploaded_photos, :multiple => 'true' if mType != 'comment' %></div>
 				<%= f.hidden_field :message_id, :value => @message_to.id if @message_to != nil %>
 				<%= f.hidden_field :theme_id, :value => @theme.id if @theme != nil%>

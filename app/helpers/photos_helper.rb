@@ -120,5 +120,38 @@ module PhotosHelper
 		end
 		return value
 	end
-
+    
+    def edit_photos_item(e, f = nil)
+        photo = e.photo
+        return "" if photo.nil? || e.nil?
+        v = photo_mini_form(photo).html_safe
+        f = f.nil? ? userCanDeleteEntityPhoto?(e) : f
+        b = "<ul id = 'edit_ph_menu'>"
+        b += "<a class='b_link pointer addHashCode' hashCode= '#Photo#{photo.id.to_s}' title = 'Нажмите, чтобы встроить фото в текст...'><li><p>Встроить в текст</p></li></a>" if (params[:hashToCont] == 'true' || @hashToCont == true) and @entity != 'photo_album'
+        b += "<a class = 'del-photo-but b_link pointer' photo_id = '#{e.id }'><li><p>Удалить</p></li></a>" if f
+        b += "<a class='b_link pointer set-as-main' set_photo_id='#{photo.id.to_s }' title = 'Сделать главной фотографией альбома...'><li><p>Установить как фото альбома</p></li></a>" if @entity == 'photo_album'
+        b += "</ul>"
+        return "<li class = 'ph-list-items' id = 'img_#{photo.id.to_s }'>
+                    <div class = 'ph-block-c'>
+                        <div class = 'central_field' style = width: '#{photo.widthAndHeight[:width_th]}px;'>
+                            <div style = 'height: #{photo.widthAndHeight[:height_th]} px;'>
+                                #{image_tag(photo.link.thumb, :class => 'album_thumb_photo')}
+                            </div>
+                            <div style = 'height: 50px; width: #{photo.widthAndHeight[:width_th] }px;'>
+                                #{v}
+                                #{b}
+                            </div>
+                            
+                        </div>
+                    </div>
+                </li>"
+    end
+    def photo_mini_form(photo)
+        form_for(photo, remote: true, html: {class: "photo_form"}) do |f|
+            "
+                <div style = 'width: 100%; height: 20px;' ><p style= 'display: none; color: green;' class = 'istring' id = 'notice'>Фото успешно обновлено</p></div>
+                #{f.text_area(:description, :rows => '3', :cols => '30', :defaultRows => 3, :value => photo.description, style: "width: #{photo.widthAndHeight[:width_th]-6}px; position:;top: 5px;", placeholder: "Описание фото")}
+            ".html_safe
+        end 
+    end
 end

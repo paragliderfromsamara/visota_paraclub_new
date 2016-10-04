@@ -120,17 +120,17 @@ include MessagesHelper
 	when "theme" #Фотографии в теме...
 		@theme = Theme.find_by(id: params[:e_id])
 		redirect_to '/404' if !isEntityOwner?(@theme)
-		@photos = @theme.entity_photos
+		@photos = @theme.entity_photos.includes(:photo)
 		@link_to = theme_path(@theme.id)
 	when "photo_album" #Фотографии в альбоме...
 		@album = PhotoAlbum.find_by(id: params[:e_id])
 		redirect_to '/404' if !isEntityOwner?(@album)
-		@photos = @album.entity_photos
+		@photos = @album.entity_photos.includes(:photo)
 		@link_to = photo_album_path(@album.id)
 	when "message" #Фотографии в теме...
 		@message = Message.find_by(id: params[:e_id])
 		redirect_to '/404' if !isEntityOwner?(@message)
-		@photos = @message.entity_photos
+		@photos = @message.entity_photos.includes(:photo)
 		@link_to = theme_path(@message.theme_id) if @message.theme != nil
     @link_to = photo_album_path(@message.photo_album_id) if @message.photo_album != nil
     @link_to = photo_path(@message.photo) if @message.photo != nil
@@ -138,15 +138,20 @@ include MessagesHelper
 	when "article" #Фотографии в статье...
 		@article = Article.find_by(id: params[:e_id])
 		redirect_to '/404' if !isEntityOwner?(@article)
-		@photos = @article.entity_photos
+		@photos = @article.entity_photos.includes(:photo)
 		@link_to = article_path(@article)
 	when "event" #Фотографии в Новостях...
 		@event = Event.find_by(id: params[:e_id])
 		redirect_to '/404' if !is_admin? and user_type != 'manager'
-		@photos = @event.entity_photos
+		@photos = @event.entity_photos.includes(:photo)
 		@link_to = event_path(@event)
+        
 	end
-	redirect_to '/404' if @theme == nil && @album == nil && @event == nil && @message == nil && @article == nil
+    if @theme == nil && @album == nil && @event == nil && @message == nil && @article == nil
+	    redirect_to '/404' 
+    else
+        render layout: false if params[:no_layout] == 'true'
+    end
   end
   
   def update_photos

@@ -1,37 +1,12 @@
 <div class = 'c_box'>
 	<div class = 'm_1000wh tb-pad-s'>
-		<ul id = 'update_photos_form'>
-               
+		<ul id = 'update_photos_form'> 
+            <%if !@photos.blank?%>
+                <%delFlag = userCanDeleteEntityPhoto?(@photos.first)%>
                 <% @photos.each do |e| %>
-                <% photo = e.photo %>
-                 <li class = 'ph-list-items' id = 'img_<%= photo.id.to_s %>'>
-                    <div class = "ph-block-c">
-                        <div class = "central_field" style = "width: <%= photo.widthAndHeight[:width_th] %>px;">
-                            <div style = "height: <%= photo.widthAndHeight[:height_th] %>px;">
-                                <%= image_tag(photo.link.thumb, :class => "album_thumb_photo")%>
-                            </div>
-                            <div style = "width: <%= photo.widthAndHeight[:width_th] %>px;">
-                                <%= form_for(photo, remote: true, html: {class: "photo_form"}) do |f| %>
-                                                            <div style = "width: 100%; height: 20px;" ><p style= "display: none; color: green;" class = "istring" id = "notice">Фото успешно обновлено</p></div>
-    							    <%= f.text_area :description, :rows => '3', :cols => '30', :defaultRows => 3, :value => photo.description, style: "width: #{photo.widthAndHeight[:width_th]-6}px; position:;top: 5px;", placeholder: "Описание фото" %>  <% end %>
-                                        <ul id = 'edit_ph_menu'>
-                                            <% if params[:hashToCont] == 'true' and @entity != 'photo_album' %>
-                                                 <a class="b_link pointer addHashCode" hashCode="#Photo<%= photo.id.to_s %>" title = "Нажмите, чтобы встроить фото в текст..."><li><p>Встроить в текст</p></li></a>
-                                                 
-                                            <% end %>
-                                            <% if userCanDeleteEntityPhoto?(e) %>
-                                                <a class = "del-photo-but b_link pointer" photo_id = "<%= e.id %>"><li><p>Удалить</p></li></a> 
-                                            <% end %>
-                                            <% if @entity == 'photo_album' %>
-                                                <a class="b_link pointer set-as-main" set_photo_id="<%= photo.id.to_s %>" title = "Сделать главной фотографией альбома..."><li><p>Установить как фото альбома</p></li></a>
-                                            <% end %>
-                                        </ul>
-                                   
-                            </div>
-                        </div>
-                    </div>
-                    </li>
+                    <%= edit_photos_item(e, delFlag).html_safe %>
                 <% end %>
+            <% end %>
 		</div>
 	</div>
 </div>

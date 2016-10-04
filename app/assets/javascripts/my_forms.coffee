@@ -10,6 +10,7 @@ albumFormClass = "photo_album_form"
 voteFormId = "vote_form"
 eventFormClass = 'event_form'
 articleFormClass = "article_form"
+conversationFormClass = "add_conversation"
 menuIconSizeClass = "fi-large"
 
 waitLineHtml = (id)-> 
@@ -28,6 +29,11 @@ waitLineHtml = (id)->
 		<div class = 'wl-item'>
 		</div>
 	</div></div>"
+
+initNewConversationForm = (f)->
+    f = new myForm('conversation', null, "." + f.className)
+    $.getJSON "/users?format=json", (json)->
+        f.getBindingEntities(json, "users")
 
 initArticleAsFlightAccidents = (f)->
     f.aButList = [2]
@@ -87,7 +93,9 @@ initArticleAsDefault = (f)->
         iFlag = f.imagesLengthCheck()
         afFlag = f.checkAttachmentLength()
         f.switchSubmitBut(cFlag & nFlag & iFlag & afFlag)
-    f.getBindingEntities()
+    $.getJSON "/#{f.type}s/#{f.entityID}/bind_videos_and_albums?format=json", (json)-> #link = "/" + this.type + "s/" + this.entityID + "/"
+        f.getBindingEntities(json.albums, "albums")
+        f.getBindingEntities(json.videos, "videos")
     f.photosUploader()
     f.getPhsToForm()
     f.attachmentFilesUploader()
@@ -545,7 +553,9 @@ class myForm
                                         sending: (file, xhr, formData)->
                                             formData.append("authenticity_token", _this.formElement.find("input[name='authenticity_token']").val())
                                         success: (file, response)->
-                                            _this.getPhsToForm()
+                                            _this.formElement.find('#update_photos_form').append response.form
+                                            _this.initPhotoFormsListners()
+                                            #_this.getPhsToForm()
                                             $(file.previewElement).remove()
                                             #ph_id = response.photoID
                                             #getUploadedPh(ph_id, el, file.previewElement, entity)
@@ -584,74 +594,60 @@ class myForm
                                             _this.formElement.find('#ph_to_frm').append(v)
                                             _this.formElement.find('#ph_to_frm').append($('#'+this.options.inputId).clone()) 
                                        }
-    getBindingEntities: ()->
+    getBindingEntities: (eList, eName)->
         link = "/" + this.type + "s/" + this.entityID + "/bind_videos_and_albums?format=json"
         el = this
-        arr_a = getIdsArray(this.formElement.find("#"+this.type+'_assigned_albums').val())
-        arr_v = getIdsArray(this.formElement.find("#"+this.type+'_assigned_videos').val())
-        $.getJSON link, (json)->
-            v = ''
-            a = ''
-            sv = ''
-            sa = ''
-            #console.log json.albums.length
-            $.each json.albums, (r, i)->
+        arr = getIdsArray(this.formElement.find("#"+this.type+"_assigned_#{eName}").val())
+        sel = '' 
+        nSel = ''
+        $.each eList, (r, i)->
+            f = false
+            if arr.length>0
+                newArr = new Array()
+                for al in arr
+                    do (al)->
+                       if al is i.id then f = true else newArr[newArr.length] = al
+                arr = newArr
+            if f
+                sel += "<div class = \"art-binding-ent-item to-unbind\" b-type=\"#{eName}\"  ent-id = \"#{i.id}\"><p>#{i.name}</p></div>"
                 f = false
-                if arr_a.length>0
-                    newArr = new Array()
-                    for al in arr_a
-                        do (al)->
-                           if al is i.id then f = true else newArr[newArr.length] = al
-                    arr_a = newArr
-                if f
-                    sa += '<div class = "art-binding-ent-item to-unbind" b-type="albums"  ent-id = "'+i.id+'"><p>'+i.name+'</p></div>'
-                    f = false
-                else
-                    a+='<div class = "art-binding-ent-item to-bind" b-type="albums"  ent-id = "'+i.id+'"><p>'+i.name+'</p></div>'
-            $.each json.videos, (s, j)->
-                f = false
-                if arr_v.length>0
-                    newArr = new Array()
-                    for vid in arr_v
-                        do (v)->
-                            if vid is j.id then f = true else newArr[newArr.length] = vid
-                    arr_v = newArr
-                if f
-                    sv += '<div class = "art-binding-ent-item to-bind" b-type="videos"  ent-id = "'+j.id+'"><p>'+j.name+'</p></div>'
-                    f = false
-                else
-                    v += '<div class = "art-binding-ent-item to-bind" b-type="videos"  ent-id = "'+j.id+'"><p>'+j.name+'</p></div>'
-            $('#ab_albums').html(sa)
-            $('#ab_videos').html(sv)
-            $('#b_albums').html(a)
-            $('#b_videos').html(v)
-            updBindEntLists('albums', el)
-            updBindEntLists('videos', el)
+            else
+                nSel +="<div class = \"art-binding-ent-item to-bind\" b-type=\"#{eName}\"  ent-id = \"#{i.id}\"><p>#{i.name}</p></div>"          
+            $("#ab_#{eName}").html(sel)
+            $("#b_#{eName}").html(nSel)
+            updBindEntLists(eName, el)
             true
+    initPhotoFormsListners: ()->
+        el = this
+        $(".addHashCode, .del-photo-but, .set-as-main, [name='photo[description]']").unbind()
+        $(".photo_form")
+        
+        $(".addHashCode").click ()-> updCurFormText(" " + $(this).attr('hashCode'), el)    
+        $(".del-photo-but").click ()-> el.deletePhoto(this)
+        cur_photo_id = if $("##{el.type}_photo_id").val() is undefined then null else $("##{el.type}_photo_id").val()
+        $(".set-as-main").each ()->
+            if $(this).attr('set_photo_id') is $("##{el.type}_photo_id").val() then $(this).hide()
+            
+        $(".set-as-main").click ()-> el.setAsMainAlbumPhoto(this)
+        
+        $(".photo_form").on "ajax:success", (e, data, status, xhr) ->
+            nts = $(this).find("#notice")
+            nts.fadeIn 300, ()-> 
+                setTimeout (()-> nts.fadeOut(300)), 3000         
+        $("[name='photo[description]']").change ()-> 
+            $(this).parents(".photo_form").submit()
+        if el.formChecking isnt null then el.formChecking()
     getPhsToForm: ()->
+        if $(this.formElement).attr('intgp') == 'false' then return true
         t = $(this.formElement).find("#uploadedPhotos")
         el = this
         t.html(waitLineHtml("wait_photos_to_form"))
         wb = new waitbar("wait_photos_to_form")
         wb.startInterval()
-        $(t).load "/edit_photos #update_photos_form", { 'e': el.type, 'e_id': el.entityID, "hashToCont": "true", "submitBut": "false"}, ()->
+        $(t).load "/edit_photos #update_photos_form", { 'e': el.type, 'e_id': el.entityID, "hashToCont": "true", "submitBut": "false", "no_layout":"true"}, ()->
              #updUploadedImageButtons(el.formElement.attr('id'))
              wb.stopInterval()
-             $(".addHashCode").click ()-> updCurFormText(" " + $(this).attr('hashCode'), el)    
-             $(".del-photo-but").click ()-> el.deletePhoto(this)
-             cur_photo_id = if $("##{el.type}_photo_id").val() is undefined then null else $("##{el.type}_photo_id").val()
-             $(".set-as-main").each ()->
-                 if $(this).attr('set_photo_id') is $("##{el.type}_photo_id").val() then $(this).hide()
-                 
-             $(".set-as-main").click ()-> el.setAsMainAlbumPhoto(this)
-             
-             $(".photo_form").on "ajax:success", (e, data, status, xhr) ->
-                 nts = $(this).find("#notice")
-                 nts.fadeIn 300, ()-> 
-                     setTimeout (()-> nts.fadeOut(300)), 3000         
-             $("[name='photo[description]']").change ()-> 
-                 $(this).parents(".photo_form").submit()
-             if el.formChecking isnt null then el.formChecking()
+             el.initPhotoFormsListners()
     getAttachmentsToForm: ()->
         _this = this
         t = $(this.formElement).find("#uploadedAttachmentFiles")
@@ -1381,6 +1377,7 @@ r = ()->
     vtForm = document.getElementById(voteFormId)
     aForm = document.getElementsByClassName(articleFormClass)
     eForm = document.getElementsByClassName(eventFormClass) 
+    cForm = document.getElementsByClassName(conversationFormClass) 
     if tForm.length > 0 then initThemeForm(tForm[0])
     if mForm.length > 0 then initMessageForm(mForm[0])
     if vForm.length > 0 then initVideoForm(vForm[0])
@@ -1388,12 +1385,13 @@ r = ()->
     if vtForm isnt null then initVoteForm(vtForm)
     if aForm.length > 0 then initArticleForm(aForm[0])
     if eForm.length > 0 then initEventForm(eForm[0])
+    if cForm.length > 0 then initNewConversationForm(cForm[0])
     $('#merge_theme_topic_id').change ()->
         th = new themeObj()
         th.topic = $(this).val()
         make_themes_list(th)
     $('#merge_theme_theme_id').change ()->
-        getTargetTheme this
+        getTargetTheme this 
 
 $(document).ready r
 $(document).on "page:load", r

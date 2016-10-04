@@ -157,12 +157,15 @@ class ArticlesController < ApplicationController
   	article = Article.find_by(id: params[:id]) 
   	if isEntityOwner?(article)
   		@photo = Photo.new(:user_id => article.user.id, :link => params[:article][:uploaded_photos])
-  		if @photo.save
-        article.entity_photos.create(photo_id: @photo.id, visibility_status_id: 1)
-  			render :json => {:message => 'success', :photoID => @photo.id }, :status => 200
-  		else
-  			render :json => {:error => @photo.errors.full_messages.join(',')}, :status => 400
-  		end
+		respond_to do |format|
+            if @photo.save
+                @hashToCont = true
+                @entity = article.entity_photos.create(photo_id: @photo.id, visibility_status_id: 1)
+    			format.json {render 'photos/edit_photo.json'}
+    		else
+    			format.json {render json: {:error => @photo.errors.full_messages.join(',')}}
+    		end
+        end
   	else
   		redirect_to '/404'
   	end

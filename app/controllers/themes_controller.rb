@@ -330,12 +330,15 @@ include TopicsHelper
 	theme = Theme.find_by_id(params[:id]) 
 	if isThemeOwner?(theme)
 		@photo = Photo.new(:user_id => theme.user.id, :link => params[:theme][:uploaded_photos])
-		if @photo.save
-      theme.entity_photos.create(photo_id: @photo.id, visibility_status_id: 1)
-			render :json => {:message => 'success', :photoID => @photo.id }, :status => 200
-		else
-			render :json => {:error => @photo.errors.full_messages.join(',')}, :status => 400
-		end
+		respond_to do |format|
+            if @photo.save
+                @hashToCont = true
+                @entity = theme.entity_photos.create(photo_id: @photo.id, visibility_status_id: 1)
+    			format.json {render 'photos/edit_photo.json'}
+    		else
+    			format.json {render json: {:error => @photo.errors.full_messages.join(',')}}
+    		end
+        end
 	else
 		redirect_to '/404'
 	end
