@@ -23,6 +23,7 @@ class Theme < ActiveRecord::Base
   has_one :entity_view, :as => :v_entity, :dependent => :delete
   has_one :event, dependent: :destroy
   has_one :article
+  has_many :steps, -> {select(:entity_id, :user_id, :visit_time).where(part_id: 9, page_id: 1).order("visit_time DESC")}, foreign_key: "entity_id" 
   auto_html_for :content do
     html_escape
     my_google_map
@@ -313,7 +314,7 @@ class Theme < ActiveRecord::Base
 #управление содержимым end  
   def not_read_messages(user = User.find(1), step = nil)
     if self.messages.size > 0
-      last_step_in_theme = (step.nil?)? Step.find_by(part_id: 9, page_id: 1, entity_id: self.id, user_id: user.id) : step
+      last_step_in_theme = (step.nil?)? get_user_step(user) : step
       return (last_step_in_theme.nil?)? [] : self.messages.where("created_at > :step_time", {step_time: last_step_in_theme.visit_time}).order('created_at ASC')
     else
       return []
@@ -323,7 +324,7 @@ class Theme < ActiveRecord::Base
     info = ""
     link = "/themes/#{self.id}"
     if !user.nil?
-      step = Step.find_by(part_id: 9, page_id: 1, entity_id: self.id, user_id: user.id)
+      step = get_user_step(user)#Step.find_by(part_id: 9, page_id: 1, entity_id: self.id, user_id: user.id)
       if step.nil?
         info = (self.created_at + 10.days < Time.now)? '<span class = "not-read-theme" title = "не прочитано">н/п</span>' : '<span class = "new-theme" title = "новая тема">new</span>'
       elsif !self.messages.blank?
@@ -344,6 +345,13 @@ class Theme < ActiveRecord::Base
   def clean
 		self.update_attributes(:content => '',:name => '')
 		self.remove_attachments_and_photos
+  end
+  
+  def get_user_step(u)
+      steps.each do |s|
+          return s if s.user_id == u.id
+      end
+      return nil
   end
   
   def unbind_photos
@@ -446,9 +454,10 @@ def update_album_draft(album)
   return album
 end
 
-def steps
-  Step.where(part_id: 9, page_id: 1, entity_id: self.id)
-end
+#def user_steps(user = nil)
+#  self.steps.where(user_id: user.id) if !user.nil? 
+#  self.steps if user.nil? 
+#end
 
 def delete_steps
   self.steps.delete_all

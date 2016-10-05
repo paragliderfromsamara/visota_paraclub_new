@@ -69,8 +69,8 @@ module ThemesHelper
 	end
   
 	def themeInformation(theme)
-		mCount = (@messages == nil)? theme.messages.count : @messages.count 
-    h = theme.statusHash
+		mCount = (@messages == nil)? theme.messages.size : @messages.size 
+        h = theme.statusHash
 		vh = theme.vStatusHash
 		v = ''
 		v += "<div class='stat fi-float-left' title = '#{vh[:ru]}'>#{drawIcon(vh[:img], 'medium', 'grey')}</div>" if vh[:value] == 'hidden'

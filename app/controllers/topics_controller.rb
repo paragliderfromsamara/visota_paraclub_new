@@ -16,13 +16,14 @@ include EventsHelper
   # GET /topics/1
   # GET /topics/1.json
   def show
+      
   @topic = Topic.find(params[:id])
 	@title = @header = @topic.name
   thType = [1,2,3]#(session[:themes_list_type] == 'list')? [1,2] : 1
   if session[:themes_list_type] != 'list'
     vStat = is_not_authorized? ? 1 : [1,2]
-    @ads = Theme.where(theme_type_id: 3, status_id: [1,3], visibility_status_id: vStat).order('last_message_date DESC')
-    @ads += Theme.where(theme_type_id: 2, status_id: [1,3], visibility_status_id: vStat, topic_id: @topic.id).order('last_message_date DESC')
+   # @ads = Theme.where(theme_type_id: 3, status_id: [1,3], visibility_status_id: vStat).includes(:messages).order('last_message_date DESC')
+   # @ads += Theme.where(theme_type_id: 2, status_id: [1,3], visibility_status_id: vStat, topic_id: @topic.id).includes(:messages).order('last_message_date DESC')
   end
   
   @themes_per_page = 25
@@ -30,20 +31,20 @@ include EventsHelper
     if signed_in?
       #@ads = Theme.where(theme_type_id: 2,status_id: [1,3]).order('last_message_date DESC') if session[:themes_list_type] != 'list'
       if params[:th_filter] == 'my'
-        @themes = @topic.themes.where(user_id: current_user.id, theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+        @themes = @topic.themes.where(user_id: current_user.id, theme_type_id: thType).includes([:entity_view, :user, {messages: :user}, :steps]).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
       elsif params[:th_filter] == 'ntf'
-        @themes = @topic.themes.where(id: current_user.theme_notifications.select(:theme_id), theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+        @themes = @topic.themes.where(id: current_user.theme_notifications.select(:theme_id), theme_type_id: thType).includes([:entity_view, :user, {messages: :user}, :steps]).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
       elsif params[:th_filter] == 'not_visited' 
-        @themes = @topic.themes.where(id: current_user.not_readed_themes_ids(@topic, is_not_authorized?), theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+        @themes = @topic.themes.where(id: current_user.not_readed_themes_ids(@topic, is_not_authorized?), theme_type_id: thType).includes([:entity_view, :user, {messages: :user}, :steps]).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
       elsif params[:th_filter] == 'deleted' && user_type == 'super_admin'
-        @themes = @topic.themes.rewhere(status_id: 2, theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+        @themes = @topic.themes.rewhere(status_id: 2, theme_type_id: thType).includes([:entity_view, :user, {messages: :user}, :steps]).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
       else
       	if is_not_authorized?
           #@ads = Theme.where.where(theme_type_id: 2, visibility_status_id: 1,status_id: [1,3]).order('last_message_date DESC') if session[:themes_list_type] != 'list'
       		@themes = @topic.themes.where(visibility_status_id: 1, theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
       	else
           #@ads = Theme.where(theme_type_id: 2, visibility_status_id: [1,2],status_id: [1,3]).order('last_message_date DESC') if session[:themes_list_type] != 'list'
-      		@themes = @topic.themes.where(visibility_status_id: [1,2], theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+      		@themes = @topic.themes.where(visibility_status_id: [1,2], theme_type_id: thType).includes([:entity_view, :user, {messages: :user}, :steps]).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
       	end
       end
     else

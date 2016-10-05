@@ -42,7 +42,7 @@ module TopicsHelper
     buttons[buttons.length] = {:name => "Мои темы[#{myThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, th_filter: 'my'), selected: params[:th_filter] == 'my'}
     buttons[buttons.length] = {:name => "Отслеживаемые темы[#{myNtfThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, th_filter: 'ntf'), selected: params[:th_filter] == 'ntf'}
     if user_type == 'super_admin'
-      delThemes = Theme.where(status_id: 2, topic_id: @topic.id).size
+      delThemes = Theme.where(status_id: 2, topic_id: @topic.id).includes(:messages).size
       buttons[buttons.length] = {:name => "Удалённые темы[#{delThemes}]", :access => true, :type => 'b_grey', :link => topic_path(id: @topic.id, th_filter: 'deleted'), selected: params[:th_filter] == 'deleted'}
     end
     return buttons_in_line(buttons).html_safe
