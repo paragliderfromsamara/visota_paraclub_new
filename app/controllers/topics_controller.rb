@@ -22,8 +22,13 @@ include EventsHelper
   thType = [1,2,3]#(session[:themes_list_type] == 'list')? [1,2] : 1
   if session[:themes_list_type] != 'list'
     vStat = is_not_authorized? ? 1 : [1,2]
-   # @ads = Theme.where(theme_type_id: 3, status_id: [1,3], visibility_status_id: vStat).includes(:messages).order('last_message_date DESC')
-   # @ads += Theme.where(theme_type_id: 2, status_id: [1,3], visibility_status_id: vStat, topic_id: @topic.id).includes(:messages).order('last_message_date DESC')
+    if signed_in?
+        @ads = Theme.where(theme_type_id: 3, status_id: [1,3], visibility_status_id: vStat).includes([:entity_view, :user, {messages: :user}, :steps]).order('last_message_date DESC')
+        @ads += Theme.where(theme_type_id: 2, status_id: [1,3], visibility_status_id: vStat, topic_id: @topic.id).includes([:entity_view, :user, {messages: :user}, :steps]).order('last_message_date DESC')
+    else
+        @ads = Theme.where(theme_type_id: 3, status_id: [1,3], visibility_status_id: vStat).includes(:messages).order('last_message_date DESC')
+        @ads += Theme.where(theme_type_id: 2, status_id: [1,3], visibility_status_id: vStat, topic_id: @topic.id).includes(:messages).order('last_message_date DESC')
+    end
   end
   
   @themes_per_page = 25
