@@ -21,7 +21,14 @@ class ApplicationController < ActionController::Base
   def set_online
       if signed_in?
           $redis_onlines.set( "user:#{current_user.id}", Time.now, ex: 90.days)
-          ThemeStep.get_from_step_table if user_type == 'super_admin'
+          if user_type == 'super_admin'
+              if params[:todo] == 'make' 
+                  ThemeStep.get_from_step_table 
+              elsif params[:todo] == 'del'
+                   ThemeStep.del 
+              end
+          end
+          
       else
           $redis_onlines.set( "ip:#{request.remote_ip}", Time.now, ex: 10*60 )
       end
