@@ -5,5 +5,5 @@
 
 #/var/run/redis/redis.sock ubuntu
 #/tmp/redis.sock mac-os
-$redis_onlines = Redis.new path: "/run/redis/redis.sock ", db: 15, driver: :hiredis
-$redis_views = Redis.new path: "/run/redis/redis.sock", db: 15, driver: :hiredis
+$redis_onlines = Redis.new path: "/tmp/redis.sock", db: 15, driver: :hiredis
+$redis_views = Redis.new path: "/tmp/redis.sock", db: 15, driver: :hiredis
