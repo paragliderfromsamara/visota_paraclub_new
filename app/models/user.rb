@@ -31,6 +31,7 @@ has_many :photos, :dependent  => :destroy
 
 #--------Themes--------------------------------------------------
 has_many :themes, :dependent  => :destroy
+has_many :theme_steps, dependent: :delete_all
 #--------Themes end----------------------------------------------
 has_many :articles, :dependent => :destroy
 #--------video_like_marks--------------------------------------------------
@@ -64,7 +65,7 @@ def getTopicNotification(topic_id)
 end
 #--------topic_notifications end-------------------------------------------------
 #--------theme_notifications-----------------------------------------------------
-has_many :theme_notifications
+has_many :theme_notifications, dependent: :delete_all
 def getThemeNotification(theme_id)
 	tNtf = nil
 	if self.theme_notifications != []
@@ -183,27 +184,18 @@ mount_uploader :photo, UserPhotoUploader
   #tracked_themes
   def tracked_themes(flag)
     v_status = (flag)? 1 : [1,2]
-    return Theme.where(id: self.steps.select(:entity_id).where(part_id: 9, page_id: 1).order("visit_time DESC"), status_id: [1, 3], :visibility_status_id => v_status).order('last_message_date ASC')
+    return Theme.where(id: theme_notifications.ids, status_id: [1, 3], :visibility_status_id => v_status).order('last_message_date ASC')
   end
   #tracked_themes end
   
   def not_readed_themes_ids(topic, flag=false) #use for select not visited themes in topic show
     v_status = (flag)? 1 : [1,2]
-    topic_themes = topic.themes.where(visibility_status_id: v_status).includes(:steps, :messages).order("last_message_date DESC")
-    #my_steps = self.steps.where(part_id: 9, page_id: 1)
-    not_visited_themes_ids = []
+    #topic_themes = topic.themes.where(visibility_status_id: v_status).includes(:theme_steps, :messages).order("last_message_date DESC")
+    not_visited_themes_ids = topic.themes.where.not(id: theme_steps.pluck(:theme_id)).where(visibility_status_id: v_status).ids
+    visited_themes = topic.themes.includes(:theme_steps).where("theme_steps.user_id" => self.id)
     no_read_last_message_ids = []
-    topic_themes.each do |th| 
-      s = th.get_user_step(self)#my_steps.where(entity_id: th.id).first 
-      if s.nil?
-        not_visited_themes_ids[not_visited_themes_ids.length] = th.id
-      else
-        no_read_last_message_ids[no_read_last_message_ids.length] = th.id if th.not_read_messages(self, s).size > 0
-      end
-    end
-    #visited_but_not_read = topic_themes.select(:id).where(id: no_read_last_message_ids)
-    #not_visited = topic_themes.select(:id).where(id: not_visited_themes_ids)
-    return no_read_last_message_ids + not_visited_themes_ids
+    visited_themes.each {|th| no_read_last_message_ids << th.id if th.last_message_date > th.theme_steps.first.last_visit_date}
+    return no_read_last_message_ids << not_visited_themes_ids
   end
   
   def self.club_pilots

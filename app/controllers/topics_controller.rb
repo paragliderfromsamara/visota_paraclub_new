@@ -1,6 +1,7 @@
 class TopicsController < ApplicationController
 include ThemesHelper
 include EventsHelper
+
   # GET /topics
   # GET /topics.json
   def index
@@ -23,10 +24,10 @@ include EventsHelper
   if session[:themes_list_type] != 'list'
     vStat = is_not_authorized? ? 1 : [1,2]
     if signed_in?
-        @ads = Theme.where(theme_type_id: 3, status_id: [1,3], visibility_status_id: vStat).includes([:entity_view, :user, {messages: :user}, :steps]).order('last_message_date DESC')
-        @ads += Theme.where(theme_type_id: 2, status_id: [1,3], visibility_status_id: vStat, topic_id: @topic.id).includes([:entity_view, :user, {messages: :user}, :steps]).order('last_message_date DESC')
+        @ads = Theme.where(theme_type_id: 3, status_id: [1,3], visibility_status_id: vStat).includes([:entity_view, :user, {messages: :user}, :theme_steps]).order('last_message_date DESC')
+        @ads += Theme.where(theme_type_id: 2, status_id: [1,3], visibility_status_id: vStat, topic_id: @topic.id).includes([:entity_view, :user, {messages: :user}, :theme_steps]).order('last_message_date DESC')
     else
-        @ads = Theme.where(theme_type_id: 3, status_id: [1,3], visibility_status_id: vStat).includes(:messages).order('last_message_date DESC')
+        @ads = Theme.where(theme_type_id: 3, status_id: [1,3], visibility_status_id: vStat).includes(:messages).order('last_message_date DESC') << Theme.where(theme_type_id: 2, status_id: [1,3], visibility_status_id: vStat, topic_id: @topic.id).includes(:messages).order('last_message_date DESC')
         @ads += Theme.where(theme_type_id: 2, status_id: [1,3], visibility_status_id: vStat, topic_id: @topic.id).includes(:messages).order('last_message_date DESC')
     end
   end
@@ -36,29 +37,25 @@ include EventsHelper
     if signed_in?
       #@ads = Theme.where(theme_type_id: 2,status_id: [1,3]).order('last_message_date DESC') if session[:themes_list_type] != 'list'
       if params[:th_filter] == 'my'
-        @themes = @topic.themes.where(user_id: current_user.id, theme_type_id: thType).includes([:entity_view, :user, {messages: :user}, :steps]).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+        @themes = @topic.themes.where(user_id: current_user.id, theme_type_id: thType).includes([:entity_view, :user, {messages: :user}, :theme_steps]).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
       elsif params[:th_filter] == 'ntf'
-        @themes = @topic.themes.where(id: current_user.theme_notifications.select(:theme_id), theme_type_id: thType).includes([:entity_view, :user, {messages: :user}, :steps]).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+        @themes = @topic.themes.where(id: current_user.theme_notifications.select(:theme_id), theme_type_id: thType).includes([:entity_view, :user, {messages: :user}, :theme_steps]).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
       elsif params[:th_filter] == 'not_visited' 
-        @themes = @topic.themes.where(id: current_user.not_readed_themes_ids(@topic, is_not_authorized?), theme_type_id: thType).includes([:entity_view, :user, {messages: :user}, :steps]).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+        @themes = @topic.themes.where(id: current_user.not_readed_themes_ids(@topic, is_not_authorized?), theme_type_id: thType).includes([:entity_view, :user, {messages: :user}, :theme_steps]).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
       elsif params[:th_filter] == 'deleted' && user_type == 'super_admin'
-        @themes = @topic.themes.rewhere(status_id: 2, theme_type_id: thType).includes([:entity_view, :user, {messages: :user}, :steps]).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+        @themes = @topic.themes.rewhere(status_id: 2, theme_type_id: thType).includes([:entity_view, :user, {messages: :user}, :theme_steps]).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
       else
       	if is_not_authorized?
-          #@ads = Theme.where.where(theme_type_id: 2, visibility_status_id: 1,status_id: [1,3]).order('last_message_date DESC') if session[:themes_list_type] != 'list'
       		@themes = @topic.themes.where(visibility_status_id: 1, theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
       	else
-          #@ads = Theme.where(theme_type_id: 2, visibility_status_id: [1,2],status_id: [1,3]).order('last_message_date DESC') if session[:themes_list_type] != 'list'
-      		@themes = @topic.themes.where(visibility_status_id: [1,2], theme_type_id: thType).includes([:entity_view, :user, {messages: :user}, :steps]).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
+      		@themes = @topic.themes.where(visibility_status_id: [1,2], theme_type_id: thType).includes([:entity_view, :user, {messages: :user}, :theme_steps]).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
       	end
       end
     else
-      #@ads = Theme.where(theme_type_id: 2, visibility_status_id: 1,status_id: [1,3]).order('last_message_date DESC') if session[:themes_list_type] != 'list'
       @themes = @topic.themes.where(visibility_status_id: 1, theme_type_id: thType).order('last_message_date DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
     end
   else #если топик == купи-продайка
     @cur_equipment_part = Theme.equipment_part_by_id(params[:e_part])
-    #@ads = Theme.where(theme_type_id: 2, status_id: [1,3]).order('last_message_date DESC') if session[:themes_list_type] != 'list'
     vStatus = (is_not_authorized?)? 1 : [1,2]
     if @cur_equipment_part[:id] == 100 && user_type != 'guest' && user_type != 'new_user'
       @themes = @topic.themes.rewhere(theme_type_id: 1, user_id: current_user.id, status_id: [1,3]).order('updated_at DESC').paginate(:page => params[:page], :per_page => @themes_per_page)
@@ -69,7 +66,7 @@ include EventsHelper
 	@path_array = [
 					        {:name => 'Общение', :link => '/visota_life'},
 					        {:name => @title}
-				        ]
+				   ]
     respond_to do |format|
       format.html# show.html.erb
       format.json { render :json => @topic }
@@ -157,30 +154,11 @@ include EventsHelper
     topic = Topic.find(params[:id])
     redirect_to '/404' if !signed_in? || topic.nil?
     themes = topic.themes.where(id: current_user.not_readed_themes_ids(topic, is_not_authorized?))
-    if themes.size > 0
-      themes.each do |th|
-        step = Step.find_by(part_id: 9, page_id: 1, entity_id: th.id, user_id: current_user.id)
-        if step.nil?
-    		  step = Step.create(
-    					              :user_id => current_user.id, 
-    						            :part_id => 9,
-    						            :page_id => 1,
-    						            :entity_id => th.id,
-    						            :host_name => request.env['REMOTE_HOST'],
-    						            :ip_addr => request.env['REMOTE_ADDR'],
-    						            :visit_time => Time.now,
-                            :guest_token => current_user.guest_token,
-                            online_flag: true
-    						            )
-        else
-          step.update_attributes(visit_time: Time.now, online_flag: true)
-        end
-      end
-    end
-		respond_to do |format|
-		  format.html { redirect_to topic }
-		  format.json { render :json => {callback: 'success'}}
-		end
+    themes.each {|th| th.update_step(current_user)} if themes.size > 0
+	respond_to do |format|
+	  format.html { redirect_to topic }
+	  format.json { render :json => {callback: 'success'}}
+	end
   end
   # DELETE /topics/1
   # DELETE /topics/1.json

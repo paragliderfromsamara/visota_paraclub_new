@@ -30,7 +30,9 @@ class Photo < ActiveRecord::Base
   #def comments
 	#  self.messages.where(:status_id=>1).order('created_at ASC')
   #end
-  
+  def e_view
+      (self.entity_view == nil)? self.build_entity_view(counter: 0) : self.entity_view
+  end
   def views 
 	  (self.entity_view == nil)? 0 : self.entity_view.counter 
   end

@@ -353,32 +353,7 @@ end
       ''
     end
   end
-  def whoIsOnlineMenu    
-    newUsrs = User.n_users
-    nUsrsText = "<div class = 'm_1000wh tb-pad-s'><span class = 'istring_m'>К нам присоединил#{newUsrs.size == 1 ? 'ся' : 'ись'}: </span>#{usersLinkString(newUsrs)}</div>"
-    signedTxt = ""
-    if signed_in?
-      stps = Step.users_online
-      stps[:signed] -= [current_user]
-      signedTxt = "<span class = 'istring_m'>Сейчас на сайте#{' только' if stps[:signed].size == 0 && stps[:unsigned] == 0}</span> <span style = 'font-size: 12px;' class = 'bi-string'>Вы</span>"
-      if stps[:signed].size > 0
-        stps[:signed].each do |u|
-          signedTxt += (stps[:signed].last == u)? " <span class = 'istring_m'>и</span> " : "<span class = 'istring_m'>,</span> "
-          signedTxt += link_to u.name, u, class: 'b_link_i'
-        end
-      end
-      if stps[:unsigned] > 0
-        signedTxt += (stps[:signed].size == 0)? " <span class = 'istring_m'>и</span> " : " <span class = 'istring_m'>, а также</span> "
-        signedTxt += (stps[:unsigned] == 1)? "<span style = 'font-size: 12px;' class = 'bi-string'>Гость</span>" : "<span style = 'font-size: 12px;' class = 'istring_m'>#{stps[:unsigned]}</span> <span style = 'font-size: 12px;' class = 'bi-string'>Гостей</span>" 
-      end
-      signedTxt = "<div class = 'm_1000wh tb-pad-s'>#{signedTxt}</div>"
-    end
-    if newUsrs.size > 0 || !signedTxt.blank?
-      return "<div class = 'c_box even'>#{signedTxt}#{nUsrsText if newUsrs.size > 0}</div>".html_safe
-    else
-      return ''
-    end
-  end
+
 
 	def my_collection_select(collection, list_name, form_name, base_item, prompt) #структура collection [{:value => integer, :name => string}]
 		if collection != {} and collection != nil and list_name != nil and list_name != '' and form_name != nil and form_name != ''

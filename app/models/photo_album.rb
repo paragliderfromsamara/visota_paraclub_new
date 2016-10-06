@@ -89,8 +89,13 @@ class PhotoAlbum < ActiveRecord::Base
   def visota_life_photos
 	self.photos.order('created_at ASC').limit(9)
   end
+  
   def comments
 	  self.messages.where(:status_id => 1, :photo_id => nil).order('created_at ASC')
+  end
+  
+  def e_view
+      (self.entity_view == nil)? self.build_entity_view(counter: 0) : self.entity_view
   end
   
   def views

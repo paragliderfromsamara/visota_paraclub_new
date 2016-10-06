@@ -8,10 +8,23 @@ class ApplicationController < ActionController::Base
   include StepsHelper
   #before_action :site_works
   before_action :check_domain_name
+  after_filter :set_online
   
   def site_works
     redirect_to '/404' if user_type == 'guest'
     redirect_to '/404' if current_user.id != 1 
+  end
+  
+  
+  private
+  
+  def set_online
+      if signed_in?
+          $redis_onlines.set( "user:#{current_user.id}", Time.now, ex: 90.days)
+          ThemeStep.get_from_step_table if user_type == 'super_admin'
+      else
+          $redis_onlines.set( "ip:#{request.remote_ip}", Time.now, ex: 10*60 )
+      end
   end
   
   def check_domain_name
@@ -22,5 +35,7 @@ class ApplicationController < ActionController::Base
       redirect_to url.gsub(regexp, new_url)
     end
   end
+  
+  
   
 end

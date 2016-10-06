@@ -55,6 +55,9 @@ class Video < ActiveRecord::Base
 	  
   #categories end---
   #Просмотры--------
+  def e_view
+      (self.entity_view == nil)? self.build_entity_view(counter: 0) : self.entity_view
+  end
   def views
 	  #Step.where(part_id: 3, page_id: 1, entity_id: self.id)
     (self.entity_view == nil)? 0 : self.entity_view.counter 

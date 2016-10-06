@@ -135,6 +135,9 @@ class Article < ActiveRecord::Base
     		{:value => 2, :form_title => 'Новый документ', :add_but_name => 'документ', :name => 'Документ', :multiple_name => 'Документы', :link => 'documents', :media_name => 'Документы'}
     	]
    end
+   def e_view
+       (self.entity_view == nil)? self.build_entity_view(counter: 0) : self.entity_view
+   end
    def views
  	  #Step.where(part_id: 3, page_id: 1, entity_id: self.id)
      (self.entity_view == nil)? 0 : self.entity_view.counter 

@@ -84,7 +84,7 @@ def user_contacts(user)
 end
 def check_user_www_link(link)
   if link.blank?
-    return 'http://visota-paraclub.ru'
+    return 'http://visota63.ru'
   else
     if link.index(/http:\/\//).nil?
       return "http://#{link}"

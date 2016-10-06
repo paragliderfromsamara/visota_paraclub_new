@@ -111,10 +111,19 @@ module MessagesHelper
 		return ''
 	end
 	def message_user_row(message)
-		if message.user_id == nil or message.user_id == 0 and message.user_name != nil and message.user_name != ''
+		if message.user_id == nil or message.user_id == 0 and !message.user_name.blank?
 			return "<span id = 'u_name' class = 'istring_m norm'>#{message.user_name}</span><br />#{image_tag('/files/undefined.png', :width => '90px')}"
 		elsif message.user_id != nil and message.user_id != 0
-			return "#{link_to message.user.name, message.user, :class => 'b_link_i', :id => 'u_name'}<br />#{image_tag(message.user.alter_avatar_square, :width => '90px')}"
+            ison = is_online?(message.user)
+            tit = 'Не в сети'
+            if ison[:status]
+                cl = 'g_link_i' 
+                tit = "В сети"
+            else
+                cl = 'b_link_i' 
+                tit = "Был в сети #{my_time(DateTime.parse(ison[:last_visit_time]))}" if !ison[:last_visit_time].nil? 
+            end
+			return "#{link_to message.user.name, message.user, :class => cl, :id => 'u_name', title: tit}<br />#{image_tag(message.user.alter_avatar_square, :width => '90px')}"
 		elsif message.user_name == nil and message.user_name == '' and message.user_id == nil or message.user_id == 0 	
 			return "<span class = 'istring_m norm'>Гость</span><br />#{image_tag('/files/undefined.png', :width => '90px')}"
 		end
