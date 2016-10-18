@@ -60,7 +60,7 @@ module StepsHelper
 		elsif controller.controller_name == 'themes'
             if controller.action_name == 'show'
                 upd_view_element(@theme)
-                @theme.update_step(current_user)
+                @theme.update_step(current_user) if signed_in?
             end
             @show_authority_message_flag = true
 			@curMenuItem = 'Общение'
