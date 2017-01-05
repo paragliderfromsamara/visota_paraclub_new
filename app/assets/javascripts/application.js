@@ -14,6 +14,8 @@
 //= require jquery_ujs
 //= require jquery-ui/core
 //= require jquery-ui/dialog
+//= require motion-ui
+//= require foundation-sites
 //= require turbolinks
 //= require_tree
 
@@ -116,7 +118,6 @@ function eventRotator()
         var iTime = 12000;
         var cTime = 2000;
         var tTime = 700;
-        console.log(hEvents.length + ' ' + vEvents.length);
         if (hEvents.length > 0)
         {
             setInterval(function(){
@@ -140,5 +141,35 @@ function eventRotator()
             }, iTime)
         }
     }
-
+    
+function checkupd(url, params, func, updTime) // функция проверки необходимости обновления страницы (используется в conversations.coffee)
+    {
+        this.url = url; //ссылка на проверку изменения страницы
+        this.updFunc = func; //функция выполняемая при необходимости обновить страницу
+        this.updTime = updTime; //интервал проверки изменения страницы
+        this.interval = null; //интервал
+        this.params = params; 
+        this.startUpdate = function () {
+                                var _this = this;
+                                this.interval = setInterval(function() {
+                                    $.ajax({
+                                            type: "GET",
+                                            url: _this.url,
+                                            data: _this.params,
+                                            dataType: "json",
+                                            success: function(data)
+                                                        {
+                                                            if(data.html !== '')
+                                                            {
+                                                                _this.params = _this.updFunc(data);
+                                                                //console.log("data: " + _this.params); 
+                                                            }
+                                                               
+                                                        },
+                                            error: function(){console.error("Сервер не отвечает")} 
+                                            }
+                                          )       
+                                }, _this.updTime);};
+        this.stopUpdate = function() {if (this.interval !== null) {clearInterval(this.interval);}};
+    }
 	

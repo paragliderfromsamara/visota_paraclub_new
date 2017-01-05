@@ -13,6 +13,16 @@
  *= require jquery-ui/dialog
  *= require_tree .
  */
+$global-width: 1000px;
+
+@import "foundation-sites";
+@import "motion-ui";
+@import "_settings";
+
+@include foundation-visibility-classes;
+@include foundation-float-classes;
+@include foundation-grid;
+
 
 html.turbolinks-progress-bar::before {
   background-color: red !important;
