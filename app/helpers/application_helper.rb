@@ -271,7 +271,7 @@ end
 		b.each do |i|
 			v += (current_page?(i[:link]))? "<li id = 'c_nav_li' link_to = '#{i[:link]}'>#{i[:name]}</li>" : "<li link_to = '#{i[:link]}'>#{i[:name]}</li>" if i[:access].nil? || i[:access] == true
 		end
-		return "<ul id = 'userMenu'>#{v}</ul>"
+		return "<ul class = \"float-right\" id = 'userMenu'>#{v}</ul>"
 	end
 
 	def topMainMenu #меню в шапке сайта

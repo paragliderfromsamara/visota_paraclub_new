@@ -49,24 +49,21 @@
     </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/19725562" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     <!-- /Yandex.Metrika counter -->
-<div class='quickScroll' style = 'display: none;'>
+<div class='quickScroll show-for-medium' style = 'display: none;'>
 	<div class = 'arrow fi-arrow-up' id = 'aUp' style = 'display: none;'></div>
 	<div class = 'arrow fi-arrow-down' id = 'aDwn' style = 'display: none;'></div>
 </div>
 <% if @hideSesPanel != true %>
 
-    <div id = 'ses_p' class = 'm_1000wh' >
+    <div id = 'ses_p' class = 'show-for-medium' >
         <% if user_type == 'guest' %>
             <%= form_for(:session, :url => sessions_path(:redirect_to => 'index'), :html => {:id => 'sesForm'}) do |f|  %>
-    	        <div class = 'section group'>
-            		<div class = 'col span_3_of_12'>
-                        
-            		</div>
-            		<div class = 'col span_2_of_12'>
+    	        <div class = 'row tb-pad-s'>
+            		<div class = 'medium-3 large-2 large-offset-3 columns'>
                          <%= user_session_menu(wheather_top_but).html_safe %>
             		</div>
                     
-                    <div class = 'col span_7_of_12'>
+                    <div class = 'medium-9 large-7 columns'>
                         <table style = 'width: 100%; height: 100%;'>
                             <tr>
                                 <td align = 'center' valign = 'middle' style = 'width: 160px;'>
@@ -88,14 +85,12 @@
                 </div>
                 <% end %>
             <% else %>
-    	        <div class = 'section group'>
-            		<div class = 'col span_3_of_12'>
-            		</div>
-            		<div class = 'col span_6_of_12'>
+    	        <div class = 'row tb-pad-s'>
+            		<div class = 'medium-7 large-7 columns'>
                         <%= user_session_menu(wheather_top_but+user_top_buttons).html_safe %>
             		</div>
-            		<div class = 'col span_3_of_12'>
-                        <table style = 'width: 100%; height: 100%;'>
+            		<div class = 'medium-5 large-5 columns'>
+                        <table class = "float-right" style = 'height: 100%;'>
                             <tr>
                                 <td align = 'center' valign = 'middle' style = 'width: 50px;'>
                                      <img src = '<%= current_user.alter_avatar_thumb %>'> 
@@ -110,26 +105,24 @@
                             </tr>
                         </table>
             		</div>
-                </div>
-                
+                </div>  
             <% end %>
     </div>
 <% end %>
 <div id = 'top' style = 'height: <%= @curTopImage[:BlockHeight] %>px; <% if @curTopImage[:link] != 'none' %>background-image:url("<%= @curTopImage[:link] %>");<% end %>'>
-	<div class = 'm_1000wh'>
-		<div class = 'section group'>
-			<div class = 'col span_3_of_12' style = 'margin-top:23px; '>
+		<div class = 'row'>
+			<div class = 'small-3 columns' style = 'margin-top:23px; '>
                 <%= image_tag "logo.png", id: "mLogo", link_to: root_path, height: "130px" %>	
 			</div>
-			<div class = 'col span_9_of_12' style = 'padding: 0 0 0 0; margin-top:56px;'>
+			<div class = 'small-9 columns' style = 'padding: 0 0 0 0; margin-top:56px;'>
 				<div id = 'mainMenu'>
 					<%= topMainMenu.html_safe %>
 				</div>
 			</div>                       
 		</div>
 		<% if controller.controller_name == 'pages' &&  controller.action_name == 'index' %>
-			<div class = 'section group'>
-				<div class = 'col span_6_of_12' style = 'padding: 0 0 0 0; margin-top:50px;'>
+			<div class = 'row show-for-medium'>
+				<div class = 'medium-6 columns' style = 'padding: 0 0 0 0; margin-top:50px;'>
 					<div style = 'position: relative;'>
 						<p id = 'siteName'>САМАРСКИЙ</p>
 						<p id = 'siteName'>ПАРАПЛАНЕРНЫЙ</p>
@@ -141,7 +134,6 @@
 				</div>             
 			</div>
 		<% end %>
-	</div>
 </div>
 <a name = 'cs'></a>
 <div id = 'middle'>
@@ -159,16 +151,14 @@
 		<%= render 'pages/phones_and_adresses' if controller.action_name != 'contacts' %>
 	<% end %>
 	<div id = 'footer'>
-		<div class = 'm_1000wh'  style = 'top: 30%;'>
-			<div class = 'section group'>
-				<div class = 'col span_9_of_12'>
-					<div id = 'bottomMenu'>
-					  <%= bottomMainMenu.html_safe %>
-					</div>
+		<div class = 'row tb-pad-ml' >
+			<div class = 'medium-9 columns show-for-medium'>
+				<div id = 'bottomMenu'>
+				  <%= bottomMainMenu.html_safe %>
 				</div>
-				<div class = 'col span_3_of_12'>
-				   <p id = 'bottomClubName'> © СПК "Высота", 2000-<%= Time.now.year %></p>
-				</div>
+			</div>
+			<div class = 'small-12 medium-3 columns'>
+			   <p id = 'bottomClubName'> © СПК "Высота", <%= Time.now.year %></p>
 			</div>
 		</div>
 	</div>

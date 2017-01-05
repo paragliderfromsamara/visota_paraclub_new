@@ -1,79 +1,7 @@
-$min_width: 1100px;
-$main_color: #3084c9;
-$link_color: #176bb5;
-$second_color: #e1e7eb;
-$third_color: #f4f7fb;
-$fourth_color:#cbe0f2;
-$fiveth_color: #2e4e5e;
-$text_color_1: #6d6d6d;
-$text_color_2: #1a2d5d;
-$text_color_3: #414141;
-$text_color_4: #64b0fb;
-$text_color_5: #76797c;
-/* Цвет чётных блоков */
-$evenBlockColor: #f9f9f9;
-/* Цвет нечётных блоков */
-$oddBlockColor: #ffffff;
-$error_color: red;
-$font_family_1: ubuntu_regular, sans-serif;
-$font_family_2: ubuntu_bold, sans-serif;
-$font_family_3: ubuntu_bold_italic, sans-serif;
-$font_family_4: ubuntu_regular_italic, sans-serif;
-$font_family_5: ubuntu_light, sans-serif;
-$font_family_6: ubuntu_medium, sans-serif;
-$magistral_font: magistral_norm, sans-serif;
-$time_1: 500ms;
-$time_2: 250ms;
-/*dropzone var*/
-$dz_preview_width: 100px;
-/*dropzone var end*/
-@mixin animation($t)
-	{
-	-webkit-transition-duration: $t;
-    -o-transition-duration: $t;
-    -moz-transition-duration: $t;
-    transition-duration: $t;
-	}
-
-@mixin my_opacity($t){opacity: $t;filter: alpha(opacity=$t*100);-moz-opacity: $t;}
+@import "_settings";
 	
-@mixin menuLi
-	{
-		position: relative;
-		display: inline-block;
-		font-family: $font_family_1; 
-		font-size: 1em; 
-		cursor:pointer; 
-		z-index: 500;
-	}
-h1, h2, h3, h4 {font-weight: normal;}	
-body {
-	background-color: #ffffff;
-    /* min-width:1000px;*/
-    font: 100%/1.5 $font_family_1;
-    color: $text_color_1;
-	}
-h1 {
-	font-family: $font_family_1; 
-	font-size: 1.375em; 
-	color: $text_color_1;
-  }
-  h1.blue {color: $link_color;}
-h2 {
-	font-family: $font_family_1; 
-	font-size: 1.125em; color: $main_color;
-   }
-h3 {
-	font-family: $font_family_3; 
-	font-size: 1em; 
-	color: $text_color_1;
-  }
-h4 {
-  	font-family: $font_family_2; 
-  	font-size: 9pt;
-  	color: $main_color;
-    .black {color: $text_color_1;}
-    }
+
+
 b  {
 	font-family: $font_family_6;
    }
@@ -96,12 +24,12 @@ textarea {resize: none;}
              .arrow {cursor: pointer; width:100%;height:40px;position: absolute; @include my_opacity(0.3); @include animation($time_1);}
 			 .arrow:hover {@include my_opacity(0.8); z-index: 9005;}
 			 #aUp{
-					color: grey;
+					color: gray;
 				 }
 			 #aUp:hover {color:$main_color;}
 			 #aDwn{
 					top:50px;
-                    color: grey;
+                    color: gray;
 				  }
 			 #aDwn:hover {color:$main_color;}
 			 position: fixed;
@@ -140,10 +68,7 @@ textarea {resize: none;}
 .istring_m{	@extend .istring;font-size: 0.6875em;}
 .medium-opacity{@include my_opacity(0.7);}
 img.ava {width: 120px;}
-#top_photo, #top {position: relative; width:100%;max-width:1600px;min-width: $min_width; margin-left: auto; margin-right: auto; z-index: 1; background-position:center;}
-#middle {position: relative; width: 100%; min-width: $min_width; z-index: 1;min-height: 500px;}
-#bottom, #footer{position: relative; width: 100%; min-width: $min_width; z-index: 1;}
-#footer{background-color:$fiveth_color;height: 105px;}
+
 ul.myBut
 {
 	list-style: none; 
@@ -263,119 +188,7 @@ ul.myBut
 	a.w_link_i:hover {text-decoration: underline; }
 /*links end*/
 
-/*mainMenu*/
 
-
-	#siteName
-	{
-        color: white;
-        font-family: $font_family_1; font-size: 3em;
-        padding: 0;
-        margin: 0;
-        height:60px;
-    }
-    #aboutClubLink
-    {
-        color: white;
-        position: relative;
-        text-align: center;
-        border-color: white;
-        border-width: 1px;
-        border-radius: 30px;
-        margin-top: 35px;
-        cursor:pointer;
-        float: left;
-        p 
-        {
-            padding: 15px 24px 15px 24px;
-            font-size: 0.93em;
-            font-family: ubuntu_light, sans-serif;
-        }
-        a {
-            text-decoration: none; color:white;
-        }
-        div{
-            position:absolute; width: 100%; height:100%; background-color: #ffffff; border-radius: 30px; @include my_opacity(0);@include animation($time_1);
-        }
-        div:hover {@include my_opacity(0.2);}
-    }
-    #bottomClubName 
-      {
-        color: white; font-family: $font_family_5; font-size: 1.125em; vertical-align:middle;
-    }
-	#mainMenu { 
-		height: 40px; 
-		z-index: 550;
-        float:right;
-		ul
-		{
-			list-style: none; 
-		}
-		li {
-			@include menuLi;
-			color: black; 	
-    		padding-left: 16px;
-    		padding-right: 16px;
-    		padding-top: 7px;
-    		padding-bottom: 8px;	
-            font-size: 1em;
-		   }
-        li:hover {span {color: $main_color;}}
-		#c_nav_li {	border-width: 1px;
-    		padding-left: 15px;
-    		padding-right: 15px;
-    		padding-top: 6px;
-    		padding-bottom: 7px;
-            border-radius: 16px;
-					span {color: $main_color;}
-					border-color:$main_color; 
-                  }	
-			
-		span:hover {
-					color: $main_color; 
-				  }
-		a {
-			text-decoration: none;
-			color: black;
-		  }
-          
-	}
-	#bottomMenu { 
-		z-index: 550;
-		ul
-			{
-				list-style: none; 
-			}
-		
-		li {
-    		position: relative;
-    		float: left; 
-    		color: white; 
-    		font-family: $font_family_5; 
-    		font-size: 1.125em; 
-    		cursor:pointer; 
-    		padding-left: 12px;
-    		padding-right: 12px;
-    		z-index: 500;
-    		@include animation($time_1);		
-		  }
-			
-		span {
-				padding-bottom: 7px;
-				width: 20px;
-			}
-			
-		span:hover {
-					border-bottom-width: 2px;
-					border-bottom-color:white; 
-				  }
-		a {
-			text-decoration: none;
-			color: white;
-		  }
-	}
-
-/*mainMenu end*/
 
 /* Локальное мини меню */
 .l_menu, .l_menu_b {
@@ -469,7 +282,7 @@ ul.myBut
     	width: 20px;
     	margin-right: 5px;
     	float: left;
-    	background-color: grey;
+    	background-color: gray;
     }
 /* wait line end */ 
     
@@ -576,15 +389,7 @@ ul.ctrl_but
 	}
 .art-binding-ent-item:hover{background-color:$fourth_color; }
 
-/*foundation_icons*/
-.fi-small {font-size: 12px;}
-.fi-medium {font-size: 18px;}
-.fi-large {font-size: 24px;}
-.fi-largest {font-size: 32px;}
-.fi-grey {color: grey;}
-.fi-blue {color: $main_color;}
-.fi-float-left {display: inline-block; padding-left:10px;}
-.fi-float-right {float: right;}
+
 
 
 

@@ -13,7 +13,48 @@
  *= require jquery-ui/dialog
  *= require_tree .
  */
-$global-width: 1000px;
+@font-face {
+    font-family: 'ubuntu_bold';
+    src: url('/fonts/ubuntu/Ubuntu-B.ttf') format('truetype');
+
+    font-style: normal;
+}
+@font-face {
+    font-family: 'ubuntu_bold_italic';
+    src: url('/fonts/ubuntu/Ubuntu-BI.ttf') format('truetype');
+
+    font-style: normal;
+}
+@font-face {
+    font-family: 'ubuntu_regular';
+    src: url('/fonts/ubuntu/Ubuntu-R.ttf') format('truetype');
+    
+    font-style: normal;
+}
+@font-face {
+    font-family: 'ubuntu_regular_italic';
+    src: url('/fonts/ubuntu/Ubuntu-RI.ttf') format('truetype');
+
+    font-style: normal;
+}
+@font-face {
+    font-family: 'ubuntu_light';
+    src: url('/fonts/ubuntu/Ubuntu-L.ttf') format('truetype');
+
+    font-style: normal;
+}
+@font-face {
+    font-family: 'ubuntu_medium';
+    src: url('/fonts/ubuntu/Ubuntu-M.ttf') format('truetype');
+    font-style: normal;
+}
+@font-face {
+    font-family: 'magistral_norm';
+    src: url('/fonts/magistral/MagistralC.otf') format('truetype');
+    font-style: normal;
+}
+
+$global-width: 1100px;
 
 @import "foundation-sites";
 @import "motion-ui";
@@ -22,6 +63,76 @@ $global-width: 1000px;
 @include foundation-visibility-classes;
 @include foundation-float-classes;
 @include foundation-grid;
+@include foundation-typography;
+//@include foundation-button;
+//@include foundation-forms;
+//@include foundation-thumbnail;
+//@include foundation-menu;
+//@include foundation-top-bar;
+//@include foundation-dropdown-menu;
+//@include foundation-table;
+//@include foundation-tabs;
+//@include foundation-badge;
+//@include foundation-orbit;
+//@include foundation-reveal;
+//@include foundation-close-button;
+
+#top_photo, #top 
+{
+    position: relative; 
+    width:100%;
+    max-width:1600px;
+    margin-left: auto; 
+    margin-right: auto; 
+    z-index: 1; 
+    background-position:center;
+}
+#middle 
+{
+    position: relative; 
+    width: 100%; 
+    z-index: 1;
+    min-height: 500px;
+}
+#bottom, #footer
+{
+    position: relative; 
+    width: 100%; 
+    z-index: 1;
+}
+#footer
+{
+    background-color:$fiveth_color;
+}
+
+h1, h2, h3, h4 {font-weight: normal;}	
+body {
+	background-color: #ffffff;
+    /* min-width:1000px;*/
+    font: 100%/1.5 $font_family_1;
+    color: $text_color_1;
+	}
+h1 {
+	font-family: $font_family_1; 
+	font-size: 1.375em; 
+	color: $text_color_1;
+  }
+  h1.blue {color: $link_color;}
+h2 {
+	font-family: $font_family_1; 
+	font-size: 1.125em; color: $main_color;
+   }
+h3 {
+	font-family: $font_family_3; 
+	font-size: 1em; 
+	color: $text_color_1;
+  }
+h4 {
+  	font-family: $font_family_2; 
+  	font-size: 9pt;
+  	color: $main_color;
+    .black {color: $text_color_1;}
+    }
 
 
 html.turbolinks-progress-bar::before {
@@ -104,57 +215,6 @@ html.turbolinks-progress-bar::before {
 }
 
 
-
-/*  GO FULL WIDTH BELOW 480 PIXELS */
-/*
-@media only screen and (max-width: 480px) {
-	.col {  margin: 1% 0 1% 0%; }
-    
-    .span_1_of_12, .span_2_of_12, .span_3_of_12, .span_4_of_12, .span_5_of_12, .span_6_of_12, .span_7_of_12, .span_8_of_12, .span_9_of_12, .span_10_of_12, .span_11_of_12, .span_12_of_12 {
-	width: 100%; 
-	}
-}
-*/
-@font-face {
-    font-family: 'ubuntu_bold';
-    src: url('/fonts/ubuntu/Ubuntu-B.ttf') format('truetype');
-
-    font-style: normal;
-}
-@font-face {
-    font-family: 'ubuntu_bold_italic';
-    src: url('/fonts/ubuntu/Ubuntu-BI.ttf') format('truetype');
-
-    font-style: normal;
-}
-@font-face {
-    font-family: 'ubuntu_regular';
-    src: url('/fonts/ubuntu/Ubuntu-R.ttf') format('truetype');
-    
-    font-style: normal;
-}
-@font-face {
-    font-family: 'ubuntu_regular_italic';
-    src: url('/fonts/ubuntu/Ubuntu-RI.ttf') format('truetype');
-
-    font-style: normal;
-}
-@font-face {
-    font-family: 'ubuntu_light';
-    src: url('/fonts/ubuntu/Ubuntu-L.ttf') format('truetype');
-
-    font-style: normal;
-}
-@font-face {
-    font-family: 'ubuntu_medium';
-    src: url('/fonts/ubuntu/Ubuntu-M.ttf') format('truetype');
-    font-style: normal;
-}
-@font-face {
-    font-family: 'magistral_norm';
-    src: url('/fonts/magistral/MagistralC.otf') format('truetype');
-    font-style: normal;
-}
 html, body, div, span, h1, h2, h3, h4, h5, h6, p, img, ul, li, fieldset, form, label { margin: 0; padding: 0; border: 0; outline: 0; font-size: 100%; vertical-align: baseline; background: transparent; border-style: solid;}
 ol, ul { list-style: none; }
 hr {margin: 0;}
@@ -162,4 +222,129 @@ hr {margin: 0;}
 .tb-pad-s {padding: 10px 0 10px 0;}
 .tb-pad-sm {padding: 20px 0 20px 0;}
 .tb-pad-m {padding: 30px 0 30px 0;}
+.tb-pad-ml {padding: 45px 0 45px 0;}
 .tb-pad-l {padding: 60px 0 60px 0;}
+
+/*mainMenu*/
+
+
+	#siteName
+	{
+        color: white;
+        font-family: $font_family_1; font-size: 3em;
+        padding: 0;
+        margin: 0;
+        height:60px;
+    }
+    #aboutClubLink
+    {
+        color: white;
+        position: relative;
+        text-align: center;
+        border-color: white;
+        border-width: 1px;
+        border-radius: 30px;
+        margin-top: 35px;
+        cursor:pointer;
+        float: left;
+        p 
+        {
+            padding: 15px 24px 15px 24px;
+            font-size: 0.93em;
+            font-family: ubuntu_light, sans-serif;
+        }
+        a {
+            text-decoration: none; color:white;
+        }
+        div{
+            position:absolute; width: 100%; height:100%; background-color: #ffffff; border-radius: 30px; @include my_opacity(0);@include animation($time_1);
+        }
+        div:hover {@include my_opacity(0.2);}
+    }
+    #bottomClubName 
+      {
+        color: white; font-family: $font_family_5; font-size: 1.125em; vertical-align:middle;
+    }
+	#mainMenu { 
+		height: 40px; 
+		z-index: 550;
+        float:right;
+		ul
+		{
+			list-style: none; 
+		}
+		li {
+			@include menuLi;
+			color: black; 	
+    		padding-left: 16px;
+    		padding-right: 16px;
+    		padding-top: 7px;
+    		padding-bottom: 8px;	
+            font-size: 1em;
+		   }
+        li:hover {span {color: $main_color;}}
+		#c_nav_li {	border-width: 1px;
+    		padding-left: 15px;
+    		padding-right: 15px;
+    		padding-top: 6px;
+    		padding-bottom: 7px;
+            border-radius: 16px;
+					span {color: $main_color;}
+					border-color:$main_color; 
+                  }	
+			
+		span:hover {
+					color: $main_color; 
+				  }
+		a {
+			text-decoration: none;
+			color: black;
+		  }
+          
+	}
+	#bottomMenu { 
+		z-index: 550;
+		ul
+			{
+				list-style: none; 
+			}
+		
+		li {
+    		position: relative;
+    		float: left; 
+    		color: white; 
+    		font-family: $font_family_5; 
+    		font-size: 1.125em; 
+    		cursor:pointer; 
+    		padding-left: 12px;
+    		padding-right: 12px;
+    		z-index: 500;
+    		@include animation($time_1);		
+		  }
+			
+		span {
+				padding-bottom: 7px;
+				width: 20px;
+			}
+			
+		span:hover {
+					border-bottom-width: 2px;
+					border-bottom-color:white; 
+				  }
+		a {
+			text-decoration: none;
+			color: white;
+		  }
+	}
+
+/*mainMenu end*/
+    
+    /*foundation_icons*/
+    .fi-small {font-size: 12px;}
+    .fi-medium {font-size: 18px;}
+    .fi-large {font-size: 24px;}
+    .fi-largest {font-size: 32px;}
+    .fi-grey {color: grey;}
+    .fi-blue {color: $main_color;}
+    .fi-float-left {display: inline-block; padding-left:10px;}
+    .fi-float-right {float: right;}    
