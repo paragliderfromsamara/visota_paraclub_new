@@ -53,58 +53,81 @@
 	<div class = 'arrow fi-arrow-up' id = 'aUp' style = 'display: none;'></div>
 	<div class = 'arrow fi-arrow-down' id = 'aDwn' style = 'display: none;'></div>
 </div>
+<div id = "responsive" class="title-bar" data-responsive-toggle="responsive-toggle-menu" data-hide-for="medium">
+    <div class = "row">
+        <div class = "small-3 columns">
+            <ul class="menu align-left">
+                <li>
+                    <button style = "margin-top: 12px;" class="menu-icon" type="button" data-toggle></button>  <div style = "margin-top:10px;"class="title-bar-title">Меню</div>
+                </li>
+            </ul>
+
+        </div>
+        <div class = "small-9 columns">
+            <ul class="menu align-left float-right">
+              <%= @user_menu %>
+              <li>
+                  <% if user_type == "guest" %>
+                      <a class = "open-session-menu-buts" href="#"><i class="fi-key fi-small"></i> <span>Вход</span></a>
+                  <%else%>
+                      <a href="/signout"><i class="fi-arrow-right fi-small"></i> <span>Выход</span></a>
+                  <%end%>
+              </li>
+            </ul>
+        </div>
+    </div>
+
+
+</div>
+<div id = "responsive-toggle-menu" class = "main-menu hide-for-medium">
+    <ul>
+        <%= @main_menu %>
+    </ul>
+</div>
 <% if @hideSesPanel != true %>
 
     <div id = 'ses_p' class = 'show-for-medium' >
         <% if user_type == 'guest' %>
-            <%= form_for(:session, :url => sessions_path(:redirect_to => 'index'), :html => {:id => 'sesForm'}) do |f|  %>
-    	        <div class = 'row tb-pad-s'>
-            		<div class = 'medium-3 large-2 large-offset-3 columns'>
-                         <%= user_session_menu(wheather_top_but).html_safe %>
+    	        <div class = 'row' style = "height: 58px;">
+
+            		<div class = 'medium-12 columns'>
+                        <div  class="media-object float-right">
+                          <div class="media-object-section middle">
+                            <ul class = "float-right" id = 'userMenu'>
+                                 <%= @user_menu %>
+                             </ul>
+                          </div>
+                          <div style = "height: 58px;" class="media-object-section middle">
+                              <button style = "margin: 0;" id = "open-session-menu-but" type="button" class="addition small button open-session-menu-buts"><i class = "fi-key"></i> Вход</button>
+                          </div>
+                        </div>
             		</div>
-                    
-                    <div class = 'medium-9 large-7 columns'>
-                        <table style = 'width: 100%; height: 100%;'>
-                            <tr>
-                                <td align = 'center' valign = 'middle' style = 'width: 160px;'>
-                                    <%= f.text_field :name, :id => 'sesText', :placeholder => 'Логин или E-mail' %>
-                                </td>
-                                <td align = 'center' valign = 'middle' style = 'width: 160px;'>
-                                    <%= f.password_field :password, :id => 'sesText', :placeholder => 'Пароль' %>
-                                </td>
-                                <td align = 'center' valign = 'middle' style = 'width: 110px;' >
-                                    <%= mySubmitButton('Войти', 'sesForm').html_safe %>
-                                </td>
-                                <td align = 'left' valign = 'middle'>
-                                    <%= link_to 'Забыли пароль?', '/remember_password', :class => 'sesLink', :style => 'margin: 0 0 0 0; padding: 0 0 0 0;' %>
-                                    <%= link_to 'Регистрация', '/signup', :class => 'sesLink', :style => 'margin: 0 0 0 0; padding: 0 0 0 0;'%>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
                 </div>
-                <% end %>
             <% else %>
-    	        <div class = 'row tb-pad-s'>
-            		<div class = 'medium-7 large-7 columns'>
-                        <%= user_session_menu(wheather_top_but+user_top_buttons).html_safe %>
+    	        <div class = 'row' style = "height: 58px;">
+            		<div class = 'medium-7 large-9 columns'>
+                        <div class = "tb-pad-sm">
+                        <ul class = "float-right" id = 'userMenu'>
+                             <%= @user_menu %>
+                         </ul>
+                         </div>
             		</div>
-            		<div class = 'medium-5 large-5 columns'>
-                        <table class = "float-right" style = 'height: 100%;'>
-                            <tr>
-                                <td align = 'center' valign = 'middle' style = 'width: 50px;'>
-                                     <img src = '<%= current_user.alter_avatar_thumb %>'> 
-                                </td>
-                                <td align = 'left' valign = 'middle' style = 'width: 130px;'>
-                                    <p class = 'sesText'>Вы вошли как:</p>
-                                    <%= link_to current_user.name, current_user, :class => 'sesLink' %>
-                                </td>
-                                <td align = 'right' valign = 'middle' >
-                                    <%= myLinkButton('Выйти', '/signout').html_safe %>
-                                </td>
-                            </tr>
-                        </table>
-            		</div>
+                    <div style = "height: 100%;" class = 'medium-5 large-3 columns'>
+                        <div  class="media-object float-right">
+                          <div class="media-object-section middle">
+                            <div class="thumbnail">
+                              <img class = "float-right" src = '<%= current_user.alter_avatar_thumb %>'>
+                            </div>
+                          </div>
+                          <div class="media-object-section middle">
+                              <p class = 'sesText'>Вы вошли как:</p>
+                              <%= link_to current_user.name, current_user, :class => 'sesLink' %>
+                          </div>
+                          <div style = "height: 58px;" class="media-object-section middle">
+                              <a id = "close-session-but" href="/signout" class="addition small button float-right">Выйти</a>
+                          </div>
+                        </div>
+                    </div>
                 </div>  
             <% end %>
     </div>
@@ -115,8 +138,10 @@
                 <%= image_tag "logo.png", id: "mLogo", link_to: root_path, height: "130px" %>	
 			</div>
 			<div class = 'small-9 columns' style = 'padding: 0 0 0 0; margin-top:56px;'>
-				<div id = 'mainMenu'>
-					<%= topMainMenu.html_safe %>
+				<div id = "mainMenu" class = "main-menu show-for-medium">
+                    <ul>
+                       <%= @main_menu %> 
+                    </ul>
 				</div>
 			</div>                       
 		</div>
@@ -153,8 +178,10 @@
 	<div id = 'footer'>
 		<div class = 'row tb-pad-ml' >
 			<div class = 'medium-9 columns show-for-medium'>
-				<div id = 'bottomMenu'>
-				  <%= bottomMainMenu.html_safe %>
+				<div class = "main-menu" id = 'bottomMenu'>
+                    <ul>
+                        <%= @main_menu %> 
+                    </ul>
 				</div>
 			</div>
 			<div class = 'small-12 medium-3 columns'>

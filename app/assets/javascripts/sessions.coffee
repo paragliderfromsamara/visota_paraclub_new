@@ -1,11 +1,11 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
-openEntryFormId = "open-session-menu-but"
+openEntryFormClassName = "open-session-menu-buts"
 sessionFormId = "site-entry-form"
 sessionFormUrl = "/signin?nolayout=true #sesForm"
 formContainerId = "ses-form-container"
-sesBut = null
+sesButs = null
 sesForm = null
 
 makeSessionForm = ()->
@@ -30,10 +30,10 @@ makeSessionForm = ()->
     
 
 r = ()->
-    sesBut = document.getElementById(openEntryFormId)
-    if sesBut isnt null
-        sesBut = $(sesBut)
-        sesBut.click(makeSessionForm)
+    sesButs = document.getElementsByClassName(openEntryFormClassName)
+    if sesButs.length isnt 0
+        sesButs = $(sesButs)
+        sesButs.click(makeSessionForm)
     
     
 

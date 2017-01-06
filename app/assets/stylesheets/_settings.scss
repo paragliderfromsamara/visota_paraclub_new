@@ -4,3 +4,85 @@
 
 @import "foundation-sites";
 @include foundation-global-styles;
+$primary-color: #3084c9;
+$secondary-color: #e1e7eb;
+
+//old variables 
+$min_width: 1100px;
+$main_color: #3084c9;
+$link_color: #176bb5;
+$second_color: #e1e7eb;
+$third_color: #f4f7fb;
+$fourth_color:#cbe0f2;
+$fiveth_color: #2e4e5e;
+$text_color_1: #6d6d6d;
+$text_color_2: #1a2d5d;
+$text_color_3: #414141;
+$text_color_4: #64b0fb;
+$text_color_5: #76797c;
+/* Цвет чётных блоков */
+$evenBlockColor: #f9f9f9;
+/* Цвет нечётных блоков */
+$oddBlockColor: #ffffff;
+$error_color: red;
+$font_family_1: ubuntu_regular, sans-serif;
+$font_family_2: ubuntu_bold, sans-serif;
+$font_family_3: ubuntu_bold_italic, sans-serif;
+$font_family_4: ubuntu_regular_italic, sans-serif;
+$font_family_5: ubuntu_light, sans-serif;
+$font_family_6: ubuntu_medium, sans-serif;
+$magistral_font: magistral_norm, sans-serif;
+$time_1: 500ms;
+$time_2: 250ms;
+/*dropzone var*/
+$dz_preview_width: 100px;
+/*dropzone var end*/
+
+//
+
+$foundation-palette: (
+  primary: #3084c9,
+  secondary: #e1e7eb,
+  success: #3adb76,
+  warning: #ffae00,
+  alert: #cc4b37,
+  addition: #afc5d1,
+);
+
+@mixin animation($t)
+	{
+	-webkit-transition-duration: $t;
+    -o-transition-duration: $t;
+    -moz-transition-duration: $t;
+    transition-duration: $t;
+	}
+
+@mixin my_opacity($t){opacity: $t;filter: alpha(opacity=$t*100);-moz-opacity: $t;}
+
+//button
+$button-radius: 16px;
+$button-padding: 0.5em 1.5em;
+#open-session-menu-but, #close-session-but
+{
+    margin: 0;
+}
+
+//grid
+$grid-column-gutter: (small: 15px, medium: 20px);
+
+//title-bar
+.title-bar
+{
+    .fi-small
+    {
+        font-size: 20px;
+    }
+    a
+    {
+        color: $white;
+    }
+    a:hover
+    {
+        color: $light-gray;
+    }
+}

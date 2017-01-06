@@ -261,37 +261,53 @@ end
 					 ]
 	end
   def wheather_top_but
-    return [{:name => '<i class = "fi-cloud fi-small"></i>Погода', :link => '/wheather'}]
+    return [
+              {
+                name: 'Погода',
+                icon: 'cloud', 
+                link: '/wheather'
+              }
+           ]
   end
   def user_top_buttons
-    return [{:name => '<i class = "fi-comments fi-small"></i>Диалоги', :link => "/conversations", :access => user_type == 'super_admin'},{:name => '<i class = "fi-torsos-all fi-small"></i>Пилоты', :link => '/pilots'},{:name => '<i class = "fi-torso fi-small"></i>Профиль', :link => user_path(current_user)}]
+    return [
+              {
+                name: 'Диалоги',
+                icon: 'comments', 
+                link: "/conversations", 
+                access: user_type == 'super_admin'
+              },
+              {
+                name: 'Пилоты', 
+                icon: "torsos-all",
+                link: '/pilots'
+              },
+              {
+                name: 'Профиль', 
+                icon: "torso",
+                link: user_path(current_user)
+              }
+            ]
   end
 	def user_session_menu(b)
+    #'<i class = "fi-comments fi-small"></i><span>Диалоги</span>'
     v = ''
 		b.each do |i|
-			v += (current_page?(i[:link]))? "<li id = 'c_nav_li' link_to = '#{i[:link]}'>#{i[:name]}</li>" : "<li link_to = '#{i[:link]}'>#{i[:name]}</li>" if i[:access].nil? || i[:access] == true
+			v += "<li #{"id = 'c_nav_li'" if current_page?(i[:link])}><a href = '#{i[:link]}'><i class = \"fi-#{i[:icon]} fi-small\"></i><span class = 'show-for-medium'>#{i[:name]}</span></a></li>" if i[:access].nil? || i[:access] == true
 		end
-		return "<ul class = \"float-right\" id = 'userMenu'>#{v}</ul>"
+		return "#{v}"
 	end
-
-	def topMainMenu #меню в шапке сайта
+  def main_menu #присваивается глобальной переменной @main_menu в функции define_action в steps_helper 
 		value = ""
 		primaryMenuItems.each do |item|
-			value += "<a href = '#{item[:link]}'><li id = '#{is_selected(item)}'><span>#{item[:name]}</span></li></a>"
+			value += "<li #{is_selected(item)}><a href = '#{item[:link]}'><span>#{item[:name]}</span></a></li>"
 		end
-		return "<ul>#{value}</ul>"
-	end
-	def bottomMainMenu
-		value = ""
-		primaryMenuItems.each do |item|
-			value += "<a href = '#{item[:link]}'><li><span>#{item[:name]}</span></li></a>"
-		end
-		
-		return "<ul>#{value}</ul>"
+		return "#{value}"
   end
+	
 	def is_selected(item)
 			if @curMenuItem == item[:name] || current_page?(item[:link])
-				return 'c_nav_li' 
+				return 'id = "c_nav_li"' 
 			end
 	end
   

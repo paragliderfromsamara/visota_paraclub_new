@@ -22,7 +22,7 @@
 function my_functions()
 	{
 		var enteredLi, leftLi; //для управления главным меню
-		
+		$(document).foundation();
         Dropzone.autoDiscover = false;
         Dropzone.options.myAwesomeDropzone = false;
         eventRotator();

@@ -101,49 +101,7 @@ ul.myBut
     margin:0px;
     color: #898f99;
 }
-#ses_p 
-{
-    ul#userMenu 
-    {
-    	list-style: none; 
-        float: right; 
-        position: relative;
-        top: 10px;
-        li{
-            float: left; 
-            font-size: 12px; 
-            padding: 4px 15px 4px 15px;
-            cursor:pointer;
-            @include animation($time_1);
-            color: #afafaf;
-          }
-       li:hover, li#c_nav_li
-          {
-              color: grey;
-              text-decoration:underline;
-          }
-          i{padding-right:3px;}
-    }
-    .sesLink, .sesText
-        {
-            font-size: 12px;
-            padding: 0px;
-            margin:0px;
-            text-decoration:none;
-            color: #898f99;
-        }
-    #sesText
-        {
-            border-radius: 8px;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #afc5d1;
-            width: 130px;
-            font-size: 12px;
-            padding: 5px;
-        }
-    .sesLink:hover {text-decoration:underline;}
-}
+
 
 #mLogo 
 {

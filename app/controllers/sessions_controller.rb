@@ -2,6 +2,7 @@ class SessionsController < ApplicationController
   def new
 	 @title = @header = 'Вход на сайт'
    @hideSesPanel = true
+   render layout: false if params[:nolayout] == "true" 
   end
 
   def create

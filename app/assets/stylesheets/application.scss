@@ -64,7 +64,12 @@ $global-width: 1100px;
 @include foundation-float-classes;
 @include foundation-grid;
 @include foundation-typography;
-//@include foundation-button;
+@include foundation-menu;
+@include foundation-title-bar;
+//@include foundation-top-bar;
+@include foundation-menu-icon;
+
+@include foundation-button;
 //@include foundation-forms;
 //@include foundation-thumbnail;
 //@include foundation-menu;
@@ -74,8 +79,9 @@ $global-width: 1100px;
 //@include foundation-tabs;
 //@include foundation-badge;
 //@include foundation-orbit;
-//@include foundation-reveal;
-//@include foundation-close-button;
+@include foundation-reveal;
+@include foundation-close-button;
+@include foundation-media-object;
 
 #top_photo, #top 
 {
@@ -146,6 +152,227 @@ html.turbolinks-progress-bar::before {
     width: 80px;
     height:10px;
 }
+
+
+
+html, body, div, span, h1, h2, h3, h4, h5, h6, p, img, ul, li, fieldset, form, label { margin: 0; padding: 0; border: 0; outline: 0; font-size: 100%; vertical-align: baseline; background: transparent; border-style: solid;}
+ol, ul { list-style: none; }
+hr {margin: 0;}
+
+.tb-pad-s {padding: 10px 0 10px 0;}
+.tb-pad-sm {padding: 20px 0 20px 0;}
+.tb-pad-m {padding: 30px 0 30px 0;}
+.tb-pad-ml {padding: 45px 0 45px 0;}
+.tb-pad-l {padding: 60px 0 60px 0;}
+
+/*mainMenu*/
+
+
+	#siteName
+	{
+        color: white;
+        font-family: $font_family_1; font-size: 3em;
+        padding: 0;
+        margin: 0;
+        height:60px;
+    }
+    #aboutClubLink
+    {
+        color: white;
+        position: relative;
+        text-align: center;
+        border-color: white;
+        border-width: 1px;
+        border-radius: 30px;
+        margin-top: 35px;
+        cursor:pointer;
+        float: left;
+        p 
+        {
+            padding: 15px 24px 15px 24px;
+            font-size: 0.93em;
+            font-family: ubuntu_light, sans-serif;
+        }
+        a {
+            text-decoration: none; color:white;
+        }
+        div{
+            position:absolute; width: 100%; height:100%; background-color: #ffffff; border-radius: 30px; @include my_opacity(0);@include animation($time_1);
+        }
+        div:hover {@include my_opacity(0.2);}
+    }
+    #bottomClubName 
+      {
+        color: white; font-family: $font_family_5; font-size: 1.125em; vertical-align:middle;
+    }
+	.main-menu
+    {
+		z-index: 550;
+        ul
+        {
+            list-style: none;
+            li
+            {
+        		position: relative;
+        		display: inline-block;
+                cursor:pointer;
+                a
+                {
+                    position: relative;
+                    display: block;
+                    text-decoration: none;
+                } 
+            }
+        }
+    }
+    #responsive
+    {
+        background-color: darken($primary-color, 15%);
+    }
+    #responsive-toggle-menu
+    {
+        background-color: darken($primary-color, 22%);
+        a
+        {
+            color: white;
+            padding-left: 8px;
+            padding-right:8px;
+            padding-bottom: 8px;
+            padding-top:8px;
+        }
+        li:hover
+        {
+          background-color: darken($primary-color, 10%);  
+        }
+        #c_nav_li
+        {
+          background-color: darken($primary-color, 16%);   
+        }
+        li{display: block;}
+    }
+    #mainMenu { 
+        float:right;
+        height: 40px; 
+		li {
+            font-family: $font_family_1; 
+			color: black; 	
+            font-size: 1em;
+		   }
+        li:hover {span {color: $main_color;}}
+		#c_nav_li {	
+
+                            border-width: 1px;
+                            border-radius: 16px;
+                            border-color:$main_color;     
+					a {
+                        color: $main_color;
+                  		padding-left: 15px;
+                  		padding-right: 15px;
+                  		padding-top: 6px;
+                  		padding-bottom: 6px;
+                      }
+                  }	
+			
+		a:hover {
+					color: $main_color; 
+				  }
+		a {
+      		padding-left: 16px;
+      		padding-right: 16px;
+      		padding-top: 6px;
+      		padding-bottom: 6px;
+			color: black;
+		  }
+          
+	}
+	#bottomMenu { 
+		//height: 40px; 
+		li {
+    		color: white; 
+    		font-family: $font_family_5; 
+    		font-size: 1.125em; 
+    		z-index: 500;
+      		margin-left: 12px;
+      		margin-right: 12px;
+      		a {
+      			color: white;
+                padding-bottom: 7px;
+      		  }	
+		  }
+          li:hover
+          {
+  			border-bottom-width: 2px;
+  			border-bottom-color:white; 
+          }
+	}
+
+/*mainMenu end*/
+/*user session menu*/    
+    #ses_p 
+    {
+        ul#userMenu 
+        {
+        	list-style: none; 
+            float: right; 
+            position: relative;
+            li{
+                float: left; 
+                font-size: 12px; 
+                padding: 0px 15px 0px 15px;
+                cursor:pointer;
+            
+                a
+                {
+                    @include animation($time_1);
+                    color: #afafaf;
+                }
+              }
+           li:hover, li#c_nav_li
+              {
+                  a
+                  {
+                      color: gray;
+                      span
+                      {
+                          text-decoration:underline;
+                      }
+                  }
+              }
+              i{padding-right:3px;}
+        }
+        .sesLink, .sesText
+            {
+                font-size: 12px;
+                padding: 0px;
+                margin:0px;
+                text-decoration:none;
+                color: #898f99;
+            }
+        #sesText
+            {
+                border-radius: 8px;
+                border-width: 1px;
+                border-style: solid;
+                border-color: #afc5d1;
+                width: 130px;
+                font-size: 12px;
+                padding: 5px;
+            }
+        .sesLink:hover {text-decoration:underline;}
+    }
+    
+    /*foundation_icons*/
+    .fi-small {font-size: 12px;}
+    .fi-medium {font-size: 18px;}
+    .fi-large {font-size: 24px;}
+    .fi-largest {font-size: 32px;}
+    .fi-grey {color: gray;}
+    .fi-blue {color: $main_color;}
+    .fi-float-left {display: inline-block; padding-left:10px;}
+    .fi-float-right {float: right;}    
+
+
+//----удалить по завершению
 /*  SECTIONS  */
 .section {
 	clear: both;
@@ -213,138 +440,3 @@ html.turbolinks-progress-bar::before {
 .span_1_of_12 {
   	width: 7.875%;
 }
-
-
-html, body, div, span, h1, h2, h3, h4, h5, h6, p, img, ul, li, fieldset, form, label { margin: 0; padding: 0; border: 0; outline: 0; font-size: 100%; vertical-align: baseline; background: transparent; border-style: solid;}
-ol, ul { list-style: none; }
-hr {margin: 0;}
-
-.tb-pad-s {padding: 10px 0 10px 0;}
-.tb-pad-sm {padding: 20px 0 20px 0;}
-.tb-pad-m {padding: 30px 0 30px 0;}
-.tb-pad-ml {padding: 45px 0 45px 0;}
-.tb-pad-l {padding: 60px 0 60px 0;}
-
-/*mainMenu*/
-
-
-	#siteName
-	{
-        color: white;
-        font-family: $font_family_1; font-size: 3em;
-        padding: 0;
-        margin: 0;
-        height:60px;
-    }
-    #aboutClubLink
-    {
-        color: white;
-        position: relative;
-        text-align: center;
-        border-color: white;
-        border-width: 1px;
-        border-radius: 30px;
-        margin-top: 35px;
-        cursor:pointer;
-        float: left;
-        p 
-        {
-            padding: 15px 24px 15px 24px;
-            font-size: 0.93em;
-            font-family: ubuntu_light, sans-serif;
-        }
-        a {
-            text-decoration: none; color:white;
-        }
-        div{
-            position:absolute; width: 100%; height:100%; background-color: #ffffff; border-radius: 30px; @include my_opacity(0);@include animation($time_1);
-        }
-        div:hover {@include my_opacity(0.2);}
-    }
-    #bottomClubName 
-      {
-        color: white; font-family: $font_family_5; font-size: 1.125em; vertical-align:middle;
-    }
-	#mainMenu { 
-		height: 40px; 
-		z-index: 550;
-        float:right;
-		ul
-		{
-			list-style: none; 
-		}
-		li {
-			@include menuLi;
-			color: black; 	
-    		padding-left: 16px;
-    		padding-right: 16px;
-    		padding-top: 7px;
-    		padding-bottom: 8px;	
-            font-size: 1em;
-		   }
-        li:hover {span {color: $main_color;}}
-		#c_nav_li {	border-width: 1px;
-    		padding-left: 15px;
-    		padding-right: 15px;
-    		padding-top: 6px;
-    		padding-bottom: 7px;
-            border-radius: 16px;
-					span {color: $main_color;}
-					border-color:$main_color; 
-                  }	
-			
-		span:hover {
-					color: $main_color; 
-				  }
-		a {
-			text-decoration: none;
-			color: black;
-		  }
-          
-	}
-	#bottomMenu { 
-		z-index: 550;
-		ul
-			{
-				list-style: none; 
-			}
-		
-		li {
-    		position: relative;
-    		float: left; 
-    		color: white; 
-    		font-family: $font_family_5; 
-    		font-size: 1.125em; 
-    		cursor:pointer; 
-    		padding-left: 12px;
-    		padding-right: 12px;
-    		z-index: 500;
-    		@include animation($time_1);		
-		  }
-			
-		span {
-				padding-bottom: 7px;
-				width: 20px;
-			}
-			
-		span:hover {
-					border-bottom-width: 2px;
-					border-bottom-color:white; 
-				  }
-		a {
-			text-decoration: none;
-			color: white;
-		  }
-	}
-
-/*mainMenu end*/
-    
-    /*foundation_icons*/
-    .fi-small {font-size: 12px;}
-    .fi-medium {font-size: 18px;}
-    .fi-large {font-size: 24px;}
-    .fi-largest {font-size: 32px;}
-    .fi-grey {color: grey;}
-    .fi-blue {color: $main_color;}
-    .fi-float-left {display: inline-block; padding-left:10px;}
-    .fi-float-right {float: right;}    

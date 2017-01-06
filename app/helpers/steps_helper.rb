@@ -4,6 +4,8 @@ module StepsHelper
   end
 
 	def define_action
+    @main_menu = main_menu.html_safe
+    @user_menu = user_session_menu(signed_in? ? (wheather_top_but + user_top_buttons) : wheather_top_but).html_safe
         #ThemeStep.get_from_step_table
 		@page_params = {:part_id => 0, :page_id => 0, :entity_id => 0} if @page_params == nil
 		@curTopImage = topImages.last
