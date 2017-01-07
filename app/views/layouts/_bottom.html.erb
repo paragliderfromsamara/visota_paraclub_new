@@ -1,0 +1,21 @@
+<div id = 'bottom'>
+	<div id = 'test'></div>
+	<% if controller.controller_name == 'pages' and controller.action_name != 'visota_life' and controller.action_name != 'feed' and controller.action_name != 'search' %>
+        <%= render 'pages/social_links' %>
+		<%= render 'pages/phones_and_adresses' if controller.action_name != 'contacts' %>
+	<% end %>
+	<div id = 'footer'>
+		<div class = 'row tb-pad-ml' >
+			<div class = 'medium-9 columns show-for-medium'>
+				<div class = "main-menu" id = 'bottomMenu'>
+                    <ul>
+                        <%= @main_menu %> 
+                    </ul>
+				</div>
+			</div>
+			<div class = 'small-12 medium-3 columns'>
+			   <p id = 'bottomClubName'> © СПК "Высота", <%= Time.now.year %></p>
+			</div>
+		</div>
+	</div>
+</div>
