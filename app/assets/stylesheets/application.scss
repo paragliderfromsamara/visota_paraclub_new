@@ -73,7 +73,6 @@ $global-width: 1100px;
 //@include foundation-forms;
 //@include foundation-thumbnail;
 //@include foundation-menu;
-//@include foundation-top-bar;
 //@include foundation-dropdown-menu;
 //@include foundation-table;
 //@include foundation-tabs;
@@ -92,7 +91,225 @@ $global-width: 1100px;
     margin-right: auto; 
     z-index: 1; 
     background-position:center;
+    background-size: cover;
 }
+#top
+{
+    #logo-column
+    {
+        margin-top:23px; 
+    }
+    #menu-column
+    {
+        padding: 0 0 0 0; 
+        margin-top:56px;
+    }
+    @include breakpoint(small only) {
+        #logo-column
+        {
+            margin-top:5px; 
+        }
+        #site-name-column
+        {
+            padding-top: 0; 
+            margin-top:28px;
+            .site-name li
+            {
+                height:20px;
+                font-size: 1em;
+                display: inline-block;
+            }
+        }
+        #aboutClubLink
+        {
+            border-radius: 30px;
+            margin-top: 50px;
+            width:100%;
+            p 
+            {
+                padding: 15px 0px 15px 0px;
+                font-size: 0.9em;
+            }
+            div
+            {
+               border-radius: 30px; 
+            }
+        }
+
+      
+    }
+    @include breakpoint(medium only) {
+        #logo-column
+        {
+            padding-top: 0; 
+            margin-top:5px; 
+        }
+        #menu-column
+        {
+           margin-top:18px; 
+        }
+        #site-name-column
+        {
+            margin-top:25px;
+            .site-name li
+            {
+                height:30px;
+                font-size: 1.5em;
+                display: inline-block;
+                padding-right: 0.25em;
+            }
+        }
+        #aboutClubLink
+        {
+            border-radius: 30px;
+            margin-top: 30px;
+            p 
+            {
+                padding: 15px 24px 15px 24px;
+                font-size: 0.93em;
+            }
+            div
+            {
+               border-radius: 30px; 
+            }
+        }
+        #mainMenu 
+        {
+            li
+            {
+                font-size: 0.85em;
+            }
+    		a {
+          		padding: 5px 10px 5px 10px;
+    		  }
+            #c_nav_li
+            {
+                a
+                {
+                    padding: 5px 9px 5px 9px;
+                }
+            }
+        }
+      
+    }
+    @include breakpoint(large) {
+        #site-name-column
+        { 
+            margin-top:50px;
+            .site-name li
+            {
+                height:60px;
+                font-size: 3em;
+                display: block; 
+            }
+        }
+        #aboutClubLink
+        {
+            border-radius: 30px;
+            margin-top: 35px;
+            p 
+            {
+                padding: 15px 24px 15px 24px;
+                font-size: 0.93em;
+            }
+            div
+            {
+               border-radius: 30px; 
+            }
+        }
+        #mainMenu 
+        {
+            li
+            {
+                font-size: 1em;
+            }
+    		a {
+          		padding: 6px 16px 6px 16px;
+    		  }
+            #c_nav_li
+              {
+                  a
+                  {
+                      padding: 6px 15px 6px 15px;
+                  }
+              }
+        }
+
+    }
+    #site-name-column
+    {
+        
+        .site-name li
+        {
+            color: white;
+            font-family: $font_family_1; 
+            //padding: 0;
+            margin: 0;
+            
+        }
+        
+    }
+    #mainMenu { 
+        float:right;
+        height: 40px; 
+		li {
+            font-family: $font_family_1; 
+			color: black; 	
+            //font-size: 1em;
+		   }
+        li:hover {span {color: $main_color;}}
+		#c_nav_li {	
+
+                            border-width: 1px;
+                            border-radius: 16px;
+                            border-color:$main_color;     
+					a {
+                        color: $main_color;
+                        //padding: 6px 15px 6px 15px;
+                      }
+                  }	
+			
+		a {
+      		//padding: 6px 16px 6px 16px;
+			color: black;
+            &:hover
+            {
+                color: $main_color;
+            }
+		  }
+	}
+    #mLogo 
+    {
+        cursor:pointer;
+    }
+    #aboutClubLink
+    {
+        color: white;
+        position: relative;
+        text-align: center;
+        border-color: white;
+        border-width: 1px;
+        //border-radius: 30px;
+        //margin-top: 35px;
+        cursor:pointer;
+        float: left;
+        p 
+        {
+            //padding: 15px 24px 15px 24px;
+            //font-size: 0.93em;
+            font-family: ubuntu_light, sans-serif;
+        }
+        a {
+            text-decoration: none; color:white;
+        }
+        div{
+            position:absolute; width: 100%; height:100%; background-color: #ffffff; /*border-radius: 30px;*/ @include my_opacity(0);@include animation($time_1);
+        }
+        div:hover {@include my_opacity(0.2);}
+    }
+}
+
+
 #middle 
 {
     position: relative; 
@@ -168,43 +385,12 @@ hr {margin: 0;}
 /*mainMenu*/
 
 
-	#siteName
-	{
-        color: white;
-        font-family: $font_family_1; font-size: 3em;
-        padding: 0;
-        margin: 0;
-        height:60px;
-    }
-    #aboutClubLink
-    {
-        color: white;
-        position: relative;
-        text-align: center;
-        border-color: white;
-        border-width: 1px;
-        border-radius: 30px;
-        margin-top: 35px;
-        cursor:pointer;
-        float: left;
-        p 
-        {
-            padding: 15px 24px 15px 24px;
-            font-size: 0.93em;
-            font-family: ubuntu_light, sans-serif;
-        }
-        a {
-            text-decoration: none; color:white;
-        }
-        div{
-            position:absolute; width: 100%; height:100%; background-color: #ffffff; border-radius: 30px; @include my_opacity(0);@include animation($time_1);
-        }
-        div:hover {@include my_opacity(0.2);}
-    }
+
+
     #bottomClubName 
       {
         color: white; font-family: $font_family_5; font-size: 1.125em; vertical-align:middle;
-    }
+      }
 	.main-menu
     {
 		z-index: 550;
@@ -250,41 +436,7 @@ hr {margin: 0;}
         }
         li{display: block;}
     }
-    #mainMenu { 
-        float:right;
-        height: 40px; 
-		li {
-            font-family: $font_family_1; 
-			color: black; 	
-            font-size: 1em;
-		   }
-        li:hover {span {color: $main_color;}}
-		#c_nav_li {	
-
-                            border-width: 1px;
-                            border-radius: 16px;
-                            border-color:$main_color;     
-					a {
-                        color: $main_color;
-                  		padding-left: 15px;
-                  		padding-right: 15px;
-                  		padding-top: 6px;
-                  		padding-bottom: 6px;
-                      }
-                  }	
-			
-		a:hover {
-					color: $main_color; 
-				  }
-		a {
-      		padding-left: 16px;
-      		padding-right: 16px;
-      		padding-top: 6px;
-      		padding-bottom: 6px;
-			color: black;
-		  }
-          
-	}
+    
 	#bottomMenu { 
 		//height: 40px; 
 		li {

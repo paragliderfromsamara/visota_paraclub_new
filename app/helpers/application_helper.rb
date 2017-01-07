@@ -122,18 +122,20 @@ end
   def topImageMainPage
     path = "/sliderImages/main_"
     arr = [1, 2]
-    return {link: "#{path}#{arr.shuffle.first}.jpg", BlockHeight: 531}
+    v = arr.shuffle.first
+    return {link: "[#{path}#{v}_small.jpg, small],[#{path}#{v}_medium.jpg, medium],[#{path}#{v}_large.jpg, large]", BlockHeight: 531}
   end
+  
 	def topImages
 		path = "/sliderImages/"
 		arr = [
-				{link: "#{path}2.jpg", BlockHeight: 397},
-				{link: "#{path}3.jpg", BlockHeight: 397},
-				{link: "#{path}4.jpg", BlockHeight: 397},
-				{link: "#{path}5.jpg", BlockHeight: 397},
-        {link: "#{path}6.jpg", BlockHeight: 397},
-        {link: "#{path}7.jpg", BlockHeight: 422},
-        {link: "#{path}default.png", BlockHeight: 296}
+				{link: "[#{path}2_small.jpg, small],[#{path}2_medium.jpg, medium],[#{path}2_large.jpg, large]", BlockHeight: 397},
+        {link: "[#{path}3_small.jpg, small],[#{path}3_medium.jpg, medium],[#{path}3_large.jpg, large]", BlockHeight: 397},
+        {link: "[#{path}4_small.jpg, small],[#{path}4_medium.jpg, medium],[#{path}4_large.jpg, large]", BlockHeight: 397},
+        {link: "[#{path}5_small.jpg, small],[#{path}5_medium.jpg, medium],[#{path}5_large.jpg, large]", BlockHeight: 397},
+        {link: "[#{path}6_small.jpg, small],[#{path}6_medium.jpg, medium],[#{path}6_large.jpg, large]", BlockHeight: 397},
+        {link: "[#{path}7_small.jpg, small],[#{path}7_medium.jpg, medium],[#{path}7_large.jpg, large]", BlockHeight: 422},
+        {link: "[#{path}default_small.png, small],[#{path}default_medium.png, medium],[#{path}default_large.png, large]", BlockHeight: 296}
 			  ]
 		return arr
   end
@@ -320,19 +322,7 @@ end
 		end
 		return "<div style = 'display: none; width: #{item[:link_list_width]};' class = 'menu_drop_list'><ul>#{value}</ul></div>"
 	end
-#slider
-	def topSlider
-		"
-						<div class='slider'>
-						<ul>
-							<li><img src='/sliderImages/1.jpg' alt=''></li>
-							<li><img src='/sliderImages/2.jpg' alt=''></li>
-							<li><img src='/sliderImages/3.jpg' alt=''></li>
-						</ul>
-						</div>"
-	end
-	
-#slider end
+
 	def topic_link_list #Формирует массив для формирования выпадающего списка.
 		val_arr = []
 		topics = Topic.all(:order => 'name ASC')

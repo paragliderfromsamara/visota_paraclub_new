@@ -19,10 +19,49 @@
 //= require turbolinks
 //= require_tree
 
+(function() {
+    var appReady = function() {$(document).foundation(); $('img, style').load(function(){$(this).fadeIn(1000);}); my_functions(); console.log(Foundation.MediaQuery.current);resizeTopBlock();};
+
+    
+    
+    $(document).ready(appReady);
+    $(document).on('page:load', appReady);
+    $(window).resize(function(){resizeTopBlock();});
+}).call(this);   
+
+function resizeTopBlock()
+{
+    var f = function() {
+        var baseHeight, baseWidth, cur, t, w;
+         t = document.getElementById("top");
+         if (t === null) {
+           return;
+         }
+         if (!t.hasAttribute("kra-base-height")) {
+           console.error("Отсутствует атрибут \"kra-base-height\" у элемента top");
+           return;
+         }
+         t = $(t);
+         cur = Foundation.MediaQuery.current;
+         baseHeight = parseInt(t.attr("kra-base-height"));
+         if (cur === "small") {
+           w = 600;
+         } else if (cur === "medium") {
+           w = 1000;
+         } else {
+           w = 1600;
+         }
+         baseWidth = 1600;
+         $(t).height(w / (baseWidth / baseHeight));
+         console.log(cur);
+    };
+    setTimeout(f, 10); //если делать иначе при переключени в полноэкранный режим, не будет изменяться корректно
+
+}
+
 function my_functions()
 	{
 		var enteredLi, leftLi; //для управления главным меню
-		$(document).foundation();
         Dropzone.autoDiscover = false;
         Dropzone.options.myAwesomeDropzone = false;
         eventRotator();

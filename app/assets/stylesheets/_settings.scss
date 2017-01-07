@@ -47,6 +47,7 @@ $foundation-palette: (
   warning: #ffae00,
   alert: #cc4b37,
   addition: #afc5d1,
+  white: #ffffff,
 );
 
 @mixin animation($t)
@@ -62,10 +63,13 @@ $foundation-palette: (
 //button
 $button-radius: 16px;
 $button-padding: 0.5em 1.5em;
+$button-hollow-hover-lightness: -4%;
 #open-session-menu-but, #close-session-but
 {
     margin: 0;
 }
+
+
 
 //grid
 $grid-column-gutter: (small: 15px, medium: 20px);

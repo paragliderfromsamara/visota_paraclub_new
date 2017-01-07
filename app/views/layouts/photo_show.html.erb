@@ -50,7 +50,9 @@
                    
                 </div>
                 <div id = "mmPhPath" style = "margin:0; padding:0;" class = "col span_8_of_12">
-                    <%= topMainMenu.html_safe %>
+                    <ul>
+                       <%= @main_menu %> 
+                    </ul>
                 </div>
                 <div id = "mmPhPath" style = "margin:0; padding:0;" class = "col span_2_of_12">
                     <ul>
@@ -65,22 +67,6 @@
 		<%= yield %>
         <div style = "position: relative; width: 100%;" id = "footerMark"></div>
 	</div>
-	<div id = 'bottom' style = 'width: 100%;'>
-		<div id = 'test'></div><br />
-    	<div id = 'footer'>
-    		<div class = 'm_1000wh'  style = 'top: 30%;'>
-    			<div class = 'section group'>
-    				<div class = 'col span_9_of_12'>
-    					<div id = 'bottomMenu'>
-    					  <%= bottomMainMenu.html_safe %>
-    					</div>
-    				</div>
-    				<div class = 'col span_3_of_12'>
-    				   <p id = 'bottomClubName'> © СПК "Высота", 2000-<%= Time.now.year %></p>
-    				</div>
-    			</div>
-    		</div>
-    	</div>
-    </div>
+    <%= render "layouts/bottom" %>
 </body>
 </html>

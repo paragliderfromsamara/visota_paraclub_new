@@ -7,6 +7,7 @@
   <meta property="og:title" content="<%= my_title %>">
   <meta property="og:image" content="<%= page_image %>">
   <meta property="og:description" content="<%= meta_content %>">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -14,8 +15,7 @@
   
   <%= vk_like_vidget[:script].html_safe %>
     <script type = 'text/javascript'>
-        var ready = function(){
-            $('img, style').load(function(){$(this).fadeIn(1000);}); my_functions();  <%= js_functions %> };
+        var ready = function(){<%= js_functions %>};
         $(document).ready(ready);
         $(document).on('page:load', ready);
     </script>
@@ -61,7 +61,6 @@
                     <button style = "margin-top: 12px;" class="menu-icon" type="button" data-toggle></button>  <div style = "margin-top:10px;"class="title-bar-title">Меню</div>
                 </li>
             </ul>
-
         </div>
         <div class = "small-9 columns">
             <ul class="menu align-left float-right">
@@ -76,8 +75,6 @@
             </ul>
         </div>
     </div>
-
-
 </div>
 <div id = "responsive-toggle-menu" class = "main-menu hide-for-medium">
     <ul>
@@ -132,33 +129,39 @@
             <% end %>
     </div>
 <% end %>
-<div id = 'top' style = 'height: <%= @curTopImage[:BlockHeight] %>px; <% if @curTopImage[:link] != 'none' %>background-image:url("<%= @curTopImage[:link] %>");<% end %>'>
-		<div class = 'row'>
-			<div class = 'small-3 columns' style = 'margin-top:23px; '>
+<div id = 'top' data-interchange = "<%= @curTopImage[:link] %>" kra-base-height = "<%= @curTopImage[:BlockHeight] %>">
+	<div id = "top-info-container" class = 'row'>
+			<div class = 'small-3 columns' id = 'logo-column'>
                 <%= image_tag "logo.png", id: "mLogo", link_to: root_path, height: "130px" %>	
 			</div>
-			<div class = 'small-9 columns' style = 'padding: 0 0 0 0; margin-top:56px;'>
-				<div id = "mainMenu" class = "main-menu show-for-medium">
+			<div class = 'small-9 columns show-for-medium' id = 'menu-column'>
+				<div id = "mainMenu" class = "main-menu">
                     <ul>
                        <%= @main_menu %> 
                     </ul>
 				</div>
-			</div>                       
-		</div>
-		<% if controller.controller_name == 'pages' &&  controller.action_name == 'index' %>
-			<div class = 'row show-for-medium'>
-				<div class = 'medium-6 columns' style = 'padding: 0 0 0 0; margin-top:50px;'>
-					<div style = 'position: relative;'>
-						<p id = 'siteName'>САМАРСКИЙ</p>
-						<p id = 'siteName'>ПАРАПЛАНЕРНЫЙ</p>
-						<p id = 'siteName'>КЛУБ</p>
-						<div id = 'aboutClubLink'>
-							<a href = '/about_us'><div></div><p>УЗНАТЬ О КЛУБЕ</p></a>   
-						</div>
-					</div>
-				</div>             
+			</div>  
+            <% if controller.controller_name == 'pages' &&  controller.action_name == 'index' %>
+			<div id = "site-name-column" class = 'small-9 medium-12 column'>
+                    <ul class = 'site-name'>
+                        <li>
+                            САМАРСКИЙ
+                        </li>
+                        <li>
+                            ПАРАПЛАНЕРНЫЙ
+                        </li>
+                        <li>
+                            КЛУБ
+                        </li>
+                    </ul>
 			</div>
-		<% end %>
+            <div class = 'small-12 column' >
+                <div id = 'aboutClubLink'>
+                    <a href = '/about_us'><div></div><p>УЗНАТЬ О КЛУБЕ</p></a>   
+                </div>
+            </div>    
+            <% end %>                 
+   </div>
 </div>
 <a name = 'cs'></a>
 <div id = 'middle'>
@@ -168,27 +171,6 @@
     
     <div style = "position: relative; width: 100%;" id = "footerMark"></div>
 </div>
-
-<div id = 'bottom'>
-	<div id = 'test'></div>
-	<% if controller.controller_name == 'pages' and controller.action_name != 'visota_life' and controller.action_name != 'feed' and controller.action_name != 'search' %>
-        <%= render 'pages/social_links' %>
-		<%= render 'pages/phones_and_adresses' if controller.action_name != 'contacts' %>
-	<% end %>
-	<div id = 'footer'>
-		<div class = 'row tb-pad-ml' >
-			<div class = 'medium-9 columns show-for-medium'>
-				<div class = "main-menu" id = 'bottomMenu'>
-                    <ul>
-                        <%= @main_menu %> 
-                    </ul>
-				</div>
-			</div>
-			<div class = 'small-12 medium-3 columns'>
-			   <p id = 'bottomClubName'> © СПК "Высота", <%= Time.now.year %></p>
-			</div>
-		</div>
-	</div>
-</div>
+<%= render "layouts/bottom" %>
 </body>
 </html>

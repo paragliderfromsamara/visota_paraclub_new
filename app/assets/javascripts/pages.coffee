@@ -54,25 +54,13 @@ bottomControl = ()->
     scrollControl
     new_middle_h
     
-wheatherPanel = ()->
-    cont = $('.right_menu #cont')
-    h_wr = cont.find('#h_wr')
-    $('#w_but').click ()-> 
-        wh_c = $('.right_menu #wh_cont')
-        h_wr.html(wh_c.html())
-        h_wr.width(wh_c.width())
-        h_wr.show(300)
-        true
-    $('.right_menu').mouseleave ()->
-        h_wr.hide(300)
-        h_wr.html('')
-
 initSearchForm = (sForm)->
     sForm = $(sForm)
     sBut = sForm.find('.myBut')
     sBut.click ()->
         sBut.find('a').attr('href', "/search?" + sForm.serialize())
         #alert sForm.serialize() #sBut.find('a').attr('href', "/search?" + sForm.serialize())
+        
 adaptWheatherTable = (whTable)->
     whTable = $(whTable)
     whTable.find("img").each ()->
@@ -89,9 +77,9 @@ r = ()->
     linksUpdater()
     whTable = document.getElementById('forecast')
     if whTable isnt null then adaptWheatherTable(whTable)
-    $(document).click ()-> bottomControl()
-    $(document).mouseover ()-> bottomControl()
-    $(window).resize ()-> bottomControl()
+    #$(document).click ()-> bottomControl()
+    #$(document).mouseover ()-> bottomControl()
+    #$(window).resize ()-> bottomControl()                 
     if $("#notice").text.length > 0 then setTimeout (()-> $("#notice").fadeOut(500)), 6000
     sForm = document.getElementById("searchForm")
     if sForm isnt null then initSearchForm(sForm)
