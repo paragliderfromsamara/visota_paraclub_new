@@ -195,3 +195,30 @@ span.blue_undline{border-bottom: 3px solid #176bb5; padding-bottom: 14px;}
         padding: 25px 0 25px 0;
     }
 }
+
+//paragliding
+#pages-paragliding-block-1
+{
+    padding: 50px 0 25px 0;
+    @include breakpoint(small only)
+    {
+        padding: 25px 0 12px 0;
+    }
+}
+
+#pages-paragliding-block-2
+{
+    padding: 25px 0 50px 0;
+    @include breakpoint(small only)
+    {
+        padding: 12px 0 25px 0;
+    }
+}
+#pages-paragliding-block-3
+{
+    padding: 50px 0 50px 0;
+    @include breakpoint(small only)
+    {
+        padding: 25px 0 25px 0;
+    }
+}
