@@ -3,6 +3,31 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 @import "application";
 
+p.quote-text, p.quote-author
+{
+    font-size: 1.25em;
+    @include breakpoint(small only)
+    {
+        font-size: 1.0em;
+    }
+    @include breakpoint(medium only)
+    {
+        font-size: 1.1em;
+    }
+     
+}
+p.quote-text 
+{
+    color: $link_color;
+    font-family:$font_family_6;
+}
+p.quote-author
+{
+    color: $link_color;
+    font-family:$font_family_1;
+}
+span.blue_undline{border-bottom: 3px solid #176bb5; padding-bottom: 14px;}
+
 #pages-index-block-1
 {
     padding: 78px 0 78px 0;
@@ -123,5 +148,50 @@
     @include breakpoint(medium only)
     {
         padding: 39px 0 39px 0;
+    }
+}
+// about_us
+#pages-about-block-1
+{
+    padding: 50px 0 50px 0;
+    @include breakpoint(small only)
+    {
+        padding: 15px 0 15px 0;
+        .columns
+        {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+    }
+    @include breakpoint(medium only)
+    {
+        padding: 25px 0 25px 0;
+    }
+}
+#pages-about-block-3
+{
+    padding-bottom: 50px;
+    #pages-about-sub-block-1
+    {
+        .columns
+        {
+            padding-bottom: 20px;
+        }
+    }
+    @include breakpoint(medium down)
+    {
+        padding-bottom: 0px;
+        .columns
+        {
+            padding-top: 25px;
+            padding-bottom: 25px;
+        }
+    }
+}
+#pages-about-block-4
+{
+    @include breakpoint(medium down)
+    {
+        padding: 25px 0 25px 0;
     }
 }
