@@ -1,0 +1,85 @@
+// Place all the styles related to the Votes controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+@import "application";
+
+#pages-index-block-1
+{
+    padding: 78px 0 78px 0;
+    .pages-club-funcs
+    {
+        @extend .central_field;
+        p
+        {
+            font-size: 0.9rem;
+        }
+        max-width: 300px; 
+        width: 100%;
+        background:white; 
+        text-align: center; 
+        border-bottom: 1px solid #e1e7eb; 
+        img 
+        {
+            width: 100%; 
+            height:auto; 
+            display: none;
+        }
+        div 
+        {
+            height: 50px;
+            margin: 0 10px 0 10px;
+        }
+    }
+    @include breakpoint(small only)
+    {
+        padding: 10px 0 10px 0;
+        .pages-club-funcs
+        {
+            max-width: 100%;
+            margin-top: 30px; 
+            p
+            {
+                font-size: 0.7rem;
+            }
+        }
+    }
+    @include breakpoint(medium only)
+    {
+        padding: 39px 0 39px 0;
+        .pages-club-funcs
+        {
+            p
+            {
+                font-size: 0.75rem;
+            }
+        }
+    }
+}
+
+#pages-index-block-2
+{
+    padding: 81px 0 81px 0; 
+    background-repeat: no-repeat; 
+    background-image: url("/files/davinci.jpg");
+    @include breakpoint(small only)
+    {
+        padding: 30px 0 30px 0;
+    }
+    @include breakpoint(medium only)
+    {
+        padding: 40px 0 40px 0;
+    }
+}
+
+#pages-index-block-3
+{
+    height:428px;
+    @include breakpoint(small only)
+    {
+        height:250px;
+    }
+    @include breakpoint(medium only)
+    {
+        height:300px;
+    }
+}

@@ -1,52 +1,34 @@
-<!-- 
-<% parallaxItems.each do |p| %>
-	<div class = 'pBox' id = '<%= p[:id] %>' style = '<%= p[:style].html_safe %>'>
-		<% if p[:bg_img] == true %>
-			<div class = 'pB-wrapper pB-wr-abs <%= p[:actioClass] %>' pb-speed = '<%= p[:speed] %>' pb-start-position = '<%= p[:startPosition] %>' style = '<%= p[:backgroundStyle] %>");'></div>
-		<% end %>
-		<div class = 'pB-content'>
-			<%= p[:html].html_safe %>
-		</div>
-	</div>
-<% end %>
-
- -->
-
 <div id = 'm_full' class = 'even'>
-    <div class = 'central_field' id = 'm_1000wh'>
-    <div class = 'section group' style = 'padding: 78px 0 78px 0'>
-        <div class = 'col span_4_of_12'>
-            <div class = 'central_field' style = 'width: 300px; background:white; text-align: center; border-bottom: 1px solid #e1e7eb; float: left;'>
-                <img src = '/files/learning.jpg' style = 'width: 100%; height:auto; display: none;' vspace = '0'>
-                <div style = 'height: 50px;'>
-                <p>Круглогодичное обучение <br />полётам на параплане</p>
+    <div id = "pages-index-block-1" class = 'row'>
+        <div class = 'small-6 medium-4 columns'>
+            <div class = 'pages-club-funcs'>
+                <img src = '/files/learning.jpg' vspace = '0'>
+                <div>
+                    <p>Круглогодичное обучение полётам на параплане</p>
                 </div>
             </div>
         </div>
-        <div class = 'col span_4_of_12'>
-            <div class = 'central_field' style = 'width: 300px; background:white; text-align: center; border-bottom: 1px solid #e1e7eb;'>
-                <img src = '/files/rent.jpg' style = 'width: 100%; height:auto; display: none;' vspace = '0'>
-                <div style = 'height: 50px;'>
-                    <p>Помощь в выборе нового оборудования <br />и аренда клубного</p>
+        <div class = 'small-6 medium-4 columns'>
+            <div class = 'pages-club-funcs'>
+                <img src = '/files/rent.jpg' vspace = '0'>
+                <div>
+                    <p>Помощь в выборе нового оборудования и аренда клубного</p>
                 </div>
-            </div>
-           
+            </div> 
         </div>
-        <div class = 'col span_4_of_12'>
-            <div class = 'central_field' style = 'width: 300px; background:white; text-align: center; border-bottom: 1px solid #e1e7eb; float: right;'>
-                <img src = '/files/tandem.jpg' style = 'width: 100%; height:auto; display: none;' vspace = '0'>
-                <div style = 'height: 50px;'>
-                    <p>Полёт с инструктором <br />без специальной подготовки</p>
+        <div class = 'small-6 small-offset-3 medium-offset-0 medium-4 columns end'>
+            <div class = 'pages-club-funcs'>
+                <img src = '/files/tandem.jpg' vspace = '0'>
+                <div>
+                    <p>Полёт с инструктором без специальной подготовки</p>
                 </div>
             </div>
         </div>               
     </div>
 </div>
-</div>
-<div id = 'm_full' style = 'background: white; '>
-    <div class = 'central_field' id = 'm_1000wh' style = 'height: 100%; '>
-        <div class = 'section group' style = 'padding: 81px 0 81px 0; background-repeat: no-repeat; background-image: url("/files/davinci.jpg");'>
-            <div class = 'col span_5_of_12'>
+<div id = 'm_full' style = 'background: white;'>
+    <div id = "pages-index-block-2" class = 'row'>
+            <div class = 'small-6 medium-5 columns'>
                  
                     <p style = 'font-size: 1.2em;'>ПАРАПЛАНЕРИЗМ</p>
                     <br />
@@ -55,41 +37,35 @@
                      <a href = '/paragliding' class = 'b_link' target = '_blank'><img src = '/files/arr.png'> Подробнее</a>
                  
             </div>
-            <div class = 'col span_1_of_12'>
-            </div>
-            <div class = 'col span_3_of_12'>
+            <div class = 'small-6 medium-4 large-3 large-offset-1 columns'>
                    <p class = 'quote-text'>«Раз испытав полет, твои глаза навечно будут устремлены в небо. Однажды там побывав, на всю жизнь ты обречен тосковать о нем»</p>
                    <br />
                    <p class = 'quote-author'>
                        <span class = 'blue_undline'>Леонардо д</span>а Винчи
                    </p>
             </div>
-            <div class = 'col span_1_of_12'>
-            </div>
-            <div class = 'col span_2_of_12'>     
+            <div class = 'medium-2 large-offset-1 columns hide-for-small-only'>     
                     <p>Мы считаем, что параплан может передавать невероятное чувство полета.</p>
                     <br />
                     <p>Мы искренне хотим, чтобы вы полюбили этот спорт так же, как и мы.</p>
             </div>               
         </div>
 </div>
-</div>
 
-<div class = 'pBox' id = 'pBlock_1' style = 'height:428px;'>
+<div class = 'pBox' id = 'pages-index-block-3'>
 
 			<div class = 'pB-wrapper pB-wr-abs pB-top-to-bot' pb-speed = '0.55' pb-start-position = 'over' style = 'background-image: url("/parallax_imgs/pBlock_1.jpg");height:1047px; background-position:center;'></div>
 
-		<div class = 'pB-content'>
-			
-    		<div class = 'central_field' style = 'width: 800px; height: 100%;'>
-    			<table style = 'width: 100%; height: 100%; color: white; font-size: 36pt;'>
+		<div class = 'row pB-content'>
+                <div class = "small-10 small-centered medium-8 columns" style = 'height: 100%;'>
+    			<table style = 'width: 100%; height: 100%;'>
     				<tr>
     					<td align = 'center' valign = 'middle'>
-    						ЕСЛИ У ТЕБЯ ЕСТЬ КРЫЛЬЯ, ПОЧЕМУ БЫ НЕ ЛЕТАТЬ?
+    						<span class = "pb-text">ЕСЛИ У ТЕБЯ ЕСТЬ КРЫЛЬЯ, ПОЧЕМУ БЫ НЕ ЛЕТАТЬ?</span>
     					</td>
     				</tr>
     			</table>
-    		</div>
+                </div>
 		</div>
 </div>
 
