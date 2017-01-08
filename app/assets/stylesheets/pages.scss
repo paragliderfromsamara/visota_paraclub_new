@@ -83,3 +83,32 @@
         height:300px;
     }
 }
+/*social icons*/
+#pages-social-menu
+{
+    padding: 20px 0 20px 0; 
+    margin: 0;
+    .social-icons
+    {
+        position: relative;
+        width: 90px;
+        height: 90px;
+        img
+        {
+            position: relative;
+        }
+        &.normal
+        {
+            display: block;
+            z-index: 100;
+        }
+        &.hovered
+        {
+            z-index: 99;
+        }
+    }
+}
+
+
+
+/*social icons end*/

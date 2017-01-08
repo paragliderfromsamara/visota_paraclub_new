@@ -70,16 +70,34 @@ linksUpdater = ()->
     $(".t_link").each ()-> if $(this).attr("link_to").indexOf('#') is -1 then $(this).attr("link_to", "#{$(this).attr('link_to')}#cs")
     $("#{i}").each(()-> 
         if $(this).attr('href') isnt undefined and this.id isnt 'user_site_link' then if $(this).attr('href').indexOf('#') is -1 then $(this).attr("href", "#{$(this).attr('href')}#cs")) for i in showAtMiddleLinksList
-    
+
+#подменяет social-icons svg картинки при наведении курсора 08-01-2017
+socialMenuEffectsInit = ()->
+    el = document.getElementById("pages-social-menu")
+    if el isnt null then el = $(el) else return
+    switchIcon = (f, e)->
+        t = if f then 300 else 0
+        e.find(if f then ".normal" else ".hovered").fadeOut(0, ()-> 
+                                    e.find(if !f then ".normal" else ".hovered").fadeIn(t)
+                                    if f then e.addClass("active") else e.removeClass("active")
+                                    )
+    eventAct = (e, isHover)->
+        el.find("a").each ()->
+            isAct = $(this).hasClass("active")
+            switchIcon((!isAct and isHover and this is e), $(this))
+            
+    el.find("a").mouseenter(()-> eventAct(this, true)) 
+    el.find("a").mouseleave(()-> eventAct(this, false))    
 
 r = ()->
     initScrollControl()
     linksUpdater()
+    socialMenuEffectsInit()
     whTable = document.getElementById('forecast')
     if whTable isnt null then adaptWheatherTable(whTable)
-    #$(document).click ()-> bottomControl()
-    #$(document).mouseover ()-> bottomControl()
-    #$(window).resize ()-> bottomControl()                 
+    $(document).click ()-> bottomControl()
+    $(document).mouseover ()-> bottomControl()
+    $(window).resize ()-> bottomControl()                 
     if $("#notice").text.length > 0 then setTimeout (()-> $("#notice").fadeOut(500)), 6000
     sForm = document.getElementById("searchForm")
     if sForm isnt null then initSearchForm(sForm)

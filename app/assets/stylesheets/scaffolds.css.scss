@@ -39,25 +39,7 @@ textarea {resize: none;}
 			 z-index: 9000;
 			}
 /*quickScroll end*/
-/*social icons*/
-.social-icons
-{
-    position: absolute;
-    width: 90px;
-    height: 90px;
-    top:45px;
-}
-.normal
-{
-    z-index: 100;
-}
-.normal:hover {@include my_opacity(0.0);}
-.hovered
-{
-    z-index: 99;
-}
 
-/*social icons end*/
 .bi-string {font-family:$font_family_3;}
 .string {font-family: $font_family_1; font-size: 0.875em;}
 .str-min {@extend .string; font-size: 0.75em;}
