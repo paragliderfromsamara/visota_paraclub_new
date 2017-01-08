@@ -108,7 +108,20 @@
         }
     }
 }
-
-
-
 /*social icons end*/
+#pages-contacts-block
+{
+    padding: 78px 0 78px 0;
+    @include breakpoint(small only)
+    {
+        padding: 25px 0 25px 0;
+        .columns
+        {
+            padding-top: 20px;
+        }
+    }
+    @include breakpoint(medium only)
+    {
+        padding: 39px 0 39px 0;
+    }
+}
