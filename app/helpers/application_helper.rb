@@ -15,15 +15,19 @@ def authority_message
     </div>
   ".html_safe
 end
+
 def page_image
     @page_image.nil? ? 'http://visota63.ru/sliderImages/main_1.jpg' : 'http://visota63.ru' + @page_image
 end
+
 def current_path
   request.env['PATH_INFO']
 end
+
 def oldMessagesPerPage
   25
 end
+
 def vk_like_vidget(prms=nil)
     url = 'http://visota63.ru'
     title = '"ВЫСОТА"-Самарский Парапланерный Клуб'
@@ -45,9 +49,11 @@ VK.Widgets.Like(\"vk_like\",  {type: \"button\", verb: 1});
   }
   return v
 end
+
 def meta_content
   (@meta_content == nil)? "Круглогодичное обучение полетам на параплане, мотопараплане и кайтах. Помощь в выборе и приобретении снаряжения" : @meta_content
 end
+
 def meta_keywords
   default = "параплан, самара, высота, тандем, аэрофотосъемка, кайтинг, параавис, полет, обучение, парапланеризм"
   if @keywords.blank? 
@@ -56,7 +62,8 @@ def meta_keywords
     @keywords
   end
 end
-  def waitline(id)
+
+def waitline(id)
     "
 		<div style = 'display:none;' id = '#{id}' class = 'wl'>
 			<div class = 'wl-item'>
@@ -71,121 +78,128 @@ end
 			</div>
 		</div>
     " 
-  end 
-	def alter_logo
+end 
+
+def alter_logo
 		logo = "/img/main_page.jpg"
 		logo = @alter_logo if @alter_logo != nil
 		return "background-image: url(#{logo});background-size: cover;"
 	end
-	def header_1 #h1 тэг
+
+def header_1 #h1 тэг
 		("<div class = 'row'><div class = 'small-12 columns'><h1>#{@header}</h1></div></div>").html_safe if @header != nil 
-	end
-	def header_2 #h2 тэг
+end
+
+def header_2 #h2 тэг
 		("<h2>#{@title_2}</h2>").html_safe if @title_2 != nil
-	end
-	def js_functions 
-		return @add_functions.html_safe if @add_functions != nil
-	end
-	def central_field_style #динамичный стиль для central_field
-		style_hash = {:width => '1100px', :min_width => '1100px', :height => '700px'}
-		if @cf_style != nil
-			style_hash[:width] = @cf_style[:width] if @cf_style[:width] != nil 
-			style_hash[:min_width] = @cf_style[:min_width] if @cf_style[:min_width] != nil 
-			style_hash[:height] = @cf_style[:height] if @cf_style[:height] != nil 
-		end
-		return "style = 'width: #{style_hash[:width]}; min-width: #{style_hash[:min_width]}; height: #{style_hash[:height]};'"
-	end
-	
-	def select_topic_for_comments(c_id)
-		if c_id != nil
-			if c_id == 4 or c_id == 5 #Свободные полёты и Моторные полеты в раздел Парапланеризм
-				return 1
-			elsif c_id == 2 #Кайтинг в кайтинг
-				return 2
-			elsif c_id == 1 or c_id == 3 #Клубные мероприятия в клубные мероприятия
-				return 4
-			elsif c_id == 1 #Разное в беседку
-				return 3
-			else 
-				return 3
-			end
-		end
-	end
-	
-	def my_title
+end
+
+def my_title
 		if @title != nil and @title != ''
 			return @title
 		else
 			return '"ВЫСОТА"-Самарский Парапланерный Клуб'
 		end
-	end
-  def topImageMainPage
-    path = "/sliderImages/main_"
-    arr = [1, 2]
-    v = arr.shuffle.first
-    return {link: "[#{path}#{v}_small.jpg, small],[#{path}#{v}_medium.jpg, medium],[#{path}#{v}_large.jpg, large]", BlockHeight: 531}
-  end
-  
-	def topImages
-		path = "/sliderImages/"
-		arr = [
-				{link: "[#{path}2_small.jpg, small],[#{path}2_medium.jpg, medium],[#{path}2_large.jpg, large]", BlockHeight: 397},
-        {link: "[#{path}3_small.jpg, small],[#{path}3_medium.jpg, medium],[#{path}3_large.jpg, large]", BlockHeight: 397},
-        {link: "[#{path}4_small.jpg, small],[#{path}4_medium.jpg, medium],[#{path}4_large.jpg, large]", BlockHeight: 397},
-        {link: "[#{path}5_small.jpg, small],[#{path}5_medium.jpg, medium],[#{path}5_large.jpg, large]", BlockHeight: 397},
-        {link: "[#{path}6_small.jpg, small],[#{path}6_medium.jpg, medium],[#{path}6_large.jpg, large]", BlockHeight: 397},
-        {link: "[#{path}7_small.jpg, small],[#{path}7_medium.jpg, medium],[#{path}7_large.jpg, large]", BlockHeight: 422},
-        {link: "[#{path}default_small.png, small],[#{path}default_medium.png, medium],[#{path}default_large.png, large]", BlockHeight: 296}
-			  ]
-		return arr
-  end
+end
 
-  def primaryMenuItems
-	  [{
-	   :name => 'О клубе', 
-	   :link => "/about_us", 
-	   :title => "История клуба",
-	   :drop_items => 'none'
-	  },
-    {
-    	   :name => 'Новости', 
-    	   :link => "/events", 
-    	   :title => "История клуба",
-    	   :drop_items => 'none'
-    	  },
-	  {
-	   :name => 'Обучение', 
-	   :link => "/school", 
-	   :title => "История клуба",
-	   :drop_items => 'none'
-	  },
-	  {
-	   :name => 'Снаряжение', 
-	   :link => "/equipment", 
-	   :title => "Снаряжение",
-	   :drop_items => 'none'
-	  },
-    {
-     :name => 'Контакты', 
-     :link => "/contacts", 
-     :title => "Контактная информация",
-     :drop_items => 'none'
-    },
-    {
-     :name => 'Медиа', 
-     :link => "/media", 
-     :title => "Фото и видео",
-     :drop_items => 'none'
-    },
-	  {
-	   :name => 'Общение', 
-	   :link => "/visota_life", 
-	   :title => "Фотографии, общение, видео",
-	   :drop_items => 'none'
-	  }
-	]
-  end
-  def visota_life_buttons #buttons => {:name => 'Перейти', :title => "Перейти на страницу пилота", :access => ['all'], :type => 'b_green', :link => user_path(user)}
+def js_functions 
+	return @add_functions.html_safe if @add_functions != nil
+end
+
+def central_field_style #динамичный стиль для central_field
+	style_hash = {:width => '1100px', :min_width => '1100px', :height => '700px'}
+	if @cf_style != nil
+		style_hash[:width] = @cf_style[:width] if @cf_style[:width] != nil 
+		style_hash[:min_width] = @cf_style[:min_width] if @cf_style[:min_width] != nil 
+		style_hash[:height] = @cf_style[:height] if @cf_style[:height] != nil 
+	end
+	return "style = 'width: #{style_hash[:width]}; min-width: #{style_hash[:min_width]}; height: #{style_hash[:height]};'"
+end
+
+def select_topic_for_comments(c_id)
+	if c_id != nil
+		if c_id == 4 or c_id == 5 #Свободные полёты и Моторные полеты в раздел Парапланеризм
+			return 1
+		elsif c_id == 2 #Кайтинг в кайтинг
+			return 2
+		elsif c_id == 1 or c_id == 3 #Клубные мероприятия в клубные мероприятия
+			return 4
+		elsif c_id == 1 #Разное в беседку
+			return 3
+		else 
+			return 3
+		end
+	end
+end
+	
+def topImageMainPage
+  path = "/sliderImages/main_"
+  arr = [1, 2]
+  v = arr.shuffle.first
+  return {link: "[#{path}#{v}_small.jpg, small],[#{path}#{v}_medium.jpg, medium],[#{path}#{v}_large.jpg, large]", BlockHeight: 531}
+end
+  
+def topImages
+	path = "/sliderImages/"
+	arr = [
+			{link: "[#{path}2_small.jpg, small],[#{path}2_medium.jpg, medium],[#{path}2_large.jpg, large]", BlockHeight: 397},
+      {link: "[#{path}3_small.jpg, small],[#{path}3_medium.jpg, medium],[#{path}3_large.jpg, large]", BlockHeight: 397},
+      {link: "[#{path}4_small.jpg, small],[#{path}4_medium.jpg, medium],[#{path}4_large.jpg, large]", BlockHeight: 397},
+      {link: "[#{path}5_small.jpg, small],[#{path}5_medium.jpg, medium],[#{path}5_large.jpg, large]", BlockHeight: 397},
+      {link: "[#{path}6_small.jpg, small],[#{path}6_medium.jpg, medium],[#{path}6_large.jpg, large]", BlockHeight: 397},
+      {link: "[#{path}7_small.jpg, small],[#{path}7_medium.jpg, medium],[#{path}7_large.jpg, large]", BlockHeight: 422},
+      {link: "[#{path}default_small.png, small],[#{path}default_medium.png, medium],[#{path}default_large.png, large]", BlockHeight: 296}
+		  ]
+	return arr
+end
+
+def primaryMenuItems
+  [{
+   :name => 'О клубе', 
+   :link => "/about_us", 
+   :title => "История клуба",
+   :drop_items => 'none'
+  },
+  {
+  	   :name => 'Новости', 
+  	   :link => "/events", 
+  	   :title => "История клуба",
+  	   :drop_items => 'none'
+  	  },
+  {
+   :name => 'Обучение', 
+   :link => "/school", 
+   :title => "История клуба",
+   :drop_items => 'none'
+  },
+  {
+   :name => 'Снаряжение', 
+   :link => "/equipment", 
+   :title => "Снаряжение",
+   :drop_items => 'none'
+  },
+  {
+   :name => 'Контакты', 
+   :link => "/contacts", 
+   :title => "Контактная информация",
+   :drop_items => 'none'
+  },
+  {
+   :name => 'Медиа', 
+   :link => "/media", 
+   :title => "Фото и видео",
+   :drop_items => 'none'
+  },
+  {
+   :name => 'Общение', 
+   :link => "/visota_life", 
+   :title => "Фотографии, общение, видео",
+   :drop_items => 'none'
+  }
+]
+end
+
+def visota_life_buttons #buttons => {:name => 'Перейти', :title => "Перейти на страницу пилота", :access => ['all'], :type => 'b_green', :link => user_path(user)}
 	user = User.new
 	buttons_array = [
 					 {:name => "Общение", :access => true, :type => 'b_grey', :link => '/communication'}, 
@@ -196,132 +210,69 @@ end
 					 ]
 	buttons_array[@active_button][:selected] = true if @active_button != nil
 	buttons_in_line(buttons_array)
-  end
-	def secondaryMenuItems
-	[
-					  {
-					   :name => 'Новости', 
-					   :link => "/events", 
-					   :title => "Новости",
-					   :drop_items => 'none'
-					  },
-					  {
-					   :name => 'Фото', 
-					   :link => "/photo_albums", 
-					   :title => "Фотоальбомы",
-					   # :links_list => [
-										# {:name => 'Свободные полёты', :link => "/photo_albums?category=paragliding"},
-										# {:name => 'Моторные полёты', :link => "/photo_albums?category=power_paragliding"},
-										# {:name => 'Кайтинг', :link => "/photo_albums?category=kiting"},
-										# {:name => 'Клубные мероприятия', :link => "/photo_albums?category=club_events"},
-										# {:name => 'Разное', :link => "/photo_albums?category=another"}
-									   # ],
-						:link_list_width => '170px',
-						:id => 'nav_photos',
-						:drop_items => 'none'
-					  },
-					  {
-					   :name => 'Видео', 
-					   :link => "/videos", 
-					   :title => "Видеоматериалы",
-					   # :links_list => [
-										# {:name => 'Свободные полёты', :link => "/videos?category=paragliding"},
-										# {:name => 'Моторные полёты', :link => "/videos?category=power_paragliding"},
-										# {:name => 'Кайтинг', :link => "/videos?category=kiting"},
-										# {:name => 'Клубные мероприятия', :link => "/videos?category=club_events"},
-										# {:name => 'Разное', :link => "/videos?category=another"}
-									   # ],
-						:link_list_width => '170px',
-						:id => 'nav_videos',
-						:drop_items => 'none'
-					  },
-					  {
-					   :name => 'Общение', 
-					   :link => "/visota_life", 
-					   :title => "в прошлом Гостевая",
-					   :links_list => topic_link_list,
-					   :link_list_width => '170px',
-					   :id => 'nav_topics',
-					   :drop_items => 'none'
-					  },
-					  {
-					  :name => 'Материалы', 
-					   :link => "/articles", 
-					   :title => "Отчёты, Отзывы, Документация, полезные ссылки",
-					   #:links_list => [
-										# {:name => 'Отчёты', :link => '/reports'},
-										# {:name => 'Статьи', :link => '/club_articles'},
-										# {:name => 'Отзывы', :link => '/reviews'},
-										# {:name => 'Отчёты о ЛП', :link => '/flight_accidents'},
-										# {:name => 'Восставшие из руин', :link => '/risen_from_the_ruin'},
-										# {:name => 'Документы', :link => '/documents'}
-									   # ],
-						:link_list_width => '170px',
-						:id => 'nav_materials',
-					  :drop_items => 'none'
-					 }
-					 ]
+end
+
+
+def wheather_top_but
+  return [
+            {
+              name: 'Погода',
+              icon: 'cloud', 
+              link: '/wheather'
+            }
+         ]
+end
+def user_top_buttons
+  return [
+            {
+              name: 'Диалоги',
+              icon: 'comments', 
+              link: "/conversations", 
+              access: user_type == 'super_admin'
+            },
+            {
+              name: 'Пилоты', 
+              icon: "torsos-all",
+              link: '/pilots'
+            },
+            {
+              name: 'Профиль', 
+              icon: "torso",
+              link: user_path(current_user)
+            }
+          ]
+end
+def user_session_menu(b)
+  #'<i class = "fi-comments fi-small"></i><span>Диалоги</span>'
+  v = ''
+	b.each do |i|
+		v += "<li #{"id = 'c_nav_li'" if current_page?(i[:link])}><a href = '#{i[:link]}'><i class = \"fi-#{i[:icon]} fi-small\"></i><span class = 'show-for-medium'>#{i[:name]}</span></a></li>" if i[:access].nil? || i[:access] == true
 	end
-  def wheather_top_but
-    return [
-              {
-                name: 'Погода',
-                icon: 'cloud', 
-                link: '/wheather'
-              }
-           ]
-  end
-  def user_top_buttons
-    return [
-              {
-                name: 'Диалоги',
-                icon: 'comments', 
-                link: "/conversations", 
-                access: user_type == 'super_admin'
-              },
-              {
-                name: 'Пилоты', 
-                icon: "torsos-all",
-                link: '/pilots'
-              },
-              {
-                name: 'Профиль', 
-                icon: "torso",
-                link: user_path(current_user)
-              }
-            ]
-  end
-	def user_session_menu(b)
-    #'<i class = "fi-comments fi-small"></i><span>Диалоги</span>'
-    v = ''
-		b.each do |i|
-			v += "<li #{"id = 'c_nav_li'" if current_page?(i[:link])}><a href = '#{i[:link]}'><i class = \"fi-#{i[:icon]} fi-small\"></i><span class = 'show-for-medium'>#{i[:name]}</span></a></li>" if i[:access].nil? || i[:access] == true
-		end
-		return "#{v}"
+	return "#{v}"
+end
+def main_menu #присваивается глобальной переменной @main_menu в функции define_action в steps_helper 
+	value = ""
+	primaryMenuItems.each do |item|
+		value += "<li #{is_selected(item)}><a href = '#{item[:link]}'><span>#{item[:name]}</span></a></li>"
 	end
-  def main_menu #присваивается глобальной переменной @main_menu в функции define_action в steps_helper 
-		value = ""
-		primaryMenuItems.each do |item|
-			value += "<li #{is_selected(item)}><a href = '#{item[:link]}'><span>#{item[:name]}</span></a></li>"
-		end
-		return "#{value}"
-  end
+	return "#{value}"
+end
 	
-	def is_selected(item)
-			if @curMenuItem == item[:name] || current_page?(item[:link])
-				return 'id = "c_nav_li"' 
-			end
-	end
-  
-	def menu_drop_list(item) #Формирует выпадающие списки основного меню.
-		value = ''
-		if item[:links_list] != nil and item[:links_list] != []
-			item[:links_list].each do |sub_item|
-				value += "<a style = 'text-decoration: none;' href = '#{sub_item[:link]}'><li style = 'display: block; font-size: 12pt;' class = 's_nav_li'>#{sub_item[:name]}</li></a>"
-			end
+def is_selected(item)
+		if @curMenuItem == item[:name] || current_page?(item[:link])
+			return 'id = "c_nav_li"' 
 		end
-		return "<div style = 'display: none; width: #{item[:link_list_width]};' class = 'menu_drop_list'><ul>#{value}</ul></div>"
+end
+  
+def menu_drop_list(item) #Формирует выпадающие списки основного меню.
+	value = ''
+	if item[:links_list] != nil and item[:links_list] != []
+		item[:links_list].each do |sub_item|
+			value += "<a style = 'text-decoration: none;' href = '#{sub_item[:link]}'><li style = 'display: block; font-size: 12pt;' class = 's_nav_li'>#{sub_item[:name]}</li></a>"
+		end
 	end
+	return "<div style = 'display: none; width: #{item[:link_list_width]};' class = 'menu_drop_list'><ul>#{value}</ul></div>"
+end
 
 	def topic_link_list #Формирует массив для формирования выпадающего списка.
 		val_arr = []
@@ -337,8 +288,10 @@ end
     if notice != nil && notice != ''
     "
      <div class = 'notice'> 
-         <div class = 'm_1000wh'>
-             <p id='notice' class = 'tb-pad-s'>#{notice}</p>
+         <div class = 'row'>
+             <div class = \"small-12 columns\">
+               <p id='notice' class = 'tb-pad-s'>#{notice}</p>
+             </div>
          </div>
      </div>
     ".html_safe
@@ -350,8 +303,10 @@ end
     if flash[:alert] != nil && flash[:alert] != ''
     "
      <div class = 'alert'> 
-         <div class = 'm_1000wh'>
-             <p id='alert' class = 'tb-pad-s'>#{flash[:alert]}</p>
+       <div class = 'row'>
+            <div class = \"small-12 columns\">
+               <p id='alert' class = 'tb-pad-s'>#{flash[:alert]}</p>
+            </div>
          </div>
      </div>
     ".html_safe
@@ -377,13 +332,13 @@ end
 #Блок отрисовки кнопок----------------------------------------------------------
 def draw_in_line(buttons) #buttons => {:name => 'Перейти', :title => "Перейти на страницу пилота", :access => ['all'], :type => 'b_green', :link => user_path(user)}
 	value = ""
-	if @active_button != nil
+	if !@active_button.nil?
 		buttons[@active_button][:selected]
 	end
-	if buttons != nil and buttons != []
+	if !buttons.blank?
 		buttons.each do |button|
 			if button[:access] == true
-				button[:type] = 'c_loc_li' if button[:selected] == true
+				button[:type] = 'c_loc_li' if button[:selected]
 				value += "<a #{button_attrs(button)}><li id = '#{button[:type]}'>#{button[:name]}</li></a>"
 			end
 		end
@@ -401,32 +356,32 @@ end
 
 def button_attrs(button)
 	val = ''
-	val += "href = '#{button[:link]}'" if button[:link] != '' and button[:link] != nil
-	val += "data-confirm = '#{button[:data_confirm]}'" if button[:data_confirm] != '' and button[:data_confirm] != nil
-	val += "data-method = '#{button[:data_method]}'" if button[:data_method] != '' and button[:data_method] != nil
-	val += "rel = '#{button[:rel]}'" if button[:rel] != '' and button[:rel] != nil
-	val += "onclick = '#{button[:onclick]}'" if button[:onclick] != '' and button[:onclick] != nil
-	val += "id = '#{button[:id]}'" if button[:id] != '' and button[:id] != nil
-	val += "title = '#{button[:title]}'" if button[:title] != '' and button[:title] != nil
-	val += "name = '#{button[:e_name]}'" if button[:e_name] != '' and button[:e_name] != nil
-	val += "alt = '#{button[:alt]}'" if button[:alt] != '' and button[:alt] != nil
-	val += "data-remote = '#{button[:remote]}'" if button[:remote] != '' and button[:remote] != nil
-	val += "data-value = '#{button[:value]}'" if button[:value] != '' and button[:value] != nil
+	val += "href = '#{button[:link]}'" if !button[:link].blank?
+	val += "data-confirm = '#{button[:data_confirm]}'" if !button[:data_confirm].blank?
+	val += "data-method = '#{button[:data_method]}'" if !button[:data_method].blank?
+	val += "rel = '#{button[:rel]}'" if !button[:rel].blank?
+	val += "onclick = '#{button[:onclick]}'" if !button[:onclick].blank?
+	val += "id = '#{button[:id]}'" if !button[:id].blank?
+	val += "title = '#{button[:title]}'" if !button[:title].blank?
+	val += "name = '#{button[:e_name]}'" if !button[:e_name].blank?
+	val += "alt = '#{button[:alt]}'" if !button[:alt].blank?
+	val += "data-remote = '#{button[:remote]}'" if !button[:remote].blank?
+	val += "data-value = '#{button[:value]}'" if !button[:value].blank?
 	return val
 end
 
 def control_buttons(buttons)
 	value = ""
-	if buttons != nil and buttons != []
+	if !buttons.blank?
 		buttons.each do |button|
-			if button[:access] == true
-				button[:type] = 'c_loc_li' if button[:selected] == true
+			if button[:access]
+				button[:type] = 'c_loc_li' if button[:selected]
 				value += "<a #{button_attrs(button)}><li>"
-				value += "<div style = 'padding-right: 5px;' class = 'fi-float-left'>#{drawIcon(button[:type], 'medium', 'blue')}</div>" if button[:type] != nil and button[:type] != ''
+				value += "<div style = 'padding-right: 5px;' class = 'fi-float-left'>#{drawIcon(button[:type], 'medium', 'blue')}</div>" if !button[:type].blank?
 				value += "#{button[:name]}</li></a>"
 			end
 		end
-		value = "<div id = 'cButWrapper' ><ul class = 'ctrl_but'>#{value}</ul></div>" if value != ""
+		value = "<div id = 'cButWrapper' ><ul class = 'ctrl_but'>#{value}</ul></div>" if !value.blank?
 	end
 	return value
 end
@@ -441,7 +396,7 @@ end
 def themes_search(p)
 	themeParams = p[:th]
 	themes = []
-	if themeParams != nil and themeParams != []
+	if !themeParams.nil?
 	else
 		return themes
 	end
