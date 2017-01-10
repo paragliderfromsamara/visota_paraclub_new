@@ -78,7 +78,7 @@ end
 		return "background-image: url(#{logo});background-size: cover;"
 	end
 	def header_1 #h1 тэг
-		("<div class = 'm_1000wh tb-pad-m'><h1>#{@header}</h1></div>").html_safe if @header != nil 
+		("<div class = 'row'><div class = 'small-12 columns'><h1>#{@header}</h1></div></div>").html_safe if @header != nil 
 	end
 	def header_2 #h2 тэг
 		("<h2>#{@title_2}</h2>").html_safe if @title_2 != nil
