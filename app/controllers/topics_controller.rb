@@ -27,7 +27,7 @@ include EventsHelper
         @ads = Theme.where(theme_type_id: 3, status_id: [1,3], visibility_status_id: vStat).includes([:entity_view, :user, {messages: :user}, :theme_steps]).order('last_message_date DESC')
         @ads += Theme.where(theme_type_id: 2, status_id: [1,3], visibility_status_id: vStat, topic_id: @topic.id).includes([:entity_view, :user, {messages: :user}, :theme_steps]).order('last_message_date DESC')
     else
-        @ads = Theme.where(theme_type_id: 3, status_id: [1,3], visibility_status_id: vStat).includes(:messages).order('last_message_date DESC') << Theme.where(theme_type_id: 2, status_id: [1,3], visibility_status_id: vStat, topic_id: @topic.id).includes(:messages).order('last_message_date DESC')
+        @ads = Theme.where(theme_type_id: 3, status_id: [1,3], visibility_status_id: vStat).includes(:messages).order('last_message_date DESC') + Theme.where(theme_type_id: 2, status_id: [1,3], visibility_status_id: vStat, topic_id: @topic.id).includes(:messages).order('last_message_date DESC')
         @ads += Theme.where(theme_type_id: 2, status_id: [1,3], visibility_status_id: vStat, topic_id: @topic.id).includes(:messages).order('last_message_date DESC')
     end
   end

@@ -550,21 +550,17 @@ end
 		# ")
 	# end
 	def c_box_block(p) #p = {:tContent => '', :fContent =>'', :classLvl_1 => '', :idLvl_1 => '', :classLvl_2 => '', :idLvl_2 => '', :classBg => '', :parity => integer}
-		parity = '' 
-		if p[:parity] != nil
-			parity = ' odd' if p[:parity].odd?
-			parity = ' even' if p[:parity].even?
+		if p[:parity].nil?
+      bg = p[:classBg].nil? ? "" : "<div class='#{p[:classBg]}'></div>"
+    else
+			bg = ' odd' if p[:parity].odd?
+			bg = ' even' if p[:parity].even?
 		end
-		val = ""
-		tContent = ""
-		fContent = ""
-		bg = ""
-		tContent = "<div class = 'm_1000wh#{" "+p[:classLvl_2] if p[:classLvl_2] != nil}'#{" id='#{p[:idLvl_2]}'" if p[:idLvl_2] != nil}>#{p[:tContent]}</div>" if p[:tContent] != nil
-		fContent = p[:fContent] if p[:fContent] != nil
-		bg = "<div class='#{p[:classBg]}'></div>" if p[:classBg] != nil
+		tContent = p[:tContent].nil? ? "" : "<div class = '#{" "+p[:classLvl_2] if !p[:classLvl_2].nil?}'#{" id='#{p[:idLvl_2]}'" if !p[:idLvl_2].nil?}>#{p[:tContent]}</div>"
+		fContent = p[:fContent].nil? ? "" : p[:fContent]
 		val = "
-				<div class = 'c_box#{" "+p[:classLvl_1] if p[:classLvl_1] != nil}#{parity}'#{" id='#{p[:idLvl_1]}'" if p[:idLvl_1] != nil}>
-					#{bg}#{tContent}#{fContent}					
+				<div class = 'c_box#{" "+p[:classLvl_1] if !p[:classLvl_1].nil?}#{bg}'#{" id='#{p[:idLvl_1]}'" if !p[:idLvl_1].nil?}>
+					#{tContent}#{fContent}					
 				</div>
 			  "
 		return val
@@ -581,5 +577,20 @@ end
 	return "<div class = 'nav_string'>#{value}</div>"
   end
 #Основные блоки	end
-
+  
+  
+#рисует блок для пустых сущностей и пишет сообщение
+  def no_values_message(icon="page", message_text="Ничего не найдено")
+    "
+    <div id = \"no-entities-message\" class = \"row\">
+      <div class = \"small-12 columns text-center\">
+        <div id = \"icon-wrapper\"><i class = \"fi-#{icon}\"></i></div>
+          <p class = \"istring medium-opacity tb-pad-l\">
+            #{message_text}
+          </p>
+        </div>
+    </div>
+    "
+  end 
+  
 end

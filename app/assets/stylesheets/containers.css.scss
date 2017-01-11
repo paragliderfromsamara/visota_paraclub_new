@@ -2,6 +2,27 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 @import "scaffolds";
+
+div#no-entities-message //для отображения пустых списков с сообщениями
+{
+    position: relative;
+    #icon-wrapper 
+    {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        font-size: 25rem;
+        color: $light-gray;
+        text-align: center;
+        @include my_opacity(0.4);
+    }
+    .columns 
+    {
+        height: 500px;
+    }
+}
 /* block */
 .inline-blocks
 {
