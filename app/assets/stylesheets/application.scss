@@ -71,6 +71,7 @@ $global-width: 1100px;
 @include foundation-menu-icon;
 
 @include foundation-button;
+@include foundation-button-group;
 //@include foundation-forms;
 //@include foundation-thumbnail;
 //@include foundation-menu;
@@ -377,11 +378,62 @@ html, body, div, span, h1, h2, h3, h4, h5, h6, p, img, ul, li, fieldset, form, l
 ol, ul { list-style: none; }
 hr {margin: 0;}
 
-.tb-pad-s {padding: 10px 0 10px 0;}
-.tb-pad-sm {padding: 20px 0 20px 0;}
-.tb-pad-m {padding: 30px 0 30px 0;}
-.tb-pad-ml {padding: 45px 0 45px 0;}
-.tb-pad-l {padding: 60px 0 60px 0;}
+.tb-pad-s
+{
+    @include breakpoint(small)
+    {
+        padding: 5px 0 5px 0;
+    }
+    @include breakpoint(medium)
+    {
+        padding: 10px 0 10px 0;
+    }
+}
+
+.tb-pad-sm 
+{
+    @include breakpoint(small)
+    {
+        padding: 10px 0 10px 0;
+    }
+    @include breakpoint(medium)
+    {
+        padding: 20px 0 20px 0;
+    }
+}
+.tb-pad-m 
+{
+    @include breakpoint(small)
+    {
+        padding: 15px 0 15px 0;
+    }
+    @include breakpoint(medium)
+    {
+        padding: 30px 0 30px 0;
+    }
+}
+.tb-pad-ml 
+{
+    @include breakpoint(small)
+    {
+        padding: 20px 0 20px 0;
+    }
+    @include breakpoint(medium)
+    {
+        padding: 45px 0 45px 0;
+    }
+}
+.tb-pad-l 
+{
+    @include breakpoint(small)
+    {
+        padding: 30px 0 30px 0;
+    }
+    @include breakpoint(medium)
+    {
+        padding: 60px 0 60px 0;
+    }
+}
 
 /*mainMenu*/
 
