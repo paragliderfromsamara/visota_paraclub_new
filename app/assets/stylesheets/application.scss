@@ -72,7 +72,7 @@ $global-width: 1100px;
 
 @include foundation-button;
 @include foundation-button-group;
-//@include foundation-forms;
+@include foundation-forms;
 //@include foundation-thumbnail;
 //@include foundation-menu;
 //@include foundation-dropdown-menu;
@@ -372,7 +372,14 @@ html.turbolinks-progress-bar::before {
     height:10px;
 }
 
-
+.success-text
+{
+    color: darken($success-color, 10%);
+}
+.alert-text
+{
+    color: $alert-color;
+}
 
 html, body, div, span, h1, h2, h3, h4, h5, h6, p, img, ul, li, fieldset, form, label { margin: 0; padding: 0; border: 0; outline: 0; font-size: 100%; vertical-align: baseline; background: transparent; border-style: solid;}
 ol, ul { list-style: none; }

@@ -144,7 +144,7 @@ Rails.application.routes.draw do
   #users_controller
   resources :users
   post '/make_mail', :to => 'users#make_mail'
-  get '/remember_password', :to => 'users#remember_password'
+  get '/remember_password', to: 'users#remember_password', as: :remember_password
   get '/thanks', :to => 'users#thanks'
   get '/mail_switcher', :to => 'users#mail_switcher'
   get '/user_check', :to => 'users#user_check'
@@ -164,13 +164,10 @@ Rails.application.routes.draw do
   
   #sessions_controller
   resources :sessions, :only => [:new, :create, :destroy]
-  get "sessions/new"
-  get "sessions/create"
-  get "sessions/destroy"
-  get '/create_session',  :to => 'sessions#create'
-  get '/signup',  :to => 'users#new'
-  get '/signin',  :to => 'sessions#new'
-  get '/signout', :to => 'sessions#destroy'
+  get 'create_session', :to => 'sessions#create'
+  get 'signup',  to: 'users#new', as: :signup
+  get 'signin',  to: 'sessions#new', as: :signin
+  get 'signout', to: 'sessions#destroy', as: :signout
   #sessions_controller end
   
   #pages_controller

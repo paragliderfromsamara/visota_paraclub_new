@@ -1,25 +1,30 @@
 class SessionsController < ApplicationController
   def new
+    redirect_to current_user if signed_in? 
 	 @title = @header = 'Вход на сайт'
    @hideSesPanel = true
    render layout: false if params[:nolayout] == "true" 
   end
 
   def create
+    redirect_to current_user if signed_in? 
 	@title = @header = 'Вход на сайт'
-    user = User.authenticate(params[:session][:name],
+    @user = User.authenticate(params[:session][:name],
                              params[:session][:password])
-    if user.nil?
+    if @user.nil?
       flash.now[:alert] = "Неверное имя пользователя или пароль"
       @title = @header = 'Вход на сайт'
       @hideSesPanel = true
 	    respond_to do |format|
 	      format.html { render 'new' }
-		    format.json { head :no_content }
-	    end
+        format.js {}
+      end
     else
-      sign_in user
-	    redirect_to user
+      sign_in @user
+	    respond_to do |format|
+	      format.html { redirect_to @user }
+        format.js {}
+      end
     end
   end
 

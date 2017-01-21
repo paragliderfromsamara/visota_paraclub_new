@@ -8,6 +8,7 @@ formContainerId = "ses-form-container"
 sesButs = null
 sesForm = null
 
+
 makeSessionForm = ()->
     $("body").append(
                         "
@@ -28,12 +29,14 @@ makeSessionForm = ()->
                                     $("##{sessionFormId}").on("closed.zf.reveal", ()-> $("##{sessionFormId}").foundation('destroy'))
                                 )
     
+    
 
 r = ()->
     sesButs = document.getElementsByClassName(openEntryFormClassName)
     if sesButs.length isnt 0
         sesButs = $(sesButs)
         sesButs.click(makeSessionForm)
+
     
     
 

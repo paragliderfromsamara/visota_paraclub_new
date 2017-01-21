@@ -8,7 +8,6 @@
         
         <% @antibot = @user.get_default_antibot_image %>
         <input type = 'hidden' name = abi[name] value = '<%= @antibot[:name] %>' >
-        <%= f.hidden_field :guest_token, value: guestToken %>
         <% user_errors %>
 	   
 	        <% if user_type == 'admin' or user_type == 'super_admin' %>

@@ -1,31 +1,35 @@
 <div class = 'c_box even'>
     <%= my_alert %>
-    <div class = 'm_1000wh tb-pad-m'>
-        <p class = 'istring'>Чтобы зайти на сайт небходимо ввести ник и пароль созданной Вами учётной записи.</p>
-        
-       <%= form_for(:session, :url => sessions_path(:redirect_to => 'index'), :html => {:id => 'sesForm'}) do |f|  %>
-        <div id = 'ses_p' class = 'section group'>
-               <div class = 'col span_7_of_12'>
-                   <table style = 'width: 100%; height: 100%;'>
-                       <tr>
-                           <td align = 'center' valign = 'middle' style = 'width: 150px;'>
-                               <%= f.text_field :name, :id => 'sesText', :placeholder => 'Логин или E-mail' %>
-                           </td>
-                           <td align = 'center' valign = 'middle' style = 'width: 150px;'>
-                               <%= f.password_field :password, :id => 'sesText', :placeholder => 'Пароль' %>
-                           </td>
-                           <td align = 'center' valign = 'middle' style = 'width: 100px;' >
-                              <%= mySubmitButton('Войти', 'sesForm').html_safe %>
-                           </td>
-                           <td align = 'left' valign = 'middle'>
-                               <%= link_to 'Забыли пароль?', '/remember_password', :class => 'sesLink', :style => 'margin: 0 0 0 0; padding: 0 0 0 0;' %>
-                               <%= link_to 'Регистрация', '/signup', :class => 'sesLink', :style => 'margin: 0 0 0 0; padding: 0 0 0 0;'%>
-                           </td>
-                       </tr>
-                   </table>
-               </div>
-           </div>
-           <% end %>
+    <div class = 'row tb-pad-m'>
+        <div class = "small-12 medium-6 columns end">
+        <%= form_for(:session, url: sessions_path(:redirect_to => 'index'), :html => {:id => 'sesForm'}, remote: true) do |f|  %>
+            <div id = 'ses_p' >
+                <div class = 'row'>
+                   <div id = "session-message-text" class = 'small-12 columns'>
+                       
+                   </div>
+                </div>
+                <div class = 'row'>
+                   <div class = 'small-12 columns end'>
+                       <%= f.text_field :name, :placeholder => 'Логин или E-mail' %>
+                   </div>
+                </div>
+                <div class = 'row'>
+                    <div class = 'small-12 columns end'>
+                       <%= f.password_field :password, :placeholder => 'Пароль' %>
+                    </div>
+                </div>
+            </div>
+            <div class = "row">
+                <div class = 'small-12 columns end'>
+                   <div class="button-group tb-pad-s">
+                       <button class = "success button">Войти</button>
+                       <%= link_to 'Регистрация', signup_path, class: 'primary button' %>
+                       <%= link_to 'Забыли пароль?', remember_password_path, class: 'primary button' %>
+                   </div>
+                </div>
+            </div>
+        <% end %>
     </div>
-   
+   </div>
 </div>
