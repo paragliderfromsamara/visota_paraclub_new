@@ -47,24 +47,20 @@ def user_errors
 end
 #Отображение пользователя в списке пользователей
 def user_index_list(user, i)
-	html = "
-      			<table style = 'width: 100%;'>
-      				<tr>
-      					<td style = 'width: 100px;' align = 'center' valign = 'top'>
-      							#{image_tag(user.alter_avatar_square, :class => 'ava')}
-      					</td>
-      					<td align = 'left' valign = 'top'>
-      						<div style = 'padding-left: 15px;'>
-      							<p>#{link_to user.visible_name(user_type), user, :class => 'b_link_bold'}</p>
-      							<p class = 'istring norm'>#{user.group_name}</p>
-                    <p class = 'istring norm'>#{user.email_with_status if user_type == 'super_admin'}</p>
-      						</div>
-      					</td>
-      				</tr>
-      			</table>"
+	html = %{
+            <div class = "row tb-pad-m">
+              <div class = "small-2 columns">
+                #{image_tag(user.alter_avatar_square, :class => 'ava')}
+              </div>
+              <div class = "small-10 columns">
+  							<p>#{link_to user.visible_name(user_type), user, :class => 'b_link_bold'}</p>
+  							<p class = 'istring norm'>#{user.group_name}</p>
+                <p class = 'istring norm'>#{user.email_with_status if user_type == 'super_admin'}</p>
+              </div>
+            </div>
+          }
         	p = {
         			  :tContent => html, 
-        			  :idLvl_2 => 'b_middle',
                 :parity => i
         		  }
             return c_box_block(p).html_safe

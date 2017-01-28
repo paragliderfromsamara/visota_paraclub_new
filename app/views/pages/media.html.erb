@@ -56,7 +56,7 @@
             			<% end %>
                     </table>
         		<% else %>
-        			<p class = 'istring norm'>В данной категории нет материалов...</p>
+        			<%= no_values_message("page", "В данной категории нет материалов...").html_safe %>
         		<% end %>
             </div>
         </div>
@@ -66,7 +66,7 @@
             <%= render 'photo_albums/list_view' if session[:albums_list_type] == 'list' %>
             <%= render 'photo_albums/thumbs_view' if session[:albums_list_type] == 'thumbs' %>
     <%else%>
-        <p class = 'istring norm'>В данной категории нет фотоальбомов...</p>
+        <div class = "c_box"><%= no_values_message("book", "В данной категории нет фотоальбомов...").html_safe %></div>
     <%end%>
 	
 <% end %>

@@ -1,21 +1,21 @@
-<div class = 'm_1000wh'>
-	<div class = 'section group'>
-		<div class = 'col span_9_of_12'>
-			<%= users_paths_buttons.html_safe %>
-		</div>
-		<div class = 'col span_3_of_12'>
-			<%= will_paginate @users %>
-		</div>
-	</div>
+<div class = 'row tb-pad-s'>
+    <div class = 'small-12 medium-9 columns'>
+    	<%= users_paths_buttons.html_safe %>
+    </div>
+    <div class = 'small-12 medium-3 columns'>
+    	<%= will_paginate @users %>
+    </div>
 </div>
-<div id = 'b_wrapper' style='min-height: 400px;'>
+
     <% if @users != [] %>
         <%i=0%>
         <%if @users.first.user_group_id == 6%>
-            <div class = 'm_1000wh tb-pad-s'>
-                <h2>
-                    Лица клуба
-                </h2>
+            <div class = 'row tb-pad-s'>
+                <div class = 'small-9 columns'>
+                    <h2>
+                        Лица клуба
+                    </h2>
+                </div>
             </div>
             <%prev_group_id = 6%>
         <%else%>
@@ -24,33 +24,27 @@
 		<% @users.each do |user| %>
             <%if prev_group_id == 6 && user.user_group_id != 6%>
                 <div class = 'c_box'>
-                <div class = 'm_1000wh tb-pad-s'>
-                    <br />
-                    <h2>
-                        Клубные пилоты
-                    </h2>
+                    <div class = 'row tb-pad-s'>
+                        <div class = 'small-12 columns'>
+                            <h2>
+                                Клубные пилоты
+                            </h2>
+                        </div>
+                    </div>
                 </div>
-            </div>
                 <%prev_group_id = user.user_group_id%>
             <%end%>
-			<%= user_index_list(user, i) %>
+			    <%= user_index_list(user, i) %>
             <%i+=1%>
 		<% end %>
 	<% else %>
-        <div class = 'm_1000wh'>
-            <br />
-            <br />
-            <p class = 'istring norm'>Нет ни одного пользователя в данной категории</p>
-        </div>
+        <%= no_values_message("torso", "Нет ни одного пользователя в данной категории").html_safe %>
 	<% end %>
-</div>
-<div class = 'm_1000wh'>
-	<div class = 'section group'>
-		<div class = 'col span_9_of_12'>
-			<%= users_paths_buttons.html_safe %>
-		</div>
-		<div class = 'col span_3_of_12'>
-			<%= will_paginate @users %>
-		</div>
-	</div>
+<div class = 'row tb-pad-s'>
+    <div class = 'small-9 columns'>
+    	<%= users_paths_buttons.html_safe %>
+    </div>
+    <div class = 'small-3 columns'>
+    	<%= will_paginate @users %>
+    </div>
 </div>
