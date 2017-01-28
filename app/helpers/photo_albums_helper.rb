@@ -4,95 +4,88 @@ module PhotoAlbumsHelper
 		html = album_table(album, pathName)
 		p = {
 				:tContent => html, 
-				:idLvl_2 => "b_middle",
+        classLvl_2: "tb-pad-m",
 				:parity => i
 			}
 		v = top_album_buttons(album, pathName)
-		v = (v == '')? '':"<div class = 'c_box'><div class = 'central_field' id = 'm_1000wh'>#{v}</div></div>"
+		v = (v == '')? '':"<div class = 'c_box'><div class = 'row'><div class = 'small-12 columns'>#{v}</div></div></div>"
 		return "#{v}#{c_box_block(p)}".html_safe
 	end
 	def album_table(album, pathName)
-		"
-			<table style = 'width: 100%;'>				
-				#{"<tr><td colspan = '2'><h3>#{album.name}</h3></td></tr>" if pathName == 'index' || pathName == 'visota_life'}
-				<tr>
-					<td align='left' valign='middle'>
-						#{albumInformation(album)}
-					</td>
-					<td align = 'right' valign='middle'>
-						<p class = 'istring_m norm medium-opacity'>Размещён #{my_time(album.created_at)}</p>
-					</td>
-				</tr>
-				<tr>
-					<td align = 'left' valign='middle' style = 'height:30px;'>
-						<span class = 'istring_m norm medium-opacity'>Автор </span>#{link_to album.user.name, album.user, :class => 'b_link_i'}
-					</td>
-					<td align = 'right' valign='middle'>
-						
-					</td>
-				</tr>
-				<tr>
-					<td align = 'left' valign='middle' >
-						<span class = 'istring_m norm medium-opacity'>Категория </span>#{link_to album.category_name, "/media/?t=albums&c=#{album.category_id}", :class => 'b_link_i', :title => "Все альбомы категории #{album.category_name}"}
-					</td>
-					<td align = 'right' valign='middle'>
-						
-					</td>
-				</tr>
-        #{"<tr><td align = 'left' valign='middle' ><span class = 'istring_m norm medium-opacity'>Создан из темы </span>#{link_to album.theme.name, theme_path(album.theme), :class => 'b_link_i'}</td><td></td></tr>" if !album.theme.nil?}
-				#{"<tr><td colspan = '2' align = 'left' valign='top'><p class = 'istring_m norm tb-pad-s'>#{album.description}</p></td></tr>" if album.description != nil and album.description != ''}
-				<tr>
-					<td colspan = '2'>
-						#{album_photos_field(album, pathName)}
-					</td>
-				</tr>
-				<tr>
-          <td style = 'height: 40px;' align='left' valign = 'middle'>
-            #{bottom_album_buttons(album, pathName)}	
-          </td>
-          <td align='right' valign = 'middle'>
-            #{user_photo_album_like_link(album)}
-          </td>
-        </tr>
-		   </table>
-		"
+    %{
+      <div class = "row">
+        <div class = "small-9 columns"> 
+          #{album.name}
+        </div>
+        <div class = "small-3 columns text-right"> 
+          <p class = 'istring_m norm medium-opacity'>Размещён #{my_time(album.created_at)}</p>
+        </div>
+      </div>
+      <div class = "row">
+        <div class = "small-12 columns"> 
+          #{albumInformation(album)}
+        </div>
+      </div>
+      <div class = "row">
+        <div class = "small-12 columns"> 
+          <span class = 'istring_m norm medium-opacity'>Автор </span>#{link_to album.user.name, album.user, :class => 'b_link_i'}
+        </div>
+      </div>
+      <div class = "row">
+        <div class = "small-12 columns"> 
+          <span class = 'istring_m norm medium-opacity'>Категория </span>#{link_to album.category_name, "/media/?t=albums&c=#{album.category_id}", :class => 'b_link_i', :title => "Все альбомы категории #{album.category_name}"}
+        </div>
+      </div>
+      #{%{<div class = "row">
+        <div class = "small-12 columns"> 
+          <span class = 'istring_m norm medium-opacity'>Создан из темы </span>#{link_to album.theme.name, theme_path(album.theme), :class => 'b_link_i'}
+        </div>
+      </div>} if !album.theme.nil?}
+      #{%{<div class = "row"><div class = "small-12 columns"><p class = 'istring_m norm tb-pad-s'>#{album.description}</p></div></div>} if !album.description.blank?}
+      #{album_photos_field(album, pathName)}
+      <div class = "row tb-pad-s">
+        <div class = "small-6 columns">
+          #{bottom_album_buttons(album, pathName)}	
+        </div>
+        <div class = "small-6 columns">
+          #{user_photo_album_like_link(album)}
+        </div>
+      </div>
+     }
 	end
 	def album_mini_table(album, pathName='index')
-		"
-			<table style = 'width: 100%;'>				
-				<tr>
-          <td align = 'left' valign = 'middle' style = 'width: 60%;'>
-            <h3 style = 'height: 14px;' title = '#{album.name}'>#{truncate album.name, length: 26}</h3>
-          </td>
-          <td align = 'right'>
-            <p class = 'istring_m norm medium-opacity'>Размещён #{my_time(album.created_at)}</p>
-          </td>
-        </tr>
-				<tr>
-					<td align='left' valign='middle'>
-						<span class = 'istring_m norm medium-opacity'>Автор: </span>#{link_to album.user.name, album.user, :class => 'b_link_i'}
-					</td>
-					<td align = 'right' valign='middle'> 
-             #{albumInformation(album)}
-					</td>
-				</tr>
-				<tr>
-					<td colspan = '2'>
-						<div class = 'm_95p tb-pad-s'>
-              #{image_tag album.get_photo.link.big_thumb, width: '100%' if album.get_photo.link?}
-            </div>
-					</td>
-				</tr>
-				<tr>
-          <td  align='left' valign = 'middle'>
-            #{bottom_album_buttons(album, pathName)}	
-          </td>
-          <td align='right' valign = 'middle'>
-            #{user_photo_album_like_link(album)}
-          </td>
-        </tr>
-		   </table>
-		"
+		%{
+      <div class = "row">
+        <div class = "small-8 columns">
+          <h3 style = 'height: 14px;' title = '#{album.name}'>#{truncate album.name, length: 30}</h3>
+        </div>
+        <div class = "small-4columns text-right">
+          <p class = 'istring_m norm medium-opacity'>Размещён #{my_time(album.created_at)}</p>
+        </div>
+      </div>
+      <div class = "row tb-pad-s">
+        <div class = "small-6 columns">
+          <span class = 'istring_m norm medium-opacity'>Автор: </span>#{link_to album.user.name, album.user, :class => 'b_link_i'}
+        </div>
+        <div class = "small-6 columns text-right">
+          #{albumInformation(album)}
+        </div>
+      </div>
+      <div class = "row">
+        <div class = "small-12 columns">
+          #{image_tag album.get_photo.link.big_thumb, width: '100%', class: "float-center" if album.get_photo.link?}
+        </div>
+      </div>
+      <div class = "row tb-pad-s">
+        <div class = "small-6 columns">
+          #{bottom_album_buttons(album, pathName)}	
+        </div>
+        <div class = "small-6 columns text-right">
+          #{user_photo_album_like_link(album)}
+        </div>
+      </div>
+     }
+
 	end
   def view_mode_albums_list
     if session[:albums_list_type].nil?
@@ -106,7 +99,6 @@ module PhotoAlbumsHelper
 	def album_photos_field(album, pathName)
 		value = ''
 		photos = []
-		width = (pathName == 'visota_life')? '510px':'903px'
 		allPhotosCount = album.photos.count 
     if pathName == 'index'
 			photos = album.index_photos
@@ -117,11 +109,10 @@ module PhotoAlbumsHelper
 		end
 		if photos != []
 			photos.each do |p|
-				value += "<a href = '#{photo_path(id: p.id, e:'photo_album', e_id:album.id)}' da title = '#{p.description}' alt = '#{photo_path(id: p.id, e:'photo_album', e_id:album.id)}' ><div class = 'inline-blocks inline-mini'><div class = 'central_field' style = 'width: 150px; margin-top: 7px;'><img src = '#{p.link.small_thumb}' style = 'display: none;'/></div></div></a>" if pathName == 'index' || pathName == 'visota_life'
-				value += "<a href = '#{photo_path(id: p.id, e:'photo_album', e_id:album.id)}' title = '#{p.description}' alt = '#{photo_path(id: p.id, e:'photo_album', e_id:album.id)}' ><div class = 'inline-blocks inline-thumb'><div class = 'central_field' style = 'width: 250px; margin-top: 15px;'><img src = '#{p.link.thumb}' style = 'display: none;' width = '250px' /></div><div style = 'width: 100px; height: 23px; position: absolute; bottom: 5px; right: 15px;'>#{photoInfo(p)}</div></div></a>" if pathName == 'show'
+        value += %{<div class = 'column column-block'><a href = '#{photo_path(id: p.id, e:'photo_album', e_id:album.id)}' title = '#{p.description}' alt = '#{photo_path(id: p.id, e:'photo_album', e_id:album.id)}' ><img class = "float-center thumbnail" src = '#{p.link.small_thumb}'/></a></div>}
 			end
-			value = "<div class = 'central_field' style = 'width: #{width}; padding-top: 10px; padding-bottom:10px;'>#{value}</div>"
-      value += "<br /><p class = 'istring_m medium-opacity'>показано #{photos.count} из #{allPhotosCount}</p>" if allPhotosCount > photos.count
+			value = "<div class = 'row small-up-3 medium-up-4 large-up-6 tb-pad-s'>#{value}</div>"
+      value += "<div class = 'row'><div class = 'small-12 columns'><p class = 'istring_m medium-opacity'>показано #{photos.count} из #{allPhotosCount}</p></div></div>" if allPhotosCount > photos.count
 		end
 		return value
 	end
@@ -148,15 +139,15 @@ module PhotoAlbumsHelper
 			#v = [{:name => 'Добавить комментарий', :access => userCanCreateMsg?, :type => 'plus', :id => 'newMsgBut', :link => '#new_message'}]
             val = "#{control_buttons(v)}" if v != []
         else
-            val = "#{vk_like_vidget({title: @album.name, description: @album.description.blank? ? "Альбом категории \"#{@album.category[:name]}\"" : @album.description, image: @album.get_photo.link.to_s, url: photo_album_path(@album)})[:button]} <div id = 'vk_but'></div>"
+            val = "#{vk_like_vidget[:button]}"
         end
 
 		return val
 	end
 	def albumInformation(album)
-		v = "<div title = 'Фотографий в альбоме' class='stat fi-float-left'><i class = 'fi-camera fi-medium fi-grey'></i><span>#{album.photos.count}</span></div>"
-    v += "<div title = 'Комментарии' class='stat fi-float-left'><i class = 'fi-comments fi-medium fi-grey'></i><span>#{album.comments.count.to_s}</span></div>"
-		v += "<div class='stat fi-float-left'><i class = 'fi-eye fi-medium fi-grey'></i><span>#{album.views}</span></div>" #{album.views.count}
+		v = "<div title = 'Фотографий в альбоме' class='stats fi-float-right'><i class = 'fi-camera fi-medium fi-grey'></i><span>#{album.photos.count}</span></div>"
+    v += "<div title = 'Комментарии' class='stats fi-float-right'><i class = 'fi-comments fi-medium fi-grey'></i><span>#{album.comments.count.to_s}</span></div>"
+		v += "<div class='stats fi-float-right'><i class = 'fi-eye fi-medium fi-grey'></i><span>#{album.views}</span></div>" #{album.views.count}
     return "#{v}"
 	end
 #album block end

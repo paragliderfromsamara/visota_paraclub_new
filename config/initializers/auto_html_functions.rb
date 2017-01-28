@@ -98,9 +98,9 @@ AutoHtml.add_filter(:my_youtube).with(:width => 640, :height => 480, :frameborde
 	span = options[:span]
     src += "?#{params.join '&'}" unless params.empty?
 	if span == true
-		%{<br /><div id = 'video' class = 'central_field' style = 'width: #{width}px;'><iframe width="#{width}" height="#{height}" src="#{src}" frameborder="#{frameborder}" allowfullscreen></iframe></div><br />}
+		%{<br /><div id = 'video' class = 'flex-video widescreen' ><iframe src="#{src}" frameborder="#{frameborder}" allowfullscreen></iframe></div><br />}
 	else
-		%{<iframe width="#{width}" height="#{height}" src="#{src}" frameborder="#{frameborder}" allowfullscreen></iframe>}
+		%{<div class = 'flex-video widescreen' ><iframe src="#{src}" frameborder="#{frameborder}" allowfullscreen></iframe></div>}
 	end
   end
 end

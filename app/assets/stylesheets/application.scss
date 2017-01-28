@@ -69,11 +69,12 @@ $global-width: 1100px;
 @include foundation-title-bar;
 //@include foundation-top-bar;
 @include foundation-menu-icon;
-
+@include foundation-flex-video;
 @include foundation-button;
 @include foundation-button-group;
 @include foundation-forms;
-//@include foundation-thumbnail;
+@include foundation-callout;
+@include foundation-thumbnail;
 //@include foundation-menu;
 //@include foundation-dropdown-menu;
 //@include foundation-table;
@@ -389,11 +390,13 @@ hr {margin: 0;}
 {
     @include breakpoint(small)
     {
-        padding: 5px 0 5px 0;
+        padding-top: 5px;
+        padding-bottom: 5px;
     }
     @include breakpoint(medium)
     {
-        padding: 10px 0 10px 0;
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
 }
 
@@ -401,44 +404,52 @@ hr {margin: 0;}
 {
     @include breakpoint(small)
     {
-        padding: 10px 0 10px 0;
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
     @include breakpoint(medium)
     {
-        padding: 20px 0 20px 0;
+        padding-top: 20px;
+        padding-bottom: 20px;
     }
 }
 .tb-pad-m 
 {
     @include breakpoint(small)
     {
-        padding: 15px 0 15px 0;
+        padding-top: 15px;
+        padding-bottom: 15px;
     }
     @include breakpoint(medium)
     {
-        padding: 30px 0 30px 0;
+        padding-top: 30px;
+        padding-bottom: 30px;
     }
 }
 .tb-pad-ml 
 {
     @include breakpoint(small)
     {
-        padding: 20px 0 20px 0;
+        padding-top: 20px;
+        padding-bottom: 20px;
     }
     @include breakpoint(medium)
     {
-        padding: 45px 0 45px 0;
+        padding-top: 45px;
+        padding-bottom: 45px;
     }
 }
 .tb-pad-l 
 {
     @include breakpoint(small)
     {
-        padding: 30px 0 30px 0;
+        padding-top: 30px;
+        padding-bottom: 30px;
     }
     @include breakpoint(medium)
     {
-        padding: 60px 0 60px 0;
+        padding-top: 60px;
+        padding-bottom: 60px;
     }
 }
 
@@ -580,10 +591,87 @@ hr {margin: 0;}
     .fi-largest {font-size: 32px;}
     .fi-grey {color: gray;}
     .fi-blue {color: $main_color;}
-    .fi-float-left {display: inline-block; padding-left:10px;}
-    .fi-float-right {float: right;}    
+    .fi-float-left {display: inline-block; padding-right:10px;}
+    .fi-float-right {float: right;padding-left:10px;}    
 
+    .nav_string 
+    {
+    	font-family: $font_family_1;
+    	z-index: 11;
+    	width: 100%;
+    	a {font-size: 10pt;}
+    	span#splitter {
+    					font-size: 9pt;
+    				  }
+    	span#cur_path  {
+    					font-size: 10pt;
+    					color: $text_color_1;
+    				  }
+    }
 
+    #cButWrapper
+    {
+    	position: relative;
+    	width: 100%; 
+    	//height: 40px;
+    }
+    ul.ctrl_but
+    	{
+    		//padding-top:7px;
+    	  li {float: left; padding-right: 10px;}
+    	  a {
+    		font-family: $font_family_1;
+    		color: $text_color_1;
+    		text-decoration: none;
+    		font-size: 14px;
+    		cursor: pointer;
+    	  }
+    	  a:hover {
+    				font-family: $font_family_1;
+    				color: $main_color;
+    				@include animation($time_1);
+    			    }
+    	}
+        
+        /* Локальное мини меню */
+        .l_menu, .l_menu_b {
+        		position: relative;
+	
+        		li {
+        			display: inline-block;
+                    //padding-left: 7px;
+        			padding-right: 14px;
+        			padding-top: 10px;
+        			padding-bottom: 10px;
+        			z-index: 100;
+        		   }
+        		li:hover {
+        					color: $text_color_1;
+        					border-width: 0;
+        				 }
+        		a {
+        			color: #a2a2a2;
+        			text-decoration: none;
+        			font-family: $font_family_1;
+        		   }
+        		a:hover {
+        			color: $text_color_1;
+        		 }
+        		 #c_loc_li {color: $main_color;}
+        		}
+        .l_menu_b {
+                		a {
+                			font-size: 14pt;
+                		   }
+                		}
+                        .l_menu {
+                                		a {
+                                			font-size: 9pt;
+                                		   }
+                                		}
+        /* Локальное мини меню end */
+                                        
+.stats span {font-size: 12px;color:$text_color_1;font-family:$font_family_1; padding-left:2px;}
 //----удалить по завершению
 /*  SECTIONS  */
 .section {

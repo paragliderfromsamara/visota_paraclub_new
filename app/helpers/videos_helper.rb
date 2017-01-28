@@ -75,42 +75,35 @@ module VideosHelper
   end
   
 	def video_index_block(video)
-		"
-			<div class = 'video_thumb' style = 'margin-top: 10px;'>
-							<div>
-								#{video.mini_link_html}
+		%{
+			<div class = 'video_thumb'>
+              <div class = "tb-pad-s">
+							<div class = "row" >
+                <div class = "small-12 columns">
+                		#{video.mini_link_html}
+                </div>
 							</div>
-							<div style = 'position: relative;'>
-								<div class = 'video_thumb_background'></div>
-								<table class = 'video_thumb_table'>
-									<tr>
-										<td style = 'width: 80px' align = 'right'>
-											<p class='istring_m norm medium-opacity' style = 'padding-left: 4px;'>Автор:</p>
-										</td>
-										<td style = 'width: 170px' >
-											#{link_to video.user.name, video.user, :class => 'b_link_i', :style => 'font-size: 12px;'}
-										</td>
-									</tr>
-									<tr>
-										<td style = 'width: 80px;' align = 'right'>
-											<p class='istring_m norm medium-opacity' style = 'padding-left: 4px;'>Категория:</p>
-										</td>
-										<td style = 'width: 170px' >
-											#{link_to video.category[:name], "/media?t=videos&c=#{video.category_id}", :class => 'b_link_i', :style => 'font-size: 12px;', :title => "Смотреть все альбомы категории #{video.category[:name]}"}
-										</td>
-									</tr>
-									<tr>
-										<td align = 'right' valign = 'middle'  style = 'height: 20px;'>
-												#{link_to "<i class = 'fi-arrow-right fi-small fi-blue'></i> Перейти".html_safe, video, :class => 'b_link'}
-										</td>
-										<td align = 'right'>
-											<div class='stat fi-float-left'><i class = 'fi-comments fi-medium fi-grey'></i><span>#{video.messages.where(:status_id => 1).count.to_s}</span></div><div class='stat fi-float-left'>#{drawIcon('eye', 'medium', 'grey')}<span>#{video.views}</span></div>
-										</td>
-									</tr>
-								</table>
+							<div class = "row" >
+                <div class = "small-12 columns">
+                		<p class='istring_m norm medium-opacity' style = 'padding-left: 4px;'>Автор: #{link_to video.user.name, video.user, :class => 'b_link_i', :style => 'font-size: 12px;'}</p> 
+                </div>
 							</div>
-						</div>
-		"
+							<div class = "row" >
+                <div class = "small-12 columns">
+                		<p class='istring_m norm medium-opacity' style = 'padding-left: 4px;'>Категория: #{link_to video.category[:name], "/media?t=videos&c=#{video.category_id}", :class => 'b_link_i', :style => 'font-size: 12px;', :title => "Смотреть все альбомы категории #{video.category[:name]}"}</p>
+                </div>
+							</div>
+							<div class = "row" >
+                <div class = "small-6 columns">
+                		#{link_to "<i class = 'fi-arrow-right fi-small fi-blue'></i> Перейти".html_safe, video, :class => 'b_link'}
+                </div>
+                <div class = "small-6 columns">
+                		<span class = "float-right"><div class='stats fi-float-left'><i class = 'fi-comments fi-medium fi-grey'></i><span>#{video.messages.where(:status_id => 1).count.to_s}</span></div><div class='stats fi-float-left'>#{drawIcon('eye', 'medium', 'grey')}<span>#{video.views}</span></div></span>
+                </div>
+							</div>
+              </div>
+					</div>
+     }
 	end
 
 	def video_errors

@@ -1,37 +1,30 @@
 <div class = 'c_box'>
-    <div class = 'm_1000wh'>
-        <div class = "section group">
-            <div class = "col span_4_of_12">
-                <%= add_new_event if userCanCreateEvent?%>
-            </div>
-            <div class = "col span_8_of_12">
-                <%= will_paginate @event %>
-            </div>
+    <div class = "row tb-pad-s">
+        <div class = "small-12 medium-4 columns">
+            <%= add_new_event if userCanCreateEvent?%>
+        </div>
+        <div class = "small-12 medium-8 columns">
+            <%= will_paginate @events %>
         </div>
     </div>
 </div>
-
-<% if @events != [] %>
+<% if !@events.blank? %>
     <% i = 0 %>
     <% @events.each do |event| %>
         <%= event_index_item(event, i).html_safe %>
         <%i+=1%>
     <% end %>
 <% else %>
-    <div class = 'm_1000wh'>
-        <p class = 'istring'>
-            Нет ни одной новости
-        </p>
+    <div class = 'c_box'>
+        <%= no_values_message("page", message_text="Нет ни одной новости").html_safe %>
     </div>
 <% end %>
-<div class = "c_box">
-    <div class = 'm_1000wh '>
-        <div class = "section group">
-            <div class = "col span_4_of_12">
-            </div>
-            <div class = "col span_8_of_12">
-                <%= will_paginate @event %>
-            </div>
+<div class = 'c_box'>
+    <div class = "row tb-pad-s">
+        <div class = "small-12 medium-4 columns">
+        </div>
+        <div class = "small-12 medium-8 columns">
+            <%= will_paginate @events %>
         </div>
     </div>
 </div>

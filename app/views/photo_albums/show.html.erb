@@ -1,13 +1,16 @@
-<div class = 'm_1000wh'>
-		<div class = 'tb-pad-s'><%= navigation_string.html_safe %></div>
+<div class = 'row'>
+    <div class = 'small-12 columns tb-pad-s'>
+        <%= navigation_string.html_safe %>
+    </div>
 </div>
 <%= my_notice %>
 <% i=1 %>
-
 <%= album_index_block(@album, i, 'show') %>
 <div class = 'cBoxSplitter'>
-	<div class = 'm_1000wh'>
-		<h3>Комментарии</h3>
+	<div class = "row">
+        <div class = "small-12 columns">
+		    <h3>Комментарии</h3>
+        </div>
 	</div>
 </div>
 <%= render "messages/form" %>
@@ -17,9 +20,11 @@
 		<%= message_theme_box(c, true, i).html_safe %>
 	<% end %>
 <% else %>
-	<div class = 'm_1000wh tb-pad-l'><p class = 'istring norm'>Нет ни одного комментария к альбому</p></div>
+    <%= no_values_message("comments", message_text="Нет ни одного комментария к альбому").html_safe %>
 <% end %>
-<div class = 'm_1000wh tb-pad-s'>
-	<%= navigation_string.html_safe %>
+<div class = 'row'>
+    <div class = 'small-12 columns tb-pad-s'>
+        <%= navigation_string.html_safe %>
+    </div>
 </div>
 <%= whoIsOnlineMenu %>

@@ -1,57 +1,64 @@
-<div class = 'm_1000wh'>
-    <div class = 'section group'>
-        <div class = 'col span_10_of_12'>
-            <%= buttons_in_line_b(@mediaPartHash[:typeButtons]).html_safe  %>
-            <%= buttons_in_line(@mediaPartHash[:categoryButtons]).html_safe %>
-        </div>
-        <div class = 'col span_2_of_12'>
-            <%= will_paginate @entities %>
+<div class = 'row'>
+    <div class = 'small-12 medium-10 columns'>
+        <div class = "row">
+            <div class = 'small-12 medium-12 columns'>
+                 <%= buttons_in_line_b(@mediaPartHash[:typeButtons]).html_safe  %>
+            </div>
+            <div class = 'small-12 medium-12 columns'>
+                 <%= buttons_in_line(@mediaPartHash[:categoryButtons]).html_safe %>
+            </div>
         </div>
     </div>
+    <div class = 'small-12 medium-2 columns'>
+        <%= will_paginate @entities %>
+    </div>
 </div>
+
 <%if !newMediaPanel.blank? || @mediaPartHash[:typeName] == 'albums' %>
 <div class = 'c_box'>
-    <div class = 'm_1000wh'>
-        <div class = 'section group'>
-            <div class = 'col span_10_of_12' style = 'margin:0;padding:0;'>
-                <%= newMediaPanel %>
-            </div>
-            <div class = 'col span_2_of_12' style = 'margin:0;padding:0;'>
-                <%= view_mode_albums_list.html_safe if @mediaPartHash[:typeName] == 'albums' %>
-            </div>
+    <div class = 'row tb-pad-s'>
+        <div class = 'small-10 columns'>
+            <%= newMediaPanel %>
+        </div>
+        <div class = 'small-2 columns'>
+            <span class = "float-right"><%= view_mode_albums_list.html_safe if @mediaPartHash[:typeName] == 'albums' %></span>
         </div>
     </div>
 </div> 
 <%end%>
 <% if @mediaPartHash[:typeName] == 'videos'%>
     <div class = 'c_box odd'>
-        <div class = 'm_1000wh tb-pad-m' >
+        <div class = 'row small-up-1 medium-up-2 large-up-3 tb-pad-m' >
 			<% @entities.each do |vid| %>
-				<%= video_index_block(vid).html_safe %>
+                <div class = "column">
+				    <%= video_index_block(vid).html_safe %>
+                </div>
 			<% end %>
         </div>
     </div>
 <% elsif @mediaPartHash[:typeName] == 'articles'%>
     <div class = 'c_box odd'>
-        <div class = 'm_1000wh tb-pad-m' >
-    		<% if @entities != [] %>
-    			<table class = 'v_table' id = 'article_table'>
-        			<% @entities.each do |article| %>
-        				<tbody class = 't_link' link_to = '<%= article_path(article) %>'>
-        					<tr>
-        						<td align = 'left' class = 'name' id = 'first'>
-        							<%= article.name %>
-        						</td>
-        						<td align = 'right' class = 'date' id = 'last'>
-        							<%= article.created_at.strftime("%d.%m.%Y") %>
-        						</td>
-        					</tr>
-        				</tbody>
-        			<% end %>
-                </table>
-    		<% else %>
-    			<p class = 'istring norm'>В данной категории нет материалов...</p>
-    		<% end %>
+        <div class = 'row tb-pad-m' >
+            <div class = "small-12 columns">
+        		<% if @entities != [] %>
+        			<table class = 'v_table' id = 'article_table'>
+            			<% @entities.each do |article| %>
+            				<tbody class = 't_link' link_to = '<%= article_path(article) %>'>
+            					<tr>
+            						<td align = 'left' class = 'name' id = 'first'>
+            							<%= article.name %>
+            						</td>
+            						<td align = 'right' class = 'date' id = 'last'>
+            							<%= article.created_at.strftime("%d.%m.%Y") %>
+            						</td>
+            					</tr>
+            				</tbody>
+            			<% end %>
+                    </table>
+        		<% else %>
+        			<p class = 'istring norm'>В данной категории нет материалов...</p>
+        		<% end %>
+            </div>
         </div>
     </div>
 <% elsif @mediaPartHash[:typeName] == 'albums' %>
@@ -63,14 +70,12 @@
     <%end%>
 	
 <% end %>
-<div class = 'm_1000wh tb-pad-s'>
-    <div class = 'section group'>
-        <div class = 'col span_10_of_12'>
-            <%= buttons_in_line(@mediaPartHash[:typeButtons]).html_safe %>
-        </div>
-        <div class = 'col span_2_of_12'>
-            <%= will_paginate @entities %>
-        </div>
+<div class = 'row tb-pad-s'>
+    <div class = 'small-12 medium-9 columns'>
+        <%= buttons_in_line(@mediaPartHash[:typeButtons]).html_safe %>
+    </div>
+    <div class = 'small-12 medium-3 columns'>
+        <%= will_paginate @entities %>
     </div>
 </div>   
 

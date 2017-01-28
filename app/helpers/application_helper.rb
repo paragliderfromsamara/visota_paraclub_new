@@ -567,14 +567,14 @@ end
 	end
 
   def navigation_string #Навигационная строка 
-	value = ''
-	@path_array.each do |path|
-		value += " <span id = 'splitter'><i class = 'fi-arrow-right'></i></span> " if @path_array.first != path
-		value += "#{link_to truncate(path[:name], :length => 50), path[:link], :title => path[:name], :class => 'b_link', :id => 'first'}" if @path_array.first == path
-		value += "#{link_to truncate(path[:name], :length => 50), path[:link], :title => path[:name], :class => 'b_link'}" if path != @path_array.last and @path_array.first != path
-		value += "<span id = 'cur_path'>#{truncate(path[:name], :length => 50)}</span>" if path == @path_array.last
-	end
-	return "<div class = 'nav_string'>#{value}</div>"
+  	value = ''
+  	@path_array.each do |path|
+  		value += " <span id = 'splitter'><i class = 'fi-arrow-right'></i></span> " if @path_array.first != path
+  		value += "#{link_to truncate(path[:name], :length => 50), path[:link], :title => path[:name], :class => 'b_link', :id => 'first'}" if @path_array.first == path
+  		value += "#{link_to truncate(path[:name], :length => 50), path[:link], :title => path[:name], :class => 'b_link'}" if path != @path_array.last and @path_array.first != path
+  		value += "<span id = 'cur_path'>#{truncate(path[:name], :length => 50)}</span>" if path == @path_array.last
+  	end
+  	return "#{value}"
   end
 #Основные блоки	end
   

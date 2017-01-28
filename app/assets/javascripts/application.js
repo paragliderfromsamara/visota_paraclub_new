@@ -20,7 +20,15 @@
 //= require_tree
 
 (function() {
-    var appReady = function() {$(document).foundation(); $('img, style').load(function(){$(this).fadeIn(1000);}); my_functions(); console.log(Foundation.MediaQuery.current);resizeTopBlock();};
+    var appReady = function() {
+                                $(document).foundation();
+                                //addMyValidators(); 
+                                //Foundation.onImagesLoaded($('img, style'), function(){$(this).fadeIn(1000);});
+                                $('img, style').load(function(){$(this).fadeIn(1000);}); 
+                                my_functions(); 
+                                console.log(Foundation.MediaQuery.current);
+                                resizeTopBlock();
+                              };
 
     
     
@@ -211,4 +219,4 @@ function checkupd(url, params, func, updTime) // функция проверки
                                 }, _this.updTime);};
         this.stopUpdate = function() {if (this.interval !== null) {clearInterval(this.interval);}};
     }
-	
+

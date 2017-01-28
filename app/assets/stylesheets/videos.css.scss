@@ -2,16 +2,21 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 /*  videos  */
-.video_thumb {position: relative;display: inline-block;margin-bottom: 25px; margin-left: 5px; margin-right: 5px;width: 320px;height: 310px;}
-.video_thumb_table {position: relative;margin-top: 0px;width: 97%;height: 100%;}
-.video_thumb_background
-	{
-		position: absolute; 
-		top: 0; 
-		left: 0; 
-		width: 100%;
-		height: 100%; 
-		background-color: #ebeef1;
-	}
+.video_thumb 
+{
+    position: relative;
+    display: inline-block;
+    background-color: #ebeef1;
+    width: 100%;
+    margin-bottom: 10px;
+    .row
+    {
+        width: 98%;
+        margin-right: auto;
+        margin-left: auto;
+    }
+}
+
+
 
 /*videos end*/

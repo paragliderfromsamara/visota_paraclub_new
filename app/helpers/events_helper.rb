@@ -1,22 +1,29 @@
 module EventsHelper
 	def event_index_item(event, i) #Миниатюра в списке новостей  
     event.update_attribute(:post_date, event.created_at) if event.post_date.blank?
-    html = "<h4><span class = 'black'>#{event.post_date.strftime('%d-%m-%Y')} |</span> #{event.title}</h4>
-							<table style = 'width: 99%;'>
-								<tr>
-									#{"<td>#{event.alter_photo('thumb')}</td>" if event.alter_photo('thumb') != nil}
-									<td valign = 'top' align = 'left' style = 'min-width: 700px;'>
-                    <span class = 'mText' id = 'content'>
-                      <p>#{truncate(event.content.escapeBbCode, :length => 500)}</p>
-                    </span>
-                  </td>
-								</tr>
-							</table>
-						#{control_buttons(event_index_buttons(event))}
+    img = event.alter_photo('thumb').nil? ? "" : "<div class = \"media-object-section\">#{event.alter_photo('thumb')}</div>"
+    html = "
+              <div class = 'row event-index-block'>
+                  <div class = 'small-12 columns'>
+                    <div class = 'media-object stack-for-small'>
+                        #{img}
+                        <div class = \"media-object-section\">
+                          <h4><span class = 'black'>#{event.post_date.strftime('%d-%m-%Y')} |</span> #{event.title}</h4>
+                          <span class = 'mText' id = 'content'>
+                            <p class = 'tb-pad-sm'>#{truncate(event.content.escapeBbCode, :length => 500)}</p>
+                          </span>
+                        </div>
+                    </div>
+                  </div>
+                  <div class = 'small-12 columns'>
+                    #{control_buttons(event_index_buttons(event))}
+                  </div>	
+              </div>
+		
 				"
     		p = {
-    				:tContent => html, 
-    				:classLvl_2 => "m_1000wh tb-pad-m", 
+    				:tContent => "#{html}", 
+    				:classLvl_2 => "tb-pad-m", 
     				:parity => i
     			}
           return c_box_block(p)
@@ -45,19 +52,17 @@ module EventsHelper
   
 	def event_show_block
 		"
-    <table style = 'width:100%;'>
-      <tr>
-        <td align = 'left'>
+    <div class = 'row'>
+      <div class = 'small-12 columns'>
           <span class = 'istring norm medium-opacity'>Размещена #{my_time(@event.created_at)}</span>
-        </td>
-      </tr>
-      <tr> 
-        <td align = 'left' colspan = '2'>
+      </div>
+    </div>
+    <div class = 'row'>
+      <div class = 'small-12 columns'>
           <span class = 'article_content'>#{@event.content_html}</span>
           #{event_show_photos}
-        </td>
-      </tr>
-    </table>
+      </div>
+    </div>
 		"
 	end
 	
@@ -100,7 +105,6 @@ module EventsHelper
 	def light_box_event_photo_block(photo, link, style)
 		"
 			<a data-lightbox='event_#{ @event.id.to_s }' href = '#{ photo.link }' title = '#{photo.description}' ><img src = '#{link}' #{style} class = 'album_thumb_photo'/></a>
-			
 		"#<span id = 'album_#{ photo.photo_album.id.to_s }_#{i}' style = 'display: none;'><a class = 'b_link' href = '#{photo_path(photo)}'>Комментарии</a></span>
 	end
 	

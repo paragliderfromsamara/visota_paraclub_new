@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
 include UsersHelper
+include Recaptcha::ClientHelper
+include Recaptcha::Verify
   # GET /users
   # GET /users.json
   def index
@@ -192,25 +194,24 @@ include UsersHelper
 			params[:user][:user_group_id] = 5
 			params[:user][:email_status] = 'Проверка'
 			@user = User.new(params[:user])
-			@add_functions = "userFieldsChecking();"
-			if @user.image_valid?(params[:abi][:value], params[:abi][:name])
+			if verify_recaptcha(model: @user)
 				respond_to do |format|
 				  if @user.save
-					UserMailer.user_check(@user).deliver_now
-					user = User.authenticate(params[:user][:name],
-											params[:user][:password])
-					sign_in user
-					format.html { redirect_to @user, :notice => "<b>Приветствуем в нашей крылатой компании!!!</b><br /><br /> На электронный адрес <b>#{@user.email}</b> было отправлено сообщение с ссылкой на подтверждение Вашей учётной записи. <br />
-			Подтвердив свою учётную запись, Вы сможете делиться своими фотографиями и видеозаписями." }
-					format.json { render :json => @user, :status => :created, :location => @user }
+  					UserMailer.user_check(@user).deliver_now
+  					user = User.authenticate(params[:user][:name],
+  											params[:user][:password])
+  					sign_in user
+  					format.html { redirect_to @user, :notice => "<b>Приветствуем в нашей крылатой компании!!!</b><br /><br /> На электронный адрес <b>#{@user.email}</b> было отправлено сообщение с ссылкой на подтверждение Вашей учётной записи. <br />
+  			Подтвердив свою учётную запись, Вы сможете делиться своими фотографиями и видеозаписями." }
+  					format.json { render :json => @user, :status => :created, :location => @user }
 				  else
-					format.html { render :action => "new" }
-					format.json { render :json => @user.errors, :status => :unprocessable_entity }
+  					format.html { render :action => "new" }
+  					format.json { render :json => @user.errors, :status => :unprocessable_entity }
 				  end
 				end
 		else
 			respond_to do |format|
-				format.html {redirect_to :back, :alert => 'Неправильно введён текст изображения', @user => params[:user]}
+				format.html {render "new"}
 			end
 		end
 	else

@@ -1,0 +1,6 @@
+<% if @user.nil?%>
+    $("form #session-message-text").html("<p class = \"alert-text tb-pad-s\">Не удалось найти пользователя с таким именем, либо пароль введён некорректно</p>");
+<%else%>
+    $("form #session-message-text").html("<p class = \"success-text tb-pad-s\">Вход произведён успешно.</p>");
+    Turbolinks.visit();
+<%end%>

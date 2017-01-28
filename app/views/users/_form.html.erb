@@ -1,75 +1,115 @@
 <%= my_notice %>
-<div class = 'cBoxSplitter'>
-     <div class = 'm_1000wh'><h3>Основные данные</h3></div>
-</div>
-<%= form_for(@user, html: {class: 'new_user_form'}) do |f| %>
-<div class = 'c_box odd'>
-    <div class = 'm_1000wh tb-pad-m'>
-        
-        <% @antibot = @user.get_default_antibot_image %>
-        <input type = 'hidden' name = abi[name] value = '<%= @antibot[:name] %>' >
-        <% user_errors %>
-	   
-	        <% if user_type == 'admin' or user_type == 'super_admin' %>
-	        <div class = 'field'>
-	            <%= f.label :user_group_id, 'Группа' %>
-	            <%= my_collection_select(@user.user_groups, 'user_group_id', 'user', {}, '' ) %>
-	        </div>
-	        <% end %>
-	        <div class = 'field'>
-	            <%= f.label :name, 'Ник' %><span title = "Поля обязательные для заполнения" style = "color: red;">*</span><br />
-                <%= f.text_field :name, :class => 't_field' %><span id = "user_name_check">  <span id = "length"></span><span class = 'istring' id = "errDesc"></span></span>
+<%= form_for(@user, html: {class: 'new_user_form', novalidate: true}) do |f| %>
+    <% user_errors %>
+    <% @antibot = @user.get_default_antibot_image %>
+    <input type = 'hidden' name = abi[name] value = '<%= @antibot[:name] %>' >
+    <div class = 'c_box odd'>
+        <div class = "row tb-pad-s">
+            <div class = "small-12 medium-6 columns end">
+                <div data-abide-error class="alert callout" style="display: none;">
+                    <p><i class="fi-alert"></i> Имеются неверно заполненные поля</p>
+                </div>
             </div>
-	        <div class = 'field'>
-	            <i class = 'fi-key fi-medium'></i> <%= f.label "Пароль" %><span title = "Поля обязательные для заполнения" style = "color: red;">*</span><br />
-	            <%= f.password_field :password, :title => "От 6 до 40 знаков", :class => 't_field' %> <span id = "user_password_check">  <span id = "length"></span><span class = 'istring' id = "errDesc"></span></span>
-	        </div>
-	        <div class = 'field'>
-	            <%= f.label "Подтверждение пароля" %><span title = "Поля обязательные для заполнения" style = "color: red;">*</span><br /> 
-	            <%= f.password_field :password_confirmation, :title => "От 6 до 40 знаков", :class => 't_field' %> <span id = "user_password_confirmation_check">  <span id = "length"></span><span class = 'istring' id = "errDesc"></span></span>
-	        </div>
-	        <div class = 'field'>
-		        <i class = 'fi-mail fi-medium'></i> <%= f.label "E-mail" %><span title = "Поля обязательные для заполнения" style = "color: red;">*</span><br />
-	            <%= f.text_field :email, :class => 't_field' %> <span id = "user_email_check">  <span id = "length"></span><span class = 'istring' id = "errDesc"></span></span>
-	        </div>
-      </div>
-</div>
-<div class = 'cBoxSplitter'>
-     <div class = 'm_1000wh'><h3>Дополнительная информация</h3></div>
-</div>
-<div class = 'c_box even'>
-    <div class = 'm_1000wh tb-pad-m'>
-    	<div class = 'field'>
-    		<%= f.label :full_name, 'Полное имя' %><br />
-    		<%= f.text_field :full_name, :class => 't_field' %>
-    	</div>
-    	<div class = 'field'>
-    		<i class = 'fi-telephone fi-medium'></i> <%= f.label :cell_phone, 'Контактный номер' %><br /> 
-    		<%= f.text_field :cell_phone, :class => 't_field' %>
-    	</div>
-    	<div class = 'field'>
-    		<i class = 'fi-social-skype fi-medium'></i> <%= f.label :skype, 'Skype' %><br /> 
-    		<%= f.text_field :skype, :class => 't_field' %>
-    	</div>
-    	<div class = 'field'>
-    			<i class = 'fi-web fi-medium'></i> <%= f.label :web_site, 'Сайт' %><br />  
-    			<%= f.text_field :web_site, :class => 't_field' %>
-    	</div>
-    	<div class = 'field'>
-    		<%= f.label :inform, 'О себе' %><br /> 
-    		<%= f.text_area :inform, :rows => '10', :cols => '60', :class => 't_area' %>
-    	</div>
+        </div>
+    <% if user_type == 'admin' or user_type == 'super_admin' %>
+        <div class = "row tb-pad-s">
+            <div class = "small-12 medium-6 columns end">
+                <div class = 'field'>
+                    <%= f.label :user_group_id, 'Группа' %>
+                    <%= my_collection_select(@user.user_groups, 'user_group_id', 'user', {}, '' ) %>
+                </div>
+            </div>
+        </div>
+    <% end %>
+
+        <div class = "row tb-pad-s">
+            <div class = "small-12 medium-6 columns end">
+                <%= f.label :name, 'Ник' %>
+                <%= f.text_field :name, :class => 't_field', required: true, "data-validator" => "check_user_name", "aria-describedby"=>"userNameHelpText" %>
+                <span id = "user_name_error" class="form-error">
+                  
+                </span>
+                <p class="help-text" id="userNameHelpText">Ник - уникальный идентификатор пользователя, должен быть уникальным, длиной не менее 3 символов и не более 36 символов</p>
+            </div>
+        </div>
+        <div class = "row tb-pad-s">
+            <div class = "small-12 medium-6 columns end">
+        		<%= f.label :full_name, 'Полное имя' %>
+        		<%= f.text_field :full_name, :class => 't_field',"aria-describedby"=>"userFullNameHelpText" %>
+                <p class="help-text" id="userFullNameHelpText">Ваше настоящее имя. Данное поле не является обязательным, но полезно для того, чтобы Ваши друзья Вас узнали.</p>
+            </div>
+        </div>
+        <div class = "row tb-pad-s">
+            <div class = "small-12 medium-6 columns end">
+                <%= f.label :email, "<i class = 'fi-mail fi-medium'></i> E-mail".html_safe %>
+                <%= f.text_field :email, :class => 't_field', required: true, "aria-describedby"=>"userEmailHelpText", "data-validator" => "check_user_email" %> 
+                <span id = "email_error" class="form-error"></span>
+                <p class="help-text" id="userEmailHelpText">E-mail необходим для проверки Вашего аккаунта</p>
+            </div>
+        </div>
+        <div class = "row tb-pad-s">
+            <div class = "small-12 medium-6 columns end">
+                <%= f.label :password, "<i class = 'fi-key fi-medium'></i> Пароль".html_safe %>
+                <%= f.password_field :password, :class => 't_field',required: true, "data-validator" => "check_user_password", "aria-describedby"=>"userPasswordHelpText" %>
+                <span id = "password_error" class="form-error"></span>
+                <p class="help-text" id="userPasswordHelpText">Пароль необходим для безопасности вашего аккаунта, должен быть длиной не менее 6 символов и не более 40 символов</p>
+            </div>
+        </div>
+        <div class = "row tb-pad-s">
+            <div class = "small-12 medium-6 columns end">
+                <%= f.label :password_confirmation, "Подтверждение пароля" %>
+                <%= f.password_field :password_confirmation, :class => 't_field',required: true, "data-equalto" => "user_password", "aria-describedby"=>"userPasswordConfirmationHelpText" %> 
+                <span id = "password_confirmation_error" class="form-error">Подтверждение не совпадает с введённым паролем.</span>
+                <p class="help-text" id="userPasswordConfirmationHelpText">Подтверждение пароля необходимо для проверки правильности введённого Вами пароля</p>
+            </div>
+        </div>
+        <div class = "row tb-pad-s">
+            <div class = "small-12 medium-6 columns end">
+                <a onclick = "$('#more_info').toggle(100);" class = "button expanded">дополнительная информация</a>
+            </div>
+        </div>
     </div>
-</div>
-<div class = 'c_box odd'>
-    <div class = 'm_1000wh tb-pad-m'>
-        <p class = 'istring'>Введите текст отображенный на картинке</p>
-        <br />
-        <img src = '/antibot_images/<%= @antibot[:name] %>.png' width = '150px'><br />
-        <input type = 'text' name = abi[value] class = "t_field"> 
-		<div class='actions tb-pad-m'>           
-			<%= mySubmitButton("Подтвердить регистрацию", "submit_new_user_form").html_safe %>
-		</div>
+    <div style="display:none;" id = "more_info" class = 'c_box even'>
+        <div class = "tb-pad-sm">
+            <div class = "row tb-pad-s">
+                <div class = "small-12 medium-6 columns end">
+            		<h3>Дополнительная информация</h3>
+                </div>
+            </div>
+            <div class = "row tb-pad-s">
+                <div class = "small-12 medium-6 columns end">
+            		<%= f.label :cell_phone, "<i class = 'fi-telephone fi-medium'></i> Контактный номер".html_safe %>
+            		<%= f.text_field :cell_phone, :class => 't_field' %>
+                </div>
+            </div>
+            <div class = "row tb-pad-s">
+                <div class = "small-12 medium-6 columns end">
+            		<%= f.label :skype, "<i class = 'fi-social-skype fi-medium'></i> Skype".html_safe %>
+            		<%= f.text_field :skype, :class => 't_field' %>
+                </div>
+            </div>
+            <div class = "row tb-pad-s">
+                <div class = "small-12 medium-6 columns end">
+            		<%= f.label :web_site, "<i class = 'fi-web fi-medium'></i> Сайт".html_safe %>
+            		<%= f.text_field :web_site, :class => 't_field' %>
+                </div>
+            </div>
+            <div class = "row tb-pad-s">
+                <div class = "small-12 medium-6 columns end">
+            		<%= f.label :inform, 'О себе' %>
+            		<%= f.text_area :inform, :rows => '10', :cols => '60', :class => 't_area' %>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+    <div class = 'c_box odd'>
+        <div class = 'row tb-pad-m'>
+            <div class = "small-6 columns end">
+                <%= recaptcha_tags model: :user, attribute: "captcha"  %>
+        		<div class='actions tb-pad-m'>
+                    <button class = "success button" value="Submit" type="submit">Подтвердить регистрацию</button>           
+        		</div>
+            </div>
+        </div>
+    </div>
 <% end %>

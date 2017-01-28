@@ -84,7 +84,7 @@ class PhotoAlbum < ActiveRecord::Base
   end
   
   def index_photos
-	self.photos.order('created_at ASC').limit(10)
+	self.photos.order('created_at ASC').limit(12)
   end
   def visota_life_photos
 	self.photos.order('created_at ASC').limit(9)
