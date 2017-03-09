@@ -45,7 +45,7 @@ class Theme < ActiveRecord::Base
     my_simple_format
   end
   after_save :check_photos_in_content 
-  before_destroy :delete_steps
+  #before_destroy :delete_steps
   #after_create :last_msg_upd_after_create
   after_validation :check_event_flag
   
