@@ -4,7 +4,6 @@
 					   <div class="col span_1_of_12">
 					   </div>
 					   <div class="col span_5_of_12">
-                           <!--
 							<h2>
 								Адрес базирования клуба: 
 							</h2>
@@ -13,7 +12,6 @@
 								Россия, Самарская обл., г.Самара ул.Чекистов д.170 <% if controller.action_name == 'contacts' %><br />(метка 1 на карте)<%end%>
 							</p>
                             <br />
-                                -->
 							<h2>
 								Филиал клуба: 
 							</h2>
@@ -22,6 +20,13 @@
                                 Россия, Ульяновская обл., Барышский район,<br /> с. Малая Бекшанка ул.Центральная д.1<br />
                                 телефон +7-929-791-61-31 Владимир
                                  <% if controller.action_name == 'contacts' %><br />(метка 2 на карте)<%end%>
+							</p>
+                            <br />
+							<h2>
+								Электронная почта: 
+							</h2>
+							<p class = 'string norm'>
+                                <%= mail_to "vysota-samara@mail.ru", "vysota-samara@mail.ru", class: "b_link" %>
 							</p>
 					   </div>
 					   <div class="col span_1_of_12">
