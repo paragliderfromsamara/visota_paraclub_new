@@ -89,7 +89,6 @@ bunned:
   encrypted_password: abcdef 
   user_group_id: 4
   email_status: MyString
-  bunned_to: Time.now
   
   
 manager:

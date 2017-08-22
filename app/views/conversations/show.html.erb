@@ -1,14 +1,22 @@
-<p id="notice"><%= notice %></p>
+<div id = 'm_1000wh'>
+    <p id="notice"><%= notice %></p>
+        <%= link_to 'Изменить', edit_conversation_path(@conversation), class: 'b_link' %> |
+        <%= link_to 'К списку диалогов', conversations_path, class: 'b_link' %>
+</div>
 
-<p>
-  <strong>Name:</strong>
-  <%= @conversation.name %>
-</p>
+<div id = "m_1000wh">
+    <a><div id = 'get-cnv-msgs-but'></div></a>
+    <div id = "cnv-msgs-container" cnv_id = "<%= @conversation.id %>">
+        <!-- cnv-msgs-list заполняется в conversation.coffee -->
+        <table id = "cnv-table">
+            <tbody id = 'cnv-msgs-list'>
+            
+            </tbody>
+        </table>
+    </div>
+    <a><div id = 'go-dwn-cnv-msgs-but'></div></a>
+</div>
+<%= render "conversation_messages/form" %>
 
-<p>
-  <strong>Salt:</strong>
-  <%= @conversation.salt %>
-</p>
 
-<%= link_to 'Edit', edit_conversation_path(@conversation) %> |
-<%= link_to 'Back', conversations_path %>
+

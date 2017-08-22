@@ -1,10 +1,12 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.1'
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+#gem 'sqlite3'
+gem 'yaml_db'
+gem 'pg'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -41,6 +43,15 @@ gem 'exifr'
 gem 'nokogiri', '~> 1.6.0'
 gem 'protected_attributes'
 gem 'lightbox2-rails'
+gem "recaptcha", require: "recaptcha/rails"
+
+gem 'redis'
+gem 'hiredis' # optional
+
+source 'https://rails-assets.org' do
+	gem 'rails-assets-foundation-sites', '~> 6.2.0'
+	gem 'rails-assets-motion-ui'
+end
 #gem 'sunspot_rails'
 
 group :development, :test do

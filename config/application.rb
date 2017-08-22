@@ -26,7 +26,8 @@ module Test212
     
     config.action_mailer.default_url_options = { host: 'visota63.ru' } #kozvonin.ru
     config.action_mailer.asset_host = 'http://visota63.ru'
-    
+
+
 
     config.action_mailer.delivery_method = :smtp
 

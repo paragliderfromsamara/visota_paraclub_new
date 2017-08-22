@@ -1,6 +1,7 @@
 require 'openssl'
 class ConversationMessage < ActiveRecord::Base
-  attr_accessible :user_id, :conversation_id, :content, :salt
+  attr_accessor :last_visible_msg_id
+  attr_accessible :user_id, :conversation_id, :content, :salt, :last_visible_msg_id
   belongs_to :user
   belongs_to :conversation
   has_many :conversation_user_messages, dependent: :delete_all
@@ -14,8 +15,10 @@ class ConversationMessage < ActiveRecord::Base
   private
   
   def assign_conversation_users_to_message
-    usrs = self.conversation.users
-    usrs.each {|u| self.conversation_user_messages.create(user_id: u.id)}
+    usrs = self.conversation.users.select(:id)
+    newArr = []
+    usrs.each {|u| newArr[newArr.length] = {user_id: u.id}}
+    self.conversation_user_messages.create(newArr)
   end
   
   def encrypt_content

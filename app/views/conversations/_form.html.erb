@@ -1,25 +1,48 @@
-<%= form_for(@conversation) do |f| %>
-  <% if @conversation.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@conversation.errors.count, "error") %> prohibited this conversation from being saved:</h2>
-
-      <ul>
-      <% @conversation.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+<div class = 'm_1000wh section group'>
+    <div class = 'col span_12_of_12'>
+        <%= form_for(@conversation, html: {class: "add_conversation"}) do |f| %>
+          <%= f.hidden_field :assigned_users, value: @conversation.assigned_users_string %>
+          <%= f.hidden_field :user_id, value: current_user.id %>
+          <% if @conversation.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(@conversation.errors.count, "error") %> prohibited this conversation from being saved:</h2>
+              <ul>
+              <% @conversation.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+              </ul>
+            </div>
+          <% end %>
+          <div class="field">
+            <%= f.label :name, "Название диалога" %><br>
+            <%= f.text_field :name, style: "width:100%;" %>
+          </div>
+          <div class = "field">
+              <div class = 'section group'>
+                  <div class = 'col span_6_of_12'>
+                      <h4>Все пользователи</h4>
+                      <div class = "art-binding-ent-list" id = "b_users"> 
+                      </div>
+                  </div>
+                  <div class = 'col span_6_of_12'>
+                      <h4>Добавленные пользователи</h4>
+                      <div class = "art-binding-ent-list" id = "ab_users"> 
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class = "field">
+              <div class = 'section group'>
+                  <div class = 'col span_12_of_12'>
+                      <%= f.label :message_content, "Текст сообщения" %>
+                      <%= f.text_area :message_content, style: "width: 100%;" %>
+                  </div>
+              </div>
+          </div>
+          <div class="actions">
+            <%= f.submit %>
+          </div>
+        <% end %>
     </div>
-  <% end %>
+</div>
 
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :salt %><br>
-    <%= f.text_field :salt %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>

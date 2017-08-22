@@ -1,29 +1,31 @@
-<p id="notice"><%= notice %></p>
+<div class = "m_1000wh">
+    <div class = "section group">
+        <div class = "col span_12_of_12">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Salt</th>
+                  <th colspan="3"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @conversations.each do |conversation| %>
+                  <tr>
+                    <td><%= conversation.alter_name %></td>
+                    <td><%= conversation.salt %></td>
+                    <td><%= link_to 'Show', conversation %></td>
+                    <td><%= link_to 'Edit', edit_conversation_path(conversation) %></td>
+                    <td><%= link_to 'Destroy', conversation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
 
-<h1>Listing Conversations</h1>
+            <br>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Salt</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @conversations.each do |conversation| %>
-      <tr>
-        <td><%= conversation.name %></td>
-        <td><%= conversation.salt %></td>
-        <td><%= link_to 'Show', conversation %></td>
-        <td><%= link_to 'Edit', edit_conversation_path(conversation) %></td>
-        <td><%= link_to 'Destroy', conversation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Conversation', new_conversation_path %>
+            <%= link_to 'New Conversation', new_conversation_path %>
+        
+        </div>
+    </div>
+</div>
