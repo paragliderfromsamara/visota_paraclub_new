@@ -359,9 +359,9 @@ include TopicsHelper
   def make_article
     @theme = Theme.find(params[:id])
     @title = @header = 'Создание статьи из темы'
-    if @theme != nil and is_admin?
+    if !@theme.nil? and is_admin?
       art = Article.new
-      tId = (params[:article_type] == nil)? 0 : params[:article_type][:article_type_id].to_i
+      tId = (params[:article_type].nil?)? 1 : params[:article_type][:article_type_id].to_i
       @type = (art.get_type_by_id(tId) == nil)? {} : art.get_type_by_id(tId)
   		@path_array = [
   						        {:name => 'Клубная жизнь', :link => '/visota_life'},
@@ -374,8 +374,11 @@ include TopicsHelper
   		  format.html # make_article.html.erb
   		end
     else 
-      redirect_to @theme if !@theme.nil?
-      redirect_to '/404'
+      if !@theme.nil?
+        redirect_to @theme 
+      else
+        redirect_to '/404'
+      end
     end
   end
   def make_album
