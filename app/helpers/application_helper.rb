@@ -122,7 +122,13 @@ end
   def topImageMainPage
     path = "/sliderImages/main_"
     arr = [1, 2]
-    return {link: "#{path}#{arr.shuffle.first}.jpg", BlockHeight: 531}
+    datetime = DateTime.civil(2017, 11, 29, 17, 8, 0, Rational(+4, 24))
+    datetime += 40.days
+    if Time.now < datetime 
+      return {link: "/sliderImages/sarboz.jpg", BlockHeight: 531}
+    else 
+      return {link: "#{path}#{arr.shuffle.first}.jpg", BlockHeight: 531}
+    end
   end
 	def topImages
 		path = "/sliderImages/"
