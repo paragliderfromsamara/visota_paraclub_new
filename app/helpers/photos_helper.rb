@@ -133,11 +133,11 @@ module PhotosHelper
         b += "</ul>"
         return "<li class = 'ph-list-items' id = 'img_#{photo.id.to_s }'>
                     <div class = 'ph-block-c'>
-                        <div class = 'central_field' style = width: '#{photo.widthAndHeight[:width_th]}px;'>
-                            <div style = 'height: #{photo.widthAndHeight[:height_th]} px;'>
+                        <div class = 'central_field' >
+                            <div >
                                 #{image_tag(photo.link.thumb, :class => 'album_thumb_photo')}
                             </div>
-                            <div style = 'height: 50px; width: #{photo.widthAndHeight[:width_th] }px;'>
+                            <div style = 'height: 50px;'>
                                 #{v}
                                 #{b}
                             </div>
