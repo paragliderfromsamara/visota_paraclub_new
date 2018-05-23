@@ -172,9 +172,10 @@ AutoHtml.add_filter(:my_photo_hash) do |text|
   phs_ids = phs.map{|i| i.delete("#Photo").to_i}
   photos = Photo.where(id: phs_ids)
   photos.each do |ph|
-    h = ph.getSizeByWidth(700)[:height]
-    w = ph.getSizeByWidth(700)[:width]
-    text.gsub!("#Photo#{ph.id}", "<br /><div class = 'central_field' style = 'width: #{w}px; height:#{h}px;'>#{"<p class = 'istring norm'>#{ph.description}</p>" if !ph.description.blank?}<img style = 'width: #{w}px; height: #{h}px;' src = '#{ph.link.in_content}'></div><br />")
+    #h = ph.getSizeByWidth(700)[:height]
+    #w = ph.getSizeByWidth(700)[:width]
+    #text.gsub!("#Photo#{ph.id}", "<br /><div class = 'central_field' style = 'width: #{w}px; height:#{h}px;'>#{"<p class = 'istring norm'>#{ph.description}</p>" if !ph.description.blank?}<img style = 'width: #{w}px; height: #{h}px;' src = '#{ph.link.in_content}'></div><br />")
+    text.gsub!("#Photo#{ph.id}", "<br /><div class = 'central_field' >#{"<p class = 'istring norm'>#{ph.description}</p>" if !ph.description.blank?}<img src = '#{ph.link.in_content}'></div><br />")
   end
   text
 end

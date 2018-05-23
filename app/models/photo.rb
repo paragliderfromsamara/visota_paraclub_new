@@ -78,7 +78,7 @@ class Photo < ActiveRecord::Base
   
   def getSizeByWidth(width)
     w = nw = self.widthAndHeight[:width].to_f
-    h = nh =self.widthAndHeight[:height].to_f
+    h = nh = self.widthAndHeight[:height].to_f
     p = w/h
     if w > width.to_f
       nw = width.to_f
