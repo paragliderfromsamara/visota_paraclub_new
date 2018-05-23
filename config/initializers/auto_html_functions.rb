@@ -166,17 +166,17 @@ AutoHtml.add_filter(:my_quotes) do |text|
   end
   text
 end
+
 AutoHtml.add_filter(:my_photo_hash) do |text|
-  text.gsub(/#Photo(\d+)/) do 
-    photo = Photo.find_by(:id => $1)
-  	if photo != nil
-      h = photo.getSizeByWidth(700)[:height]
-      w = photo.getSizeByWidth(700)[:width]
-  		"<br /><div class = 'central_field' style = 'width: #{w}px; height:#{h}px;'>#{"<p class = 'istring norm'>#{photo.description}</p>" if photo.description != nil and photo.description != ''}<img style = 'width: #{w}px; height: #{h}px;' src = '#{photo.link.in_content}'></div><br />"
-    else
-      "Фотография не найдена"
-    end
+  phs = text.scan(/#Photo\d+/)
+  phs_ids = phs.map{|i| i.delete("#Photo").to_i}
+  photos = Photo.where(id: phs_ids)
+  photos.each do |ph|
+    h = ph.getSizeByWidth(700)[:height]
+    w = ph.getSizeByWidth(700)[:width]
+    text.gsub!("#Photo#{ph.id}", "<br /><div class = 'central_field' style = 'width: #{w}px; height:#{h}px;'>#{"<p class = 'istring norm'>#{ph.description}</p>" if !ph.description.blank?}<img style = 'width: #{w}px; height: #{h}px;' src = '#{ph.link.in_content}'></div><br />")
   end
+  text
 end
 
 AutoHtml.add_filter(:theme_hash) do |text|
